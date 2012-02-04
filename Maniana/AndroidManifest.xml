@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.zapta.apps.maniana"
+    android:versionCode="17"
+    android:versionName="1.01.17.d01" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="15" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:backupAgent=".backup.AppBackupHelper"
+        android:icon="@drawable/app_icon"
+        android:label="@string/app_name" >
+        <meta-data
+            android:name="com.google.android.backup.api_key"
+            android:value="AEdPqrEAAAAIuy5K_Vn8AGynwe5lz1SxJqwTxbg5gnd4bb3hPg" />
+
+        <activity
+            android:name=".main.MainActivity"
+            android:configChanges="orientation"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".help.PopupMessageActivity"
+            android:configChanges="orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent" >
+        </activity>
+        <activity
+            android:name=".preferences.PreferencesActivity"
+            android:label="Maniana Settings" >
+        </activity>
+        <activity
+            android:name=".editors.VoiceRecognition"
+            android:label="My Voice Recognition" >
+        </activity>
+
+        <receiver
+            android:name=".widget.ListWidgetProvider1"
+            android:label="Maniana List 4x1" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_list_info_size_1" />
+        </receiver>
+        <receiver
+            android:name=".widget.ListWidgetProvider2"
+            android:label="Maniana List 4x2" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_list_info_size_2" />
+        </receiver>
+        <receiver
+            android:name=".widget.ListWidgetProvider3"
+            android:label="Maniana List 4x3" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_list_info_size_3" />
+        </receiver>
+        <receiver
+            android:name=".widget.ListWidgetProvider4"
+            android:label="Maniana List 2x2" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_list_info_size_4" />
+        </receiver>
+        <receiver
+            android:name=".widget.IconWidgetProvider"
+            android:label="Maniana Icon" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_icon_info" />
+        </receiver>
+        <receiver
+            android:name=".widget.WidgetMidnightTicker"
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="com.zapta.apps.maniana.widget.WIDGET_UPDATE_ACTION" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>

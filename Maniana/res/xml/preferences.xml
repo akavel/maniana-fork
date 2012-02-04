@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="Sound" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="prefAllowSoundKey"
+            android:summaryOff="Sound is disabled"
+            android:summaryOn="Sound is enabled"
+            android:title="Sound" />
+
+        <ListPreference
+            android:defaultValue="always"
+            android:dependency="prefAllowSoundKey"
+            android:entries="@array/applauseLevelNames"
+            android:entryValues="@array/applauseLevelValues"
+            android:key="prefApplauseLevelKey"
+            android:summary="Applause on task completion"
+            android:title="Applause" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Behavior" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="prefStartupAnimationKey"
+            android:summaryOff="Disabled (faster app start)"
+            android:summaryOn="Enabled (review Maniana page)"
+            android:title="Startup Animation" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="prefVerboseMessagesKey"
+            android:summaryOff="Disabled (expert mode)"
+            android:summaryOn="Enabled (trainee mode)"
+            android:title="Detailed Messages" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="prefAutoSortKey"
+            android:summaryOff="Allowing arbitrary task order"
+            android:summaryOn="Forcing task order (pending before completed before locked)"
+            android:title="Auto Task Sort" />
+
+        <ListPreference
+            android:defaultValue="never"
+            android:entries="@array/lockPeriodNames"
+            android:entryValues="@array/lockPeriodValues"
+            android:key="prefLockPeriodKey"
+            android:summary="Locks expiration period"
+            android:title="Locks Expiration" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Page Appearance" >
+        <ListPreference
+            android:defaultValue="paper"
+            android:entries="@array/pageBackgroundTypeNames"
+            android:entryValues="@array/pageBackgroundTypeValues"
+            android:key="prefPageBackgroundTypeKey"
+            android:title="Background Type" />
+
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
+            android:defaultValue="#ffffffc0"
+            android:key="prefPageBackgroundSolidColorKey"
+            android:title="Background Color" />
+
+        <ListPreference
+            android:defaultValue="cursive"
+            android:entries="@array/itemFontNames"
+            android:entryValues="@array/itemFontValues"
+            android:key="prefItemFontKey"
+            android:title="Font" />
+        <ListPreference
+            android:defaultValue="normal"
+            android:entries="@array/itemFontSizeNames"
+            android:entryValues="@array/itemFontSizeValues"
+            android:key="prefItemFontSizeKey"
+            android:title="Text Size" />
+
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
+            android:defaultValue="#ff000000"
+            android:key="prefPageTextColorKey"
+            android:summary="Text color of pending tasks"
+            android:title="Text Color" />
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
+            android:defaultValue="#ff888888"
+            android:key="prefPageCompletedTextColorKey"
+            android:summary="Text color of completed tasks"
+            android:title="Completed Text Color" />
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
+            android:defaultValue="#ffffddaa"
+            android:key="prefPageItemDividerColorKey"
+            android:summary="Color of lines between tasks"
+            android:title="Task Divider Color" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="List Widget Appearance" >
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
+            android:defaultValue="#44000000"
+            android:key="prefWidgetBackgroundColorKey"
+            android:summary="List widget background color"
+            android:title="Background Color" />
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
+            android:defaultValue="#ffffff00"
+            android:key="prefWidgetTextColorKey"
+            android:summary="List widget text color"
+            android:title="Text Color" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="prefWidgetSingleLineKey"
+            android:summaryOff="Wrapping longer tasks onto a second line"
+            android:summaryOn="Limiting tasks to a single line"
+            android:title="Single Line" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Miscellaneous" >
+        <Preference
+            android:key="prefVersionInfoKey"
+            android:summary="Click to see release info"
+            android:title="Release Info" >
+        </Preference>
+        <Preference
+            android:key="prefShareKey"
+            android:summary="Click to tell a friend about Maniana"
+            android:title="Tell A Friend" >
+        </Preference>
+        <Preference
+            android:key="prefFeedbackKey"
+            android:summary="Click to provide feedback to the developers"
+            android:title="Send Us Feedback" >
+        </Preference>
+        <Preference
+            android:key="prefRestoreDefaultsKey"
+            android:summary="Click to restore the original settings. Does not affect task data"
+            android:title="Reset Settings" >
+        </Preference>
+    </PreferenceCategory>
+
+</PreferenceScreen>

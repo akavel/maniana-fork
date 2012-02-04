@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<dimen name="widget_margin">8dp</dimen>
+
+<dimen name="icon_widget_label_top_margin">12dp</dimen>
+<dimen name="icon_widget_label_right_margin">0dp</dimen>
+
+</resources>

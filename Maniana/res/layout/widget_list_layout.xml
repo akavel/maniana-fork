@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_top_view"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_margin="7dip"
+    android:background="@android:color/transparent"
+    android:padding="@dimen/widget_margin" >
+
+    <LinearLayout
+        android:id="@+id/widget_item_list"
+        android:background="#00000000"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+    </LinearLayout>
+
+</FrameLayout>

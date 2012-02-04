@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="ContentDescription" severity="informational" />
+    <issue id="HardcodedText" severity="informational" />
+    <issue id="IconDensities" severity="informational" />
+    <issue id="IconDipSize" severity="informational" />
+    <issue id="IconDuplicatesConfig" severity="informational" />
+    <issue id="IconLocation" severity="informational" />
+    <issue id="IconMissingDensityFolder" severity="informational" />
+    <issue id="Overdraw">
+        <ignore path="res\layout\ics_menu_dialog_layout.xml" />
+    </issue>
+</lint>

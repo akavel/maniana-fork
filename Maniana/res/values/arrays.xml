@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="itemFontNames">
+        <item>Cursive</item>
+        <item>Elegant</item>
+        <item>San Serif</item>
+        <item>Serif</item>
+    </string-array>
+    <string-array name="itemFontValues">
+        <item>cursive</item>
+        <item>elegant</item>
+        <item>sans</item>
+        <item>serif</item>
+    </string-array>
+    <string-array name="itemFontSummaries">
+        <item>Using Cursive font</item>
+        <item>Using Elegant font</item>
+        <item>Using San Serif font</item>
+        <item>Using Serif font</item>
+    </string-array>
+    <string-array name="itemFontSizeNames">
+        <item>Small</item>
+        <item>Normal</item>
+        <item>Large</item>
+        <item>Very Large</item>
+    </string-array>
+    <string-array name="itemFontSizeValues">
+        <item>small1</item>
+        <item>normal</item>
+        <item>large1</item>
+        <item>large2</item>
+    </string-array>
+    <string-array name="itemFontSizeSummaries">
+        <item>Using small text size</item>
+        <item>Using normal text size</item>
+        <item>Using large text size</item>
+        <item>Using very large text size</item>
+    </string-array>
+    <string-array name="pageBackgroundTypeNames">
+        <item>Stained paper</item>
+        <item>Solid color</item>
+    </string-array>
+    <string-array name="pageBackgroundTypeValues">
+        <item>paper</item>
+        <item>solid</item>
+    </string-array>
+    <string-array name="pageBackgroundTypeSummaries">
+        <item>Using stained paper background</item>
+        <item>Using solid background color</item>
+    </string-array>
+    <string-array name="lockPeriodNames">
+        <item>Once a Week</item>
+        <item>Once a Month</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="lockPeriodValues">
+        <item>weekly</item>
+        <item>monthly</item>
+        <item>never</item>
+    </string-array>
+    <string-array name="lockPeriodSummaries">
+        <item>Once a week</item>
+        <item>Once a month</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="applauseLevelNames">
+        <item>Never</item>
+        <item>Surprise Me</item>
+        <item>Always</item>
+    </string-array>
+    <string-array name="applauseLevelValues">
+        <item>never</item>
+        <item>sometimes</item>
+        <item>always</item>
+    </string-array>
+    <string-array name="applauseLevelSummaries">
+        <item>Never applaud when I complete a task</item>
+        <item>Surprise me</item>
+        <item>Always applaud when I complete a task</item>
+    </string-array>
+
+</resources>

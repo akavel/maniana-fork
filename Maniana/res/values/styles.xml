@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Animations" />
+
+    <style name="Animations.QuickActionAbove">
+        <item name="@android:windowEnterAnimation">@anim/qa_show_above</item>
+        <item name="@android:windowExitAnimation">@anim/qa_dismiss_above</item>
+    </style>
+
+    <style name="Animations.QuickActionBelow">
+        <item name="@android:windowEnterAnimation">@anim/qa_show_below</item>
+        <item name="@android:windowExitAnimation">@anim/qa_dismiss_below</item>
+    </style>
+
+    <style name="Theme" parent="android:Theme" />
+
+
+    <!-- Used for animating ICS main menu. -->
+    <style name="IcsMainMenuStyle" parent="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
+        <item name="android:windowAnimationStyle">@style/IcsMainMenuAnimation</item>
+    </style>
+
+    <style name="IcsMainMenuAnimation">
+        <item name="android:windowEnterAnimation">@anim/ics_menu_in</item>
+        <item name="android:windowExitAnimation">@anim/ics_menu_out</item>
+    </style>
+
+</resources>

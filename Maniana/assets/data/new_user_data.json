@@ -1,0 +1,37 @@
+{
+  "model": {
+	"tomorow": [
+	  {
+	    "text": "This task will be moved to the Today page on midnight"
+	  }
+	],
+	"today": [
+	  {
+	    "text": "Drag left to switch page"
+	  },
+	  {
+	    "text": "Tap on this task and select Done"
+	  },
+	  {
+	    "text": "Tap on the arrow to do this task tomorrow"
+	  },
+	  {
+	    "color": "red",
+	    "text": "Tap on the red mark to change its color"
+	  },
+	  {
+	    "color": "blue",
+	    "text": "Long press on this task and move it up"
+	  },
+	  {
+	    "text": "See Settings and  Help for more features"
+	  }
+	],
+	"last_push_date": "20111209"
+  },
+  "metadata": {
+    "writer_ver_name": "demo",
+    "writer_ver_code" : 13
+  },
+  "format": 2
+}
