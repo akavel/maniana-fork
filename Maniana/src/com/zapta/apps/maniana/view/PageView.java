@@ -32,7 +32,6 @@ import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.quick_action.QuickActionItem;
 import com.zapta.apps.maniana.services.AppServices;
 import com.zapta.apps.maniana.util.ColorUtil;
-import com.zapta.apps.maniana.util.LogUtil;
 
 /**
  * A single page view. Contains title, date (today page only), items, and buttons.
