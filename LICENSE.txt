@@ -1,0 +1,8 @@
+
+All source code (Java, XML, HTML, CSS, etc) are under Apache 2.0.
+
+License of binary asset and resource files:  TBD
+
+
+  
+  
