@@ -1,8 +1,57 @@
 
-All source code (Java, XML, HTML, CSS, etc) are under Apache 2.0.
+Maniana, Maniana Todo List and Maniana Task List are Trademarks of Tal Dayan.
 
-License of binary asset and resource files:  TBD
+All source code (Java, XML, HTML, CSS, etc) are licensed under Apache 2.0.
 
+Binary assets and resource files are licensed under Apache 2.0 except for the ones listed below:
 
-  
-  
+TODO: list files name(s) of each resource listed below
+
+Fonts
+-----
+Damion font
+SIL OPEN FONT LICENSE Version 1.1
+
+Pompiere font
+SIL OPEN FONT LICENSE Version 1.1
+
+Vavont font
+GPL
+ 
+Icons
+----- 
+App icon
+GNU/GPL
+http://findicons.com/icon/17187/next?id=388709
+
+Page icons (x4, bottom of Maniana page)
+http://findicons.com/pack/2456/hand_drawn_web_icons
+Hand Drawn Web Icons
+Creative Commons Attribution (by) http://177designs.com/
+
+Move item right/left Arrow icons
+http://findicons.com/icon/69012/right
+Creative Commons Attribution Share Alike (by-sa)
+
+Lock icon (displayed on the right of locked tasks)
+http://findicons.com/icon/69034/locked
+Creative Commons Attribution Share Alike (by-sa) 
+http://olawolska.com/
+
+Background Images
+-----------------
+Page right and left background images
+TBD
+
+Sound clips
+-----------------
+applause_normal mp3
+http://soundbible.com/1260-Auditorium-Applause.html
+Public Domain
+By Thore
+
+applause_special mp3
+http://soundbible.com/989-10-Second-Applause.html
+Attribution 3.0
+By Mike Koening
+
