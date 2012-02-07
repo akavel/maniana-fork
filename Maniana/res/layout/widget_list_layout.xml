@@ -1,18 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_top_view"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_margin="7dip"
-    android:background="@android:color/transparent"
-    android:padding="@dimen/widget_margin" >
+    android:layout_margin="@dimen/widget_margin"
+    android:padding="0dp"
+    android:background="#00000000"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/widget_list_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dip"
+        android:background="#60ffffff"
+        android:padding="0dip" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:paddingLeft="4dip"
+            android:text="TODAY"
+            android:textStyle="bold"
+            android:textColor="#ff0000ff"
+            android:background="#00000000"
+            android:textSize="16sp" />
+
+        <ImageButton
+            android:id="@+id/widget_add_by_voice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center_vertical"
+            android:background="#00000000"
+            android:longClickable="false"
+            android:paddingLeft="8dip"
+            android:paddingRight="10dip"
+            android:src="@drawable/widget_add_by_voice" >
+        </ImageButton>
+
+        <ImageButton
+            android:id="@+id/widget_add_by_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_toLeftOf="@id/widget_add_by_voice"
+            android:background="#00000000"
+            android:longClickable="false"
+            android:paddingLeft="8dip"
+            android:paddingRight="8dip"
+            android:src="@drawable/widget_add_by_text" >
+        </ImageButton>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/widget_item_list"
-        android:background="#00000000"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:background="#00000000"
         android:orientation="vertical" >
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>
