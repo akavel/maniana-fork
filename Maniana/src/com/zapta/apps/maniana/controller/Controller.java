@@ -219,6 +219,7 @@ public class Controller {
             }
         }
 
+        // Reset the in sub activity tracking .
         mInSubActivity = false;
 
         maybeAutoSortPages(true, true);

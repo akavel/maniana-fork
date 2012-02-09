@@ -84,7 +84,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 		setOnClickLaunch(context, remoteViews, R.id.widget_add_by_text_button,
 				ResumeAction.ADD_NEW_ITEM_BY_TEXT);
 		
-		// @@@ fix the layout when mic icon is not shown
+		// The voice recognition button is shown only if this device supports voice recognition.
 		if (AppServices.isVoiceRecognitionSupported(context)) {
 			remoteViews.setInt(R.id.widget_add_by_voice_button, "setVisibility", View.VISIBLE);
 		    setOnClickLaunch(context, remoteViews, R.id.widget_add_by_voice_button,
