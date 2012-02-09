@@ -20,6 +20,7 @@ import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -103,17 +104,7 @@ public final class ItemEditor {
 
         dialog.getWindow().setGravity(Gravity.TOP);
 
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                // TODO: cache this in app context services??? (performance???)
-                final InputMethodManager imm = (InputMethodManager) app.context().getSystemService(
-                                Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
-            }
-        });
-
-        // TODO(tal): why this setting does not work when done in the layout XML?
+        // TODO: why this setting does not work when done in the layout XML?
         editText.setHorizontallyScrolling(false);
         editText.setSingleLine(false);
         editText.setMinLines(3);
@@ -121,6 +112,8 @@ public final class ItemEditor {
         
         // Position cursor at the end of the text
         editText.setSelection(initialText.length());
+        
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
         dialog.show();
     }

@@ -38,6 +38,9 @@ import com.zapta.apps.maniana.util.LogUtil;
 public class MainActivity extends Activity {
 
     private AppContext mApp;
+    
+    /** Used to pass resume action from onNewIntent() to onResume(). */
+    private ResumeAction resumeAction = ResumeAction.NONE;
 
     /** Called by the Android framework to initialize the activity. */
     @Override
@@ -91,6 +94,9 @@ public class MainActivity extends Activity {
         // Set top view of this activity
         setContentView(mApp.view().getRootView());
 
+        // Track resume action from the launch intent
+        trackResumeAction(getIntent());
+          
         // Tell the controller the app was just created.
         mApp.controller().onMainActivityCreated(startupKind);
 
@@ -98,12 +104,10 @@ public class MainActivity extends Activity {
 
     /** Is this a minor upgrade that should supress the startup message? */
     private static final boolean isSilentUpgrade(int oldVersionCode, int newVersionCode) {
-//        // Minor fix of ICS menu. Should not affect 99% of the users as of Jan 2012.
-//        if (oldVersionCode == 14 && newVersionCode == 15) {
-//            return android.os.Build.VERSION.SDK_INT < 14;
-//        }
+        // Return here true if combination of old and new version code does not warrant
+    	// bothering some users with the What's New popup.
 
-        // Default
+        // By default, upgrdes are not silent.
         return false;
     }
 
@@ -125,9 +129,11 @@ public class MainActivity extends Activity {
         inflater.inflate(R.menu.main_menu, menu);
         return true;
         
-         //NOTE: alternative implementation to use the ICS popup menu instead
-         //IcsMainMenuDialog.showMenu(mApp);
-         //return false;
+        // NOTE: alternative implementation to use the ICS popup menu instead. We don't
+        // use it because it shows the menu at the bottom of the screen far from the 
+        // menu overlow button (bad user experience)
+        //IcsMainMenuDialog.showMenu(mApp);
+        //return false;
     }
 
     /** Called by the framework when the user make a selection in the app main menu. */
@@ -158,6 +164,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+        resumeAction = ResumeAction.NONE;
         // Inform the controller.
         mApp.controller().onMainActivityPause();
     }
@@ -166,8 +173,13 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Inform the controller.
-        mApp.controller().onMainActivityResume();
+        
+        // Get the action for this resume
+        final ResumeAction thisResumeAction = resumeAction;
+        resumeAction = ResumeAction.NONE;
+        
+        // Inform the controller
+        mApp.controller().onMainActivityResume(thisResumeAction);
     }
 
     @Override
@@ -184,4 +196,20 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         mApp.controller().onActivityResult(requestCode, resultCode, intent);
     }
+    
+    /** 
+     * Called when the activity recieves an intent. Used to detect launches from
+     * list widget action buttons.
+     */
+     @Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);		
+		trackResumeAction(intent);
+	}
+	
+	/** Update the resume action from the given launch intent. */
+	private final void trackResumeAction(Intent launchIntent)  {
+		// TODO: should we condition test first that the intent is a launcher intent?
+		resumeAction = ResumeAction.fromIntent(launchIntent);
+	}
 }

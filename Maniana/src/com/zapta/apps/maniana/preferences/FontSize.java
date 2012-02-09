@@ -16,14 +16,15 @@ package com.zapta.apps.maniana.preferences;
 
 import javax.annotation.Nullable;
 
-import com.zapta.apps.maniana.preferences.EnumUtil.KeydEnum;
+import com.zapta.apps.maniana.util.EnumUtil;
+import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 
 /** 
  * Represents possible values of Font Size preference. 
  * 
  * @author Tal Dayan
  */
-public enum FontSize implements KeydEnum {
+public enum FontSize implements KeyedEnum {
     SMALL1("small1", 0.8f),
     NORMAL("normal", 1.0f),
     LARGE1("large1", 1.3f),

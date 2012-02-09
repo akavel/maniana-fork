@@ -16,14 +16,15 @@ package com.zapta.apps.maniana.preferences;
 
 import javax.annotation.Nullable;
 
-import com.zapta.apps.maniana.preferences.EnumUtil.KeydEnum;
+import com.zapta.apps.maniana.util.EnumUtil;
+import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 
 /** 
  * Represents possible values of Font preference. 
  * 
  * @author
  */
-public enum FontType implements KeydEnum {
+public enum FontType implements KeyedEnum {
     CURSIVE("cursive"),
     ELEGANT("elegant"),
     SAN_SERIF("sans"),

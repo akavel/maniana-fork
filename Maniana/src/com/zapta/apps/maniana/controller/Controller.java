@@ -37,6 +37,7 @@ import com.zapta.apps.maniana.editors.ItemEditor;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
 import com.zapta.apps.maniana.help.PopupMessageActivity.MessageKind;
 import com.zapta.apps.maniana.main.AppContext;
+import com.zapta.apps.maniana.main.ResumeAction;
 import com.zapta.apps.maniana.model.ItemColor;
 import com.zapta.apps.maniana.model.ItemModel;
 import com.zapta.apps.maniana.model.ItemModelReadOnly;
@@ -106,29 +107,23 @@ public class Controller {
 
         // Here when item is not locked. Animate and move to other page and do the actual
         // move in the model at the end of the animation.
-
-        // if (pageKind.isToday()) {
-        // mApp.services().maybePlayHastaManianaClip(AudioManager.FX_KEYPRESS_RETURN, false);
-        // } else {
-
         mApp.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_RETURN, false);
-
-        // }
-
         mApp.view().startItemAnimation(pageKind, itemIndex,
-                        AppView.ItemAnimationType.MOVING_ITEM_TO_OTHER_PAGE, 0, new Runnable() {
-                            @Override
-                            public void run() {
-                                moveItemToOtherPage(pageKind, itemIndex);
-                            }
-                        });
+                AppView.ItemAnimationType.MOVING_ITEM_TO_OTHER_PAGE, 0, new Runnable() {
+                    @Override
+                    public void run() {
+                        moveItemToOtherPage(pageKind, itemIndex);
+                    }
+                });
     }
 
     /**
      * Move a model item to the other page.
      * 
-     * @param pageKind the source page.
-     * @param itemIndex item index in the source page.
+     * @param pageKind
+     *            the source page.
+     * @param itemIndex
+     *            item index in the source page.
      */
     private final void moveItemToOtherPage(PageKind pageKind, int itemIndex) {
         // Remove item from current page.
@@ -149,7 +144,7 @@ public class Controller {
 
     /** Called by the view when the user drag an item within the page */
     public final void onItemMoveInPage(final PageKind pageKind, final int sourceItemIndex,
-                    final int destinationItemIndex) {
+            final int destinationItemIndex) {
         // LogUtil.debug("OS version: %s", android.os.Build.VERSION.SDK_INT);
 
         final ItemModel itemModel = mApp.model().removeItem(pageKind, sourceItemIndex);
@@ -173,7 +168,7 @@ public class Controller {
         // If state is dirty save it, so we don't lose it if the app is note resumed.
         if (mApp.model().isDirty()) {
             PersistenceMetadata metadata = new PersistenceMetadata(mApp.services()
-                            .getAppVersionCode(), mApp.services().getAppVersionName());
+                    .getAppVersionCode(), mApp.services().getAppVersionName());
             // NOTE(tal): this clears the dirty bit.
             ModelPersistence.saveData(mApp, mApp.model(), metadata);
             check(!mApp.model().isDirty());
@@ -187,23 +182,29 @@ public class Controller {
     }
 
     /** Called when the main activity is resumed, including after app creation. */
-    public final void onMainActivityResume() {
+    public final void onMainActivityResume(ResumeAction resumeAction) {
         maybeHandleDateChange();
         clearAllUndo();
 
         ++mOnAppResumeCount;
 
-        if (mInSubActivity) {
-            // Returning from a sub activity. Do not change display.
-            mInSubActivity = false;
-        } else {
-            // Here when starting or resuming the app.
+        // Typically we reset the view to default position (both pages are scrolled
+        // to the top, Today page is shown) when the app is resume. We preserve it only
+        // when it is resumed from a sub activity (e.g. settings or startup message)
+        // with no resume action.
+        final boolean preserveView = mInSubActivity && resumeAction.isNone();
+
+        if (!preserveView) {
             // Force both pages to be scrolled to top. More intuitive this way.
             mApp.view().scrollToTop(PageKind.TOMOROW);
             mApp.view().scrollToTop(PageKind.TODAY);
 
-            // If needed, show startp animaton.
-            if (mOnAppResumeCount == 1 && mApp.pref().getStartupAnimationPreference()) {
+            // Force showing today's page. This is done with animation or immedietly
+            // depending on settings. In case of an actual resume action, we skip
+            // the animation to save user's time.
+            final boolean isAppStartup = (mOnAppResumeCount == 1);
+            if (isAppStartup && mApp.pref().getStartupAnimationPreference()
+                    && resumeAction.isNone()) {
                 // Show initial animation
                 mApp.view().setCurrentPage(PageKind.TOMOROW, -1);
                 mApp.view().getRootView().postDelayed(new Runnable() {
@@ -213,12 +214,28 @@ public class Controller {
                     }
                 }, 500);
             } else {
-                // No animation. Jump to Today.
+                // No animation. Jump directly to Today.
                 mApp.view().setCurrentPage(PageKind.TODAY, 0);
             }
         }
 
+        mInSubActivity = false;
+
         maybeAutoSortPages(true, true);
+
+        // Dispatch optional resume action by simulating user clicks. By the logic
+        // above, if resumeAction is not NONE, here the TODAY page is already displayed and
+        // is scrolled all the way to the top.
+        switch (resumeAction) {
+            case ADD_NEW_ITEM_BY_TEXT:
+                onAddItemByTextButton(PageKind.TODAY);
+                break;
+            case ADD_NEW_ITEM_BY_VOICE:
+                onAddItemByVoiceButton(PageKind.TODAY);
+                break;
+            default:
+                // Do nothing
+        }
     }
 
     /** Update date and if needed push model items from Tomorow to Today. */
@@ -237,12 +254,12 @@ public class Controller {
         }
 
         final PushScope pushScope = mApp.dateTracker().computePushScope(modelPushDateStamp,
-                        mApp.pref().getLockExpirationPeriodPrefernece());
+                mApp.pref().getLockExpirationPeriodPrefernece());
 
         if (pushScope == PushScope.NONE) {
             LogUtil.error("*** Unexpected condition, pushScope=NONE,"
-                            + " modelTimestamp=%s, trackerDateStamp=%s", modelPushDateStamp,
-                            trackerTodayDateStamp);
+                    + " modelTimestamp=%s, trackerDateStamp=%s", modelPushDateStamp,
+                    trackerTodayDateStamp);
         } else {
             LogUtil.debug("Model push scope: %s", pushScope);
             final int itemsTransfered = mApp.model().pushToToday(pushScope == PushScope.ALL);
@@ -264,28 +281,24 @@ public class Controller {
 
         // Done vs ToDo based on item isCompleted status.
         final QuickActionItem doneAction = item.isCompleted() ? mQuickActionCache.getToDoAction()
-                        : mQuickActionCache.getDoneAction();
+                : mQuickActionCache.getDoneAction();
 
         // Edit.
         final QuickActionItem editAction = mQuickActionCache.getEditAction();
 
         // Lock vs Unlock based on item isLocked status.
         final QuickActionItem lockAction = item.isLocked() ? mQuickActionCache.getUnlockAction()
-                        : mQuickActionCache.getLockAction();
+                : mQuickActionCache.getLockAction();
 
         // Delete.
         final QuickActionItem deleteAction = mQuickActionCache.getDeleteAction();
 
         // TODO: could cache only this array since there are only 4 permutations.
-        final QuickActionItem actions[] = {
-            doneAction,
-            editAction,
-            lockAction,
-            deleteAction };
+        final QuickActionItem actions[] = { doneAction, editAction, lockAction, deleteAction };
 
         mApp.view().setItemViewHighlight(pageKind, itemIndex, true);
         mApp.view().showItemMenu(pageKind, itemIndex, actions,
-                        QuickActionsCache.DISMISS_WITH_NO_SELECTION_ID);
+                QuickActionsCache.DISMISS_WITH_NO_SELECTION_ID);
     }
 
     /** Called when the user made a selection from an item popup menu. */
@@ -330,27 +343,27 @@ public class Controller {
                 mApp.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
                 final ItemModel item = mApp.model().getItemForMutation(pageKind, itemIndex);
                 ItemEditor.startEditor(mApp, "Edit Task", item.getText(),
-                                new ItemEditor.ItemEditorListener() {
-                                    @Override
-                                    public void onTextChange(String newText) {
-                                        // This updates the model on each key, as the user types.
-                                        // Closing the editor will still leave the new content
-                                        // stored in the model.
-                                        item.setText(newText);
-                                        mApp.model().setDirty();
-                                    }
+                        new ItemEditor.ItemEditorListener() {
+                            @Override
+                            public void onTextChange(String newText) {
+                                // This updates the model on each key, as the user types.
+                                // Closing the editor will still leave the new content
+                                // stored in the model.
+                                item.setText(newText);
+                                mApp.model().setDirty();
+                            }
 
-                                    @Override
-                                    public void onDismiss(String finalString) {
-                                        item.setText(finalString);
-                                        mApp.model().setDirty();
-                                        mApp.view().updateSingleItemView(pageKind, itemIndex);
-                                        // Highlight the modified item for a short time, to provide
-                                        // the user with
-                                        // an indication of the modified item.
-                                        briefItemHighlight(pageKind, itemIndex);
-                                    }
-                                });
+                            @Override
+                            public void onDismiss(String finalString) {
+                                item.setText(finalString);
+                                mApp.model().setDirty();
+                                mApp.view().updateSingleItemView(pageKind, itemIndex);
+                                // Highlight the modified item for a short time, to provide
+                                // the user with
+                                // an indication of the modified item.
+                                briefItemHighlight(pageKind, itemIndex);
+                            }
+                        });
                 return;
             }
 
@@ -364,19 +377,19 @@ public class Controller {
                 // If lock and in Today page, we also move it to the Tomorrow page, with an
                 // animation.
                 if (pageKind == PageKind.TODAY && actionId == QuickActionsCache.LOCK_ACTION_ID) {
-                    //mApp.services().vibrateShort();
-                    
+                    // mApp.services().vibrateShort();
+
                     // We do a short delay before the animation to let the use see the icon change
                     // to lock before the item is moved to the other page.
                     // TODO: make the pre delay a resource or const
                     mApp.view().startItemAnimation(pageKind, itemIndex,
-                                    AppView.ItemAnimationType.MOVING_ITEM_TO_OTHER_PAGE, 200,
-                                    new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            moveItemToOtherPage(pageKind, itemIndex);
-                                        }
-                                    });
+                            AppView.ItemAnimationType.MOVING_ITEM_TO_OTHER_PAGE, 200,
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    moveItemToOtherPage(pageKind, itemIndex);
+                                }
+                            });
                 } else {
                     maybeAutosortPageWithItemOfInterest(pageKind, itemIndex);
                     // maybeAutoSortPage(pageKind, true, true);
@@ -387,14 +400,14 @@ public class Controller {
             case QuickActionsCache.DELETE_ACTION_ID: {
                 mApp.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_DELETE, false);
                 mApp.view().startItemAnimation(pageKind, itemIndex,
-                                AppView.ItemAnimationType.DELETING_ITEM, 0, new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        // This runs at the end of the animation.
-                                        mApp.model().removeItemWithUndo(pageKind, itemIndex);
-                                        mApp.view().upadatePage(pageKind);
-                                    }
-                                });
+                        AppView.ItemAnimationType.DELETING_ITEM, 0, new Runnable() {
+                            @Override
+                            public void run() {
+                                // This runs at the end of the animation.
+                                mApp.model().removeItemWithUndo(pageKind, itemIndex);
+                                mApp.view().upadatePage(pageKind);
+                            }
+                        });
                 return;
             }
         }
@@ -448,14 +461,14 @@ public class Controller {
 
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Dictate a new task");
         mInSubActivity = true;
         mApp.mainActivity().startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
     }
 
     private final void maybeAddNewItem(final String text, final PageKind pageKind,
-                    boolean upperCaseIt) {
+            boolean upperCaseIt) {
         String cleanedValue = text.trim();
         if (cleanedValue.length() == 0) {
             if (mApp.pref().getVerboseMessagesEnabledPreference()) {
@@ -514,7 +527,7 @@ public class Controller {
 
         ListView listView = (ListView) dialog.findViewById(R.id.voice_selection_list);
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(mApp.context(),
-                        android.R.layout.simple_list_item_1, matches);
+                android.R.layout.simple_list_item_1, matches);
 
         listView.setAdapter(adapter);
 
@@ -524,7 +537,7 @@ public class Controller {
                 dialog.dismiss();
                 final TextView itemTextView = (TextView) arg1;
                 maybeAddNewItem(itemTextView.getText().toString(), mApp.view().getCurrentPage(),
-                                true);
+                        true);
             }
         });
 
@@ -540,8 +553,8 @@ public class Controller {
         mApp.model().organizePageWithUndo(pageKind, deleteCompletedItems, -1, summary);
 
         mApp.services().maybePlayStockSound(
-                        (summary.completedItemsDeleted > 0) ? AudioManager.FX_KEYPRESS_DELETE
-                                        : AudioManager.FX_KEY_CLICK, false);
+                (summary.completedItemsDeleted > 0) ? AudioManager.FX_KEYPRESS_DELETE
+                        : AudioManager.FX_KEY_CLICK, false);
 
         mApp.view().upadatePage(pageKind);
 
@@ -556,7 +569,8 @@ public class Controller {
     /**
      * Compose the message to show to the user after a page cleanup operation.
      * 
-     * @param summary the page cleanup summary.
+     * @param summary
+     *            the page cleanup summary.
      * @return the message or null if no message should me shown.
      */
     @Nullable
@@ -565,8 +579,7 @@ public class Controller {
 
         if (summary.completedItemsDeleted > 0) {
             return isMinimal ? null : String.format("Deleted %d completed %s",
-                            summary.completedItemsDeleted,
-                            taskOrTasks(summary.completedItemsDeleted));
+                    summary.completedItemsDeleted, taskOrTasks(summary.completedItemsDeleted));
         }
 
         // Here when not deleted
@@ -576,16 +589,16 @@ public class Controller {
                 return null;
             }
             return (summary.completedItemsFound == 0) ? "Tasks reordered" : String.format(
-                            "Tasks reordered. Long press to delete %d completed %s",
-                            summary.completedItemsFound, taskOrTasks(summary.completedItemsFound));
+                    "Tasks reordered. Long press to delete %d completed %s",
+                    summary.completedItemsFound, taskOrTasks(summary.completedItemsFound));
         }
 
         // Here when was already ordered.
         if (summary.completedItemsFound > 0) {
             // Here if found completed items.
             return isMinimal ? null : String.format(
-                            "Page already organized. Long press to delete %d completed %s",
-                            summary.completedItemsFound, taskOrTasks(summary.completedItemsFound));
+                    "Page already organized. Long press to delete %d completed %s",
+                    summary.completedItemsFound, taskOrTasks(summary.completedItemsFound));
         }
 
         return isMinimal ? null : "Page already organized";
@@ -627,7 +640,8 @@ public class Controller {
     /**
      * Called by the app preferences client when app preferences changed.
      * 
-     * @param id the id of the preference item that was changed.
+     * @param id
+     *            the id of the preference item that was changed.
      */
     public final void onPreferenceChange(PreferenceKind id) {
         onBackupDataChange();
@@ -755,7 +769,7 @@ public class Controller {
     }
 
     private final boolean maybeAutoSortPage(PageKind pageKind, boolean updateViewIfSorted,
-                    boolean showMessageIfSorted) {
+            boolean showMessageIfSorted) {
         if (mApp.pref().getAutoSortPreference()) {
             // TODO: use a temp member to avoid an extra object allocation;
             OrganizePageSummary summary = new OrganizePageSummary();
@@ -780,48 +794,48 @@ public class Controller {
         final boolean sorted = sorted1 || sorted2;
         // NOTE: suppressing message if showing a sub activity (e.g. SettingActivity).
         if (sorted && showMessageIfSorted && mApp.pref().getVerboseMessagesEnabledPreference()
-                        && !mInSubActivity) {
+                && !mInSubActivity) {
             mApp.services().toast("Tasks sorted");
         }
         return sorted;
     }
 
     /**
-     * @param pageKind the page
-     * @param itemOfInteresttOriginalIndex if >= 0, the pre sort index of the item to highlight post
-     *            sort.
+     * @param pageKind
+     *            the page
+     * @param itemOfInteresttOriginalIndex
+     *            if >= 0, the pre sort index of the item to highlight post sort.
      */
     private final void maybeAutosortPageWithItemOfInterest(final PageKind pageKind,
-                    final int itemOfInteresttOriginalIndex) {
+            final int itemOfInteresttOriginalIndex) {
         if (!mApp.pref().getAutoSortPreference() || mApp.model().isPageSorted(pageKind)) {
             return;
         }
 
         mApp.view().startItemAnimation(pageKind, itemOfInteresttOriginalIndex,
-                        ItemAnimationType.SORTING_ITEM, 0, new Runnable() {
-                            @Override
-                            public void run() {
-                                // This is done at the end of the animation
-                                final OrganizePageSummary summary = new OrganizePageSummary();
-                                mApp.model().organizePageWithUndo(pageKind, false,
-                                                itemOfInteresttOriginalIndex, summary);
-                                mApp.view().upadatePage(pageKind);
-                                if (mApp.pref().getVerboseMessagesEnabledPreference()) {
-                                    mApp.services().toast("Auto sorted");
+                ItemAnimationType.SORTING_ITEM, 0, new Runnable() {
+                    @Override
+                    public void run() {
+                        // This is done at the end of the animation
+                        final OrganizePageSummary summary = new OrganizePageSummary();
+                        mApp.model().organizePageWithUndo(pageKind, false,
+                                itemOfInteresttOriginalIndex, summary);
+                        mApp.view().upadatePage(pageKind);
+                        if (mApp.pref().getVerboseMessagesEnabledPreference()) {
+                            mApp.services().toast("Auto sorted");
+                        }
+                        if (summary.itemOfInterestNewIndex >= 0) {
+                            // After the animation, briefly highlight the item at the new
+                            // location.
+                            mApp.view().getRootView().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    briefItemHighlight(pageKind, summary.itemOfInterestNewIndex);
                                 }
-                                if (summary.itemOfInterestNewIndex >= 0) {
-                                    // After the animation, briefly highlight the item at the new
-                                    // location.
-                                    mApp.view().getRootView().post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            briefItemHighlight(pageKind,
-                                                            summary.itemOfInterestNewIndex);
-                                        }
-                                    });
+                            });
 
-                                }
-                            }
-                        });
+                        }
+                    }
+                });
     }
 }

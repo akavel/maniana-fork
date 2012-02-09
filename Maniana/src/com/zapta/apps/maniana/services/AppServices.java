@@ -122,25 +122,8 @@ public class AppServices {
         return mLayoutInflater;
     }
 
-    /** Activate a short length vibration */
-//    public final void vibrateShort() {
-////        final Vibrator v = (Vibrator) mApp.context().getSystemService(Context.VIBRATOR_SERVICE);
-////        final int timeMillis = mApp.context().getResources().getInteger(
-////                        R.integer.vibrator_short_millis_id);
-////        v.vibrate(timeMillis);
-//        
-//        mApp.view().getRootView().performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY,
-//                        HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
-//        
-//    }
-
     /** Activate a medium length vibration */
     public final void vibrateForLongPress() {
-        // final Vibrator v = (Vibrator) mApp.context().getSystemService(Context.VIBRATOR_SERVICE);
-        // final int timeMillis = mApp.context().getResources().getInteger(
-        // R.integer.vibrator_medium_millis_id);
-        // v.vibrate(timeMillis);
-
         mApp.view().getRootView().performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,
                         HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
     }
@@ -207,16 +190,6 @@ public class AppServices {
         }
     }
 
-    /** If needed, play 'hasta maniana baby'. */
-    // public final void maybePlayHastaManianaClip(int fallbackFxEffectType,
-    // boolean fallBackToShortVibration) {
-    // if (shouldPlayHastaManianaClip()) {
-    // startPlayingSoundClip(R.raw.hasta_maniana_baby);
-    // return;
-    // }
-    //
-    // maybePlayStockSound(fallbackFxEffectType, fallBackToShortVibration);
-    // }
 
     private final void startPlayingSoundClip(int rawResourceId) {
         releaseMediaPlayer();
@@ -226,25 +199,6 @@ public class AppServices {
         mMediaPlayer.start();
     }
 
-    /**
-     * Determine if a request to play Hasta Maniana should go through or fallback.
-     * 
-     * @return true if hasta maniana should be played.
-     */
-    // private final boolean shouldPlayHastaManianaClip() {
-    //
-    // if (!mApp.pref().getSoundEnabledPreference()) {
-    // return false;
-    // }
-    //
-    // if (mApp.pref().getApplauseLevelPreference() != ApplauseLevel.SOMETIMES) {
-    // return false;
-    // }
-    //
-    // // 1:200 probability
-    // return mRandom.nextInt(1000) < 5;
-    // //return mRandom.nextInt(1000) < 300;
-    // }
 
     /** Show a brief popup message with given formatted string */
     public final void toast(String format, Object... args) {
@@ -263,7 +217,7 @@ public class AppServices {
         // Check to see if a recognition activity is present
         final PackageManager pm = context.getPackageManager();
         List<ResolveInfo> activities = pm.queryIntentActivities(new Intent(
-                        RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
+                RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
         return activities.size() != 0;
     }
 }

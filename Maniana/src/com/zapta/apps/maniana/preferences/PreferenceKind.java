@@ -16,7 +16,8 @@ package com.zapta.apps.maniana.preferences;
 
 import javax.annotation.Nullable;
 
-import com.zapta.apps.maniana.preferences.EnumUtil.KeydEnum;
+import com.zapta.apps.maniana.util.EnumUtil;
+import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 
 /**
  * Represents the preference items.
@@ -27,7 +28,7 @@ import com.zapta.apps.maniana.preferences.EnumUtil.KeydEnum;
  *   
  * @author Tal Dayan
  */
-public enum PreferenceKind implements KeydEnum {
+public enum PreferenceKind implements KeyedEnum {
     SOUND_ENABLED("prefAllowSoundKey"),
     APPLAUSE_LEVEL("prefApplauseLevelKey"),
     AUTO_SORT("prefAutoSortKey"),

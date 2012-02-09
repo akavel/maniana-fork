@@ -4,9 +4,9 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_margin="@dimen/widget_margin"
-    android:padding="0dp"
     android:background="#00000000"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:padding="0dp" >
 
     <RelativeLayout
         android:id="@+id/widget_list_title"
@@ -21,38 +21,45 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
+            android:background="#00000000"
             android:paddingLeft="4dip"
             android:text="TODAY"
-            android:textStyle="bold"
-            android:textColor="#ff0000ff"
-            android:background="#00000000"
-            android:textSize="16sp" />
+            android:textColor="#ffffff00"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-        <ImageButton
-            android:id="@+id/widget_add_by_voice"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_gravity="center_vertical"
+            android:layout_margin="0dip"
             android:background="#00000000"
-            android:longClickable="false"
-            android:paddingLeft="8dip"
-            android:paddingRight="10dip"
-            android:src="@drawable/widget_add_by_voice" >
-        </ImageButton>
+            android:orientation="horizontal"
+            android:padding="0dip" >
 
-        <ImageButton
-            android:id="@+id/widget_add_by_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_toLeftOf="@id/widget_add_by_voice"
-            android:background="#00000000"
-            android:longClickable="false"
-            android:paddingLeft="8dip"
-            android:paddingRight="8dip"
-            android:src="@drawable/widget_add_by_text" >
-        </ImageButton>
+            <ImageButton
+                android:id="@+id/widget_add_by_text_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:longClickable="false"
+                android:paddingLeft="8dip"
+                android:paddingRight="8dip"
+                android:src="@drawable/widget_add_by_text" >
+            </ImageButton>
+
+            <ImageButton
+                android:id="@+id/widget_add_by_voice_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:longClickable="false"
+                android:paddingLeft="8dip"
+                android:paddingRight="10dip"
+                android:src="@drawable/widget_add_by_voice" >
+            </ImageButton>
+        </LinearLayout>
     </RelativeLayout>
 
     <LinearLayout

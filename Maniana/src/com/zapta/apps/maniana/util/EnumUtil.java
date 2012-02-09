@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.zapta.apps.maniana.preferences;
+package com.zapta.apps.maniana.util;
 
 import javax.annotation.Nullable;
 
@@ -21,12 +21,12 @@ import javax.annotation.Nullable;
  */
 public class EnumUtil {
 
-    public static interface KeydEnum {
+    public static interface KeyedEnum {
         String getKey();
     }
 
     /** Return the first item with given key or fallBack if not found. */
-    public static <T extends KeydEnum> T fromKey(String key, T[] array, @Nullable T fallBack) {
+    public static <T extends KeyedEnum> T fromKey(String key, T[] array, @Nullable T fallBack) {
         for (T t : array) {
             if (t.getKey().equals(key)) {
                 return t;

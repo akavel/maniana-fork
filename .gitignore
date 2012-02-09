@@ -1,0 +1,10 @@
+# Dirs and files ignored by git
+Maniana/bin/
+Maniana/gen/
+
+ManianaTest/bin/
+ManianaTest/gen/
+
+# Eclipse local configuration
+.metadata
+

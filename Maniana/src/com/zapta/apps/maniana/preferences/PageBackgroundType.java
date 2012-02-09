@@ -16,14 +16,15 @@ package com.zapta.apps.maniana.preferences;
 
 import javax.annotation.Nullable;
 
-import com.zapta.apps.maniana.preferences.EnumUtil.KeydEnum;
+import com.zapta.apps.maniana.util.EnumUtil;
+import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 
 /** 
  * Represents the possible choices for page background preference. 
  * 
  * @author Tal Dayan
  */
-public enum PageBackgroundType implements KeydEnum {
+public enum PageBackgroundType implements KeyedEnum {
     PAPER("paper"), SOLID("solid");
 
     /** Preference item key. Matches the prefernce option value defined in XMl. */

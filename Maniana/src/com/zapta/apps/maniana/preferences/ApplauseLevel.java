@@ -16,14 +16,17 @@ package com.zapta.apps.maniana.preferences;
 
 import javax.annotation.Nullable;
 
-import com.zapta.apps.maniana.preferences.EnumUtil.KeydEnum;
+import com.zapta.apps.maniana.util.EnumUtil;
+import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 
 /** 
  * Represents possible values on task completion applause level. 
  * 
+ * TODO: find a better name than 'level'. ('preference')?
+ *
  * @author Tal Dayan
  */
-public enum ApplauseLevel implements KeydEnum {
+public enum ApplauseLevel implements KeyedEnum {
     NEVER("never"),
     SOMETIMES("sometimes"),
     ALWAYS("always");

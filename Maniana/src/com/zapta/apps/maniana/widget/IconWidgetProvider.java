@@ -47,26 +47,13 @@ public class IconWidgetProvider extends BaseWidgetProvider {
 
     /** Called by the widget host. */
     @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-//        LogUtil.debug("*** Icon: onUpdate() called, length = %s", appWidgetIds.length);
-//        for (int id : appWidgetIds) {
-//            LogUtil.debug("    - id: %s", id);  
-//        }
-//        LogUtil.debug("    pid = %s, uid = %s", Binder.getCallingPid(), Binder.getCallingUid());
-        
-        
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {        
         update(context, appWidgetManager, appWidgetIds, loadModel(context));
     }
 
     /** Internal widget update method. */
     private static final void update(Context context, AppWidgetManager appWidgetManager,
                     int[] appWidgetIds, @Nullable AppModel model) {
-//        LogUtil.debug("*** Icon: update() called, widgets = %s", appWidgetIds.length);
-//        for (int id : appWidgetIds) {
-//            LogUtil.debug("    - id: %s", id);  
-//        }
-//        LogUtil.debug("    pid = %s, uid = %s", Binder.getCallingPid(), Binder.getCallingUid());
-
         if (appWidgetIds.length == 0) {
             return;
         }
@@ -74,8 +61,6 @@ public class IconWidgetProvider extends BaseWidgetProvider {
         final SharedPreferences sharedPreferences = PreferenceManager
                         .getDefaultSharedPreferences(context);
 
-        // final boolean showUpdateNotice;
-        // final int activeItemsWouldMove;
         final String label;
         if (model == null) {
             label = "??";
@@ -111,8 +96,6 @@ public class IconWidgetProvider extends BaseWidgetProvider {
     }
     
     public static void updateAllIconWidgetsFromModel(Context context, @Nullable AppModel model) {
-//        LogUtil.debug("*** Icon: updateAllIconWidgetsFromModel() called");
-//        LogUtil.debug("    pid = %s, uid = %s", Binder.getCallingPid(), Binder.getCallingUid());
         // Get list of all widget ids
         final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
         final int[] widgetIds =  appWidgetManager.getAppWidgetIds(new ComponentName(context,
