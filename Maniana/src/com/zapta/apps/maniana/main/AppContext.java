@@ -55,6 +55,9 @@ public class AppContext {
 
     /** The app view. */
     private AppView mView;
+    
+    /** The open dialog tracker. */
+    private final PopupsTracker mPopupsTracker = new PopupsTracker();
 
     AppContext(MainActivity mainActivity) {
         mMainActivity = checkNotNull(mainActivity);
@@ -82,6 +85,10 @@ public class AppContext {
 
     public final DateTracker dateTracker() {
         return mDateTracker;
+    }
+    
+    public final PopupsTracker popupsTracker() {
+        return mPopupsTracker;
     }
 
     public final AppResources resources() {

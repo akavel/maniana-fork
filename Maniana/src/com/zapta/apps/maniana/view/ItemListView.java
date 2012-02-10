@@ -647,6 +647,7 @@ public class ItemListView extends ListView {
                         new OnActionItemOutcomeListener() {
                             @Override
                             public void onOutcome(QuickActionMenu source, QuickActionItem actionItem) {
+                                mApp.popupsTracker().untrack(source);
                                 final int actionId = (actionItem != null) ? actionItem
                                                 .getActionId() : dismissActionId;
                                 mApp.controller().onItemMenuSelection(mAdapter.pageKind(),
@@ -660,9 +661,9 @@ public class ItemListView extends ListView {
 
         @Nullable
         final ItemView itemView = getItemViewIfVisible(itemIndex);
-        // NOTE: this should always be non null but handling gracefully to avoid a
-        // force close.
+        // NOTE: this should always be non null but handling gracefully to avoid a forced close.
         if (itemView != null) {
+            mApp.popupsTracker().track(quickActionMenu);
             quickActionMenu.show(itemView);
         }
     }

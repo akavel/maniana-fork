@@ -165,6 +165,9 @@ public class Controller {
 
     /** Called when the activity is paused */
     public final void onMainActivityPause() {
+        // Close any leftover dialogs. This provides a more intuitive user experience.
+        mApp.popupsTracker().closeAllLeftOvers();
+        
         // If state is dirty save it, so we don't lose it if the app is note resumed.
         if (mApp.model().isDirty()) {
             PersistenceMetadata metadata = new PersistenceMetadata(mApp.services()
@@ -482,7 +485,7 @@ public class Controller {
         if (upperCaseIt) {
             cleanedValue = cleanedValue.substring(0, 1).toUpperCase() + cleanedValue.substring(1);
         }
-
+        
         // // TODO: share with add by voice below
         ItemModel item = new ItemModel(cleanedValue, false, false, ItemColor.NONE);
         // final

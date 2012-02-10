@@ -39,6 +39,7 @@ import android.widget.TextView;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.main.AppContext;
+import com.zapta.apps.maniana.main.PopupsTracker.TrackablePopup;
 
 /**
  * Quick action popup menu.
@@ -46,7 +47,7 @@ import com.zapta.apps.maniana.main.AppContext;
  * @author Tal Dayan (adapted to Maniana)
  * Based on example by Lorensius W. L. T <lorenz@londatiga.net>.
  */
-public class QuickActionMenu implements OnDismissListener {
+public class QuickActionMenu implements OnDismissListener, TrackablePopup {
 
     private final AppContext mApp;
 
@@ -182,17 +183,9 @@ public class QuickActionMenu implements OnDismissListener {
             throw new IllegalStateException("setContentView was not called with a view to display.");
         }
 
-        // if (mBackground == null) {
-
         // Set transparent window background. This will clear the horizontal strips above and below
         // the menu defined by the two arrows.
         mMenuWindow.setBackgroundDrawable(new BitmapDrawable());
-
-        // } else {
-        // // TODO: remove mBackground member.
-        // throw new RuntimeException("Non reachable.");
-        // // mMenuWindow.setBackgroundDrawable(mBackground);
-        // }
 
         mMenuWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         mMenuWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
@@ -278,5 +271,14 @@ public class QuickActionMenu implements OnDismissListener {
     public interface OnActionItemOutcomeListener {
         /** Action item is null if dismissed with no selection. */
         void onOutcome(QuickActionMenu source, /* @Nullable */QuickActionItem actionItem);
+    }
+    
+    @Override
+    public final void closeLeftOver() {
+        // NOTE: we don't bother here to early report the dismissal, as we do with the item editor,
+        // because the dismissal of this menu does not cause a mutation of the model.
+        if (mMenuWindow.isShowing()) {
+            mMenuWindow.dismiss();
+        }
     }
 }

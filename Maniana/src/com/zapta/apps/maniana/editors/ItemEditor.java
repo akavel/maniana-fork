@@ -15,27 +15,26 @@
 package com.zapta.apps.maniana.editors;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.main.AppContext;
+import com.zapta.apps.maniana.main.PopupsTracker.TrackablePopup;
 
 /**
- * Provides popup item editor functionality.
+ * Item text editor dialog. Used to create new itmes and to edit existing ones.
  * <p>
- * TODO: see if we can use the info in http://tinyurl.com/8yucabx to show the Done
- * button on the soft keyboard.
+ * TODO: see if we can use the info in http://tinyurl.com/8yucabx to show the Done button on the
+ * soft keyboard.
  * 
  * @author Tal Dayan
  */
-public final class ItemEditor {
+public class ItemEditor extends Dialog implements TrackablePopup {
 
     public interface ItemEditorListener {
         void onTextChange(String newText);
@@ -43,79 +42,126 @@ public final class ItemEditor {
         void onDismiss(String finalText);
     }
 
-    /** Do not instantiate */
-    private ItemEditor() {
+    private class EventAdapter implements DialogInterface.OnDismissListener, TextWatcher {
+        @Override
+        public void onDismiss(DialogInterface dialog) {
+            handleOnDismiss();
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            handleTextChanged();
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            // Nothing to do here
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // Nothing to do here
+        }
+    }
+
+    private final AppContext mApp;
+
+    private final ItemEditorListener mListener;
+
+    /** The text edit field of the dialog. */
+    private final EditText mEditText;
+
+    /** Used to avoid double reporting of dismissal. */
+    private boolean dismissAlreadyReported = false;
+
+    /** Private constructor. Use startEditor() to create and launch an editor. */
+    private ItemEditor(final AppContext app, String title, String initialText,
+            ItemEditorListener listener) {
+        // TODO: reorder and organize the statements below for better reliability.
+        super(app.context());
+        mApp = app;
+        mListener = listener;
+        setContentView(R.layout.editor_layout);
+        setTitle(title);
+        setOwnerActivity(app.mainActivity());
+
+        mEditText = (EditText) findViewById(R.id.editor_text);
+        mEditText.setText(initialText);
+
+        // Always using non completed variation, even if the item is completed.
+        app.resources().getItemFontVariation().apply(mEditText, false, false);
+
+        EventAdapter eventAdapter = new EventAdapter();
+        setOnDismissListener(eventAdapter);
+        mEditText.addTextChangedListener(eventAdapter);
+
+        getWindow().setGravity(Gravity.TOP);
+
+        // TODO: why this setting does not work when done in the layout XML?
+        mEditText.setHorizontallyScrolling(false);
+        mEditText.setSingleLine(false);
+        mEditText.setMinLines(3);
+        mEditText.setMaxLines(5);
+
+        // Position cursor at the end of the text
+        mEditText.setSelection(initialText.length());
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+    }
+
+    /** Called when the dialog get dismissed. */
+    private final void handleOnDismiss() {
+        mApp.popupsTracker().untrack(this);
+        // If not already reported during the close leftover.
+        if (!dismissAlreadyReported) {
+            mListener.onDismiss(mEditText.getText().toString());
+        }
+    }
+
+    /** Called when text field value changes. */
+    private final void handleTextChanged() {
+        final String value = mEditText.getText().toString();
+        // We detect the Enter key by the '\n' char it inserts.
+        if (value.contains("\n")) {
+            final String cleanedValue = value.replace("\n", "").trim();
+            mEditText.setText(cleanedValue);
+            // This will trigger the handleOnDismiss above that will call the listener of this
+            // editor.
+            dismiss();
+        } else {
+            mListener.onTextChange(value.trim());
+        }
+    }
+
+    /** Called when the dialog was left open and the main activity pauses. */
+    @Override
+    public final void closeLeftOver() {
+        if (isShowing()) {
+            // We provide an early dismiss event. Otherwise, this would be reported later when the
+            // UI thread will get to handle the queued event. The controller rely on the fact that
+            // the editor was dismissed and any pending new item text was submitted to the model.
+            dismissAlreadyReported = true;
+            mListener.onDismiss(mEditText.getText().toString());
+            dismiss();
+        }
     }
 
     /**
      * Show an item editor.
      * 
-     * @param app app context.
-     * @param title title to display in the editor.
-     * @param initialText initial edited item text
-     * @param listener listener to callback on changes and on end.
+     * @param app
+     *            app context.
+     * @param title
+     *            title to display in the editor.
+     * @param initialText
+     *            initial edited item text
+     * @param listener
+     *            listener to callback on changes and on end.
      */
     public static void startEditor(final AppContext app, String title, String initialText,
-                    final ItemEditorListener listener) {
-
-        final Dialog dialog = new Dialog(app.context());
-        dialog.setContentView(R.layout.editor_layout);
-        dialog.setTitle(title);
-        dialog.setOwnerActivity(app.mainActivity());
-
-        final EditText editText = (EditText) dialog.findViewById(R.id.editor_text);
-        editText.setText(initialText);
-        
-        // Always using non completed variation, even if the item is completed.
-        app.resources().getItemFontVariation().apply(editText, false, false);
-        //editText.settextc
-
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                listener.onDismiss(editText.getText().toString());
-            }
-        });
-
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {
-                final String value = editText.getText().toString();
-                // We detect the Enter key by the '\n' char it inserts.
-                if (value.contains("\n")) {
-                    final String cleanedValue = value.replace("\n", "").trim();
-                    editText.setText(cleanedValue);
-                    // This will trigger the onDismiss above that will call the listener of this
-                    // editor.
-                    dialog.dismiss();
-                } else {
-                    listener.onTextChange(value.trim());
-                }
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-        });
-
-        dialog.getWindow().setGravity(Gravity.TOP);
-
-        // TODO: why this setting does not work when done in the layout XML?
-        editText.setHorizontallyScrolling(false);
-        editText.setSingleLine(false);
-        editText.setMinLines(3);
-        editText.setMaxLines(5);
-        
-        // Position cursor at the end of the text
-        editText.setSelection(initialText.length());
-        
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-
+            final ItemEditorListener listener) {
+        final ItemEditor dialog = new ItemEditor(app, title, initialText, listener);
+        app.popupsTracker().track(dialog);
         dialog.show();
     }
-
 }
