@@ -57,6 +57,7 @@ public enum PreferenceKind implements KeyedEnum {
         this.mKey = key;
     }
 
+    @Override
     public final String getKey() {
         return mKey;
     }

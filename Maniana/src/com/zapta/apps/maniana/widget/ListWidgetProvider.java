@@ -37,6 +37,7 @@ import com.zapta.apps.maniana.main.MainActivity;
 import com.zapta.apps.maniana.main.ResumeAction;
 import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.model.ItemModelReadOnly;
+import com.zapta.apps.maniana.preferences.ListWidgetToolbarPosition;
 import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
 import com.zapta.apps.maniana.preferences.PreferencesTracker;
 import com.zapta.apps.maniana.services.AppServices;
@@ -48,192 +49,218 @@ import com.zapta.apps.maniana.services.AppServices;
  */
 public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
-	/** List of all widget provider classes. */
-	@SuppressWarnings("rawtypes")
-	public static final Class[] LIST_WIDGET_PROVIDER_CLASSES = new Class[] {
-			// TODO: split to two sets, for old and for new phones
-			ListWidgetProvider4.class, ListWidgetProvider1.class, ListWidgetProvider2.class,
-			ListWidgetProvider3.class, ListWidgetProviderX.class };
+    /** List of all widget provider classes. */
+    @SuppressWarnings("rawtypes")
+    public static final Class[] LIST_WIDGET_PROVIDER_CLASSES = new Class[] {
+            // TODO: split to two sets, for old and for new phones
+            ListWidgetProvider4.class, ListWidgetProvider1.class, ListWidgetProvider2.class,
+            ListWidgetProvider3.class, ListWidgetProviderX.class };
 
-	public ListWidgetProvider() {
-	}
+    public ListWidgetProvider() {
+    }
 
-	/** Called by the widget host. */
-	@Override
-	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-		update(context, appWidgetManager, appWidgetIds, loadModel(context));
-	}
+    /** Called by the widget host. */
+    @Override
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        update(context, appWidgetManager, appWidgetIds, loadModel(context));
+    }
 
-	/** Internal widget update method that accepts the model as a parameter */
-	private static final void update(Context context, AppWidgetManager appWidgetManager,
-			int[] appWidgetIds, @Nullable AppModel model) {
+    /** Internal widget update method that accepts the model as a parameter */
+    private static final void update(Context context, AppWidgetManager appWidgetManager,
+            int[] appWidgetIds, @Nullable AppModel model) {
 
-		if (appWidgetIds.length == 0) {
-			return;
-		}
+        if (appWidgetIds.length == 0) {
+            return;
+        }
 
-		final SharedPreferences sharedPreferences = PreferenceManager
-				.getDefaultSharedPreferences(context);
+        final SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(context);
 
-		// Provides access to the remote view hosted by the home launcher.
-		RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
-				R.layout.widget_list_layout);
+        // Provides access to the remote view hosted by the home launcher.
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
+                R.layout.widget_list_layout);
 
-		// Set onClick() actions
-		setOnClickLaunch(context, remoteViews, R.id.widget_top_view, ResumeAction.NONE);
-		setOnClickLaunch(context, remoteViews, R.id.widget_add_by_text_button,
-				ResumeAction.ADD_NEW_ITEM_BY_TEXT);
-		
-		// The voice recognition button is shown only if this device supports voice recognition.
-		if (AppServices.isVoiceRecognitionSupported(context)) {
-			remoteViews.setInt(R.id.widget_add_by_voice_button, "setVisibility", View.VISIBLE);
-		    setOnClickLaunch(context, remoteViews, R.id.widget_add_by_voice_button,
-				ResumeAction.ADD_NEW_ITEM_BY_VOICE);
-		} else {
-			remoteViews.setInt(R.id.widget_add_by_voice_button, "setVisibility", View.GONE);
-		}
+        // Set onClick() actions
+        setOnClickLaunch(context, remoteViews, R.id.widget_list_top_view, ResumeAction.NONE);
 
-		// Set widget background color
-		final int backgroundColor = PreferencesTracker
-				.readWidgetBackgroundColorPreference(sharedPreferences);
-		remoteViews.setInt(R.id.widget_top_view, "setBackgroundColor", backgroundColor);
+        // TODO: set from Settings
+        final ListWidgetToolbarPosition toolbarPosition = ListWidgetToolbarPosition.RIGHT;
+        
+        setToolbar(context, remoteViews, toolbarPosition.isTop(), R.id.widget_list_top_toolbar,
+                R.id.widget_list_top_toolbar_add_by_text, R.id.widget_list_top_toolbar_add_by_voice);
 
-		final int textColor = PreferencesTracker.readWidgetTextColorPreference(sharedPreferences);
+        setToolbar(context, remoteViews, toolbarPosition.isRight(), R.id.widget_list_right_toolbar,
+                R.id.widget_list_right_toolbar_add_by_text,
+                R.id.widget_list_right_toolbar_add_by_voice);
 
-		// Remove all items from previous update
-		remoteViews.removeAllViews(R.id.widget_item_list);
+        // Set widget background color
+        final int backgroundColor = PreferencesTracker
+                .readWidgetBackgroundColorPreference(sharedPreferences);
+        remoteViews.setInt(R.id.widget_list_top_view, "setBackgroundColor", backgroundColor);
 
-		// For debugging
-		final boolean debugTimestamp = false;
-		if (debugTimestamp) {
-			final String message = String.format("[%s]", SystemClock.elapsedRealtime() / 1000);
-			addMessageItem(context, remoteViews, message, textColor);
-		}
+        final int textColor = PreferencesTracker.readWidgetTextColorPreference(sharedPreferences);
 
-		if (model == null) {
-			addMessageItem(context, remoteViews, "(Maniana data not found)", textColor);
-		} else {
-			final LockExpirationPeriod lockExpirationPeriod = PreferencesTracker
-					.readLockExpierationPeriodPreference(sharedPreferences);
-			// TODO: reorganize the code. No need to read lock preference if
-			// date now is same as the model
-			Time now = new Time();
-			now.setToNow();
+        // Remove all items from previous update
+        remoteViews.removeAllViews(R.id.widget_list_item_list);
 
-			final List<ItemModelReadOnly> items = WidgetUtil.selectTodaysActiveItemsByTime(model,
-					now, lockExpirationPeriod);
-			if (items.isEmpty()) {
-				addMessageItem(context, remoteViews, "(no active tasks)", textColor);
-			} else {
+        populateItemList(context, remoteViews, model, textColor, sharedPreferences);
 
-				final boolean singleLine = PreferencesTracker
-						.readWidgetSingleLinePreference(sharedPreferences);
-				for (ItemModelReadOnly item : items) {
-					final RemoteViews remoteItemViews = new RemoteViews(context.getPackageName(),
-							R.layout.widget_list_item_layout);
+        // Tell the app widget manager to replace the views with the new views.
+        // This is not a partial update.
+        appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
+    }
 
-					// NOTE: TextView has a bug that does not allows more than
-					// two lines when using ellipsize. Otherwise we would give the user more
-					// choices about the max number of lines. More details here:
-					// http://code.google.com/p/android/issues/detail?id=2254
-					if (!singleLine) {
-						remoteItemViews.setBoolean(R.id.widget_item_text_view, "setSingleLine",
-								false);
-						// NOTE: on ICS (API 14) the text view behaves
-						// differently and does not limit the lines to two when ellipsize. For
-						// consistency, we limit it explicitly to two lines.
-						remoteItemViews.setInt(R.id.widget_item_text_view, "setMaxLines", 2);
-					}
+    private static final void populateItemList(Context context, RemoteViews remoteViews,
+            AppModel model, int textColor, SharedPreferences sharedPreferences) {
+        // For debugging
+        final boolean debugTimestamp = false;
+        if (debugTimestamp) {
+            final String message = String.format("[%s]", SystemClock.elapsedRealtime() / 1000);
+            addMessageItem(context, remoteViews, message, textColor);
+        }
 
-					remoteItemViews.setTextViewText(R.id.widget_item_text_view, item.getText());
-					remoteItemViews.setTextColor(R.id.widget_item_text_view, textColor);
+        if (model == null) {
+            addMessageItem(context, remoteViews, "(Maniana data not found)", textColor);
+        } else {
+            final LockExpirationPeriod lockExpirationPeriod = PreferencesTracker
+                    .readLockExpierationPeriodPreference(sharedPreferences);
+            // TODO: reorganize the code. No need to read lock preference if
+            // date now is same as the model
+            Time now = new Time();
+            now.setToNow();
 
-					// If color is NONE show a gray solid color to help visually
-					// grouping item text lines.
-					final int itemColor = item.getColor().isNone() ? 0xff808080 : item.getColor()
-							.getColor();
+            final List<ItemModelReadOnly> items = WidgetUtil.selectTodaysActiveItemsByTime(model,
+                    now, lockExpirationPeriod);
+            if (items.isEmpty()) {
+                addMessageItem(context, remoteViews, "(no active tasks)", textColor);
+            } else {
 
-					remoteItemViews.setInt(R.id.widget_item_color, "setBackgroundColor", itemColor);
+                final boolean singleLine = PreferencesTracker
+                        .readWidgetSingleLinePreference(sharedPreferences);
+                for (ItemModelReadOnly item : items) {
+                    final RemoteViews remoteItemViews = new RemoteViews(context.getPackageName(),
+                            R.layout.widget_list_item_layout);
 
-					// These are required for ICS. Otherwise text backdround is dark
-					remoteItemViews.setInt(R.id.widget_item_text_view, "setBackgroundColor",
-							0x00000000);
-					remoteItemViews.setInt(R.id.widget_item_view, "setBackgroundColor", 0x00000000);
+                    // NOTE: TextView has a bug that does not allows more than
+                    // two lines when using ellipsize. Otherwise we would give the user more
+                    // choices about the max number of lines. More details here:
+                    // http://code.google.com/p/android/issues/detail?id=2254
+                    if (!singleLine) {
+                        remoteItemViews.setBoolean(R.id.widget_item_text_view, "setSingleLine",
+                                false);
+                        // NOTE: on ICS (API 14) the text view behaves
+                        // differently and does not limit the lines to two when ellipsize. For
+                        // consistency, we limit it explicitly to two lines.
+                        remoteItemViews.setInt(R.id.widget_item_text_view, "setMaxLines", 2);
+                    }
 
-					remoteViews.addView(R.id.widget_item_list, remoteItemViews);
-				}
+                    remoteItemViews.setTextViewText(R.id.widget_item_text_view, item.getText());
+                    remoteItemViews.setTextColor(R.id.widget_item_text_view, textColor);
 
-			}
-		}
+                    // If color is NONE show a gray solid color to help visually
+                    // grouping item text lines.
+                    final int itemColor = item.getColor().isNone() ? 0xff808080 : item.getColor()
+                            .getColor();
 
-		// Tell the app widget manager to replace the views with the new views.
-		// This is not a partial update.
-		appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
-	}
+                    remoteItemViews.setInt(R.id.widget_item_color, "setBackgroundColor", itemColor);
 
-	/** Set onClick() action of given remote view element to launch the app. */
-	private static final void setOnClickLaunch(Context context, RemoteViews remoteViews,
-			int viewId, ResumeAction resumeAction) {
-		final Intent intent = new Intent(context, MainActivity.class);
-		ResumeAction.setInIntent(intent, resumeAction);
-		// Setting unique intent action and using FLAG_UPDATE_CURRENT to avoid cross
-		// reuse of pending intents. See http://tinyurl.com/8axhrlp for more info.
-		intent.setAction("maniana.list_widget." + resumeAction.toString());
-		final PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent,
-				PendingIntent.FLAG_UPDATE_CURRENT);
-		remoteViews.setOnClickPendingIntent(viewId, pendingIntent);
-	}
+                    // These are required for ICS. Otherwise text backdround is dark
+                    remoteItemViews.setInt(R.id.widget_item_text_view, "setBackgroundColor",
+                            0x00000000);
+                    remoteItemViews.setInt(R.id.widget_item_view, "setBackgroundColor", 0x00000000);
 
-	private static final void addMessageItem(Context context, RemoteViews remoteViews,
-			String message, int textColor) {
-		final RemoteViews itemMessageViews = new RemoteViews(context.getPackageName(),
-				R.layout.widget_list_item_layout);
-		final int textViewResourceId = R.id.widget_item_text_view;
-		itemMessageViews.setBoolean(R.id.widget_item_text_view, "setSingleLine", false);
-		itemMessageViews.setTextViewText(textViewResourceId, message);
-		itemMessageViews.setTextColor(textViewResourceId, textColor);
-		itemMessageViews.setInt(R.id.widget_item_color, "setVisibility", View.GONE);
-		remoteViews.addView(R.id.widget_item_list, itemMessageViews);
-	}
+                    remoteViews.addView(R.id.widget_list_item_list, remoteItemViews);
+                }
 
-	// TODO: decice what we want to do with this.
-	// An attempt to update all list widgtes by a direct call.
-	public static void updateAllIconWidgetsFromModel(Context context, @Nullable AppModel model) {
-		final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+            }
+        }
 
-		// Get ids of all widgets of this type.
-		@Nullable
-		final int[] widgetIds = getWidgetIds(context, appWidgetManager);
+    }
 
-		// Update
-		if (widgetIds != null) {
-			update(context, appWidgetManager, widgetIds, model);
-		}
-	}
+    private static final void setToolbar(Context context, RemoteViews remoteViews, boolean enabled,
+            int toolbar_id, int add_by_text_id, int add_by_voice_id) {
+        if (!enabled) {
+            remoteViews.setInt(toolbar_id, "setVisibility", View.GONE);
+            return;
+        }
 
-	/** Return null if none, or an array if at least one. */
-	private static int[] getWidgetIds(Context context, AppWidgetManager appWidgetManager) {
-		final int[][] widgetIdLists = new int[LIST_WIDGET_PROVIDER_CLASSES.length][];
+        remoteViews.setInt(toolbar_id, "setVisibility", View.VISIBLE);
 
-		int n = 0;
-		for (int i = 0; i < LIST_WIDGET_PROVIDER_CLASSES.length; i++) {
-			widgetIdLists[i] = appWidgetManager.getAppWidgetIds(new ComponentName(context,
-					LIST_WIDGET_PROVIDER_CLASSES[i]));
-			n += widgetIdLists[i].length;
-		}
+        setOnClickLaunch(context, remoteViews, add_by_text_id, ResumeAction.ADD_NEW_ITEM_BY_TEXT);
 
-		if (n == 0) {
-			return null;
-		}
+        // The voice recognition button is shown only if this device supports voice recognition.
+        if (AppServices.isVoiceRecognitionSupported(context)) {
+            remoteViews.setInt(add_by_voice_id, "setVisibility", View.VISIBLE);
+            setOnClickLaunch(context, remoteViews, add_by_voice_id,
+                    ResumeAction.ADD_NEW_ITEM_BY_VOICE);
+        } else {
+            remoteViews.setInt(add_by_voice_id, "setVisibility", View.GONE);
+        }
+    }
 
-		final int[] widgetIds = new int[n];
-		int m = 0;
-		for (int[] src : widgetIdLists) {
-			System.arraycopy(src, 0, widgetIds, m, src.length);
-			m += src.length;
-		}
-		check(m == n, "%s vs %s", m, n);
+    /** Set onClick() action of given remote view element to launch the app. */
+    private static final void setOnClickLaunch(Context context, RemoteViews remoteViews,
+            int viewId, ResumeAction resumeAction) {
+        final Intent intent = new Intent(context, MainActivity.class);
+        ResumeAction.setInIntent(intent, resumeAction);
+        // Setting unique intent action and using FLAG_UPDATE_CURRENT to avoid cross
+        // reuse of pending intents. See http://tinyurl.com/8axhrlp for more info.
+        intent.setAction("maniana.list_widget." + resumeAction.toString());
+        final PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setOnClickPendingIntent(viewId, pendingIntent);
+    }
 
-		return widgetIds;
-	}
+    private static final void addMessageItem(Context context, RemoteViews remoteViews,
+            String message, int textColor) {
+        final RemoteViews itemMessageViews = new RemoteViews(context.getPackageName(),
+                R.layout.widget_list_item_layout);
+        final int textViewResourceId = R.id.widget_item_text_view;
+        itemMessageViews.setBoolean(R.id.widget_item_text_view, "setSingleLine", false);
+        itemMessageViews.setTextViewText(textViewResourceId, message);
+        itemMessageViews.setTextColor(textViewResourceId, textColor);
+        itemMessageViews.setInt(R.id.widget_item_color, "setVisibility", View.GONE);
+        remoteViews.addView(R.id.widget_list_item_list, itemMessageViews);
+    }
+
+    // TODO: decice what we want to do with this.
+    // An attempt to update all list widgtes by a direct call.
+    public static void updateAllIconWidgetsFromModel(Context context, @Nullable AppModel model) {
+        final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+
+        // Get ids of all widgets of this type.
+        @Nullable
+        final int[] widgetIds = getWidgetIds(context, appWidgetManager);
+
+        // Update
+        if (widgetIds != null) {
+            update(context, appWidgetManager, widgetIds, model);
+        }
+    }
+
+    /** Return null if none, or an array if at least one. */
+    private static int[] getWidgetIds(Context context, AppWidgetManager appWidgetManager) {
+        final int[][] widgetIdLists = new int[LIST_WIDGET_PROVIDER_CLASSES.length][];
+
+        int n = 0;
+        for (int i = 0; i < LIST_WIDGET_PROVIDER_CLASSES.length; i++) {
+            widgetIdLists[i] = appWidgetManager.getAppWidgetIds(new ComponentName(context,
+                    LIST_WIDGET_PROVIDER_CLASSES[i]));
+            n += widgetIdLists[i].length;
+        }
+
+        if (n == 0) {
+            return null;
+        }
+
+        final int[] widgetIds = new int[n];
+        int m = 0;
+        for (int[] src : widgetIdLists) {
+            System.arraycopy(src, 0, widgetIds, m, src.length);
+            m += src.length;
+        }
+        check(m == n, "%s vs %s", m, n);
+
+        return widgetIds;
+    }
 }

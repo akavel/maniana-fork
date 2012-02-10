@@ -21,6 +21,8 @@ import android.graphics.Color;
 /**
  * The colors set used to flag items.
  * 
+ * TODO: inherit from KeyedEnum
+ * 
  * @author Tal Dayan
  */
 public enum ItemColor {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/widget_top_view"
+    android:id="@+id/widget_list_top_view"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_margin="@dimen/widget_margin"
@@ -9,7 +9,7 @@
     android:padding="0dp" >
 
     <RelativeLayout
-        android:id="@+id/widget_list_title"
+        android:id="@+id/widget_list_top_toolbar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="0dip"
@@ -39,7 +39,7 @@
             android:padding="0dip" >
 
             <ImageButton
-                android:id="@+id/widget_add_by_text_button"
+                android:id="@+id/widget_list_top_toolbar_add_by_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#00000000"
@@ -50,7 +50,7 @@
             </ImageButton>
 
             <ImageButton
-                android:id="@+id/widget_add_by_voice_button"
+                android:id="@+id/widget_list_top_toolbar_add_by_voice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#00000000"
@@ -63,11 +63,52 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/widget_item_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:baselineAligned="false"
         android:background="#00000000"
-        android:orientation="vertical" >
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/widget_list_item_list"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:orientation="vertical"
+            android:paddingRight="2dip" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/widget_list_right_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_margin="0dip"
+            android:background="#60ffffff"
+            android:orientation="vertical" >
+
+            <ImageButton
+                android:id="@+id/widget_list_right_toolbar_add_by_voice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:longClickable="false"
+                android:paddingBottom="10dip"
+                android:paddingTop="8dip"
+                android:src="@drawable/widget_add_by_voice" >
+            </ImageButton>
+
+            <ImageButton
+                android:id="@+id/widget_list_right_toolbar_add_by_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:longClickable="false"
+                android:paddingBottom="10dip"
+                android:paddingTop="8dip"
+                android:src="@drawable/widget_add_by_text" >
+            </ImageButton>
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

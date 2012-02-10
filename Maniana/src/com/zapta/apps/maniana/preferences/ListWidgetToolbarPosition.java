@@ -20,25 +20,20 @@ import com.zapta.apps.maniana.util.EnumUtil;
 import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 
 /** 
- * Represents possible values of Font Size preference. 
- * 
+ * Represents possible positions of the lift widget toolbar.
+ *
  * @author Tal Dayan
  */
-public enum FontSize implements KeyedEnum {
-    SMALL1("small1", 0.8f),
-    NORMAL("normal", 1.0f),
-    LARGE1("large1", 1.3f),
-    LARGE2("large2", 1.6f);
+public enum ListWidgetToolbarPosition implements KeyedEnum {
+    NONE("none"),
+    TOP("top"),
+    RIGHT("right");
 
     /** Preference value key. Should match the values in preference xml. */
     private final String mKey;
-    
-    /** Magnification factor. 1.0f is normal. */
-    private final float mFactor;
 
-    private FontSize(String key, float factor) {
+    private ListWidgetToolbarPosition(String key) {
         this.mKey = key;
-        this.mFactor = factor;
     }
 
     @Override
@@ -46,13 +41,17 @@ public enum FontSize implements KeyedEnum {
         return mKey;
     }
     
-    public final float getFactor() {
-        return mFactor;
+    public final boolean isTop() {
+        return this == TOP;
+    }
+    
+    public final boolean isRight() {
+        return this == RIGHT;
     }
 
     /** Return value with given key, fallback value if not found. */
     @Nullable
-    public final static FontSize fromKey(String key, @Nullable FontSize fallBack) {
-        return EnumUtil.fromKey(key, FontSize.values(), fallBack);
+    public final static ListWidgetToolbarPosition fromKey(String key, @Nullable ListWidgetToolbarPosition fallBack) {
+        return EnumUtil.fromKey(key, ListWidgetToolbarPosition.values(), fallBack);
     }
 }

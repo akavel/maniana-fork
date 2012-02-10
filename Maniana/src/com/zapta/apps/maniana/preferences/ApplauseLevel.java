@@ -38,6 +38,7 @@ public enum ApplauseLevel implements KeyedEnum {
         this.mKey = key;
     }
 
+    @Override
     public final String getKey() {
         return mKey;
     }

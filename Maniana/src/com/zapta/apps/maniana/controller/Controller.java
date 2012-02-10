@@ -475,9 +475,6 @@ public class Controller {
             boolean upperCaseIt) {
         String cleanedValue = text.trim();
         if (cleanedValue.length() == 0) {
-            if (mApp.pref().getVerboseMessagesEnabledPreference()) {
-                mApp.services().toast("New task canceled");
-            }
             return;
         }
 

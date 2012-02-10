@@ -34,6 +34,7 @@ public enum PageBackgroundType implements KeyedEnum {
         mKey = key;
     }
 
+    @Override
     public final String getKey() {
         return mKey;
     }
