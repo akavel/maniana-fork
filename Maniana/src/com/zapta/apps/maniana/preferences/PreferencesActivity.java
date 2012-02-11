@@ -57,7 +57,7 @@ public class PreferencesActivity extends PreferenceActivity implements
     private ColorPickerPreference mPageSolidColorPickPreference;
     private ListPreference mLockPeriodListPreference;
     private ListPreference mApplauseLevelListPreference;
-    private ListPreference mWidgetToolbarLocationPreference;
+    //private CheckBoxPreference mWidgetShowToolbarPreference;
     private CheckBoxPreference mSoundEnablePreference;
     private Preference mVersionInfoPreference;
     private Preference mSharePreference;
@@ -82,7 +82,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         mLockPeriodListPreference = (ListPreference) findPreference(PreferenceKind.LOCK_PERIOD);
         mApplauseLevelListPreference = (ListPreference) findPreference(PreferenceKind.APPLAUSE_LEVEL);
         mSoundEnablePreference = (CheckBoxPreference) findPreference(PreferenceKind.SOUND_ENABLED);
-        mWidgetToolbarLocationPreference = (ListPreference) findPreference(PreferenceKind.WIDGET_TOOLBAR_LOCATION);
+        //mWidgetShowToolbarPreference = (CheckBoxPreference) findPreference(PreferenceKind.WIDGET_SHOW_TOOLBAR);
         mVersionInfoPreference = findPreference(PreferenceKind.VERSION_INFO);
         mSharePreference = findPreference(PreferenceKind.SHARE);
         mFeedbackPreference = findPreference(PreferenceKind.FEEDBACK);
@@ -97,6 +97,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         findColorPickerPrerence(PreferenceKind.WIDGET_TEXT_COLOR);
         findPreference(PreferenceKind.AUTO_SORT);
         findPreference(PreferenceKind.AUTO_DAILY_CLEANUP);
+        findPreference(PreferenceKind.WIDGET_SHOW_TOOLBAR);
 
         mRestoreDefaultsPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
@@ -255,8 +256,8 @@ public class PreferencesActivity extends PreferenceActivity implements
         updateListSummary(mFontSizeListPreference, R.array.itemFontSizeSummaries, null);
         updateListSummary(mPageBackgroundTypeListPreference, R.array.pageBackgroundTypeSummaries,
                 null);
-        updateListSummary(mWidgetToolbarLocationPreference, R.array.widgetToolbarLocationSummaries,
-                null);
+//        updateListSummary(mWidgetToolbarLocationPreference, R.array.widgetToolbarLocationSummaries,
+//                null);
 
         // Disable applause if voice is disabled
         if (mSoundEnablePreference.isChecked()) {

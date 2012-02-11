@@ -679,7 +679,7 @@ public class Controller {
             case WIDGET_BACKGROUND_COLOR:
             case WIDGET_TEXT_COLOR:
             case WIDGET_SINGLE_LINE:
-            case WIDGET_TOOLBAR_LOCATION:
+            case WIDGET_SHOW_TOOLBAR:
                 // NOTE: This covers the case where the user changes widget settings and presses the
                 // Home button immediately, going back to the widgets. The widget update at
                 // onAppPause() is not triggered in this case because the main activity is already

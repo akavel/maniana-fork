@@ -37,9 +37,7 @@ import com.zapta.apps.maniana.main.MainActivity;
 import com.zapta.apps.maniana.main.ResumeAction;
 import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.model.ItemModelReadOnly;
-import com.zapta.apps.maniana.preferences.ListWidgetToolbarPosition;
 import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
-import com.zapta.apps.maniana.preferences.PreferenceKind;
 import com.zapta.apps.maniana.preferences.PreferencesTracker;
 import com.zapta.apps.maniana.services.AppServices;
 
@@ -84,16 +82,8 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         // Set onClick() actions
         setOnClickLaunch(context, remoteViews, R.id.widget_list_top_view, ResumeAction.NONE);
 
-
-        // Set the widget toolbar. The layout contains two toolbars, at the top and on the right
-        // and we enable one or none of them depending on the settings.
-        final ListWidgetToolbarPosition toolbarPosition = PreferencesTracker
-                .readWidgetToolbarLocationPreference(sharedPreferences);
-        setToolbar(context, remoteViews, toolbarPosition.isTop(), R.id.widget_list_top_toolbar,
-                R.id.widget_list_top_toolbar_add_by_text, R.id.widget_list_top_toolbar_add_by_voice);
-        setToolbar(context, remoteViews, toolbarPosition.isRight(), R.id.widget_list_right_toolbar,
-                R.id.widget_list_right_toolbar_add_by_text,
-                R.id.widget_list_right_toolbar_add_by_voice);
+        final boolean toolbarEanbled = PreferencesTracker.readWidgetShowToolbarPreference(sharedPreferences);
+        setToolbar(context, remoteViews, toolbarEanbled);
 
         // Set widget background color
         final int backgroundColor = PreferencesTracker
@@ -179,24 +169,25 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
     }
 
-    private static final void setToolbar(Context context, RemoteViews remoteViews, boolean enabled,
-            int toolbar_id, int add_by_text_id, int add_by_voice_id) {
-        if (!enabled) {
-            remoteViews.setInt(toolbar_id, "setVisibility", View.GONE);
+    private static final void setToolbar(Context context, RemoteViews remoteViews, boolean toolbarEnabled) {
+        if (!toolbarEnabled) {
+            remoteViews.setInt(R.id.widget_list_toolbar, "setVisibility", View.GONE);
             return;
         }
 
-        remoteViews.setInt(toolbar_id, "setVisibility", View.VISIBLE);
-
-        setOnClickLaunch(context, remoteViews, add_by_text_id, ResumeAction.ADD_NEW_ITEM_BY_TEXT);
+        remoteViews.setInt(R.id.widget_list_toolbar, "setVisibility", View.VISIBLE);
+        
+        setOnClickLaunch(context, remoteViews, R.id.widget_list_toolbar_add_by_text,
+                ResumeAction.ADD_NEW_ITEM_BY_TEXT);
 
         // The voice recognition button is shown only if this device supports voice recognition.
         if (AppServices.isVoiceRecognitionSupported(context)) {
-            remoteViews.setInt(add_by_voice_id, "setVisibility", View.VISIBLE);
-            setOnClickLaunch(context, remoteViews, add_by_voice_id,
+            remoteViews
+                    .setInt(R.id.widget_list_toolbar_add_by_voice, "setVisibility", View.VISIBLE);
+            setOnClickLaunch(context, remoteViews, R.id.widget_list_toolbar_add_by_voice,
                     ResumeAction.ADD_NEW_ITEM_BY_VOICE);
         } else {
-            remoteViews.setInt(add_by_voice_id, "setVisibility", View.GONE);
+            remoteViews.setInt(R.id.widget_list_toolbar_add_by_voice, "setVisibility", View.GONE);
         }
     }
 

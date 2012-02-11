@@ -79,20 +79,5 @@
         <item>Surprise me</item>
         <item>Always applaud when I complete a task</item>
     </string-array>
-    <string-array name="widgetToolbarLocationNames">
-        <item>Hide</item>
-        <item>Top</item>
-        <item>Right</item>
-    </string-array>
-    <string-array name="widgetToolbarLocationValues">
-        <item>none</item>
-        <item>top</item>
-        <item>right</item>
-    </string-array>
-    <string-array name="widgetToolbarLocationSummaries">
-        <item>Hiding toolbar</item>
-        <item>Locating widget toolbar at top</item>
-        <item>Locating widget toolbar on right side</item>
-    </string-array>
 
 </resources>

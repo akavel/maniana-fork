@@ -105,12 +105,12 @@
             android:summaryOff="Wrapping longer tasks onto a second line"
             android:summaryOn="Limiting tasks to a single line"
             android:title="Single Line" />
-        <ListPreference
-            android:defaultValue="none"
-            android:entries="@array/widgetToolbarLocationNames"
-            android:entryValues="@array/widgetToolbarLocationValues"
-            android:key="prefWidgetToolbarLocationKey"
-            android:title="Toolbar Location" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="prefWidgetShowToolbarKey"
+            android:summaryOff="Hiding widget toolbar"
+            android:summaryOn="Showing widget toolbar"
+            android:title="Show Toolbar" />
     </PreferenceCategory>
     <PreferenceCategory android:title="Miscellaneous">
         <Preference

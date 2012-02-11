@@ -46,7 +46,7 @@ public enum PreferenceKind implements KeyedEnum {
     WIDGET_SINGLE_LINE("prefWidgetSingleLineKey"),
     WIDGET_BACKGROUND_COLOR("prefWidgetBackgroundColorKey"),
     WIDGET_TEXT_COLOR("prefWidgetTextColorKey"),
-    WIDGET_TOOLBAR_LOCATION("prefWidgetToolbarLocationKey"),
+    WIDGET_SHOW_TOOLBAR("prefWidgetShowToolbarKey"),
     VERSION_INFO("prefVersionInfoKey"),
     SHARE("prefShareKey"),
     FEEDBACK("prefFeedbackKey"),

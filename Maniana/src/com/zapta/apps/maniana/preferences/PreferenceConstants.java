@@ -37,6 +37,6 @@ public interface PreferenceConstants {
     public static final int DEFAULT_WIDGET_BACKGROUND_COLOR = 0x44000000;
     public static final int DEFAULT_WIDGET_TEXT_COLOR = 0xffffff00;
     public static final boolean DEFAULT_WIDGET_SINGLE_LINE = false;
-    public static final ListWidgetToolbarPosition DEFAULT_WIDGET_TOOLBAR_LOCATION = ListWidgetToolbarPosition.NONE;
+    public static final boolean DEFAULT_WIDGET_SHOW_TOOLBAR = true;
 
 }

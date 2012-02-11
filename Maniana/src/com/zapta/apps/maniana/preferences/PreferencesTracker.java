@@ -178,13 +178,11 @@ public class PreferencesTracker implements PreferenceConstants {
                 DEFAULT_WIDGET_SINGLE_LINE);
     }
 
-    /** Read widget toolbar position preference. Used by the list widget only. */
-    public static final ListWidgetToolbarPosition readWidgetToolbarLocationPreference(
+    /** Read widget show toolbar preference. Used by the list widget only. */
+    public static final boolean readWidgetShowToolbarPreference(
             SharedPreferences sharedPreferences) {
-        final String key = sharedPreferences.getString(
-                PreferenceKind.WIDGET_TOOLBAR_LOCATION.getKey(),
-                DEFAULT_WIDGET_TOOLBAR_LOCATION.getKey());
-        return ListWidgetToolbarPosition.fromKey(key, DEFAULT_WIDGET_TOOLBAR_LOCATION);
+        return sharedPreferences.getBoolean(PreferenceKind.WIDGET_SHOW_TOOLBAR.getKey(),
+                DEFAULT_WIDGET_SHOW_TOOLBAR);
     }
 
     private final void updateCachedApplauseLevelPreference() {
@@ -332,7 +330,7 @@ public class PreferencesTracker implements PreferenceConstants {
             case WIDGET_BACKGROUND_COLOR:
             case WIDGET_TEXT_COLOR:
             case WIDGET_SINGLE_LINE:
-            case WIDGET_TOOLBAR_LOCATION:
+            case WIDGET_SHOW_TOOLBAR:
                 // These ones are not cached or used here. Just reported to controller to
                 // trigger the widget update and backup service.
                 break;
