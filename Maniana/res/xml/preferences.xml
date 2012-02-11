@@ -112,7 +112,7 @@
             android:entries="@array/widgetToolbarLocationNames"
             android:entryValues="@array/widgetToolbarLocationValues"
             android:key="prefWidgetToolbarLocationKey"
-            android:title="Toolbar" />
+            android:title="Toolbar Location" />
             
     </PreferenceCategory>
     <PreferenceCategory android:title="Miscellaneous" >

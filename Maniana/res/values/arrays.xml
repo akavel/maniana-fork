@@ -80,8 +80,8 @@
         <item>Always applaud when I complete a task</item>
     </string-array>
     <string-array name="widgetToolbarLocationNames">
-        <item>None</item>
-        <item>Above</item>
+        <item>Hide</item>
+        <item>Top</item>
         <item>Right</item>
     </string-array>
     <string-array name="widgetToolbarLocationValues">
@@ -90,9 +90,9 @@
         <item>right</item>
     </string-array>
     <string-array name="widgetToolbarLocationSummaries">
-        <item>Hiding list widget toolbar</item>
-        <item>Showing list widget toolbar at top</item>
-        <item>Showing list widget toolbar on the right</item>
+        <item>Hiding toolbar</item>
+        <item>Locating widget toolbar at top</item>
+        <item>Locating widget toolbar on right side</item>
     </string-array>
 
 </resources>
