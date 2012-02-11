@@ -37,17 +37,17 @@ public class PreferencesTracker implements PreferenceConstants {
     private boolean mCachedAllowSoundsPreference;
 
     private FontType mCachedFontTypePreference;
-    
+
     private FontSize mCachedFontSizePreference;
-    
+
     private int mCachedPageItemActiveTextColorPreference;
-    
+
     private int mCachedPageItemCompletedTextColorPreference;
 
     private PageBackgroundType mCachedPageBackgroundTypePreference;
-    
+
     private int mCachedPageBackgroundSolidColorPreference;
-    
+
     private int mCachedPageItemDividerColorPreference;
 
     private LockExpirationPeriod mCachedLockExpirationPeriodPrefernece;
@@ -58,11 +58,7 @@ public class PreferencesTracker implements PreferenceConstants {
 
     private boolean mCachedStartupAnimationPreference;
 
-//    private boolean mCachedVoiceRecognitionPreference;
-    
     private boolean mCachedAutoSortPreference;
-
-//    private final boolean mDeviceSupportsVoiceRecognition;
 
     // This is a hack to keep the listener from being garbage collected per
     // http://tinyurl.com/blkycrk. Should be unregistered explicitly when main activity is
@@ -72,8 +68,6 @@ public class PreferencesTracker implements PreferenceConstants {
     public PreferencesTracker(AppContext app) {
         mApp = app;
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mApp.context());
-
-//        mDeviceSupportsVoiceRecognition = AppServices.isVoiceRecognitionSupported(mApp.context());
 
         updateCachedAllowSoundsPreference();
         updateCachedApplauseLevelPreference();
@@ -88,7 +82,7 @@ public class PreferencesTracker implements PreferenceConstants {
         updateCachedLockExpierationPeriodPreference();
         updateCachedVerboseMessagesPreference();
         updateCachedStartupAnimationPreference();
-//        updateCachedVoiceRecognitionPreference();
+        // updateCachedVoiceRecognitionPreference();
 
         listener = new OnSharedPreferenceChangeListener() {
             @Override
@@ -101,48 +95,51 @@ public class PreferencesTracker implements PreferenceConstants {
     }
 
     private final void updateCachedAllowSoundsPreference() {
-        mCachedAllowSoundsPreference = mSharedPreferences.getBoolean(PreferenceKind.SOUND_ENABLED
-                        .getKey(), DEFAULT_ALLOWS_SOUND_EFFECTS);
+        mCachedAllowSoundsPreference = mSharedPreferences.getBoolean(
+                PreferenceKind.SOUND_ENABLED.getKey(), DEFAULT_ALLOWS_SOUND_EFFECTS);
     }
 
     private final void updateCachedFontTypePreference() {
         final String key = mSharedPreferences.getString(PreferenceKind.ITEM_FONT_TYPE.getKey(),
-                        DEFAULT_FONT_TYPE.getKey());
+                DEFAULT_FONT_TYPE.getKey());
         mCachedFontTypePreference = FontType.fromKey(key, DEFAULT_FONT_TYPE);
     }
-    
+
     private final void updateCachedFontSizePreference() {
         final String key = mSharedPreferences.getString(PreferenceKind.ITEM_FONT_SIZE.getKey(),
-                        DEFAULT_FONT_SIZE.getKey());
+                DEFAULT_FONT_SIZE.getKey());
         mCachedFontSizePreference = FontSize.fromKey(key, DEFAULT_FONT_SIZE);
     }
 
     private final void updateCachedPageBackgroundTypePreference() {
-        final String key = mSharedPreferences.getString(PreferenceKind.PAGE_BACKGROUND_TYPE.getKey(),
+        final String key = mSharedPreferences
+                .getString(PreferenceKind.PAGE_BACKGROUND_TYPE.getKey(),
                         DEFAULT_PAGE_BACKGROUND_TYPE.getKey());
         mCachedPageBackgroundTypePreference = PageBackgroundType.fromKey(key,
-                        DEFAULT_PAGE_BACKGROUND_TYPE);
+                DEFAULT_PAGE_BACKGROUND_TYPE);
     }
-    
+
     private final void updateCachedPageBackgroundSolidColorPreference() {
-        mCachedPageBackgroundSolidColorPreference = mSharedPreferences.getInt(PreferenceKind.PAGE_BACKGROUND_SOLID_COLOR.getKey(),
-                        DEFAULT_PAGE_BACKGROUND_SOLID_COLOR);
+        mCachedPageBackgroundSolidColorPreference = mSharedPreferences.getInt(
+                PreferenceKind.PAGE_BACKGROUND_SOLID_COLOR.getKey(),
+                DEFAULT_PAGE_BACKGROUND_SOLID_COLOR);
     }
-    
+
     private final void updateCachedPageItemDividerColorPreference() {
-        mCachedPageItemDividerColorPreference = mSharedPreferences.getInt(PreferenceKind.PAGE_ITEM_DIVIDER_COLOR.getKey(),
-                        DEFAULT_PAGE_ITEM_DIVIDER_COLOR);
+        mCachedPageItemDividerColorPreference = mSharedPreferences.getInt(
+                PreferenceKind.PAGE_ITEM_DIVIDER_COLOR.getKey(), DEFAULT_PAGE_ITEM_DIVIDER_COLOR);
     }
-        
+
     private final void updateCachedPageItemActiveTextColorPreference() {
-        mCachedPageItemActiveTextColorPreference = mSharedPreferences.getInt(PreferenceKind.ITEM_ACTIVE_TEXT_COLOR.getKey(),
-                        DEFAULT_ITEM_TEXT_COLOR);
+        mCachedPageItemActiveTextColorPreference = mSharedPreferences.getInt(
+                PreferenceKind.ITEM_ACTIVE_TEXT_COLOR.getKey(), DEFAULT_ITEM_TEXT_COLOR);
     }
-    
+
     private final void updateCachedPageItemCompletedTextColorPreference() {
-        mCachedPageItemCompletedTextColorPreference = mSharedPreferences.getInt(PreferenceKind.ITEM_COMPLETED_TEXT_COLOR.getKey(),
-                        DEFAULT_COMPLETED_ITEM_TEXT_COLOR);
-    }  
+        mCachedPageItemCompletedTextColorPreference = mSharedPreferences.getInt(
+                PreferenceKind.ITEM_COMPLETED_TEXT_COLOR.getKey(),
+                DEFAULT_COMPLETED_ITEM_TEXT_COLOR);
+    }
 
     private final void updateCachedLockExpierationPeriodPreference() {
         mCachedLockExpirationPeriodPrefernece = readLockExpierationPeriodPreference(mSharedPreferences);
@@ -153,60 +150,59 @@ public class PreferencesTracker implements PreferenceConstants {
      * functionality should use the cached value instead.
      */
     public static final LockExpirationPeriod readLockExpierationPeriodPreference(
-                    SharedPreferences sharedPreferences) {
+            SharedPreferences sharedPreferences) {
         final String key = sharedPreferences.getString(PreferenceKind.LOCK_PERIOD.getKey(),
-                        DEFAULT_LOCK_PERIOD.getKey());
+                DEFAULT_LOCK_PERIOD.getKey());
         return LockExpirationPeriod.fromKey(key, DEFAULT_LOCK_PERIOD);
     }
 
-    /** Read current widget background color. Used by the widget only. */
-    public static final int readWidgetBackgroundColorPreference(
-                    SharedPreferences sharedPreferences) {       
+    /** Read widget background color preference. Used by the list widget only. */
+    public static final int readWidgetBackgroundColorPreference(SharedPreferences sharedPreferences) {
         return sharedPreferences.getInt(PreferenceKind.WIDGET_BACKGROUND_COLOR.getKey(),
-                        DEFAULT_WIDGET_BACKGROUND_COLOR);
+                DEFAULT_WIDGET_BACKGROUND_COLOR);
     }
 
-    /** Read current widget text color preference. Used by the widget only. */
-    public static final int readWidgetTextColorPreference(
-                    SharedPreferences sharedPreferences) {
+    /** Read widget text color preference. Used by the list widget only. */
+    public static final int readWidgetTextColorPreference(SharedPreferences sharedPreferences) {
 
-         return sharedPreferences.getInt(PreferenceKind.WIDGET_TEXT_COLOR.getKey(),
-                        DEFAULT_WIDGET_TEXT_COLOR);
+        return sharedPreferences.getInt(PreferenceKind.WIDGET_TEXT_COLOR.getKey(),
+                DEFAULT_WIDGET_TEXT_COLOR);
     }
-    
-    /** Read current widget line wrapping preference. Used by the widget only. */
+
+    /** Read widget line wrapping preference. Used by the list widget only. */
     public static final boolean readWidgetSingleLinePreference(SharedPreferences sharedPreferences) {
-         return sharedPreferences.getBoolean(PreferenceKind.WIDGET_SINGLE_LINE.getKey(),
-                        DEFAULT_WIDGET_SINGLE_LINE);
+        return sharedPreferences.getBoolean(PreferenceKind.WIDGET_SINGLE_LINE.getKey(),
+                DEFAULT_WIDGET_SINGLE_LINE);
+    }
+
+    /** Read widget toolbar position preference. Used by the list widget only. */
+    public static final ListWidgetToolbarPosition readWidgetToolbarLocationPreference(
+            SharedPreferences sharedPreferences) {
+        final String key = sharedPreferences.getString(
+                PreferenceKind.WIDGET_TOOLBAR_LOCATION.getKey(),
+                DEFAULT_WIDGET_TOOLBAR_LOCATION.getKey());
+        return ListWidgetToolbarPosition.fromKey(key, DEFAULT_WIDGET_TOOLBAR_LOCATION);
     }
 
     private final void updateCachedApplauseLevelPreference() {
         final String key = mSharedPreferences.getString(PreferenceKind.APPLAUSE_LEVEL.getKey(),
-                        DEFAULT_APPPLAUSE_LEVEL.getKey());
+                DEFAULT_APPPLAUSE_LEVEL.getKey());
         mCachedApplauseLevelPreference = ApplauseLevel.fromKey(key, DEFAULT_APPPLAUSE_LEVEL);
     }
 
     private final void updateCachedVerboseMessagesPreference() {
         mCachedVerboseMessagesPreference = mSharedPreferences.getBoolean(
-                        PreferenceKind.VERBOSE_MESSAGES.getKey(), DEFAULT_VERBOSE_MESSAGES);
-//        LogUtil.debug("*** updateCachedVerboseMessagesPreference() -> %s", mCachedVerboseMessagesPreference);
+                PreferenceKind.VERBOSE_MESSAGES.getKey(), DEFAULT_VERBOSE_MESSAGES);
     }
 
     private final void updateCachedStartupAnimationPreference() {
         mCachedStartupAnimationPreference = mSharedPreferences.getBoolean(
-                        PreferenceKind.STARTUP_ANIMATION.getKey(), DEFAULT_STARTUP_ANIMATION);
+                PreferenceKind.STARTUP_ANIMATION.getKey(), DEFAULT_STARTUP_ANIMATION);
     }
 
-//    private final void updateCachedVoiceRecognitionPreference() {
-//        mCachedVoiceRecognitionPreference = mDeviceSupportsVoiceRecognition
-//                        && mSharedPreferences.getBoolean(PreferenceKind.VOICE_RECOGNITION.getKey(),
-//                                        DEFAULT_VOICE_RECOGNITION);
-//    }
-    
     private final void updateCachedAutoSortPreference() {
-        mCachedAutoSortPreference = mSharedPreferences.getBoolean(PreferenceKind.AUTO_SORT.getKey(),
-                                        DEFAULT_AUTO_SORT);
-//        LogUtil.debug("*** updateCachedAutoSortPreference() -> %s", mCachedAutoSortPreference);
+        mCachedAutoSortPreference = mSharedPreferences.getBoolean(
+                PreferenceKind.AUTO_SORT.getKey(), DEFAULT_AUTO_SORT);
     }
 
     public final boolean getSoundEnabledPreference() {
@@ -221,11 +217,11 @@ public class PreferencesTracker implements PreferenceConstants {
     public final FontType getItemFontTypePreference() {
         return mCachedFontTypePreference;
     }
-    
+
     public final FontSize getItemFontSizePreference() {
         return mCachedFontSizePreference;
     }
-    
+
     public int getPageItemActiveTextColorPreference() {
         return mCachedPageItemActiveTextColorPreference;
     }
@@ -237,11 +233,11 @@ public class PreferencesTracker implements PreferenceConstants {
     public final PageBackgroundType getBackgroundTypePreference() {
         return mCachedPageBackgroundTypePreference;
     }
-    
+
     public final int getPageBackgroundSolidColorPreference() {
         return mCachedPageBackgroundSolidColorPreference;
     }
-    
+
     public final int getPageItemDividerColorPreference() {
         return mCachedPageItemDividerColorPreference;
     }
@@ -251,7 +247,6 @@ public class PreferencesTracker implements PreferenceConstants {
     }
 
     public final boolean getVerboseMessagesEnabledPreference() {
-//        LogUtil.debug("*** getVerboseMessagesEnabledPreference = %s", mCachedVerboseMessagesPreference);
         return mCachedVerboseMessagesPreference;
     }
 
@@ -259,20 +254,15 @@ public class PreferencesTracker implements PreferenceConstants {
         return mCachedStartupAnimationPreference;
     }
 
-//    // TODO: move to services class
-//    public final boolean getDeviceSupportsVoiceRecognition() {
-//        return mDeviceSupportsVoiceRecognition;
-//    }
-    
     public final boolean getAutoSortPreference() {
-//        LogUtil.debug("*** getAutoSortPreference = %s", mCachedAutoSortPreference);
         return mCachedAutoSortPreference;
     }
 
     /**
      * Handle preferences change.
      * 
-     * @param key the preference key string as defined in preferences.xml.
+     * @param key
+     *            the preference key string as defined in preferences.xml.
      */
     private final void onPreferenceChange(String key) {
         // Null if not found.
@@ -283,7 +273,7 @@ public class PreferencesTracker implements PreferenceConstants {
             LogUtil.error("Unknown setting key: " + key);
             return;
         }
-        
+
         switch (id) {
             case SOUND_ENABLED:
                 updateCachedAllowSoundsPreference();
@@ -324,12 +314,13 @@ public class PreferencesTracker implements PreferenceConstants {
             case STARTUP_ANIMATION:
                 updateCachedStartupAnimationPreference();
                 break;
-             case WIDGET_BACKGROUND_COLOR:
-             case WIDGET_TEXT_COLOR:
-             case WIDGET_SINGLE_LINE:
-                 // These ones are not cached or used here. Just reported to controller to
-                 // trigger the widget update and backup service.
-               break;
+            case WIDGET_BACKGROUND_COLOR:
+            case WIDGET_TEXT_COLOR:
+            case WIDGET_SINGLE_LINE:
+            case WIDGET_TOOLBAR_LOCATION:
+                // These ones are not cached or used here. Just reported to controller to
+                // trigger the widget update and backup service.
+                break;
             default:
                 // Report and ignore this call.
                 LogUtil.error("Unknown changed preference key: %s", key);
@@ -345,6 +336,5 @@ public class PreferencesTracker implements PreferenceConstants {
     public void release() {
         // Per http://tinyurl.com/blkycrk
         mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this.listener);
-        // LogUtil.("Unregistered prefernces listener");
     }
 }

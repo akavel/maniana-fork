@@ -31,11 +31,11 @@ public interface PreferenceConstants {
     public static final LockExpirationPeriod DEFAULT_LOCK_PERIOD = LockExpirationPeriod.NEVER;
     public static final ApplauseLevel DEFAULT_APPPLAUSE_LEVEL = ApplauseLevel.ALWAYS;
     public static final boolean DEFAULT_VERBOSE_MESSAGES = true;
-    public static final boolean DEFAULT_STARTUP_ANIMATION = true;
-//    public static final boolean DEFAULT_VOICE_RECOGNITION = true;    
+    public static final boolean DEFAULT_STARTUP_ANIMATION = true;   
     public static final boolean DEFAULT_AUTO_SORT = false;  
     public static final int DEFAULT_WIDGET_BACKGROUND_COLOR = 0x44000000;
     public static final int DEFAULT_WIDGET_TEXT_COLOR = 0xffffff00;
     public static final boolean DEFAULT_WIDGET_SINGLE_LINE = false;
+    public static final ListWidgetToolbarPosition DEFAULT_WIDGET_TOOLBAR_LOCATION = ListWidgetToolbarPosition.NONE;
 
 }

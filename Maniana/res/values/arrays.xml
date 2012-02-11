@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string-array name="itemFontNames">
         <item>Cursive</item>
         <item>Elegant</item>
@@ -77,6 +78,21 @@
         <item>Never applaud when I complete a task</item>
         <item>Surprise me</item>
         <item>Always applaud when I complete a task</item>
+    </string-array>
+    <string-array name="widgetToolbarLocationNames">
+        <item>None</item>
+        <item>Above</item>
+        <item>Right</item>
+    </string-array>
+    <string-array name="widgetToolbarLocationValues">
+        <item>none</item>
+        <item>top</item>
+        <item>right</item>
+    </string-array>
+    <string-array name="widgetToolbarLocationSummaries">
+        <item>Hiding list widget toolbar</item>
+        <item>Showing list widget toolbar at top</item>
+        <item>Showing list widget toolbar on the right</item>
     </string-array>
 
 </resources>

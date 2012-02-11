@@ -39,6 +39,7 @@ import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.model.ItemModelReadOnly;
 import com.zapta.apps.maniana.preferences.ListWidgetToolbarPosition;
 import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
+import com.zapta.apps.maniana.preferences.PreferenceKind;
 import com.zapta.apps.maniana.preferences.PreferencesTracker;
 import com.zapta.apps.maniana.services.AppServices;
 
@@ -83,12 +84,13 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         // Set onClick() actions
         setOnClickLaunch(context, remoteViews, R.id.widget_list_top_view, ResumeAction.NONE);
 
-        // TODO: set from Settings
-        final ListWidgetToolbarPosition toolbarPosition = ListWidgetToolbarPosition.RIGHT;
-        
+
+        // Set the widget toolbar. The layout contains two toolbars, at the top and on the right
+        // and we enable one or none of them depending on the settings.
+        final ListWidgetToolbarPosition toolbarPosition = PreferencesTracker
+                .readWidgetToolbarLocationPreference(sharedPreferences);
         setToolbar(context, remoteViews, toolbarPosition.isTop(), R.id.widget_list_top_toolbar,
                 R.id.widget_list_top_toolbar_add_by_text, R.id.widget_list_top_toolbar_add_by_voice);
-
         setToolbar(context, remoteViews, toolbarPosition.isRight(), R.id.widget_list_right_toolbar,
                 R.id.widget_list_right_toolbar_add_by_text,
                 R.id.widget_list_right_toolbar_add_by_voice);

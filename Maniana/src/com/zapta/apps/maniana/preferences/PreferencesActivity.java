@@ -49,7 +49,7 @@ import com.zapta.apps.maniana.util.VisibleForTesting;
  * @author Tal Dayan
  */
 public class PreferencesActivity extends PreferenceActivity implements
-                OnSharedPreferenceChangeListener {
+        OnSharedPreferenceChangeListener {
 
     private ListPreference mFontListPreference;
     private ListPreference mFontSizeListPreference;
@@ -57,8 +57,8 @@ public class PreferencesActivity extends PreferenceActivity implements
     private ColorPickerPreference mPageSolidColorPickPreference;
     private ListPreference mLockPeriodListPreference;
     private ListPreference mApplauseLevelListPreference;
+    private ListPreference mWidgetToolbarLocationPreference;
     private CheckBoxPreference mSoundEnablePreference;
-    // private CheckBoxPreference mAutoSortPreference;
     private Preference mVersionInfoPreference;
     private Preference mSharePreference;
     private Preference mFeedbackPreference;
@@ -82,6 +82,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         mLockPeriodListPreference = (ListPreference) findPreference(PreferenceKind.LOCK_PERIOD);
         mApplauseLevelListPreference = (ListPreference) findPreference(PreferenceKind.APPLAUSE_LEVEL);
         mSoundEnablePreference = (CheckBoxPreference) findPreference(PreferenceKind.SOUND_ENABLED);
+        mWidgetToolbarLocationPreference = (ListPreference) findPreference(PreferenceKind.WIDGET_TOOLBAR_LOCATION);
         mVersionInfoPreference = findPreference(PreferenceKind.VERSION_INFO);
         mSharePreference = findPreference(PreferenceKind.SHARE);
         mFeedbackPreference = findPreference(PreferenceKind.FEEDBACK);
@@ -137,44 +138,6 @@ public class PreferencesActivity extends PreferenceActivity implements
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         onConfirmedResetSettingsClick();
-                        // Editor editor = getPreferenceScreen().getEditor();
-                        // editor.clear();
-                        //
-                        // // TODO: this is a hack to force notifying the main activity and widget
-                        // // about the change. For some reason they are not notified about it
-                        // // otherwise as the the non custom preference types do.
-                        // editor.putInt(PreferenceKind.ITEM_ACTIVE_TEXT_COLOR.getKey(),
-                        // PreferenceConstants.DEFAULT_ITEM_TEXT_COLOR);
-                        // editor.putInt(PreferenceKind.ITEM_COMPLETED_TEXT_COLOR.getKey(),
-                        // PreferenceConstants.DEFAULT_COMPLETED_ITEM_TEXT_COLOR);
-                        // editor.putInt(PreferenceKind.PAGE_BACKGROUND_SOLID_COLOR.getKey(),
-                        // PreferenceConstants.DEFAULT_PAGE_BACKGROUND_SOLID_COLOR);
-                        // editor.putInt(PreferenceKind.PAGE_ITEM_DIVIDER_COLOR.getKey(),
-                        // PreferenceConstants.DEFAULT_PAGE_ITEM_DIVIDER_COLOR);
-                        // editor.putInt(PreferenceKind.WIDGET_BACKGROUND_COLOR.getKey(),
-                        // PreferenceConstants.DEFAULT_WIDGET_BACKGROUND_COLOR);
-                        // editor.putInt(PreferenceKind.WIDGET_TEXT_COLOR.getKey(),
-                        // PreferenceConstants.DEFAULT_WIDGET_TEXT_COLOR);
-                        //
-                        // // We also need to set boolean preferences whose default value is false.
-                        // // Otherwise their change is not broadcast to the tracker.
-                        // editor.putBoolean(PreferenceKind.AUTO_SORT.getKey(), false);
-                        //
-                        // editor.commit();
-                        //
-                        // // getPreferenceScreen().
-                        // // TODO(tal): can we propogate the change to the main activity and
-                        // widgets?
-                        // //
-                        // // Hack per http://tinyurl.com/c44gl4r We close this activity and restart
-                        // // it using the same intent that created it. This causes it to reload
-                        // // the preferences.
-                        //
-                        // finish();
-                        // startActivity(getIntent());
-                        // Toast.makeText(PreferencesActivity.this,
-                        // "All settings restored to defaut",
-                        // Toast.LENGTH_SHORT).show();
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -186,8 +149,8 @@ public class PreferencesActivity extends PreferenceActivity implements
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Revert all settings to default values?\n\n(Does not affect task data)")
-                        .setPositiveButton("Yes!", dialogClickListener).setNegativeButton("No",
-                                        dialogClickListener).show();
+                .setPositiveButton("Yes!", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
     }
 
     private final void onConfirmedResetSettingsClick() {
@@ -201,17 +164,17 @@ public class PreferencesActivity extends PreferenceActivity implements
         // about the change. For some reason they are not notified about it
         // otherwise as the the non custom preference types do.
         editor.putInt(PreferenceKind.ITEM_ACTIVE_TEXT_COLOR.getKey(),
-                        PreferenceConstants.DEFAULT_ITEM_TEXT_COLOR);
+                PreferenceConstants.DEFAULT_ITEM_TEXT_COLOR);
         editor.putInt(PreferenceKind.ITEM_COMPLETED_TEXT_COLOR.getKey(),
-                        PreferenceConstants.DEFAULT_COMPLETED_ITEM_TEXT_COLOR);
+                PreferenceConstants.DEFAULT_COMPLETED_ITEM_TEXT_COLOR);
         editor.putInt(PreferenceKind.PAGE_BACKGROUND_SOLID_COLOR.getKey(),
-                        PreferenceConstants.DEFAULT_PAGE_BACKGROUND_SOLID_COLOR);
+                PreferenceConstants.DEFAULT_PAGE_BACKGROUND_SOLID_COLOR);
         editor.putInt(PreferenceKind.PAGE_ITEM_DIVIDER_COLOR.getKey(),
-                        PreferenceConstants.DEFAULT_PAGE_ITEM_DIVIDER_COLOR);
+                PreferenceConstants.DEFAULT_PAGE_ITEM_DIVIDER_COLOR);
         editor.putInt(PreferenceKind.WIDGET_BACKGROUND_COLOR.getKey(),
-                        PreferenceConstants.DEFAULT_WIDGET_BACKGROUND_COLOR);
+                PreferenceConstants.DEFAULT_WIDGET_BACKGROUND_COLOR);
         editor.putInt(PreferenceKind.WIDGET_TEXT_COLOR.getKey(),
-                        PreferenceConstants.DEFAULT_WIDGET_TEXT_COLOR);
+                PreferenceConstants.DEFAULT_WIDGET_TEXT_COLOR);
 
         // We also need to set boolean preferences whose default value is false.
         // Otherwise their change is not broadcast to the tracker for some reason.
@@ -219,18 +182,13 @@ public class PreferencesActivity extends PreferenceActivity implements
 
         editor.commit();
 
-        // getPreferenceScreen().
-        // TODO(tal): can we propogate the change to the main activity and widgets?
-        //
         // Hack per http://tinyurl.com/c44gl4r We close this activity and restart
         // it using the same intent that created it. This causes it to reload
         // the preferences.
-
         finish();
         startActivity(getIntent());
         Toast.makeText(PreferencesActivity.this, "All settings restored to defaut",
-                        Toast.LENGTH_SHORT).show();
-        // break;
+                Toast.LENGTH_SHORT).show();
     }
 
     private final void onVersionInfoSettingsClick() {
@@ -239,34 +197,14 @@ public class PreferencesActivity extends PreferenceActivity implements
     }
 
     private final void onShareClick() {
-        // Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-        // sharingIntent.setType("text/html");
-        //
-        // sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, Html
-        // .fromHtml("<p>This is the text that will be shared.</p>"));
-        // startActivity(Intent.createChooser(sharingIntent, "Share using"));
-
         Intent sharingIntent = new Intent(Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-
-        // String[] recipients = new String[]{"tal123@mailinator.com"};
-        // sharingIntent.putExtra(android.content.Intent.EXTRA_EMAIL, recipients);
-
-        // Spanned message =
-        // Html.fromHtml("A free fun and easy to use todo list app on the Android Market:<p>" +
-        // "https://market.android.com/details?id=com.zapta.apps.maniana");
-
         String message = "Check out Maniana, a free fun and easy to use todo "
-                        + "list app on the Android Market:\n \n"
-                        + "https://market.android.com/details?id=com.zapta.apps.maniana";
-
+                + "list app on the Android Market:\n \n"
+                + "https://market.android.com/details?id=com.zapta.apps.maniana";
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
-
-        // "An easy and fun to do list app on the Android Market\n\n" +
-        // "https://market.android.com/details?id=com.zapta.apps.maniana");
-
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
-                        "Check out \"Maniana To Do List\"");
+                "Check out \"Maniana To Do List\"");
         startActivity(Intent.createChooser(sharingIntent, "Share using"));
     }
 
@@ -301,7 +239,7 @@ public class PreferencesActivity extends PreferenceActivity implements
     protected void onPause() {
         super.onPause();
         getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(
-                        this);
+                this);
     }
 
     @Override
@@ -315,7 +253,9 @@ public class PreferencesActivity extends PreferenceActivity implements
         updateListSummary(mFontListPreference, R.array.itemFontSummaries, null);
         updateListSummary(mFontSizeListPreference, R.array.itemFontSizeSummaries, null);
         updateListSummary(mPageBackgroundTypeListPreference, R.array.pageBackgroundTypeSummaries,
-                        null);
+                null);
+        updateListSummary(mWidgetToolbarLocationPreference, R.array.widgetToolbarLocationSummaries,
+                null);
 
         // Disable applause if voice is disabled
         if (mSoundEnablePreference.isChecked()) {
@@ -352,13 +292,9 @@ public class PreferencesActivity extends PreferenceActivity implements
             }
 
             final String suffix = (wholeHoursLeft >= 0) ? construtLockTimeLeftMessageSuffix(wholeHoursLeft)
-                            : "";
+                    : "";
             updateListSummary(mLockPeriodListPreference, R.array.lockPeriodSummaries, suffix);
         }
-
-        // Set version name from package info
-        // final PackageInfo packageInfo = PackageUtil.getPackageInfo(this);
-        // mBuildVersionPreference.setSummary(packageInfo.versionName);
     }
 
     @VisibleForTesting
@@ -374,7 +310,7 @@ public class PreferencesActivity extends PreferenceActivity implements
     }
 
     private void updateListSummary(ListPreference listPreference, int stringArrayId,
-                    @Nullable String suffix) {
+            @Nullable String suffix) {
         final String value = listPreference.getValue();
         // -1 if not found.
         final int index = listPreference.findIndexOfValue(value);
