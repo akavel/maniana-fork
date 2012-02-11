@@ -33,6 +33,7 @@ public interface PreferenceConstants {
     public static final boolean DEFAULT_VERBOSE_MESSAGES = true;
     public static final boolean DEFAULT_STARTUP_ANIMATION = true;   
     public static final boolean DEFAULT_AUTO_SORT = false;  
+    public static final boolean DEFAULT_AUTO_DAILY_CLEANUP = false; 
     public static final int DEFAULT_WIDGET_BACKGROUND_COLOR = 0x44000000;
     public static final int DEFAULT_WIDGET_TEXT_COLOR = 0xffffff00;
     public static final boolean DEFAULT_WIDGET_SINGLE_LINE = false;

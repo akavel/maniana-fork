@@ -32,6 +32,7 @@ public enum PreferenceKind implements KeyedEnum {
     SOUND_ENABLED("prefAllowSoundKey"),
     APPLAUSE_LEVEL("prefApplauseLevelKey"),
     AUTO_SORT("prefAutoSortKey"),
+    AUTO_DAILY_CLEANUP("prefAutoDailyCleanupKey"),
     ITEM_FONT_TYPE("prefItemFontKey"),
     ITEM_FONT_SIZE("prefItemFontSizeKey"),
     ITEM_ACTIVE_TEXT_COLOR("prefPageTextColorKey"),

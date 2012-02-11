@@ -96,6 +96,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         findColorPickerPrerence(PreferenceKind.WIDGET_BACKGROUND_COLOR).setAlphaSliderEnabled(true);
         findColorPickerPrerence(PreferenceKind.WIDGET_TEXT_COLOR);
         findPreference(PreferenceKind.AUTO_SORT);
+        findPreference(PreferenceKind.AUTO_DAILY_CLEANUP);
 
         mRestoreDefaultsPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {

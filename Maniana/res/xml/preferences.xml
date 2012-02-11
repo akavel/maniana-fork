@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-
-    <PreferenceCategory android:title="Sound" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Sound">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="prefAllowSoundKey"
             android:summaryOff="Sound is disabled"
             android:summaryOn="Sound is enabled"
             android:title="Sound" />
-
         <ListPreference
             android:defaultValue="always"
             android:dependency="prefAllowSoundKey"
@@ -18,7 +16,7 @@
             android:summary="Applause on task completion"
             android:title="Applause" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Behavior" >
+    <PreferenceCategory android:title="Behavior">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="prefStartupAnimationKey"
@@ -37,7 +35,12 @@
             android:summaryOff="Allowing arbitrary task order"
             android:summaryOn="Forcing task order (pending before completed before locked)"
             android:title="Auto Task Sort" />
-
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="prefAutoDailyCleanupKey"
+            android:summaryOff="Daily deletion of completed tasks is disabled"
+            android:summaryOn="Deleting completed tasks every midnight"
+            android:title="Daily Task Cleanup" />
         <ListPreference
             android:defaultValue="never"
             android:entries="@array/lockPeriodNames"
@@ -46,19 +49,17 @@
             android:summary="Locks expiration period"
             android:title="Locks Expiration" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Page Appearance" >
+    <PreferenceCategory android:title="Page Appearance">
         <ListPreference
             android:defaultValue="paper"
             android:entries="@array/pageBackgroundTypeNames"
             android:entryValues="@array/pageBackgroundTypeValues"
             android:key="prefPageBackgroundTypeKey"
             android:title="Background Type" />
-
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#ffffffc0"
             android:key="prefPageBackgroundSolidColorKey"
             android:title="Background Color" />
-
         <ListPreference
             android:defaultValue="cursive"
             android:entries="@array/itemFontNames"
@@ -71,7 +72,6 @@
             android:entryValues="@array/itemFontSizeValues"
             android:key="prefItemFontSizeKey"
             android:title="Text Size" />
-
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#ff000000"
             android:key="prefPageTextColorKey"
@@ -88,7 +88,7 @@
             android:summary="Color of lines between tasks"
             android:title="Task Divider Color" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="List Widget Appearance" >
+    <PreferenceCategory android:title="List Widget Appearance">
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#44000000"
             android:key="prefWidgetBackgroundColorKey"
@@ -99,43 +99,39 @@
             android:key="prefWidgetTextColorKey"
             android:summary="List widget text color"
             android:title="Text Color" />
-
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="prefWidgetSingleLineKey"
             android:summaryOff="Wrapping longer tasks onto a second line"
             android:summaryOn="Limiting tasks to a single line"
             android:title="Single Line" />
-            
         <ListPreference
             android:defaultValue="none"
             android:entries="@array/widgetToolbarLocationNames"
             android:entryValues="@array/widgetToolbarLocationValues"
             android:key="prefWidgetToolbarLocationKey"
             android:title="Toolbar Location" />
-            
     </PreferenceCategory>
-    <PreferenceCategory android:title="Miscellaneous" >
+    <PreferenceCategory android:title="Miscellaneous">
         <Preference
             android:key="prefVersionInfoKey"
             android:summary="Click to see release info"
-            android:title="Release Info" >
+            android:title="Release Info">
         </Preference>
         <Preference
             android:key="prefShareKey"
             android:summary="Click to tell a friend about Maniana"
-            android:title="Tell A Friend" >
+            android:title="Tell A Friend">
         </Preference>
         <Preference
             android:key="prefFeedbackKey"
             android:summary="Click to provide feedback to the developers"
-            android:title="Send Us Feedback" >
+            android:title="Send Us Feedback">
         </Preference>
         <Preference
             android:key="prefRestoreDefaultsKey"
             android:summary="Click to restore the original settings. Does not affect task data"
-            android:title="Reset Settings" >
+            android:title="Reset Settings">
         </Preference>
     </PreferenceCategory>
-
 </PreferenceScreen>

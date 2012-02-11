@@ -59,6 +59,8 @@ public class PreferencesTracker implements PreferenceConstants {
     private boolean mCachedStartupAnimationPreference;
 
     private boolean mCachedAutoSortPreference;
+    
+    private boolean mCachedAutoDailyCleanupPreference;
 
     // This is a hack to keep the listener from being garbage collected per
     // http://tinyurl.com/blkycrk. Should be unregistered explicitly when main activity is
@@ -72,6 +74,7 @@ public class PreferencesTracker implements PreferenceConstants {
         updateCachedAllowSoundsPreference();
         updateCachedApplauseLevelPreference();
         updateCachedAutoSortPreference();
+        updateCachedAutoDailyCleanupPreference();
         updateCachedFontTypePreference();
         updateCachedFontSizePreference();
         updateCachedPageItemActiveTextColorPreference();
@@ -204,6 +207,11 @@ public class PreferencesTracker implements PreferenceConstants {
         mCachedAutoSortPreference = mSharedPreferences.getBoolean(
                 PreferenceKind.AUTO_SORT.getKey(), DEFAULT_AUTO_SORT);
     }
+    
+    private final void updateCachedAutoDailyCleanupPreference() {
+        mCachedAutoDailyCleanupPreference = mSharedPreferences.getBoolean(
+                PreferenceKind.AUTO_DAILY_CLEANUP.getKey(), DEFAULT_AUTO_DAILY_CLEANUP);
+    }
 
     public final boolean getSoundEnabledPreference() {
         return mCachedAllowSoundsPreference;
@@ -257,6 +265,10 @@ public class PreferencesTracker implements PreferenceConstants {
     public final boolean getAutoSortPreference() {
         return mCachedAutoSortPreference;
     }
+    
+    public final boolean getAutoDailyCleanupPreference() {
+        return mCachedAutoDailyCleanupPreference;
+    }
 
     /**
      * Handle preferences change.
@@ -283,6 +295,9 @@ public class PreferencesTracker implements PreferenceConstants {
                 break;
             case AUTO_SORT:
                 updateCachedAutoSortPreference();
+                break;
+            case AUTO_DAILY_CLEANUP:
+                updateCachedAutoDailyCleanupPreference();
                 break;
             case ITEM_FONT_TYPE:
                 updateCachedFontTypePreference();

@@ -152,7 +152,6 @@ public class Controller {
         // of the destination by 1. Despite that, we don't compensate for it as this acieve a more
         // intuitive behavior and allow to move an item to the end of the list.
         mApp.model().insertItem(pageKind, destinationItemIndex, itemModel);
-        // maybeAutoSortPage(pageKind, false, true);
         mApp.view().upadatePage(pageKind);
         mApp.view().getRootView().post(new Runnable() {
             @Override
@@ -396,7 +395,6 @@ public class Controller {
                             });
                 } else {
                     maybeAutosortPageWithItemOfInterest(pageKind, itemIndex);
-                    // maybeAutoSortPage(pageKind, true, true);
                 }
                 return;
             }
@@ -674,6 +672,7 @@ public class Controller {
             case LOCK_PERIOD:
             case VERBOSE_MESSAGES:
             case STARTUP_ANIMATION:
+            case AUTO_DAILY_CLEANUP:
                 // Nothing to do here. We query these preferences on the fly.
                 break;
 
