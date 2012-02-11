@@ -92,7 +92,7 @@ public class PageModel {
      * 
      * @return the number of items resotred by the undo operation.
      */
-    public final int applyUndo() {
+    public final int performUndo() {
         check(hasUndo(), "Undo info not found");
         final int n = mUndoItems.size();
 
@@ -112,6 +112,11 @@ public class PageModel {
         final ItemModel deletedItem = removeItem(itemIndex);
         mUndoItems.clear();
         mUndoItems.add(deletedItem);
+    }
+    
+    /** Append item to end of undo list. Item should not be in any page item list. */
+    public final void appendItemToUndo(ItemModel item) {
+        mUndoItems.add(item);
     }
 
     /** Append an item at the end of the page */

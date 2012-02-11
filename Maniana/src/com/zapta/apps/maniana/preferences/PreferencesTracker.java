@@ -85,7 +85,6 @@ public class PreferencesTracker implements PreferenceConstants {
         updateCachedLockExpierationPeriodPreference();
         updateCachedVerboseMessagesPreference();
         updateCachedStartupAnimationPreference();
-        // updateCachedVoiceRecognitionPreference();
 
         listener = new OnSharedPreferenceChangeListener() {
             @Override

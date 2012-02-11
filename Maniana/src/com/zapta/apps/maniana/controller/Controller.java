@@ -243,10 +243,10 @@ public class Controller {
 
     /** Update date and if needed push model items from Tomorow to Today. */
     private void maybeHandleDateChange() {
-        // Sample the current date.
+        // Sample and cache the current date.
         mApp.dateTracker().updateDate();
 
-        // TODO: filter out redundant view date changes?
+        // TODO: filter out redundant view date changes? (do not update unless date changed)
         mApp.view().onDateChange();
 
         // A quick check for the normal case where the last push was today.
@@ -256,19 +256,22 @@ public class Controller {
             return;
         }
 
+        // Determine if to expire all locks
         final PushScope pushScope = mApp.dateTracker().computePushScope(modelPushDateStamp,
                 mApp.pref().getLockExpirationPeriodPrefernece());
 
         if (pushScope == PushScope.NONE) {
+            // Not exepected because of the quick check above
             LogUtil.error("*** Unexpected condition, pushScope=NONE,"
                     + " modelTimestamp=%s, trackerDateStamp=%s", modelPushDateStamp,
                     trackerTodayDateStamp);
         } else {
-            LogUtil.debug("Model push scope: %s", pushScope);
-            final int itemsTransfered = mApp.model().pushToToday(pushScope == PushScope.ALL);
-            if (itemsTransfered > 0) {
-                mApp.view().updateAllPages();
-            }
+            final boolean expireAllLocks = (pushScope == PushScope.ALL);
+            final boolean deleteCompletedItems = mApp.pref().getAutoDailyCleanupPreference();
+            LogUtil.info("Model push scope: %s, auto_cleanup=%s", pushScope, deleteCompletedItems);
+            mApp.model().pushToToday(expireAllLocks, deleteCompletedItems);
+            // Not bothering to test if anything changed. Always updating. This happens only once a day.
+            mApp.view().updateAllPages();
         }
 
         // NOTE(tal): we update the model push to today date even if we did not push. This will

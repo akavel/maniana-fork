@@ -135,11 +135,6 @@ public class AppView {
         mTodayPageView.updateUndoButton();
         mTomorowPageView.updateUndoButton();
     }
-
-//    public final void onVoiceRecognitionPreferenceChange() {
-//        mTodayPageView.onVoiceRecognitionPreferenceChange();
-//        mTomorowPageView.onVoiceRecognitionPreferenceChange();
-//    }
     
     public final void onItemDividerColorPreferenceChange() {
         mTodayPageView.onItemDividerColorPreferenceChange();

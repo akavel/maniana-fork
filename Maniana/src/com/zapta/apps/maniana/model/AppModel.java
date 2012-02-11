@@ -98,7 +98,7 @@ public class AppModel {
     public final int getPageItemCount(PageKind pageKind) {
         return getPageModel(pageKind).itemCount();
     }
-    
+
     /** Get total number of items. */
     public final int getItemCount() {
         return mTodayPageModel.itemCount() + mTomorrowPageMode.itemCount();
@@ -131,7 +131,7 @@ public class AppModel {
     public final boolean pageHasUndo(PageKind pageKind) {
         return getPageModel(pageKind).hasUndo();
     }
-    
+
     /** Test if the page items are already sorted. */
     public final boolean isPageSorted(PageKind pageKind) {
         return getPageModel(pageKind).isPageSorted();
@@ -166,9 +166,10 @@ public class AppModel {
      * Organize the given page with undo. See details at
      * {@link PageModel#organizePageWithUndo(boolean, PageOrganizeResult)()}.
      */
-    public final void organizePageWithUndo(PageKind pageKind, boolean deleteCompletedItems, int itemOfInteresetIndex,
-                    OrganizePageSummary summary) {
-        getPageModel(pageKind).organizePageWithUndo(deleteCompletedItems, itemOfInteresetIndex, summary);
+    public final void organizePageWithUndo(PageKind pageKind, boolean deleteCompletedItems,
+            int itemOfInteresetIndex, OrganizePageSummary summary) {
+        getPageModel(pageKind).organizePageWithUndo(deleteCompletedItems, itemOfInteresetIndex,
+                summary);
         if (summary.pageChanged()) {
             setDirty();
         }
@@ -181,40 +182,68 @@ public class AppModel {
      * @return the number of items resotred by the undo operation.
      */
     public final int applyUndo(PageKind pageKind) {
-        final int result = getPageModel(pageKind).applyUndo();
+        final int result = getPageModel(pageKind).performUndo();
         setDirty();
         return result;
     }
 
     /**
      * Move non locked items from Tomorow to Today. It's the caller responsibility to also set the
-     * last push datestamp.
+     * last push datestamp. This method clears any previous undo buffer content of both pages.
      * 
-     * @param expireAllLocks if true, locked items are also pushed, after changing their status to
-     *            unlocked.
+     * @param expireAllLocks
+     *            if true, locked items are also pushed, after changing their status to unlocked.
      * 
-     * @return number of moved items
+     * @param deleteCompletedItems
+     *            if true, delete completed items, leaving them in the undo buffers of their
+     *            respective pages.
      */
-    public final int pushToToday(boolean expireAllLocks) {
-        ListIterator<ItemModel> listIterator = mTomorrowPageMode.listIterator();
+    public final void pushToToday(boolean expireAllLocks, boolean deleteCompletedItems) {
+        clearAllUndo();
+        setDirty();
+
+        // Process Tomorrow items
         int itemsMoved = 0;
-        while (listIterator.hasNext()) {
-            ItemModel item = listIterator.next();
-            if (expireAllLocks || !item.isLocked()) {
+        final ListIterator<ItemModel> tomorrowListIterator = mTomorrowPageMode.listIterator();
+        while (tomorrowListIterator.hasNext()) {
+            final ItemModel item = tomorrowListIterator.next();
+            // Expire lock if needed
+            if (expireAllLocks && item.isLocked()) {
                 item.setIsLocked(false);
-                listIterator.remove();
-                // We add the moved items to the beginning of Today, preserving there
-                // internal order.
+            }
+
+            // If item is completed (even if blocked), move to undo buffer.
+            if (item.isCompleted()) {
+                tomorrowListIterator.remove();
+                mTomorrowPageMode.appendItemToUndo(item);
+                continue;
+            }
+
+            // If item is not unlocked, move Today page.
+            if (!item.isLocked()) {
+                // We move the items to the beginning of Today page, preserving there
+                // relative order from Tomorrow page.
+                tomorrowListIterator.remove();
                 mTodayPageModel.insertItem(itemsMoved, item);
                 itemsMoved++;
+                continue;
+            }
+
+            // Otherwise leave item in place.
+        }
+
+        // If need to delete completed items, scan also Today list and move
+        // completed items to the Today's undo buffer.
+        if (deleteCompletedItems) {
+            final ListIterator<ItemModel> todayListIterator = mTomorrowPageMode.listIterator();
+            while (todayListIterator.hasNext()) {
+                final ItemModel item = tomorrowListIterator.next();
+                if (item.isCompleted()) {
+                    todayListIterator.remove();
+                    mTodayPageModel.appendItemToUndo(item);
+                }
             }
         }
-
-        if (itemsMoved > 0) {
-            setDirty();
-        }
-
-        return itemsMoved;
     }
 
     /** Get the datestamp of last item push. */
