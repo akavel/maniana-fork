@@ -198,7 +198,7 @@ public class AppServices {
         releaseMediaPlayer();
         mMediaPlayer = MediaPlayer.create(mApp.context(), rawResourceId);
         
-        // Added as a response for this FC report from a user
+        // Added as a response to this FC report from a user:
         // https://code.google.com/p/maniana/issues/detail?id=8
         // Apparently MediaPlayer.create() may fail for unspecified reasons.
         if (mMediaPlayer == null) {
