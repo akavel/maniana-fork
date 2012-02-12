@@ -314,7 +314,7 @@ public class Controller {
             clearPageUndo(pageKind);
         }
 
-        // Clear the item highlited enabled when the menu was shown.
+        // Clear the item-highlighted state when the menu was shown.
         mApp.view().setItemViewHighlight(pageKind, itemIndex, false);
 
         // Handle the action

@@ -17,6 +17,8 @@ package com.zapta.apps.maniana.services;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.Intent;
@@ -81,6 +83,7 @@ public class AppServices {
 
     private final BackupManager mBackupManager;
 
+    @Nullable
     private MediaPlayer mMediaPlayer;
 
     public AppServices(AppContext app) {
@@ -194,6 +197,15 @@ public class AppServices {
     private final void startPlayingSoundClip(int rawResourceId) {
         releaseMediaPlayer();
         mMediaPlayer = MediaPlayer.create(mApp.context(), rawResourceId);
+        
+        // Added as a response for this FC report from a user
+        // https://code.google.com/p/maniana/issues/detail?id=8
+        // Apparently MediaPlayer.create() may fail for unspecified reasons.
+        if (mMediaPlayer == null) {
+            LogUtil.error("Creation of a media player failed. Resource id = 0x%x", rawResourceId);
+            return;
+        }
+        
         mMediaPlayer.setOnCompletionListener(mMediaPlayerListener);
         mMediaPlayer.setOnErrorListener(mMediaPlayerListener);
         mMediaPlayer.start();
