@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="Sound">
+    <PreferenceScreen android:title="Sound">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="prefAllowSoundKey"
@@ -15,8 +15,8 @@
             android:key="prefApplauseLevelKey"
             android:summary="Applause on task completion"
             android:title="Applause" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="Behavior">
+    </PreferenceScreen>
+    <PreferenceScreen android:title="Behavior">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="prefStartupAnimationKey"
@@ -48,8 +48,8 @@
             android:key="prefLockPeriodKey"
             android:summary="Locks expiration period"
             android:title="Locks Expiration" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="Page Appearance">
+    </PreferenceScreen>
+    <PreferenceScreen android:title="Page Appearance">
         <ListPreference
             android:defaultValue="paper"
             android:entries="@array/pageBackgroundTypeNames"
@@ -87,8 +87,8 @@
             android:key="prefPageItemDividerColorKey"
             android:summary="Color of lines between tasks"
             android:title="Task Divider Color" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="List Widget Appearance">
+    </PreferenceScreen>
+    <PreferenceScreen android:title="List Widget">
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#44000000"
             android:key="prefWidgetBackgroundColorKey"
@@ -111,8 +111,8 @@
             android:summaryOff="Hiding widget toolbar"
             android:summaryOn="Showing widget toolbar"
             android:title="Show Toolbar" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="Miscellaneous">
+    </PreferenceScreen>
+    <PreferenceScreen android:title="Miscellaneous">
         <Preference
             android:key="prefVersionInfoKey"
             android:summary="Click to see release info"
@@ -128,10 +128,11 @@
             android:summary="Click to provide feedback to the developers"
             android:title="Send Us Feedback">
         </Preference>
-        <Preference
-            android:key="prefRestoreDefaultsKey"
-            android:summary="Click to restore the original settings. Does not affect task data"
-            android:title="Reset Settings">
-        </Preference>
-    </PreferenceCategory>
+         <Preference
+        android:key="prefRestoreDefaultsKey"
+        android:summary="Click to restore the original settings. Does not affect task data"
+        android:title="Reset Settings">
+    </Preference>
+    </PreferenceScreen>
+   
 </PreferenceScreen>
