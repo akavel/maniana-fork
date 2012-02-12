@@ -203,43 +203,45 @@ public class AppModel {
         setDirty();
 
         // Process Tomorrow items
-        int itemsMoved = 0;
-        final ListIterator<ItemModel> tomorrowListIterator = mTomorrowPageMode.listIterator();
-        while (tomorrowListIterator.hasNext()) {
-            final ItemModel item = tomorrowListIterator.next();
-            // Expire lock if needed
-            if (expireAllLocks && item.isLocked()) {
-                item.setIsLocked(false);
-            }
+        {
+            int itemsMoved = 0;
+            final ListIterator<ItemModel> iterator = mTomorrowPageMode.listIterator();
+            while (iterator.hasNext()) {
+                final ItemModel item = iterator.next();
+                // Expire lock if needed
+                if (expireAllLocks && item.isLocked()) {
+                    item.setIsLocked(false);
+                }
 
-            // If item is completed (even if blocked), move to undo buffer.
-            if (item.isCompleted()) {
-                tomorrowListIterator.remove();
-                mTomorrowPageMode.appendItemToUndo(item);
-                continue;
-            }
+                // If item is completed (even if blocked), move to undo buffer.
+                if (item.isCompleted()) {
+                    iterator.remove();
+                    mTomorrowPageMode.appendItemToUndo(item);
+                    continue;
+                }
 
-            // If item is not unlocked, move Today page.
-            if (!item.isLocked()) {
-                // We move the items to the beginning of Today page, preserving there
-                // relative order from Tomorrow page.
-                tomorrowListIterator.remove();
-                mTodayPageModel.insertItem(itemsMoved, item);
-                itemsMoved++;
-                continue;
-            }
+                // If item is not unlocked, move Today page.
+                if (!item.isLocked()) {
+                    // We move the items to the beginning of Today page, preserving there
+                    // relative order from Tomorrow page.
+                    iterator.remove();
+                    mTodayPageModel.insertItem(itemsMoved, item);
+                    itemsMoved++;
+                    continue;
+                }
 
-            // Otherwise leave item in place.
+                // Otherwise leave item in place.
+            }
         }
 
         // If need to delete completed items, scan also Today list and move
         // completed items to the Today's undo buffer.
         if (deleteCompletedItems) {
-            final ListIterator<ItemModel> todayListIterator = mTomorrowPageMode.listIterator();
-            while (todayListIterator.hasNext()) {
-                final ItemModel item = tomorrowListIterator.next();
+            final ListIterator<ItemModel> iterator = mTomorrowPageMode.listIterator();
+            while (iterator.hasNext()) {
+                final ItemModel item = iterator.next();
                 if (item.isCompleted()) {
-                    todayListIterator.remove();
+                    iterator.remove();
                     mTodayPageModel.appendItemToUndo(item);
                 }
             }
