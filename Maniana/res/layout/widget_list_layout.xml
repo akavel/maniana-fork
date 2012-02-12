@@ -45,8 +45,10 @@
                 android:layout_height="wrap_content"
                 android:background="#00000000"
                 android:longClickable="false"
+                android:paddingBottom="1dip"
                 android:paddingLeft="8dip"
                 android:paddingRight="8dip"
+                android:paddingTop="1dip"
                 android:src="@drawable/widget_add_by_text" >
             </ImageButton>
 
@@ -56,8 +58,10 @@
                 android:layout_height="wrap_content"
                 android:background="#00000000"
                 android:longClickable="false"
+                android:paddingBottom="1dip"
                 android:paddingLeft="8dip"
-                android:paddingRight="5dip"
+                android:paddingRight="8dip"
+                android:paddingTop="1dip"
                 android:src="@drawable/widget_add_by_voice" >
             </ImageButton>
         </LinearLayout>
