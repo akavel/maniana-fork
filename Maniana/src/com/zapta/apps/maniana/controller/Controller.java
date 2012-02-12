@@ -145,8 +145,6 @@ public class Controller {
     /** Called by the view when the user drag an item within the page */
     public final void onItemMoveInPage(final PageKind pageKind, final int sourceItemIndex,
             final int destinationItemIndex) {
-        // LogUtil.debug("OS version: %s", android.os.Build.VERSION.SDK_INT);
-
         final ItemModel itemModel = mApp.model().removeItem(pageKind, sourceItemIndex);
         // NOTE(tal): if source index < destination index, the item removal above affect the index
         // of the destination by 1. Despite that, we don't compensate for it as this acieve a more

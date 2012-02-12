@@ -54,7 +54,6 @@ public class PopupsTracker {
 
     /** Close dialogs that were left open.*/
     public final void closeAllLeftOvers() {
-        LogUtil.debug("closeLeftOvers(), n = %d", mTrackedPopups.size());
         // TODO: relax this assertion?
         check(!mClosingAllLeftOvers, "Already in closing state");
         mClosingAllLeftOvers = true;

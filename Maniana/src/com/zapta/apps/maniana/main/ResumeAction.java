@@ -40,7 +40,6 @@ public enum ResumeAction {
 	
 	/** Serialize a resume action in an intent. */
 	public static void setInIntent(Intent intent, ResumeAction resumeAction) {
-		LogUtil.debug("Setting intent action: %s", resumeAction);
 		intent.putExtra(RESUME_ACTION_KEY, resumeAction.toString());
 	}
 
@@ -48,7 +47,6 @@ public enum ResumeAction {
 	public static ResumeAction fromIntent(Intent intent) {
 		@Nullable
 		final String strValue = intent.getStringExtra(RESUME_ACTION_KEY);
-		LogUtil.debug("Action string value from intent: %s", strValue);
 		if (strValue == null) {
 			return DEFAULT_ACTION;
 		}

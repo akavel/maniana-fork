@@ -54,7 +54,6 @@ public class IcsMainMenuDialog {
     }
 
     private static final void menuEntryClicked(AppContext app, Dialog dialog, MainMenuEntry entry) {
-//        LogUtil.debug("Clicked on item: %s", entry);
         dialog.dismiss();
         app.controller().onMainMenuSelection(entry);
     }

@@ -90,25 +90,6 @@ public class AppResources {
         return mAudioManager;
     }
 
-//    /**
-//     * Get the min time in millis of a long press.
-//     */
-//    // TODO: *** remove this method. Use inline 
-//    public final int getLongPressMinMillis() {
-//        //return mLongPressMinMillis;
-//        LogUtil.debug("*** getTabTimeout() = %d millis", ViewConfiguration.getLongPressTimeout());
-//        return ViewConfiguration.getLongPressTimeout();
-//    }
-
-//    /**
-//     * Get the max time in millis of a click.
-//     */
-//    public final int getClickMaxMillis() {
-//        LogUtil.debug("*** getTabTimeout() = %d millis", ViewConfiguration.getTapTimeout());
-//        return ViewConfiguration.getTapTimeout();
-//        //return mClickMaxMillis;
-//    }
-
     /**
      * Get a drawable from a drawable id.
      * 

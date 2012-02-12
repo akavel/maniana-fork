@@ -306,8 +306,6 @@ public class PageView extends FrameLayout {
         {
             final int colorIndex = ColorUtil.selectFurthestColorIndex(baseBackgroundColor,
                             ITEM_HIGHLIGHT_CANDIDATE_COLORS);
-//            LogUtil.debug("*** highliht resource index = %d (0x%x), background= 0x%x", 
-//                            colorIndex, ITEM_HIGHLIGHT_CANDIDATE_COLORS[colorIndex], baseBackgroundColor);
             final int resourceId = ITEM_HIGHLIGHT_RESOURCES_CANDIDATE_IDS[colorIndex];
             mItemListView.setItemHighlightDrawableResourceId(resourceId);            
         }
