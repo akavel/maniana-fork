@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.zapta.apps.maniana.util.VisibleForTesting;
+
 /**
  * Contains the data of a single page.
  * 
@@ -38,7 +40,13 @@ public class PageModel {
     public PageModel(PageKind pageKind) {
         // NOTE(tal): for now we don't need page kind.
     }
-
+    
+    /** For testing only. */
+    @VisibleForTesting
+    List<ItemModel> getUndoItemsCloneForTesting() {
+        return new ArrayList<ItemModel>(mUndoItems);
+    }
+    
     /** Get a list iterator over the items. Allows to deleted items while iterating. */
     public final ListIterator<ItemModel> listIterator() {
         return mItems.listIterator();

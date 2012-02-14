@@ -17,6 +17,7 @@ package com.zapta.apps.maniana.model;
 import java.util.ListIterator;
 
 import com.zapta.apps.maniana.util.LogUtil;
+import com.zapta.apps.maniana.util.VisibleForTesting;
 
 /**
  * Contains the app data. Persisted across app activations. Controlled by the app controller.
@@ -71,7 +72,8 @@ public class AppModel {
     }
 
     /** Get the model of given page. */
-    private final PageModel getPageModel(PageKind pageKind) {
+    @VisibleForTesting
+    final PageModel getPageModel(PageKind pageKind) {
         switch (pageKind) {
             case TODAY:
                 return mTodayPageModel;
@@ -213,8 +215,8 @@ public class AppModel {
                     item.setIsLocked(false);
                 }
 
-                // If item is completed (even if blocked), move to undo buffer.
-                if (item.isCompleted()) {
+                // If delete completed and item is completed (even if blocked), move it to undo buffer.
+                if (deleteCompletedItems && item.isCompleted()) {
                     iterator.remove();
                     mTomorrowPageMode.appendItemToUndo(item);
                     continue;
