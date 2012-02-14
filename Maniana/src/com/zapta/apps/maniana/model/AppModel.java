@@ -237,7 +237,7 @@ public class AppModel {
         // If need to delete completed items, scan also Today list and move
         // completed items to the Today's undo buffer.
         if (deleteCompletedItems) {
-            final ListIterator<ItemModel> iterator = mTomorrowPageMode.listIterator();
+            final ListIterator<ItemModel> iterator = mTodayPageModel.listIterator();
             while (iterator.hasNext()) {
                 final ItemModel item = iterator.next();
                 if (item.isCompleted()) {
