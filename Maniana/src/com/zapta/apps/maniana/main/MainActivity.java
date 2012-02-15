@@ -89,7 +89,7 @@ public class MainActivity extends Activity {
         }
 
         // Inform the view about the model data change
-        mApp.view().updateAllPages();
+        mApp.view().updatePages();
 
         // Set top view of this activity
         setContentView(mApp.view().getRootView());

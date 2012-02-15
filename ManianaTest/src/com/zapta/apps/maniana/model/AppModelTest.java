@@ -19,11 +19,7 @@ import java.io.StringWriter;
 import java.util.List;
 
 import junit.framework.TestCase;
-import android.text.format.Time;
 
-import com.zapta.apps.maniana.model.persistence.ModelSerialization;
-import com.zapta.apps.maniana.model.persistence.PersistenceMetadata;
-import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**

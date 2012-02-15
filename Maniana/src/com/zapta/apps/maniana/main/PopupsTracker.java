@@ -14,11 +14,10 @@
 
 package com.zapta.apps.maniana.main;
 
+import static com.zapta.apps.maniana.util.Assertions.check;
+
 import java.util.HashSet;
 import java.util.Set;
-
-import com.zapta.apps.maniana.util.LogUtil;
-import static com.zapta.apps.maniana.util.Assertions.check;
 
 /**
  * Tracks dialogs and other popups used by the main activity. Used to close left over popups when

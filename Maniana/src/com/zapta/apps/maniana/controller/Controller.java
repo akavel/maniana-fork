@@ -134,7 +134,7 @@ public class Controller {
 
         mApp.model().clearAllUndo();
         maybeAutoSortPage(otherPageKind, false, false);
-        mApp.view().updateAllPages();
+        mApp.view().updatePages();
 
         // The item is inserted at the top of the other page. Scroll there so it is visible
         // if the user flips to the other page.
@@ -182,8 +182,12 @@ public class Controller {
     }
 
     /** Called when the main activity is resumed, including after app creation. */
-    public final void onMainActivityResume(ResumeAction resumeAction) {
-        maybeHandleDateChange();
+    public final void onMainActivityResume(ResumeAction resumeAction) {      
+        // This may leave undo items in case we cleanup completed tasks.
+        maybeHandleDateChange();        
+        
+        // NOTE: if we want the cleaned up items to stay in the undo buffers, move this 
+        // statement before the maybeHandleDateChange above.
         clearAllUndo();
 
         ++mOnAppResumeCount;
@@ -269,7 +273,7 @@ public class Controller {
             LogUtil.info("Model push scope: %s, auto_cleanup=%s", pushScope, deleteCompletedItems);
             mApp.model().pushToToday(expireAllLocks, deleteCompletedItems);
             // Not bothering to test if anything changed. Always updating. This happens only once a day.
-            mApp.view().updateAllPages();
+            mApp.view().updatePages();
         }
 
         // NOTE(tal): we update the model push to today date even if we did not push. This will
@@ -707,7 +711,9 @@ public class Controller {
 
     /** Called by the main activity when it is created. */
     public final void onMainActivityCreated(StartupKind startupKind) {
-        maybeHandleDateChange();
+        // NOTE: at this point the model has not been processed yet for potential
+        // task move/cleanup due to date change. This is done later in the 
+        // onMainActivityResume() event.
 
         switch (startupKind) {
             case NORMAL:
@@ -756,7 +762,7 @@ public class Controller {
     /** Clear undo buffer of both model pages. */
     private final void clearAllUndo() {
         mApp.model().clearAllUndo();
-        mApp.view().updateAllUndoButtons();
+        mApp.view().updateUndoButtons();
     }
 
     /** Clear undo buffer of given model page. */

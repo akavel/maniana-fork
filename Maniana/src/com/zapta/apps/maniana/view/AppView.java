@@ -120,7 +120,7 @@ public class AppView {
         getPageView(pageKind).updateSingleItemView(itemIndex);
     }
 
-    public final void updateAllPages() {
+    public final void updatePages() {
         upadatePage(PageKind.TODAY);
         upadatePage(PageKind.TOMOROW);
     }
@@ -131,7 +131,7 @@ public class AppView {
         pageView.updateUndoButton();
     }
 
-    public final void updateAllUndoButtons() {
+    public final void updateUndoButtons() {
         mTodayPageView.updateUndoButton();
         mTomorowPageView.updateUndoButton();
     }
