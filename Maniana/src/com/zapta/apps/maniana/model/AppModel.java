@@ -48,8 +48,8 @@ public class AppModel {
     private String mLastPushDateStamp;
 
     public AppModel() {
-        this.mTodayPageModel = new PageModel(PageKind.TODAY);
-        this.mTomorrowPageMode = new PageModel(PageKind.TOMOROW);
+        this.mTodayPageModel = new PageModel();
+        this.mTomorrowPageMode = new PageModel();
         this.mLastPushDateStamp = DEFAULT_DATE_STAMP;
     }
 
