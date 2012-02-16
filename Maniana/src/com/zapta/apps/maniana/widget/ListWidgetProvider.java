@@ -39,7 +39,9 @@ import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.model.ItemModelReadOnly;
 import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
 import com.zapta.apps.maniana.preferences.PreferencesTracker;
+import com.zapta.apps.maniana.preferences.WidgetBackgroundType;
 import com.zapta.apps.maniana.services.AppServices;
+import com.zapta.apps.maniana.util.LogUtil;
 
 /**
  * Base class for the task list widgets.
@@ -82,19 +84,32 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         // Set onClick() actions
         setOnClickLaunch(context, remoteViews, R.id.widget_list_top_view, ResumeAction.NONE);
 
-        final boolean toolbarEanbled = PreferencesTracker.readWidgetShowToolbarPreference(sharedPreferences);
+        final boolean toolbarEanbled = PreferencesTracker
+                .readWidgetShowToolbarPreference(sharedPreferences);
         setToolbar(context, remoteViews, toolbarEanbled);
 
-        // Set widget background color
-        final int backgroundColor = PreferencesTracker
-                .readWidgetBackgroundColorPreference(sharedPreferences);
-        remoteViews.setInt(R.id.widget_list_top_view, "setBackgroundColor", backgroundColor);
+        // Set background
+        final WidgetBackgroundType backgroundType = PreferencesTracker
+                .readWidgetBackgroundTypePreference(sharedPreferences);
+        switch (backgroundType) {
+            case PAPER:
+                remoteViews.setInt(R.id.widget_list_top_view, "setBackgroundResource",
+                        R.drawable.widget_background);
+                break;
 
-        final int textColor = PreferencesTracker.readWidgetTextColorPreference(sharedPreferences);
+            default:
+                LogUtil.error("Unknown widget background type: %s", backgroundType);
+                // fall through to Solid
+            case SOLID:
+                final int backgroundColor = PreferencesTracker
+                        .readWidgetBackgroundColorPreference(sharedPreferences);
+                remoteViews
+                        .setInt(R.id.widget_list_top_view, "setBackgroundColor", backgroundColor);
+        }
 
-        // Remove all items from previous update
+        // Set item list
         remoteViews.removeAllViews(R.id.widget_list_item_list);
-
+        final int textColor = PreferencesTracker.readWidgetTextColorPreference(sharedPreferences);
         populateItemList(context, remoteViews, model, textColor, sharedPreferences);
 
         // Tell the app widget manager to replace the views with the new views.
@@ -169,14 +184,15 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
     }
 
-    private static final void setToolbar(Context context, RemoteViews remoteViews, boolean toolbarEnabled) {
+    private static final void setToolbar(Context context, RemoteViews remoteViews,
+            boolean toolbarEnabled) {
         if (!toolbarEnabled) {
             remoteViews.setInt(R.id.widget_list_toolbar, "setVisibility", View.GONE);
             return;
         }
 
         remoteViews.setInt(R.id.widget_list_toolbar, "setVisibility", View.VISIBLE);
-        
+
         setOnClickLaunch(context, remoteViews, R.id.widget_list_toolbar_add_by_text,
                 ResumeAction.ADD_NEW_ITEM_BY_TEXT);
 

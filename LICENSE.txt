@@ -56,6 +56,11 @@ page_bg_right.png
 page_bg_left.png 
 TBD
 
+List Widget background image
+list_widget_background.png
+From http://slodive.com/design/white-backgrounds/
+TBD
+
 Sound clips
 -----------------
 applause_normal.mp3

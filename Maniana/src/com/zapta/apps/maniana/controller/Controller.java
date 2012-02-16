@@ -681,6 +681,7 @@ public class Controller {
                 // Nothing to do here. We query these preferences on the fly.
                 break;
 
+            case WIDGET_BACKGROUND_TYPE:
             case WIDGET_BACKGROUND_COLOR:
             case WIDGET_TEXT_COLOR:
             case WIDGET_SINGLE_LINE:

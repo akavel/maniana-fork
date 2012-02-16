@@ -49,7 +49,7 @@
             android:summary="Locks expiration period"
             android:title="Locks Expiration" />
     </PreferenceScreen>
-    <PreferenceScreen android:title="Page Appearance">
+    <PreferenceScreen android:title="Pages">
         <ListPreference
             android:defaultValue="paper"
             android:entries="@array/pageBackgroundTypeNames"
@@ -89,6 +89,12 @@
             android:title="Task Divider Color" />
     </PreferenceScreen>
     <PreferenceScreen android:title="List Widget">
+        <ListPreference
+            android:defaultValue="solid"
+            android:entries="@array/widgetBackgroundTypeNames"
+            android:entryValues="@array/widgetBackgroundTypeValues"
+            android:key="prefWidgetBackgroundTypeKey"
+            android:title="Background Type" />
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#44000000"
             android:key="prefWidgetBackgroundColorKey"
@@ -100,17 +106,17 @@
             android:summary="List widget text color"
             android:title="Text Color" />
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="prefWidgetSingleLineKey"
-            android:summaryOff="Wrapping longer tasks onto a second line"
-            android:summaryOn="Limiting tasks to a single line"
-            android:title="Single Line" />
-        <CheckBoxPreference
             android:defaultValue="true"
             android:key="prefWidgetShowToolbarKey"
             android:summaryOff="Hiding widget toolbar"
             android:summaryOn="Showing widget toolbar"
             android:title="Show Toolbar" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="prefWidgetSingleLineKey"
+            android:summaryOff="Wrapping longer tasks onto a second line"
+            android:summaryOn="Limiting tasks to a single line"
+            android:title="Single Line" />
     </PreferenceScreen>
     <PreferenceScreen android:title="Miscellaneous">
         <Preference
@@ -128,11 +134,10 @@
             android:summary="Click to provide feedback to the developers"
             android:title="Send Us Feedback">
         </Preference>
-         <Preference
-        android:key="prefRestoreDefaultsKey"
-        android:summary="Click to restore the original settings. Does not affect task data"
-        android:title="Reset Settings">
-    </Preference>
+        <Preference
+            android:key="prefRestoreDefaultsKey"
+            android:summary="Click to restore the original settings. Does not affect task data"
+            android:title="Reset Settings">
+        </Preference>
     </PreferenceScreen>
-   
 </PreferenceScreen>

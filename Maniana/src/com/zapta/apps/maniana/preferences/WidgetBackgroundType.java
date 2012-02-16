@@ -20,17 +20,17 @@ import com.zapta.apps.maniana.util.EnumUtil;
 import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 
 /** 
- * Represents the possible choices for page background preference. 
+ * Represents the possible choices for widget background preference. 
  * 
  * @author Tal Dayan
  */
-public enum PageBackgroundType implements KeyedEnum {
+public enum WidgetBackgroundType implements KeyedEnum {
     PAPER("paper"), SOLID("solid");
 
     /** Preference item key. Matches the preference option value defined in XMl. */
     private final String mKey;
 
-    private PageBackgroundType(String key) {
+    private WidgetBackgroundType(String key) {
         mKey = key;
     }
 
@@ -41,7 +41,7 @@ public enum PageBackgroundType implements KeyedEnum {
 
     /** Return value with given key or fallback value if not found. */
     @Nullable
-    public final static PageBackgroundType fromKey(String key, @Nullable PageBackgroundType fallBack) {
-        return EnumUtil.fromKey(key, PageBackgroundType.values(), fallBack);
+    public final static WidgetBackgroundType fromKey(String key, @Nullable WidgetBackgroundType fallBack) {
+        return EnumUtil.fromKey(key, WidgetBackgroundType.values(), fallBack);
     }
 }

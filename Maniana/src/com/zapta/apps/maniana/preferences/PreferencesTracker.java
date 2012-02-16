@@ -158,7 +158,18 @@ public class PreferencesTracker implements PreferenceConstants {
         return LockExpirationPeriod.fromKey(key, DEFAULT_LOCK_PERIOD);
     }
 
-    /** Read widget background color preference. Used by the list widget only. */
+    /** Read widget background type preference. */
+    public static final WidgetBackgroundType readWidgetBackgroundTypePreference(SharedPreferences sharedPreferences) {
+        final String key = sharedPreferences.getString(PreferenceKind.WIDGET_BACKGROUND_TYPE.getKey(),
+                DEFAULT_WIDGET_BACKGROUND_TYPE.getKey());
+        return WidgetBackgroundType.fromKey(key, DEFAULT_WIDGET_BACKGROUND_TYPE);
+    }
+    
+    /** 
+     * Read widget background color preference. 
+     * Used by the list widget only. Should be used only of 
+     * background type is SOLID
+     */
     public static final int readWidgetBackgroundColorPreference(SharedPreferences sharedPreferences) {
         return sharedPreferences.getInt(PreferenceKind.WIDGET_BACKGROUND_COLOR.getKey(),
                 DEFAULT_WIDGET_BACKGROUND_COLOR);
@@ -326,6 +337,7 @@ public class PreferencesTracker implements PreferenceConstants {
             case STARTUP_ANIMATION:
                 updateCachedStartupAnimationPreference();
                 break;
+            case WIDGET_BACKGROUND_TYPE:
             case WIDGET_BACKGROUND_COLOR:
             case WIDGET_TEXT_COLOR:
             case WIDGET_SINGLE_LINE:

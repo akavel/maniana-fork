@@ -44,6 +44,7 @@ public enum PreferenceKind implements KeyedEnum {
     VERBOSE_MESSAGES("prefVerboseMessagesKey"),
     STARTUP_ANIMATION("prefStartupAnimationKey"),
     WIDGET_SINGLE_LINE("prefWidgetSingleLineKey"),
+    WIDGET_BACKGROUND_TYPE("prefWidgetBackgroundTypeKey"),
     WIDGET_BACKGROUND_COLOR("prefWidgetBackgroundColorKey"),
     WIDGET_TEXT_COLOR("prefWidgetTextColorKey"),
     WIDGET_SHOW_TOOLBAR("prefWidgetShowToolbarKey"),

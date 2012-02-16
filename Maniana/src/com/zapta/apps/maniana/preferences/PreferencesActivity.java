@@ -57,8 +57,9 @@ public class PreferencesActivity extends PreferenceActivity implements
     private ColorPickerPreference mPageSolidColorPickPreference;
     private ListPreference mLockPeriodListPreference;
     private ListPreference mApplauseLevelListPreference;
-    //private CheckBoxPreference mWidgetShowToolbarPreference;
     private CheckBoxPreference mSoundEnablePreference;
+    private ListPreference mWidgetBackgroundTypeListPreference;
+    private ColorPickerPreference mWidgetSolidColorPickPreference;
     private Preference mVersionInfoPreference;
     private Preference mSharePreference;
     private Preference mFeedbackPreference;
@@ -82,7 +83,8 @@ public class PreferencesActivity extends PreferenceActivity implements
         mLockPeriodListPreference = (ListPreference) findPreference(PreferenceKind.LOCK_PERIOD);
         mApplauseLevelListPreference = (ListPreference) findPreference(PreferenceKind.APPLAUSE_LEVEL);
         mSoundEnablePreference = (CheckBoxPreference) findPreference(PreferenceKind.SOUND_ENABLED);
-        //mWidgetShowToolbarPreference = (CheckBoxPreference) findPreference(PreferenceKind.WIDGET_SHOW_TOOLBAR);
+        mWidgetBackgroundTypeListPreference = (ListPreference) findPreference(PreferenceKind.WIDGET_BACKGROUND_TYPE);
+        mWidgetSolidColorPickPreference = (ColorPickerPreference) findPreference(PreferenceKind.WIDGET_BACKGROUND_COLOR);
         mVersionInfoPreference = findPreference(PreferenceKind.VERSION_INFO);
         mSharePreference = findPreference(PreferenceKind.SHARE);
         mFeedbackPreference = findPreference(PreferenceKind.FEEDBACK);
@@ -93,7 +95,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         findColorPickerPrerence(PreferenceKind.PAGE_ITEM_DIVIDER_COLOR).setAlphaSliderEnabled(true);
         findColorPickerPrerence(PreferenceKind.ITEM_ACTIVE_TEXT_COLOR);
         findColorPickerPrerence(PreferenceKind.ITEM_COMPLETED_TEXT_COLOR);
-        findColorPickerPrerence(PreferenceKind.WIDGET_BACKGROUND_COLOR).setAlphaSliderEnabled(true);
+        //findColorPickerPrerence(PreferenceKind.WIDGET_BACKGROUND_COLOR).setAlphaSliderEnabled(true);
         findColorPickerPrerence(PreferenceKind.WIDGET_TEXT_COLOR);
         findPreference(PreferenceKind.AUTO_SORT);
         findPreference(PreferenceKind.AUTO_DAILY_CLEANUP);
@@ -156,9 +158,6 @@ public class PreferencesActivity extends PreferenceActivity implements
     }
 
     private final void onConfirmedResetSettingsClick() {
-        // public void onClick(DialogInterface dialog, int which) {
-        // switch (which) {
-        // case DialogInterface.BUTTON_POSITIVE:
         Editor editor = getPreferenceScreen().getEditor();
         editor.clear();
 
@@ -256,8 +255,8 @@ public class PreferencesActivity extends PreferenceActivity implements
         updateListSummary(mFontSizeListPreference, R.array.itemFontSizeSummaries, null);
         updateListSummary(mPageBackgroundTypeListPreference, R.array.pageBackgroundTypeSummaries,
                 null);
-//        updateListSummary(mWidgetToolbarLocationPreference, R.array.widgetToolbarLocationSummaries,
-//                null);
+        updateListSummary(mWidgetBackgroundTypeListPreference, R.array.widgetBackgroundTypeSummaries,
+                null);
 
         // Disable applause if voice is disabled
         if (mSoundEnablePreference.isChecked()) {
@@ -266,13 +265,23 @@ public class PreferencesActivity extends PreferenceActivity implements
             mApplauseLevelListPreference.setSummary("(sound is off)");
         }
 
-        // Disable solid background color picker if background type is stained paper
+        // Disable page solid background color picker if page background type is stained paper
         if (PageBackgroundType.SOLID.getKey().equals(mPageBackgroundTypeListPreference.getValue())) {
             mPageSolidColorPickPreference.setEnabled(true);
             mPageSolidColorPickPreference.setSummary("Solid background color");
         } else {
             mPageSolidColorPickPreference.setEnabled(false);
             mPageSolidColorPickPreference.setSummary("Solid background color not used");
+        }
+        
+
+        // Disable widget solid background color picker if widget background type is stained paper
+        if (WidgetBackgroundType.SOLID.getKey().equals(mWidgetBackgroundTypeListPreference.getValue())) {
+            mWidgetSolidColorPickPreference.setEnabled(true);
+            mWidgetSolidColorPickPreference.setSummary("Solid background color");
+        } else {
+            mWidgetSolidColorPickPreference.setEnabled(false);
+            mWidgetSolidColorPickPreference.setSummary("Solid background color not used");
         }
 
         // For lock expiration preference, also show the time until next expiration. This require
