@@ -369,7 +369,7 @@ public class Controller {
                                 // Highlight the modified item for a short time, to provide
                                 // the user with
                                 // an indication of the modified item.
-                                briefItemHighlight(pageKind, itemIndex);
+                                briefItemHighlight(pageKind, itemIndex, 700);
                             }
                         });
                 return;
@@ -423,14 +423,14 @@ public class Controller {
     }
 
     /** Highlight the given item for a brief time. The item is assumed to already be visible. */
-    private final void briefItemHighlight(final PageKind pageKind, final int itemIndex) {
+    private final void briefItemHighlight(final PageKind pageKind, final int itemIndex, int millis) {
         mApp.view().setItemViewHighlight(pageKind, itemIndex, true);
         mApp.view().getRootView().postDelayed(new Runnable() {
             @Override
             public void run() {
                 mApp.view().setItemViewHighlight(pageKind, itemIndex, false);
             }
-        }, 700);
+        }, millis);
     }
 
     /** Called by the app view when the user clicks on the Settings button. */
@@ -498,7 +498,7 @@ public class Controller {
         mApp.view().getRootView().post(new Runnable() {
             @Override
             public void run() {
-                briefItemHighlight(pageKind, 0);
+                briefItemHighlight(pageKind, 0, 700);
             }
         });
     }
@@ -838,7 +838,7 @@ public class Controller {
                             mApp.view().getRootView().post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    briefItemHighlight(pageKind, summary.itemOfInterestNewIndex);
+                                    briefItemHighlight(pageKind, summary.itemOfInterestNewIndex, 300);
                                 }
                             });
 
