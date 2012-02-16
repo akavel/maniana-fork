@@ -84,10 +84,6 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         // Set onClick() actions
         setOnClickLaunch(context, remoteViews, R.id.widget_list_top_view, ResumeAction.NONE);
 
-        final boolean toolbarEanbled = PreferencesTracker
-                .readWidgetShowToolbarPreference(sharedPreferences);
-        setToolbar(context, remoteViews, toolbarEanbled);
-
         // Set background
         final WidgetBackgroundType backgroundType = PreferencesTracker
                 .readWidgetBackgroundTypePreference(sharedPreferences);
@@ -106,6 +102,12 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                 remoteViews
                         .setInt(R.id.widget_list_top_view, "setBackgroundColor", backgroundColor);
         }
+        
+        // Set toolbar
+        final boolean toolbarEanbled = PreferencesTracker
+                .readWidgetShowToolbarPreference(sharedPreferences);
+        final boolean showToolbarBackground = toolbarEanbled && (backgroundType != WidgetBackgroundType.PAPER);
+        setToolbar(context, remoteViews, toolbarEanbled, showToolbarBackground);
 
         // Set item list
         remoteViews.removeAllViews(R.id.widget_list_item_list);
@@ -185,14 +187,23 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
     }
 
     private static final void setToolbar(Context context, RemoteViews remoteViews,
-            boolean toolbarEnabled) {
+            boolean toolbarEnabled, boolean showToolbarBackground) {
         if (!toolbarEnabled) {
             remoteViews.setInt(R.id.widget_list_toolbar, "setVisibility", View.GONE);
             return;
         }
 
+        // Make toolbar visible
         remoteViews.setInt(R.id.widget_list_toolbar, "setVisibility", View.VISIBLE);
 
+        // Show or hide toolbar background.
+        if (showToolbarBackground) {
+            remoteViews.setInt(R.id.widget_list_toolbar, "setBackgroundResource", R.id.widget_list_toolbar);
+        } else {
+           remoteViews.setInt(R.id.widget_list_toolbar, "setBackgroundColor", 0x00000000);
+        }
+        
+        // Set new task by text action.
         setOnClickLaunch(context, remoteViews, R.id.widget_list_toolbar_add_by_text,
                 ResumeAction.ADD_NEW_ITEM_BY_TEXT);
 
