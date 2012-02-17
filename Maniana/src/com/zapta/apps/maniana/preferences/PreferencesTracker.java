@@ -36,9 +36,9 @@ public class PreferencesTracker implements PreferenceConstants {
 
     private boolean mCachedAllowSoundsPreference;
 
-    private FontType mCachedFontTypePreference;
+    private PageItemFontType mCachedPageFontTypePreference;
 
-    private FontSize mCachedFontSizePreference;
+    private PageItemFontSize mCachedPageFontSizePreference;
 
     private int mCachedPageItemActiveTextColorPreference;
 
@@ -75,8 +75,8 @@ public class PreferencesTracker implements PreferenceConstants {
         updateCachedApplauseLevelPreference();
         updateCachedAutoSortPreference();
         updateCachedAutoDailyCleanupPreference();
-        updateCachedFontTypePreference();
-        updateCachedFontSizePreference();
+        updateCachedPageFontTypePreference();
+        updateCachedPageFontSizePreference();
         updateCachedPageItemActiveTextColorPreference();
         updateCachedPageItemCompletedTextColorPreference();
         updateCachedPageBackgroundTypePreference();
@@ -101,16 +101,16 @@ public class PreferencesTracker implements PreferenceConstants {
                 PreferenceKind.SOUND_ENABLED.getKey(), DEFAULT_ALLOWS_SOUND_EFFECTS);
     }
 
-    private final void updateCachedFontTypePreference() {
-        final String key = mSharedPreferences.getString(PreferenceKind.ITEM_FONT_TYPE.getKey(),
-                DEFAULT_FONT_TYPE.getKey());
-        mCachedFontTypePreference = FontType.fromKey(key, DEFAULT_FONT_TYPE);
+    private final void updateCachedPageFontTypePreference() {
+        final String key = mSharedPreferences.getString(PreferenceKind.PAGE_ITEM_FONT_TYPE.getKey(),
+                DEFAULT_PAGE_FONT_TYPE.getKey());
+        mCachedPageFontTypePreference = PageItemFontType.fromKey(key, DEFAULT_PAGE_FONT_TYPE);
     }
 
-    private final void updateCachedFontSizePreference() {
-        final String key = mSharedPreferences.getString(PreferenceKind.ITEM_FONT_SIZE.getKey(),
-                DEFAULT_FONT_SIZE.getKey());
-        mCachedFontSizePreference = FontSize.fromKey(key, DEFAULT_FONT_SIZE);
+    private final void updateCachedPageFontSizePreference() {
+        final String key = mSharedPreferences.getString(PreferenceKind.PAGE_ITEM_FONT_SIZE.getKey(),
+                DEFAULT_PAGE_FONT_SIZE.getKey());
+        mCachedPageFontSizePreference = PageItemFontSize.fromKey(key, DEFAULT_PAGE_FONT_SIZE);
     }
 
     private final void updateCachedPageBackgroundTypePreference() {
@@ -134,12 +134,12 @@ public class PreferencesTracker implements PreferenceConstants {
 
     private final void updateCachedPageItemActiveTextColorPreference() {
         mCachedPageItemActiveTextColorPreference = mSharedPreferences.getInt(
-                PreferenceKind.ITEM_ACTIVE_TEXT_COLOR.getKey(), DEFAULT_ITEM_TEXT_COLOR);
+                PreferenceKind.PAGE_ITEM_ACTIVE_TEXT_COLOR.getKey(), DEFAULT_ITEM_TEXT_COLOR);
     }
 
     private final void updateCachedPageItemCompletedTextColorPreference() {
         mCachedPageItemCompletedTextColorPreference = mSharedPreferences.getInt(
-                PreferenceKind.ITEM_COMPLETED_TEXT_COLOR.getKey(),
+                PreferenceKind.PAGE_ITEM_COMPLETED_TEXT_COLOR.getKey(),
                 DEFAULT_COMPLETED_ITEM_TEXT_COLOR);
     }
 
@@ -165,6 +165,13 @@ public class PreferencesTracker implements PreferenceConstants {
         return WidgetBackgroundType.fromKey(key, DEFAULT_WIDGET_BACKGROUND_TYPE);
     }
     
+    /** Read widget item text size preference. */
+    public static final WidgetItemFontSize readWidgetItemFontSizePreference(SharedPreferences sharedPreferences) {
+        final String key = sharedPreferences.getString(PreferenceKind.WIDGET_ITEM_FONT_SIZE.getKey(),
+                DEFAULT_WIDGET_ITEM_FONT_SIZE.getKey());
+        return WidgetItemFontSize.fromKey(key, DEFAULT_WIDGET_ITEM_FONT_SIZE);
+    }
+
     /** 
      * Read widget background color preference. 
      * Used by the list widget only. Should be used only of 
@@ -178,7 +185,7 @@ public class PreferencesTracker implements PreferenceConstants {
     /** Read widget text color preference. Used by the list widget only. */
     public static final int readWidgetTextColorPreference(SharedPreferences sharedPreferences) {
 
-        return sharedPreferences.getInt(PreferenceKind.WIDGET_TEXT_COLOR.getKey(),
+        return sharedPreferences.getInt(PreferenceKind.WIDGET_ITEM_TEXT_COLOR.getKey(),
                 DEFAULT_WIDGET_TEXT_COLOR);
     }
 
@@ -230,12 +237,12 @@ public class PreferencesTracker implements PreferenceConstants {
         return mCachedApplauseLevelPreference;
     }
 
-    public final FontType getItemFontTypePreference() {
-        return mCachedFontTypePreference;
+    public final PageItemFontType getItemFontTypePreference() {
+        return mCachedPageFontTypePreference;
     }
 
-    public final FontSize getItemFontSizePreference() {
-        return mCachedFontSizePreference;
+    public final PageItemFontSize getItemFontSizePreference() {
+        return mCachedPageFontSizePreference;
     }
 
     public int getPageItemActiveTextColorPreference() {
@@ -307,16 +314,16 @@ public class PreferencesTracker implements PreferenceConstants {
             case AUTO_DAILY_CLEANUP:
                 updateCachedAutoDailyCleanupPreference();
                 break;
-            case ITEM_FONT_TYPE:
-                updateCachedFontTypePreference();
+            case PAGE_ITEM_FONT_TYPE:
+                updateCachedPageFontTypePreference();
                 break;
-            case ITEM_FONT_SIZE:
-                updateCachedFontSizePreference();
+            case PAGE_ITEM_FONT_SIZE:
+                updateCachedPageFontSizePreference();
                 break;
-            case ITEM_ACTIVE_TEXT_COLOR:
+            case PAGE_ITEM_ACTIVE_TEXT_COLOR:
                 updateCachedPageItemActiveTextColorPreference();
                 break;
-            case ITEM_COMPLETED_TEXT_COLOR:
+            case PAGE_ITEM_COMPLETED_TEXT_COLOR:
                 updateCachedPageItemCompletedTextColorPreference();
                 break;
             case PAGE_BACKGROUND_TYPE:
@@ -339,7 +346,8 @@ public class PreferencesTracker implements PreferenceConstants {
                 break;
             case WIDGET_BACKGROUND_TYPE:
             case WIDGET_BACKGROUND_COLOR:
-            case WIDGET_TEXT_COLOR:
+            case WIDGET_ITEM_TEXT_COLOR:
+            case WIDGET_ITEM_FONT_SIZE:
             case WIDGET_SINGLE_LINE:
             case WIDGET_SHOW_TOOLBAR:
                 // These ones are not cached or used here. Just reported to controller to

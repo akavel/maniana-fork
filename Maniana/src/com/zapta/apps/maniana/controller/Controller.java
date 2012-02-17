@@ -651,10 +651,10 @@ public class Controller {
         onBackupDataChange();
 
         switch (id) {
-            case ITEM_FONT_TYPE:
-            case ITEM_FONT_SIZE:
-            case ITEM_ACTIVE_TEXT_COLOR:
-            case ITEM_COMPLETED_TEXT_COLOR:
+            case PAGE_ITEM_FONT_TYPE:
+            case PAGE_ITEM_FONT_SIZE:
+            case PAGE_ITEM_ACTIVE_TEXT_COLOR:
+            case PAGE_ITEM_COMPLETED_TEXT_COLOR:
                 mApp.resources().onItemFontVariationPreferenceChange();
                 mApp.view().onItemFontVariationPreferenceChange();
                 break;
@@ -683,7 +683,8 @@ public class Controller {
 
             case WIDGET_BACKGROUND_TYPE:
             case WIDGET_BACKGROUND_COLOR:
-            case WIDGET_TEXT_COLOR:
+            case WIDGET_ITEM_TEXT_COLOR:
+            case WIDGET_ITEM_FONT_SIZE:
             case WIDGET_SINGLE_LINE:
             case WIDGET_SHOW_TOOLBAR:
                 // NOTE: This covers the case where the user changes widget settings and presses the

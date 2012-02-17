@@ -52,14 +52,16 @@ public class PreferencesActivity extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
 
     private ListPreference mFontListPreference;
-    private ListPreference mFontSizeListPreference;
+    private ListPreference mPageFontSizeListPreference;
     private ListPreference mPageBackgroundTypeListPreference;
     private ColorPickerPreference mPageSolidColorPickPreference;
+    private ColorPickerPreference mPageItemDividerColorPickPreference;
     private ListPreference mLockPeriodListPreference;
     private ListPreference mApplauseLevelListPreference;
     private CheckBoxPreference mSoundEnablePreference;
     private ListPreference mWidgetBackgroundTypeListPreference;
     private ColorPickerPreference mWidgetSolidColorPickPreference;
+    private ListPreference mWidgetFontSizeListPreference;
     private Preference mVersionInfoPreference;
     private Preference mSharePreference;
     private Preference mFeedbackPreference;
@@ -76,27 +78,31 @@ public class PreferencesActivity extends PreferenceActivity implements
         addPreferencesFromResource(R.xml.preferences);
 
         // TODO: take keys from PreferenceKind enum, not from literal strings.
-        mFontListPreference = (ListPreference) findPreference(PreferenceKind.ITEM_FONT_TYPE);
-        mFontSizeListPreference = (ListPreference) findPreference(PreferenceKind.ITEM_FONT_SIZE);
+        mFontListPreference = (ListPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_TYPE);
+        mPageFontSizeListPreference = (ListPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_SIZE);
         mPageBackgroundTypeListPreference = (ListPreference) findPreference(PreferenceKind.PAGE_BACKGROUND_TYPE);
         mPageSolidColorPickPreference = (ColorPickerPreference) findPreference(PreferenceKind.PAGE_BACKGROUND_SOLID_COLOR);
+        mPageItemDividerColorPickPreference = (ColorPickerPreference) findPreference(PreferenceKind.PAGE_ITEM_DIVIDER_COLOR);
         mLockPeriodListPreference = (ListPreference) findPreference(PreferenceKind.LOCK_PERIOD);
         mApplauseLevelListPreference = (ListPreference) findPreference(PreferenceKind.APPLAUSE_LEVEL);
         mSoundEnablePreference = (CheckBoxPreference) findPreference(PreferenceKind.SOUND_ENABLED);
         mWidgetBackgroundTypeListPreference = (ListPreference) findPreference(PreferenceKind.WIDGET_BACKGROUND_TYPE);
         mWidgetSolidColorPickPreference = (ColorPickerPreference) findPreference(PreferenceKind.WIDGET_BACKGROUND_COLOR);
+        mWidgetFontSizeListPreference = (ListPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_SIZE);
         mVersionInfoPreference = findPreference(PreferenceKind.VERSION_INFO);
         mSharePreference = findPreference(PreferenceKind.SHARE);
         mFeedbackPreference = findPreference(PreferenceKind.FEEDBACK);
         mRestoreDefaultsPreference = findPreference(PreferenceKind.RESTORE_DEFAULTS);
+        
+        // Enabled alpha channel in colors pickers that need it. 
+        mPageItemDividerColorPickPreference.setAlphaSliderEnabled(true);
+        mWidgetSolidColorPickPreference.setAlphaSliderEnabled(true);
 
         // We lookup also the preferences we don't use here to assert that the code and the xml
-        // key strings match.
-        findColorPickerPrerence(PreferenceKind.PAGE_ITEM_DIVIDER_COLOR).setAlphaSliderEnabled(true);
-        findColorPickerPrerence(PreferenceKind.ITEM_ACTIVE_TEXT_COLOR);
-        findColorPickerPrerence(PreferenceKind.ITEM_COMPLETED_TEXT_COLOR);
-        //findColorPickerPrerence(PreferenceKind.WIDGET_BACKGROUND_COLOR).setAlphaSliderEnabled(true);
-        findColorPickerPrerence(PreferenceKind.WIDGET_TEXT_COLOR);
+        // key strings match.      
+        findColorPickerPrerence(PreferenceKind.PAGE_ITEM_ACTIVE_TEXT_COLOR);
+        findColorPickerPrerence(PreferenceKind.PAGE_ITEM_COMPLETED_TEXT_COLOR);
+        findColorPickerPrerence(PreferenceKind.WIDGET_ITEM_TEXT_COLOR);
         findPreference(PreferenceKind.AUTO_SORT);
         findPreference(PreferenceKind.AUTO_DAILY_CLEANUP);
         findPreference(PreferenceKind.WIDGET_SHOW_TOOLBAR);
@@ -128,7 +134,6 @@ public class PreferencesActivity extends PreferenceActivity implements
                 return true;
             }
         });
-
     }
 
     /** Hanlde user selecting reset settings in the settings activity */
@@ -164,9 +169,9 @@ public class PreferencesActivity extends PreferenceActivity implements
         // TODO: this is a hack to force notifying the main activity and widget
         // about the change. For some reason they are not notified about it
         // otherwise as the the non custom preference types do.
-        editor.putInt(PreferenceKind.ITEM_ACTIVE_TEXT_COLOR.getKey(),
+        editor.putInt(PreferenceKind.PAGE_ITEM_ACTIVE_TEXT_COLOR.getKey(),
                 PreferenceConstants.DEFAULT_ITEM_TEXT_COLOR);
-        editor.putInt(PreferenceKind.ITEM_COMPLETED_TEXT_COLOR.getKey(),
+        editor.putInt(PreferenceKind.PAGE_ITEM_COMPLETED_TEXT_COLOR.getKey(),
                 PreferenceConstants.DEFAULT_COMPLETED_ITEM_TEXT_COLOR);
         editor.putInt(PreferenceKind.PAGE_BACKGROUND_SOLID_COLOR.getKey(),
                 PreferenceConstants.DEFAULT_PAGE_BACKGROUND_SOLID_COLOR);
@@ -174,7 +179,7 @@ public class PreferencesActivity extends PreferenceActivity implements
                 PreferenceConstants.DEFAULT_PAGE_ITEM_DIVIDER_COLOR);
         editor.putInt(PreferenceKind.WIDGET_BACKGROUND_COLOR.getKey(),
                 PreferenceConstants.DEFAULT_WIDGET_BACKGROUND_COLOR);
-        editor.putInt(PreferenceKind.WIDGET_TEXT_COLOR.getKey(),
+        editor.putInt(PreferenceKind.WIDGET_ITEM_TEXT_COLOR.getKey(),
                 PreferenceConstants.DEFAULT_WIDGET_TEXT_COLOR);
 
         // We also need to set boolean preferences whose default value is false.
@@ -252,11 +257,12 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     private void updateSummaries() {
         updateListSummary(mFontListPreference, R.array.itemFontSummaries, null);
-        updateListSummary(mFontSizeListPreference, R.array.itemFontSizeSummaries, null);
+        updateListSummary(mPageFontSizeListPreference, R.array.pageItemFontSizeSummaries, null);
         updateListSummary(mPageBackgroundTypeListPreference, R.array.pageBackgroundTypeSummaries,
                 null);
         updateListSummary(mWidgetBackgroundTypeListPreference, R.array.widgetBackgroundTypeSummaries,
                 null);
+        updateListSummary(mWidgetFontSizeListPreference, R.array.widgetItemFontSizeSummaries, null);
 
         // Disable applause if voice is disabled
         if (mSoundEnablePreference.isChecked()) {

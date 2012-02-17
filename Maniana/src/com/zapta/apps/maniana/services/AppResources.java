@@ -20,7 +20,7 @@ import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 
 import com.zapta.apps.maniana.main.AppContext;
-import com.zapta.apps.maniana.preferences.ItemFontVariation;
+import com.zapta.apps.maniana.preferences.PageItemFontVariation;
 
 /**
  * Provides access and caching of the app resources.
@@ -36,7 +36,7 @@ public class AppResources {
 
     // TODO: @@@ move this to PreferenceTracker
     /** Cached item text font variation */
-    private ItemFontVariation mItemFontVariation;
+    private PageItemFontVariation mItemFontVariation;
 
     /** Cached page title typeface. */
     private final Typeface mTitleTypeFace;
@@ -72,11 +72,11 @@ public class AppResources {
      * item font preference changes
      */
     public final void onItemFontVariationPreferenceChange() {
-        mItemFontVariation = ItemFontVariation.newFromCurrentPreferences(mApp);
+        mItemFontVariation = PageItemFontVariation.newFromCurrentPreferences(mApp);
     }
 
     /** Get current item font variation */
-    public final ItemFontVariation getItemFontVariation() {
+    public final PageItemFontVariation getItemFontVariation() {
         return mItemFontVariation;
     }
 

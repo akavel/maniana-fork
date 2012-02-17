@@ -19,19 +19,19 @@
         <item>Using San Serif font</item>
         <item>Using Serif font</item>
     </string-array>
-    <string-array name="itemFontSizeNames">
+    <string-array name="pageItemFontSizeNames">
         <item>Small</item>
         <item>Normal</item>
         <item>Large</item>
         <item>Very Large</item>
     </string-array>
-    <string-array name="itemFontSizeValues">
+    <string-array name="pageItemFontSizeValues">
         <item>small1</item>
         <item>normal</item>
         <item>large1</item>
         <item>large2</item>
     </string-array>
-    <string-array name="itemFontSizeSummaries">
+    <string-array name="pageItemFontSizeSummaries">
         <item>Using small text size</item>
         <item>Using normal text size</item>
         <item>Using large text size</item>
@@ -49,7 +49,7 @@
         <item>Using stained paper page background</item>
         <item>Using solid background page color</item>
     </string-array>
-     <string-array name="widgetBackgroundTypeNames">
+    <string-array name="widgetBackgroundTypeNames">
         <item>Stained paper</item>
         <item>Solid color</item>
     </string-array>
@@ -60,6 +60,21 @@
     <string-array name="widgetBackgroundTypeSummaries">
         <item>Using stained paper widget background</item>
         <item>Using solid background widget color</item>
+    </string-array>
+    <string-array name="widgetItemFontSizeNames">
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+    <string-array name="widgetItemFontSizeValues">
+        <item>small</item>
+        <item>medium</item>
+        <item>large</item>
+    </string-array>
+    <string-array name="widgetItemFontSizeSummaries">
+        <item>Using small text size</item>
+        <item>Using medium text size</item>
+        <item>Using large text size</item>
     </string-array>
     <string-array name="lockPeriodNames">
         <item>Once a Week</item>

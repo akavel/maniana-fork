@@ -24,7 +24,7 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
  * 
  * @author
  */
-public enum FontType implements KeyedEnum {
+public enum PageItemFontType implements KeyedEnum {
     CURSIVE("cursive"),
     ELEGANT("elegant"),
     SAN_SERIF("sans"),
@@ -33,7 +33,7 @@ public enum FontType implements KeyedEnum {
     /** Preference value key. Should match the values in preference xml. */
     private final String mKey;
 
-    private FontType(String key) {
+    private PageItemFontType(String key) {
         this.mKey = key;
     }
 
@@ -44,7 +44,7 @@ public enum FontType implements KeyedEnum {
 
     /** Return value with given key, fallback value if not found. */
     @Nullable
-    public final static FontType fromKey(String key, @Nullable FontType fallBack) {
-        return EnumUtil.fromKey(key, FontType.values(), fallBack);
+    public final static PageItemFontType fromKey(String key, @Nullable PageItemFontType fallBack) {
+        return EnumUtil.fromKey(key, PageItemFontType.values(), fallBack);
     }
 }

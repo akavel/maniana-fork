@@ -122,6 +122,10 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
     private static final void populateItemList(Context context, RemoteViews remoteViews,
             AppModel model, int textColor, SharedPreferences sharedPreferences) {
+        // Get text size preference in sp units
+        final int fontSizeSp = PreferencesTracker.readWidgetItemFontSizePreference(
+                sharedPreferences).getSizeSp();
+
         // For debugging
         final boolean debugTimestamp = false;
         if (debugTimestamp) {
@@ -131,58 +135,58 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
         if (model == null) {
             addMessageItem(context, remoteViews, "(Maniana data not found)", textColor);
-        } else {
-            final LockExpirationPeriod lockExpirationPeriod = PreferencesTracker
-                    .readLockExpierationPeriodPreference(sharedPreferences);
-            // TODO: reorganize the code. No need to read lock preference if
-            // date now is same as the model
-            Time now = new Time();
-            now.setToNow();
+            return;
+        }
 
-            final List<ItemModelReadOnly> items = WidgetUtil.selectTodaysActiveItemsByTime(model,
-                    now, lockExpirationPeriod);
-            if (items.isEmpty()) {
-                addMessageItem(context, remoteViews, "(no active tasks)", textColor);
-            } else {
+        final LockExpirationPeriod lockExpirationPeriod = PreferencesTracker
+                .readLockExpierationPeriodPreference(sharedPreferences);
+        // TODO: reorganize the code. No need to read lock preference if
+        // date now is same as the model
+        Time now = new Time();
+        now.setToNow();
 
-                final boolean singleLine = PreferencesTracker
-                        .readWidgetSingleLinePreference(sharedPreferences);
-                for (ItemModelReadOnly item : items) {
-                    final RemoteViews remoteItemViews = new RemoteViews(context.getPackageName(),
-                            R.layout.widget_list_item_layout);
+        final List<ItemModelReadOnly> items = WidgetUtil.selectTodaysActiveItemsByTime(model, now,
+                lockExpirationPeriod);
+        if (items.isEmpty()) {
+            addMessageItem(context, remoteViews, "(no active tasks)", textColor);
+            return;
+        }
 
-                    // NOTE: TextView has a bug that does not allows more than
-                    // two lines when using ellipsize. Otherwise we would give the user more
-                    // choices about the max number of lines. More details here:
-                    // http://code.google.com/p/android/issues/detail?id=2254
-                    if (!singleLine) {
-                        remoteItemViews.setBoolean(R.id.widget_item_text_view, "setSingleLine",
-                                false);
-                        // NOTE: on ICS (API 14) the text view behaves
-                        // differently and does not limit the lines to two when ellipsize. For
-                        // consistency, we limit it explicitly to two lines.
-                        remoteItemViews.setInt(R.id.widget_item_text_view, "setMaxLines", 2);
-                    }
+        final boolean singleLine = PreferencesTracker
+                .readWidgetSingleLinePreference(sharedPreferences);
+        
+        for (ItemModelReadOnly item : items) {
+            final RemoteViews remoteItemViews = new RemoteViews(context.getPackageName(),
+                    R.layout.widget_list_item_layout);
 
-                    remoteItemViews.setTextViewText(R.id.widget_item_text_view, item.getText());
-                    remoteItemViews.setTextColor(R.id.widget_item_text_view, textColor);
-
-                    // If color is NONE show a gray solid color to help visually
-                    // grouping item text lines.
-                    final int itemColor = item.getColor().isNone() ? 0xff808080 : item.getColor()
-                            .getColor();
-
-                    remoteItemViews.setInt(R.id.widget_item_color, "setBackgroundColor", itemColor);
-
-                    // These are required for ICS. Otherwise text backdround is dark
-                    remoteItemViews.setInt(R.id.widget_item_text_view, "setBackgroundColor",
-                            0x00000000);
-                    remoteItemViews.setInt(R.id.widget_item_view, "setBackgroundColor", 0x00000000);
-
-                    remoteViews.addView(R.id.widget_list_item_list, remoteItemViews);
-                }
-
+            // NOTE: TextView has a bug that does not allows more than
+            // two lines when using ellipsize. Otherwise we would give the user more
+            // choices about the max number of lines. More details here:
+            // http://code.google.com/p/android/issues/detail?id=2254
+            if (!singleLine) {
+                remoteItemViews.setBoolean(R.id.widget_item_text_view, "setSingleLine", false);
+                // NOTE: on ICS (API 14) the text view behaves
+                // differently and does not limit the lines to two when ellipsize. For
+                // consistency, we limit it explicitly to two lines.
+                remoteItemViews.setInt(R.id.widget_item_text_view, "setMaxLines", 2);
             }
+
+            remoteItemViews.setTextViewText(R.id.widget_item_text_view, item.getText());
+            remoteItemViews.setTextColor(R.id.widget_item_text_view, textColor);
+            remoteItemViews.setFloat(R.id.widget_item_text_view, "setTextSize", fontSizeSp);
+
+            // If color is NONE show a gray solid color to help visually
+            // grouping item text lines.
+            final int itemColor = item.getColor().isNone() ? 0xff808080 : item.getColor()
+                    .getColor();
+
+            remoteItemViews.setInt(R.id.widget_item_color, "setBackgroundColor", itemColor);
+
+            // These are required for ICS. Otherwise text backdround is dark
+            remoteItemViews.setInt(R.id.widget_item_text_view, "setBackgroundColor", 0x00000000);
+            remoteItemViews.setInt(R.id.widget_item_view, "setBackgroundColor", 0x00000000);
+
+            remoteViews.addView(R.id.widget_list_item_list, remoteItemViews);
         }
 
     }
@@ -235,6 +239,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
     private static final void addMessageItem(Context context, RemoteViews remoteViews,
             String message, int textColor) {
+        // TODO: setup message text using widget font size preference?
         final RemoteViews itemMessageViews = new RemoteViews(context.getPackageName(),
                 R.layout.widget_list_item_layout);
         final int textViewResourceId = R.id.widget_item_text_view;
@@ -245,7 +250,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         remoteViews.addView(R.id.widget_list_item_list, itemMessageViews);
     }
 
-    // TODO: decice what we want to do with this.
+    // TODO: defice what we want to do with this.
     // An attempt to update all list widgtes by a direct call.
     public static void updateAllIconWidgetsFromModel(Context context, @Nullable AppModel model) {
         final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);

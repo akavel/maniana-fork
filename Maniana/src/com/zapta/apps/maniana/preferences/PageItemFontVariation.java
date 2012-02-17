@@ -29,7 +29,7 @@ import com.zapta.apps.maniana.main.AppContext;
  * 
  * @author Tal Dayan
  */
-public class ItemFontVariation {
+public class PageItemFontVariation {
     /** Path to page title fonts relative to assets directory. */
     private static final String CURSIVE_ITEM_FONT_ASSET_PATH = "fonts/Vavont/Vavont.ttf";
 
@@ -54,7 +54,7 @@ public class ItemFontVariation {
      * @param lineSpacingMultiplier The line spacing multiplier to use.
      * @param topBottomPadding padding (in dip) at top and bottom of text.
      */
-    public ItemFontVariation(Typeface typeFace, int color, int colorCompleted, int textSize,
+    public PageItemFontVariation(Typeface typeFace, int color, int colorCompleted, int textSize,
                     float lineSpacingMultiplier, int topBottomPadding) {
         this.mTypeFace = typeFace;
         this.mColor = color;
@@ -87,22 +87,22 @@ public class ItemFontVariation {
         }
     }
     
-    public static final ItemFontVariation newFromCurrentPreferences(AppContext app) {
-        final FontType fontType = app.pref().getItemFontTypePreference();
+    public static final PageItemFontVariation newFromCurrentPreferences(AppContext app) {
+        final PageItemFontType fontType = app.pref().getItemFontTypePreference();
         // TODO: move these consts to XML file (can we use styles for this?)
         final int Color = app.pref().getPageItemActiveTextColorPreference();
         final int completedColor = app.pref().getPageItemCompletedTextColorPreference();
 
-        final FontSize fontSize = app.pref().getItemFontSizePreference();
+        final PageItemFontSize fontSize = app.pref().getItemFontSizePreference();
         final float k = fontSize.getFactor(); 
         
         switch (fontType) {
             case CURSIVE:
-                return new ItemFontVariation(Typeface.createFromAsset(app.context()
+                return new PageItemFontVariation(Typeface.createFromAsset(app.context()
                                 .getAssets(), CURSIVE_ITEM_FONT_ASSET_PATH), Color,
                                 completedColor, (int) (22 * k), 0.9f, 10);
             case ELEGANT:
-                return new ItemFontVariation(Typeface.createFromAsset(app.context()
+                return new PageItemFontVariation(Typeface.createFromAsset(app.context()
                                 .getAssets(), ELEGANT_ITEM_FONT_ASSET_PATH), Color,
                                 completedColor, (int) (24 * k), 1.0f, 10);
 //            case LUCID:
@@ -110,10 +110,10 @@ public class ItemFontVariation {
 //                                .getAssets(), LUCID_ITEM_FONT_ASSET_PATH), Color,
 //                                completedColor, (int) (20 * k), 1.0f, 10);
             case SAN_SERIF:
-                return new ItemFontVariation(Typeface.SANS_SERIF, Color,
+                return new PageItemFontVariation(Typeface.SANS_SERIF, Color,
                                 completedColor, (int) (18 * k), 1.1f, 10);
             case SERIF:
-                return new ItemFontVariation(Typeface.SERIF, Color,
+                return new PageItemFontVariation(Typeface.SERIF, Color,
                                 completedColor, (int) (18 * k), 1.1f, 10);
             default:
                 throw new RuntimeException("Unknown font type: " + fontType);

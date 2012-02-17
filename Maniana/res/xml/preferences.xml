@@ -68,8 +68,8 @@
             android:title="Font" />
         <ListPreference
             android:defaultValue="normal"
-            android:entries="@array/itemFontSizeNames"
-            android:entryValues="@array/itemFontSizeValues"
+            android:entries="@array/pageItemFontSizeNames"
+            android:entryValues="@array/pageItemFontSizeValues"
             android:key="prefItemFontSizeKey"
             android:title="Text Size" />
         <net.margaritov.preference.colorpicker.ColorPickerPreference
@@ -100,6 +100,12 @@
             android:key="prefWidgetBackgroundColorKey"
             android:summary="List widget background color"
             android:title="Background Color" />
+        <ListPreference
+            android:defaultValue="medium"
+            android:entries="@array/widgetItemFontSizeNames"
+            android:entryValues="@array/widgetItemFontSizeValues"
+            android:key="prefWidgetItemFontSizeKey"
+            android:title="Text Size" />
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#ffffff00"
             android:key="prefWidgetTextColorKey"

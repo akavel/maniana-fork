@@ -30,7 +30,7 @@ import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.main.AppContext;
 import com.zapta.apps.maniana.model.ItemModelReadOnly;
 import com.zapta.apps.maniana.model.PageKind;
-import com.zapta.apps.maniana.preferences.ItemFontVariation;
+import com.zapta.apps.maniana.preferences.PageItemFontVariation;
 
 /**
  * View of a single item.
@@ -54,7 +54,7 @@ public class ItemView extends FrameLayout {
     private final PageKind mPageKind;
 
     /** Cache of last display font variation. Used to avoid unnecessary changes. */
-    private ItemFontVariation mLastFontVariaton = null;
+    private PageItemFontVariation mLastFontVariaton = null;
 
     /** Cache of item is completed status. Used to avoid unnecessary changes. */
     private boolean mLastIsCompleted = false;
@@ -145,7 +145,7 @@ public class ItemView extends FrameLayout {
     }
 
     private final void updateFont(boolean isItemCompleted) {
-        final ItemFontVariation newItemFontVariation = mApp.resources().getItemFontVariation();
+        final PageItemFontVariation newItemFontVariation = mApp.resources().getItemFontVariation();
         if (newItemFontVariation != mLastFontVariaton || isItemCompleted || mLastIsCompleted) {
             newItemFontVariation.apply(mTextView, isItemCompleted, true);
             // mTextView.setTextColor(isItemCompleted ? mApp.pref()
