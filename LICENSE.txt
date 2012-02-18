@@ -58,7 +58,8 @@ TBD
 
 List Widget background image
 list_widget_background.png
-From http://slodive.com/design/white-backgrounds/
+From http://markarmstrongillustration.com/2011/04/25/look-out-supe-thats-taxregonite/
+Cropped and desaturated.
 TBD
 
 Sound clips
