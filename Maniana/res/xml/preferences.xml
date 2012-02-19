@@ -123,6 +123,11 @@
             android:summaryOff="Wrapping longer tasks onto a second line"
             android:summaryOn="Limiting tasks to a single line"
             android:title="Single Line" />
+        <Preference
+            android:key="prefWidgetSelectThemeKey"
+            android:summary="Click to select a predefined widget setting"
+            android:title="Set Theme">
+        </Preference>
     </PreferenceScreen>
     <PreferenceScreen android:title="Miscellaneous">
         <Preference

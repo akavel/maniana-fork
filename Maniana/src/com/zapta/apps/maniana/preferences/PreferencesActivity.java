@@ -18,6 +18,7 @@ import javax.annotation.Nullable;
 
 import net.margaritov.preference.colorpicker.ColorPickerPreference;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -59,9 +60,15 @@ public class PreferencesActivity extends PreferenceActivity implements
     private ListPreference mLockPeriodListPreference;
     private ListPreference mApplauseLevelListPreference;
     private CheckBoxPreference mSoundEnablePreference;
+
     private ListPreference mWidgetBackgroundTypeListPreference;
     private ColorPickerPreference mWidgetSolidColorPickPreference;
+    private ColorPickerPreference mWidgetTextColorPickPreference;
+    private CheckBoxPreference mWidgetShowToolbarPreference;
     private ListPreference mWidgetFontSizeListPreference;
+    private Preference mWidgetSelectThemePreference;
+    private CheckBoxPreference mWidgetSingleLinePreference;
+
     private Preference mVersionInfoPreference;
     private Preference mSharePreference;
     private Preference mFeedbackPreference;
@@ -81,31 +88,42 @@ public class PreferencesActivity extends PreferenceActivity implements
         mFontListPreference = (ListPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_TYPE);
         mPageFontSizeListPreference = (ListPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_SIZE);
         mPageBackgroundTypeListPreference = (ListPreference) findPreference(PreferenceKind.PAGE_BACKGROUND_TYPE);
-        mPageSolidColorPickPreference = (ColorPickerPreference) findPreference(PreferenceKind.PAGE_BACKGROUND_SOLID_COLOR);
-        mPageItemDividerColorPickPreference = (ColorPickerPreference) findPreference(PreferenceKind.PAGE_ITEM_DIVIDER_COLOR);
+        mPageSolidColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_BACKGROUND_SOLID_COLOR);
+        mPageItemDividerColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_ITEM_DIVIDER_COLOR);
         mLockPeriodListPreference = (ListPreference) findPreference(PreferenceKind.LOCK_PERIOD);
         mApplauseLevelListPreference = (ListPreference) findPreference(PreferenceKind.APPLAUSE_LEVEL);
         mSoundEnablePreference = (CheckBoxPreference) findPreference(PreferenceKind.SOUND_ENABLED);
+        
         mWidgetBackgroundTypeListPreference = (ListPreference) findPreference(PreferenceKind.WIDGET_BACKGROUND_TYPE);
-        mWidgetSolidColorPickPreference = (ColorPickerPreference) findPreference(PreferenceKind.WIDGET_BACKGROUND_COLOR);
+        mWidgetSolidColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_BACKGROUND_COLOR);
         mWidgetFontSizeListPreference = (ListPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_SIZE);
+        mWidgetSelectThemePreference = findPreference(PreferenceKind.WIDGET_SELECT_THEME);
+        mWidgetShowToolbarPreference = (CheckBoxPreference) findPreference(PreferenceKind.WIDGET_SHOW_TOOLBAR);
+        mWidgetTextColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_ITEM_TEXT_COLOR);
+        mWidgetSingleLinePreference = (CheckBoxPreference) findPreference(PreferenceKind.WIDGET_SINGLE_LINE);
+        
         mVersionInfoPreference = findPreference(PreferenceKind.VERSION_INFO);
         mSharePreference = findPreference(PreferenceKind.SHARE);
         mFeedbackPreference = findPreference(PreferenceKind.FEEDBACK);
         mRestoreDefaultsPreference = findPreference(PreferenceKind.RESTORE_DEFAULTS);
-        
-        // Enabled alpha channel in colors pickers that need it. 
+
+        // Enabled alpha channel in colors pickers that need it.
         mPageItemDividerColorPickPreference.setAlphaSliderEnabled(true);
         mWidgetSolidColorPickPreference.setAlphaSliderEnabled(true);
 
         // We lookup also the preferences we don't use here to assert that the code and the xml
-        // key strings match.      
+        // key strings match.
         findColorPickerPrerence(PreferenceKind.PAGE_ITEM_ACTIVE_TEXT_COLOR);
         findColorPickerPrerence(PreferenceKind.PAGE_ITEM_COMPLETED_TEXT_COLOR);
-        findColorPickerPrerence(PreferenceKind.WIDGET_ITEM_TEXT_COLOR);
         findPreference(PreferenceKind.AUTO_SORT);
         findPreference(PreferenceKind.AUTO_DAILY_CLEANUP);
-        findPreference(PreferenceKind.WIDGET_SHOW_TOOLBAR);
+
+        mWidgetSelectThemePreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                onWidgetSelectThemeClick();
+                return true;
+            }
+        });
 
         mRestoreDefaultsPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
@@ -136,7 +154,32 @@ public class PreferencesActivity extends PreferenceActivity implements
         });
     }
 
-    /** Hanlde user selecting reset settings in the settings activity */
+    /** Handle user clicking on widget theme selection in the settings activity */
+    private final void onWidgetSelectThemeClick() {
+        final Dialog dialog = new ThumbnailSelector<WidgetTheme>(this, "Select Widget Theme",
+                WidgetTheme.WIDGET_THEMES,
+                new ThumbnailSelector.ThumbnailSelectorListener<WidgetTheme>() {
+                    @Override
+                    public void onThumbnailSelection(WidgetTheme theme) {
+                        handleWidgetThemeSelection(theme);
+                    }
+                });
+        dialog.show();
+    }
+
+    /** Called when a widget theme is selected from the widget theme dialog. */
+    private final void handleWidgetThemeSelection(WidgetTheme theme) {
+        LogUtil.info("Widget theme selected");
+        mWidgetBackgroundTypeListPreference.setValue(theme.backgroundType.getKey());
+        mWidgetSolidColorPickPreference.onColorChanged(theme.backgroundColor);
+        mWidgetFontSizeListPreference.setValue(theme.fontSize.getKey());
+        mWidgetTextColorPickPreference.onColorChanged(theme.textColor);
+        mWidgetShowToolbarPreference.setChecked(theme.showToolbar);
+        mWidgetSingleLinePreference.setChecked(theme.singleLine);
+      
+    }
+
+    /** Handle user selecting reset settings in the settings activity */
     private final void onResetSettingsClick() {
         // TODO: *** what does this do? Do we need it? Look like a left over.
         // PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
@@ -260,8 +303,8 @@ public class PreferencesActivity extends PreferenceActivity implements
         updateListSummary(mPageFontSizeListPreference, R.array.pageItemFontSizeSummaries, null);
         updateListSummary(mPageBackgroundTypeListPreference, R.array.pageBackgroundTypeSummaries,
                 null);
-        updateListSummary(mWidgetBackgroundTypeListPreference, R.array.widgetBackgroundTypeSummaries,
-                null);
+        updateListSummary(mWidgetBackgroundTypeListPreference,
+                R.array.widgetBackgroundTypeSummaries, null);
         updateListSummary(mWidgetFontSizeListPreference, R.array.widgetItemFontSizeSummaries, null);
 
         // Disable applause if voice is disabled
@@ -279,10 +322,10 @@ public class PreferencesActivity extends PreferenceActivity implements
             mPageSolidColorPickPreference.setEnabled(false);
             mPageSolidColorPickPreference.setSummary("Solid background color not used");
         }
-        
 
         // Disable widget solid background color picker if widget background type is stained paper
-        if (WidgetBackgroundType.SOLID.getKey().equals(mWidgetBackgroundTypeListPreference.getValue())) {
+        if (WidgetBackgroundType.SOLID.getKey().equals(
+                mWidgetBackgroundTypeListPreference.getValue())) {
             mWidgetSolidColorPickPreference.setEnabled(true);
             mWidgetSolidColorPickPreference.setSummary("Solid background color");
         } else {
