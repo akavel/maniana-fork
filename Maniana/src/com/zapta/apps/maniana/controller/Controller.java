@@ -77,6 +77,11 @@ public class Controller {
      * app re-entry.
      */
     private boolean mInSubActivity = false;
+    
+    /**
+     * Preallocated temp object. Used to reduce object alloctation.
+     */
+    private final OrganizePageSummary mTempSummary = new OrganizePageSummary();
 
     public Controller(AppContext app) {
         mApp = app;
@@ -278,8 +283,6 @@ public class Controller {
 
         // NOTE(tal): we update the model push to today date even if we did not push. This will
         // eliminate the need to parse the model date stamp for the rest of the day.
-        //
-        // TODO: pick a better name for model last push date member.
         mApp.model().setLastPushDateStamp(mApp.dateTracker().getDateStampString());
     }
 
@@ -301,7 +304,7 @@ public class Controller {
         // Delete.
         final QuickActionItem deleteAction = mQuickActionCache.getDeleteAction();
 
-        // TODO: could cache only this array since there are only 4 permutations.
+        // Action list
         final QuickActionItem actions[] = { doneAction, editAction, lockAction, deleteAction };
 
         mApp.view().setItemViewHighlight(pageKind, itemIndex, true);
@@ -389,7 +392,6 @@ public class Controller {
 
                     // We do a short delay before the animation to let the use see the icon change
                     // to lock before the item is moved to the other page.
-                    // TODO: make the pre delay a resource or const
                     mApp.view().startItemAnimation(pageKind, itemIndex,
                             AppView.ItemAnimationType.MOVING_ITEM_TO_OTHER_PAGE, 200,
                             new Runnable() {
@@ -474,6 +476,7 @@ public class Controller {
         mApp.mainActivity().startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
     }
 
+    /** Add a new task from text editor or voice recognition. */
     private final void maybeAddNewItem(final String text, final PageKind pageKind,
             boolean upperCaseIt) {
         String cleanedValue = text.trim();
@@ -481,14 +484,12 @@ public class Controller {
             return;
         }
 
-        // TODO: this creates to many objects.
         if (upperCaseIt) {
             cleanedValue = cleanedValue.substring(0, 1).toUpperCase() + cleanedValue.substring(1);
         }
         
-        // // TODO: share with add by voice below
         ItemModel item = new ItemModel(cleanedValue, false, false, ItemColor.NONE);
-        // final
+
         mApp.model().insertItem(pageKind, 0, item);
         mApp.view().upadatePage(pageKind);
         mApp.view().scrollToTop(pageKind);
@@ -514,8 +515,9 @@ public class Controller {
         }
     }
 
+    /** Handle the result of add-new-item by voice recongition. */
     private final void onVoiceActivityResult(int requestCode, int resultCode, Intent intent) {
-        // Prevets the main activity to scroll to top of pages as we do when resuming from
+        // Prevents the main activity from scrolling to top of pages as we do when resuming from
         // an external activity.
         mInSubActivity = true;
 
@@ -551,20 +553,19 @@ public class Controller {
     /** Called by the app view when the user click or long press the clean page button. */
     public final void onCleanPageButton(final PageKind pageKind, boolean isLongPress) {
         final boolean deleteCompletedItems = isLongPress;
-        // TODO: could cache and reuse this object to reduce allocation.
-        final OrganizePageSummary summary = new OrganizePageSummary();
-
-        mApp.model().organizePageWithUndo(pageKind, deleteCompletedItems, -1, summary);
+        
+        // NOTE: reusing mTempSummary.
+        mApp.model().organizePageWithUndo(pageKind, deleteCompletedItems, -1, mTempSummary);
 
         mApp.services().maybePlayStockSound(
-                (summary.completedItemsDeleted > 0) ? AudioManager.FX_KEYPRESS_DELETE
+                (mTempSummary.completedItemsDeleted > 0) ? AudioManager.FX_KEYPRESS_DELETE
                         : AudioManager.FX_KEY_CLICK, false);
 
         mApp.view().upadatePage(pageKind);
 
         // Display optional message to the user
         @Nullable
-        final String message = constructPageCleanMessage(summary);
+        final String message = constructPageCleanMessage(mTempSummary);
         if (message != null) {
             mApp.services().toast(message);
         }
@@ -621,7 +622,6 @@ public class Controller {
             }
             case ABOUT: {
                 startPopupMessageSubActivity(MessageKind.ABOUT);
-                // startSubActivity(AboutActivity.class);
                 break;
             }
             default:
@@ -746,13 +746,12 @@ public class Controller {
     }
 
     private final void startSubActivity(Class<? extends Activity> cls) {
-        // TODO: should we assert or print an error message is mInSubActivity is already true?
         final Intent intent = new Intent(mApp.context(), cls);
         startSubActivity(intent);
     }
 
     private final void startSubActivity(Intent intent) {
-        // TODO: should we assert or print an error messge is mInSubActivity is already true?
+        // TODO: should we assert or print an error message that mInSubActivity is false here?
         mInSubActivity = true;
         mApp.context().startActivity(intent);
     }
@@ -781,10 +780,9 @@ public class Controller {
     private final boolean maybeAutoSortPage(PageKind pageKind, boolean updateViewIfSorted,
             boolean showMessageIfSorted) {
         if (mApp.pref().getAutoSortPreference()) {
-            // TODO: use a temp member to avoid an extra object allocation;
-            OrganizePageSummary summary = new OrganizePageSummary();
-            mApp.model().organizePageWithUndo(pageKind, false, -1, summary);
-            if (summary.orderChanged) {
+            // NOTE: reusing temp summary mmeber.
+            mApp.model().organizePageWithUndo(pageKind, false, -1, mTempSummary);
+            if (mTempSummary.orderChanged) {
                 if (updateViewIfSorted) {
                     mApp.view().upadatePage(pageKind);
                 }
@@ -826,21 +824,20 @@ public class Controller {
                 ItemAnimationType.SORTING_ITEM, 0, new Runnable() {
                     @Override
                     public void run() {
-                        // This is done at the end of the animation
-                        final OrganizePageSummary summary = new OrganizePageSummary();
+                        // NOTE: reusing temp summary member
                         mApp.model().organizePageWithUndo(pageKind, false,
-                                itemOfInteresttOriginalIndex, summary);
+                                itemOfInteresttOriginalIndex, mTempSummary);
                         mApp.view().upadatePage(pageKind);
                         if (mApp.pref().getVerboseMessagesEnabledPreference()) {
                             mApp.services().toast("Auto sorted");
                         }
-                        if (summary.itemOfInterestNewIndex >= 0) {
+                        if (mTempSummary.itemOfInterestNewIndex >= 0) {
                             // After the animation, briefly highlight the item at the new
                             // location.
                             mApp.view().getRootView().post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    briefItemHighlight(pageKind, summary.itemOfInterestNewIndex, 300);
+                                    briefItemHighlight(pageKind, mTempSummary.itemOfInterestNewIndex, 300);
                                 }
                             });
 
