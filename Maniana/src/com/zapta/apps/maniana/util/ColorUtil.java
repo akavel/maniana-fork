@@ -32,23 +32,23 @@ public final class ColorUtil {
      */
     public static final int distance(int r, int g, int b, int color) {
         return Math.abs(r - Color.red(color)) + Math.abs(g - Color.green(color))
-                        + Math.abs(b - Color.blue(color));
+                + Math.abs(b - Color.blue(color));
     }
-    
+
     /**
      * Returns candidate color furtherest from given reference color. In case of a tie, prefer
      * candidates with lower indices. Candidates array must contain at least one member. Alpha
      * channel is ignored.
      */
     public static final int selectFurthestColor(int referenceColor, int candidates[]) {
-       final int index = selectFurthestColorIndex(referenceColor, candidates);
-       return candidates[index];
+        final int index = selectFurthestColorIndex(referenceColor, candidates);
+        return candidates[index];
     }
 
     /**
-     * Returns index of candidate color furtherest from given reference color. In case of a tie, prefer
-     * candidates with lower indices. Candidates array must contain at least one member. Alpha
-     * channel is ignored.
+     * Returns index of candidate color furtherest from given reference color. In case of a tie,
+     * prefer candidates with lower indices. Candidates array must contain at least one member.
+     * Alpha channel is ignored.
      */
     public static final int selectFurthestColorIndex(int referenceColor, int candidates[]) {
         check(candidates.length > 0);
@@ -72,5 +72,54 @@ public final class ColorUtil {
 
         check(bestCandidateIndex >= 0);
         return bestCandidateIndex;
+    }
+
+    /**
+     * Compute the combined alpha of a laver with alpha a2 over a layer with alpha a1. a1, a2 are in
+     * the range [0..255]. Where 0 indicates transparent and 255 indicates opaque color. The method
+     * does not perform range checking. Providing out of range value parameters in undefined result.
+     * 
+     * Formula is based on http://tinyurl.com/79dmuay.
+     */
+    @VisibleForTesting
+    static int compositeAlpha(int a1, int a2) {
+        return 255 - ((255 - a2) * (255 - a1)) / 255;
+    }
+
+    /**
+     * Compute the combined color component (R, G or B) of layer 2 over layer 1.
+     * 
+     * @param c1
+     *            color of layer 1 [0 .. 255]
+     * @param a1
+     *            alpha of layer 1 [0 .. 255]
+     * @param c2
+     *            color of layer 2 [0 .. 255]
+     * @param a2
+     *            alpha of layer 1 [0 .. 255]
+     * @param a
+     *            compositeAlpha(a1, a2)
+     * @return the composite color component [0..255]
+     */
+    @VisibleForTesting
+    static int compositeColorComponent(int c1, int a1, int c2, int a2, int a) {
+        // Handle the singular case of both layers fully transparent.
+        if (a == 0) {
+            return 0x00;
+        }
+        return (((255 * c2 * a2) + (c1 * a1 * (255 - a2))) / a) / 255;
+    }
+
+    /**
+     * Compute the combined color of a layer with color argb2 over layer with color argb1.
+     */
+    public static int compositeColor(int argb1, int argb2) {
+        final int a1 = Color.alpha(argb1);
+        final int a2 = Color.alpha(argb2);
+        final int a = compositeAlpha(a1, a2);
+        final int r = compositeColorComponent(Color.red(argb1), a1, Color.red(argb2), a2, a);
+        final int g = compositeColorComponent(Color.green(argb1), a1, Color.green(argb2), a2, a);
+        final int b = compositeColorComponent(Color.blue(argb1), a1, Color.blue(argb2), a2, a);
+        return Color.argb(a, r, g, b);
     }
 }

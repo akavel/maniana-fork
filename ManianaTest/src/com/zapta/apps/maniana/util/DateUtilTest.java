@@ -26,9 +26,6 @@ import android.text.format.Time;
  */
 public class DateUtilTest extends TestCase {
 
-    // private static final SimpleDateFormat TIME_FORMAT = new
-    // SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
-
     /** Data for a single time period test case. */
     private class DaysLeftTestCase {
         private final int year;

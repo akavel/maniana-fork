@@ -16,6 +16,8 @@
 
 package net.margaritov.preference.colorpicker;
 
+import com.zapta.apps.maniana.util.ColorUtil;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -111,26 +113,22 @@ public class ColorPickerPreference
             return;
         }
 
-        // Required starting from API 14
+        // TAL: required starting from API 14
         widgetFrameView.setVisibility(View.VISIBLE);
         
         // TAL: enable this condition after increasing the app target API to >= 14.      
         boolean preApi14 = android.os.Build.VERSION.SDK_INT < 14;
         
-       // final int rightPaddingDip = preApi14 ? 8 : 5;
-        
         final int rightPaddingDip = preApi14 ? 8 : 5;
                         
-       // if (preApi14) {
-          widgetFrameView.setPadding(
+        widgetFrameView.setPadding(
                           widgetFrameView.getPaddingLeft(),
                           widgetFrameView.getPaddingTop(),
                           (int)(mDensity * rightPaddingDip),
                           widgetFrameView.getPaddingBottom()
                     );
-       // }
 
-        // Uncomment to examine the location of the color preview within the widget frame.
+        // Tal: uncomment to examine the location of the color preview within the widget frame.
         //widgetFrameView.setBackgroundColor(0xff123456);
 
         // Remove previously created preview image.
@@ -152,7 +150,9 @@ public class ColorPickerPreference
 
 	private Bitmap getPreviewBitmap() {
 		int d = (int) (mDensity * 31); //30dip
-		int color = getValue();
+        // If disabled we simulate a semi transparent black overlay.
+		// NOTE: could simplify compositeColor for the special case where argb2 is aa000000;
+		int color = isEnabled() ? getValue() : ColorUtil.compositeColor(getValue(), 0xaa000000);
 		Bitmap bm = Bitmap.createBitmap(d, d, Config.ARGB_8888);
 		int w = bm.getWidth();
 		int h = bm.getHeight();
@@ -199,7 +199,7 @@ public class ColorPickerPreference
 
 	public boolean onPreferenceClick(Preference preference) {
 		ColorPickerDialog picker = new ColorPickerDialog(getContext(), getValue());
-		// TAL: added propogation of title to dialog
+		// TAL: added propagation of title to dialog
 		picker.setTitle(getTitle());
 		
 		picker.setOnColorChangedListener(this);
