@@ -32,6 +32,7 @@ import android.view.Window;
 import android.webkit.WebView;
 import android.webkit.WebView.PictureListener;
 
+
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.LogUtil;
@@ -67,8 +68,6 @@ public class PopupMessageActivity extends Activity {
         }
     }
 
-    // private MessageKind mMessageKind;
-
     private final static String ASSETS_BASE_URL = "file:///android_asset/";
 
     @Override
@@ -98,31 +97,6 @@ public class PopupMessageActivity extends Activity {
         final WebView webview = (WebView) findViewById(R.id.message_full_screen_webview);
 
         displayFromAsset(webview, messageKind);
-        
-//        // TODO(tal): share this code with the non full screen messages
-//        final FileReadResult fileReadResult = FileUtil.readFileToString(this,
-//                        messageKind.assetRelativePath, true);
-//
-//        // TODO: handle this more gracefully?
-//        check(fileReadResult.outcoe == FileReadOutcome.READ_OK,
-//                        "Error reading asset file: %s, outcome: %s", messageKind.assetRelativePath,
-//                        fileReadResult.outcoe);
-//
-//        // If About page, expand macro place holders.
-////        final String htmlPage;
-////        if (messageKind == MessageKind.ABOUT) {
-////            // Substitute the place holder(s) with actual values.
-////            final PackageInfo packageInfo = PackageUtil.getPackageInfo(this);
-////            final String escapedVersionName = TextUtils.htmlEncode(packageInfo.versionName);
-////            htmlPage = fileReadResult.content.replace("${version_name}", escapedVersionName);
-////        } else {
-////            htmlPage = fileReadResult.content;
-////        }
-//        
-//        final String htmlPage = expandMacros(fileReadResult.content);
-//
-//        webview.loadDataWithBaseURL(ASSETS_BASE_URL + messageKind.assetRelativePath, htmlPage,
-//                        null, "UTF-8", null);
     }
 
     private final void onCreateSmallLayout(MessageKind messageKind) {
@@ -150,40 +124,10 @@ public class PopupMessageActivity extends Activity {
         });
         
         displayFromAsset(webview, messageKind);
-
-//        // Render and enable view when done.
-//       // webview.loadUrl(ASSETS_BASE_URL + messageKind.assetRelativePath);
-//        
-//        final FileReadResult fileReadResult = FileUtil.readFileToString(this,
-//                        messageKind.assetRelativePath, true);
-//
-//        // TODO: handle this more gracefully?
-//        check(fileReadResult.outcoe == FileReadOutcome.READ_OK,
-//                        "Error reading asset file: %s, outcome: %s", messageKind.assetRelativePath,
-//                        fileReadResult.outcoe);
-//
-//        // If About page, expand macro place holders.
-////        final String htmlPage;
-////        if (messageKind == MessageKind.ABOUT) {
-////            // Substitute the place holder(s) with actual values.
-////            final PackageInfo packageInfo = PackageUtil.getPackageInfo(this);
-////            final String escapedVersionName = TextUtils.htmlEncode(packageInfo.versionName);
-////            htmlPage = fileReadResult.content.replace("${version_name}", escapedVersionName);
-////        } else {
-////            htmlPage = fileReadResult.content;
-////        }
-//        
-//        final String htmlPage = expandMacros(fileReadResult.content);
-//
-//        webview.loadDataWithBaseURL(ASSETS_BASE_URL + messageKind.assetRelativePath, htmlPage,
-//                        null, "UTF-8", null);
     }
     
     
     private final void displayFromAsset(WebView webView, MessageKind messageKind) {
-        // Render and enable view when done.
-        // webview.loadUrl(ASSETS_BASE_URL + messageKind.assetRelativePath);
-         
          final FileReadResult fileReadResult = FileUtil.readFileToString(this,
                          messageKind.assetRelativePath, true);
 
@@ -191,17 +135,6 @@ public class PopupMessageActivity extends Activity {
          check(fileReadResult.outcoe == FileReadOutcome.READ_OK,
                          "Error reading asset file: %s, outcome: %s", messageKind.assetRelativePath,
                          fileReadResult.outcoe);
-
-         // If About page, expand macro place holders.
-//         final String htmlPage;
-//         if (messageKind == MessageKind.ABOUT) {
-//             // Substitute the place holder(s) with actual values.
-//             final PackageInfo packageInfo = PackageUtil.getPackageInfo(this);
-//             final String escapedVersionName = TextUtils.htmlEncode(packageInfo.versionName);
-//             htmlPage = fileReadResult.content.replace("${version_name}", escapedVersionName);
-//         } else {
-//             htmlPage = fileReadResult.content;
-//         }
          
          final String htmlPage = expandMacros(fileReadResult.content);
 
@@ -244,7 +177,6 @@ public class PopupMessageActivity extends Activity {
         checkNotNull(messageKind);
 
         return messageKind;
-        // }
     }
 
     /** Create an intent to invoke this activity. */
