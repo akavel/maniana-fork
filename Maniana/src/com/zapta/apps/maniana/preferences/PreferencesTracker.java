@@ -33,6 +33,8 @@ public class PreferencesTracker implements PreferenceConstants {
     private final AppContext mApp;
 
     private final SharedPreferences mSharedPreferences;
+    
+    private PageItemFontVariation mCachedItemFontVariation;
 
     private boolean mCachedAllowSoundsPreference;
 
@@ -65,7 +67,7 @@ public class PreferencesTracker implements PreferenceConstants {
     // This is a hack to keep the listener from being garbage collected per
     // http://tinyurl.com/blkycrk. Should be unregistered explicitly when main activity is
     // destroyed.
-    private final OnSharedPreferenceChangeListener listener;
+    private final OnSharedPreferenceChangeListener mListener;
 
     public PreferencesTracker(AppContext app) {
         mApp = app;
@@ -86,14 +88,16 @@ public class PreferencesTracker implements PreferenceConstants {
         updateCachedVerboseMessagesPreference();
         updateCachedStartupAnimationPreference();
 
-        listener = new OnSharedPreferenceChangeListener() {
+        mListener = new OnSharedPreferenceChangeListener() {
             @Override
             public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
                 onPreferenceChange(key);
             }
         };
 
-        mSharedPreferences.registerOnSharedPreferenceChangeListener(this.listener);
+        mSharedPreferences.registerOnSharedPreferenceChangeListener(this.mListener);
+        
+        onItemFontVariationPreferenceChange();
     }
 
     private final void updateCachedAllowSoundsPreference() {
@@ -363,10 +367,24 @@ public class PreferencesTracker implements PreferenceConstants {
         // cached the new values.
         mApp.controller().onPreferenceChange(id);
     }
+    
+    
+    /**
+     * Update cached item font variation using current preferences. Should be called whenever the
+     * item font preference changes
+     */
+    public final void onItemFontVariationPreferenceChange() {
+        mCachedItemFontVariation = PageItemFontVariation.newFromCurrentPreferences(mApp.context(), this);
+    }
+
+    /** Get current item font variation */
+    public final PageItemFontVariation getItemFontVariation() {
+        return mCachedItemFontVariation;
+    }
 
     /** Relase resources. This is the last call to this instance. */
     public void release() {
         // Per http://tinyurl.com/blkycrk
-        mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this.listener);
+        mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this.mListener);
     }
 }

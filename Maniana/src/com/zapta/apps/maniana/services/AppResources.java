@@ -20,7 +20,6 @@ import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 
 import com.zapta.apps.maniana.main.AppContext;
-import com.zapta.apps.maniana.preferences.PageItemFontVariation;
 
 /**
  * Provides access and caching of the app resources.
@@ -34,50 +33,18 @@ public class AppResources {
     /** App context. */
     private final AppContext mApp;
 
-    // TODO: @@@ move this to PreferenceTracker
-    /** Cached item text font variation */
-    private PageItemFontVariation mItemFontVariation;
-
     /** Cached page title typeface. */
     private final Typeface mTitleTypeFace;
 
     /** Cached autio manager . */
     private final AudioManager mAudioManager;
 
-    /** Cached long press min time in millies. */
-// private final int mLongPressMinMillis;
-
-    /** Cached click max length in millis. */
-//    private final int mClickMaxMillis;
-
     public AppResources(AppContext app) {
         this.mApp = app;
-
-        onItemFontVariationPreferenceChange();
 
         mTitleTypeFace = Typeface
                         .createFromAsset(mApp.context().getAssets(), TITLE_FONT_ASSET_PATH);
         mAudioManager = (AudioManager) mApp.context().getSystemService(Context.AUDIO_SERVICE);
-
-        // TODO: *** removed unused resource integer values        
-//        mLongPressMinMillis = mApp.context().getResources().getInteger(
-//                        R.integer.long_press_min_millis_id);
-//        mClickMaxMillis = mApp.context().getResources().getInteger(R.integer.click_max_millis_id);
-    }
-
-    /**
-     * TODO: move to preferences
-     * 
-     * Update cached item font variation using current preferences. Should be called whenever the
-     * item font preference changes
-     */
-    public final void onItemFontVariationPreferenceChange() {
-        mItemFontVariation = PageItemFontVariation.newFromCurrentPreferences(mApp);
-    }
-
-    /** Get current item font variation */
-    public final PageItemFontVariation getItemFontVariation() {
-        return mItemFontVariation;
     }
 
     /** Get typeface to use for the pages title font. */

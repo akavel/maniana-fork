@@ -181,9 +181,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     /** Handle user selecting reset settings in the settings activity */
     private final void onResetSettingsClick() {
-        // TODO: *** what does this do? Do we need it? Look like a left over.
-        // PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
-
         final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

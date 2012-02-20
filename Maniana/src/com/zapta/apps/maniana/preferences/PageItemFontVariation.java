@@ -12,14 +12,12 @@
  * the License.
  */
 
-
 package com.zapta.apps.maniana.preferences;
 
+import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.widget.TextView;
-
-import com.zapta.apps.maniana.main.AppContext;
 
 /**
  * Represents parameters of selected font for items text.
@@ -34,8 +32,6 @@ public class PageItemFontVariation {
     private static final String CURSIVE_ITEM_FONT_ASSET_PATH = "fonts/Vavont/Vavont.ttf";
 
     private static final String ELEGANT_ITEM_FONT_ASSET_PATH = "fonts/Pompiere/Pompiere-Regular.ttf";
-    
-//    private static final String LUCID_ITEM_FONT_ASSET_PATH = "fonts/Questrial/Questrial-Regular.ttf";
     
     private final Typeface mTypeFace;
     private final int mColor;
@@ -87,28 +83,24 @@ public class PageItemFontVariation {
         }
     }
     
-    public static final PageItemFontVariation newFromCurrentPreferences(AppContext app) {
-        final PageItemFontType fontType = app.pref().getItemFontTypePreference();
+    public static final PageItemFontVariation newFromCurrentPreferences(Context context, PreferencesTracker prefTracker) {
+        final PageItemFontType fontType = prefTracker.getItemFontTypePreference();
         // TODO: move these consts to XML file (can we use styles for this?)
-        final int Color = app.pref().getPageItemActiveTextColorPreference();
-        final int completedColor = app.pref().getPageItemCompletedTextColorPreference();
+        final int Color = prefTracker.getPageItemActiveTextColorPreference();
+        final int completedColor = prefTracker.getPageItemCompletedTextColorPreference();
 
-        final PageItemFontSize fontSize = app.pref().getItemFontSizePreference();
+        final PageItemFontSize fontSize = prefTracker.getItemFontSizePreference();
         final float k = fontSize.getFactor(); 
         
         switch (fontType) {
             case CURSIVE:
-                return new PageItemFontVariation(Typeface.createFromAsset(app.context()
+                return new PageItemFontVariation(Typeface.createFromAsset(context
                                 .getAssets(), CURSIVE_ITEM_FONT_ASSET_PATH), Color,
                                 completedColor, (int) (22 * k), 0.9f, 10);
             case ELEGANT:
-                return new PageItemFontVariation(Typeface.createFromAsset(app.context()
+                return new PageItemFontVariation(Typeface.createFromAsset(context
                                 .getAssets(), ELEGANT_ITEM_FONT_ASSET_PATH), Color,
                                 completedColor, (int) (24 * k), 1.0f, 10);
-//            case LUCID:
-//                return new ItemFontVariation(Typeface.createFromAsset(app.context()
-//                                .getAssets(), LUCID_ITEM_FONT_ASSET_PATH), Color,
-//                                completedColor, (int) (20 * k), 1.0f, 10);
             case SAN_SERIF:
                 return new PageItemFontVariation(Typeface.SANS_SERIF, Color,
                                 completedColor, (int) (18 * k), 1.1f, 10);

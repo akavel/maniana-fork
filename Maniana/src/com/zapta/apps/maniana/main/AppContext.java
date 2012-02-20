@@ -67,7 +67,6 @@ public class AppContext {
         mServices = new AppServices(this);
         mController = new Controller(this);       
         mView = new AppView(this);
-
     }
 
     public final MainActivity mainActivity() {

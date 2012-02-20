@@ -145,13 +145,9 @@ public class ItemView extends FrameLayout {
     }
 
     private final void updateFont(boolean isItemCompleted) {
-        final PageItemFontVariation newItemFontVariation = mApp.resources().getItemFontVariation();
+        final PageItemFontVariation newItemFontVariation = mApp.pref().getItemFontVariation();
         if (newItemFontVariation != mLastFontVariaton || isItemCompleted || mLastIsCompleted) {
             newItemFontVariation.apply(mTextView, isItemCompleted, true);
-            // mTextView.setTextColor(isItemCompleted ? mApp.pref()
-            // .getPageItemActiveTextColorPreference() : mApp.pref()
-            // .getPageItemCompletedTextColorPreference());
-
             mLastFontVariaton = newItemFontVariation;
             mLastIsCompleted = isItemCompleted;
         }
@@ -180,15 +176,9 @@ public class ItemView extends FrameLayout {
         if (mLastIsHighlighted) {
             return;
         }
-        // if (isHighlight) {
+
         setBackgroundResource(drawableBackground);
         mLastIsHighlighted = true;
-        // } else {
-        // setBackgroundResource(0);
-        // setBackgroundColor(Color.TRANSPARENT);
-        // mLastIsHighlighted = false;
-        // }
-        // }
     }
 
     /** Turn off highlight */
@@ -196,16 +186,8 @@ public class ItemView extends FrameLayout {
         if (!mLastIsHighlighted) {
             return;
         }
-        // if (isHighlight) {
-        // setBackgroundResource(mPageKind.isToday() ? R.drawable.item_highlight_blue
-        // : R.drawable.item_highlight_red);
-        // mLastIsHighlighted = true;
-        // } else {
         setBackgroundResource(0);
         setBackgroundColor(Color.TRANSPARENT);
         mLastIsHighlighted = false;
-        // }
-        // }
     }
-
 }

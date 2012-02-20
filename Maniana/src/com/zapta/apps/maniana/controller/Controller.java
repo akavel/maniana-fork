@@ -655,7 +655,7 @@ public class Controller {
             case PAGE_ITEM_FONT_SIZE:
             case PAGE_ITEM_ACTIVE_TEXT_COLOR:
             case PAGE_ITEM_COMPLETED_TEXT_COLOR:
-                mApp.resources().onItemFontVariationPreferenceChange();
+                mApp.pref().onItemFontVariationPreferenceChange();
                 mApp.view().onItemFontVariationPreferenceChange();
                 break;
 
