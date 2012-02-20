@@ -53,7 +53,6 @@ public enum ItemColor {
      */
     @Nullable
     public final static ItemColor fromKey(String key, @Nullable ItemColor fallBack) {
-        // TODO: use map?
         for (ItemColor itemColor : ItemColor.values()) {
             if (key.equals(itemColor.mKey)) {
                 return itemColor;

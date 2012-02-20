@@ -50,12 +50,7 @@ public class DateTracker {
 
     /** Read today's date and cache values. */
     public void updateDate() {
-        // TODO: could cache the time of end of day and skip this update unless current
-        // time passed that limit (performance).
-        //final GregorianCalendar now = new GregorianCalendar();
-        
         mTempTime.setToNow();
-
         if (!DateUtil.isSameDate(mTempTime, mCachedDate)) {
             mCachedDate.set(mTempTime);
             mCachedDateString = DateUtil.dateToString(mCachedDate);

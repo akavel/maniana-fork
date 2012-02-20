@@ -61,8 +61,6 @@ public final class FileUtil {
      */
     @Nullable
     public static FileReadResult readFileToString(Context context, String fileName, boolean isAsset) {
-        // TODO: add finally to close stream
-
         InputStream in = null;
         try {
             // Open

@@ -26,10 +26,18 @@ import com.zapta.apps.maniana.util.LogUtil;
  */
 public class ModelUtil {
 
-    /** TODO: move this to model? */
+    /** 
+     * Determine a task push scope upon app resume. 
+     * 
+     * @param lastPushTimestamp model timestamp of last push.
+     * @param someTimeToday a Time with today's date (time of day ignored)
+     * @param lockExpirationPeriod user preference for lock expiration period
+     * 
+     * @return The scope of the task push to do, if at all.
+     */
     public static PushScope computePushScope(String lastPushTimestamp, Time someTimeToday,
                     LockExpirationPeriod lockExpirationPeriod) {
-        // Concert timestamp to time
+        // Convert timestamp to time
         final Time lastPushTime = new Time();
         final boolean parsedOk = DateUtil.setFromString(lastPushTime, lastPushTimestamp);
         

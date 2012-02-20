@@ -95,10 +95,10 @@ public class AppServices {
 
         mWindowManager = (WindowManager) app.context().getSystemService(Context.WINDOW_SERVICE);
         mLayoutInflater = (LayoutInflater) app.context().getSystemService(
-                        Context.LAYOUT_INFLATER_SERVICE);
+                Context.LAYOUT_INFLATER_SERVICE);
 
-        mNormalizedSoundEffectVolume = mApp.context().getResources().getInteger(
-                        R.integer.sound_effect_volume_percent) / 100.0f;
+        mNormalizedSoundEffectVolume = mApp.context().getResources()
+                .getInteger(R.integer.sound_effect_volume_percent) / 100.0f;
 
         mRandom = new Random();
 
@@ -127,24 +127,25 @@ public class AppServices {
 
     /** Activate a medium length vibration */
     public final void vibrateForLongPress() {
-        mApp.view().getRootView().performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,
+        mApp.view()
+                .getRootView()
+                .performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,
                         HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
     }
 
     /**
      * Start a sound affect if allowed.
      * 
-     * @param fxEffectType the sound effect to use (one of )
-     * @param fallBackToShortVibration indicates what to do if sound effects are disabled in
-     *            settings. If true then activate a short vibration instead, otherwise do nothing.
+     * @param fxEffectType
+     *            the sound effect to use (one of )
+     * @param fallBackToShortVibration
+     *            indicates what to do if sound effects are disabled in settings. If true then
+     *            activate a short vibration instead, otherwise do nothing.
      */
     public final void maybePlayStockSound(int fxEffectType, boolean fallBackToShortVibration) {
         if (mApp.pref().getSoundEnabledPreference()) {
-            // TODO: cache volume (float) in the constructor.
-            // final int soundEffectVolumePrecent = mApp.context().getResources().getInteger(
-            // R.integer.sound_effect_volume_percent);
-            mApp.resources().getAudioManager().playSoundEffect(fxEffectType,
-                            mNormalizedSoundEffectVolume);
+            mApp.resources().getAudioManager()
+                    .playSoundEffect(fxEffectType, mNormalizedSoundEffectVolume);
         } else if (fallBackToShortVibration) {
             vibrateForLongPress();
         }
@@ -158,14 +159,14 @@ public class AppServices {
     }
 
     public final void maybePlayApplauseSoundClip(int fallbackFxEffectType,
-                    boolean fallBackToShortVibration) {
+            boolean fallBackToShortVibration) {
         if (shouldPlayApplauseSoundClip()) {
             // releaseMediaPlayer();
 
             // Determine sound track to play
             final int rand = mRandom.nextInt(100);
             final int trackResourceId = (rand < 90) ? R.raw.applause_normal
-                            : R.raw.applause_special;
+                    : R.raw.applause_special;
 
             startPlayingSoundClip(trackResourceId);
             return;
@@ -193,11 +194,10 @@ public class AppServices {
         }
     }
 
-
     private final void startPlayingSoundClip(int rawResourceId) {
         releaseMediaPlayer();
         mMediaPlayer = MediaPlayer.create(mApp.context(), rawResourceId);
-        
+
         // Added as a response to this FC report from a user:
         // https://code.google.com/p/maniana/issues/detail?id=8
         // Apparently MediaPlayer.create() may fail for unspecified reasons.
@@ -205,12 +205,11 @@ public class AppServices {
             LogUtil.error("Creation of a media player failed. Resource id = 0x%x", rawResourceId);
             return;
         }
-        
+
         mMediaPlayer.setOnCompletionListener(mMediaPlayerListener);
         mMediaPlayer.setOnErrorListener(mMediaPlayerListener);
         mMediaPlayer.start();
     }
-
 
     /** Show a brief popup message with given formatted string */
     public final void toast(String format, Object... args) {

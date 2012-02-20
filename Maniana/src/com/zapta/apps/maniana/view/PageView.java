@@ -94,7 +94,6 @@ public class PageView extends FrameLayout {
 
     private final ImageButton mIcsMenuOverflowButtonView;
 
-    // TODO: move this to mApp.services() ?
     private final boolean mUsesIcsMenuOverflowButton;
 
     private final ImageButton mUndoButtonView;

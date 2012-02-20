@@ -52,9 +52,6 @@ public class WidgetMidnightTicker extends BroadcastReceiver {
         final long startTimeUtcMillis = utcMillisNextMidnight() + MIDNIGHT_MARGIN_MILLIS;
                        // - (6 * 3600 * 1000) + (0 * 60 * 1000);
                   
-        // TODO: remove after stabilization
-       // LogUtil.debug("WidgetMidnightTicker: scheduling next midnight update: " + startTimeUtcMillis);
-        
         final AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         am.setRepeating(AlarmManager.RTC, startTimeUtcMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
     }

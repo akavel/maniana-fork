@@ -53,7 +53,6 @@ public class PopupsTracker {
 
     /** Close dialogs that were left open.*/
     public final void closeAllLeftOvers() {
-        // TODO: relax this assertion?
         check(!mClosingAllLeftOvers, "Already in closing state");
         mClosingAllLeftOvers = true;
         try {

@@ -68,6 +68,9 @@ public class ItemListView extends ListView {
      * button areas for click classification purposes.
      */
     private static final int TEXT_AREA_HORIZONTAL_PERCENTILE = 80;
+    
+    /** Time interval for scrolling during drag. */
+    private static final int DRAG_SCROLL_TICK_MILLIS = 100;
 
     /** Indicates that a drag scroll tick message is in flight. */
     private boolean mPedningDragScrollTick = false;
@@ -402,8 +405,7 @@ public class ItemListView extends ListView {
                     }
 
                     // Here when still in STABLE. We stay in this state. The change to DRAG is done
-                    // on
-                    // the long press timeout message.
+                    // on the long press timeout message.
                     check(mState == State.DOWN_STABLE);
                     return OnTouchEventOutcome.CALL_SUPER;
                 }
@@ -426,7 +428,7 @@ public class ItemListView extends ListView {
                     return OnTouchEventOutcome.TRUE;
                 }
 
-                // TODO: if this does not fail, enforce it.
+                // Non reachable
                 check(false, "Unexpected state: " + mState);
                 break;
             }
@@ -676,8 +678,7 @@ public class ItemListView extends ListView {
     private final void scheduleNextDragScrollTick(boolean now) {
         check(mState == State.DOWN_DRAG);
         check(!mPedningDragScrollTick);
-        // TODO: define const
-        final long millis = now ? 1 : 100;
+        final long millis = now ? 1 : DRAG_SCROLL_TICK_MILLIS;
         final boolean ok = mMessageHandler
                         .sendEmptyMessageDelayed(MESSAGE_DRAG_SCROLL_TICK, millis);
         check(ok);

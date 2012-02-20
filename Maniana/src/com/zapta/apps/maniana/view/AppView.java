@@ -60,10 +60,6 @@ public class AppView {
         mViewPager = new ViewPager(mApp.context());
         mViewPager.setAdapter(new PagerViewAdapter(mTodayPageView, mTomorowPageView));
 
-        // TODO: do we need a margin?
-        // mViewPager.setPageMargin(1);
-        // mViewPager.setPageMarginDrawable(R.color.page_seperator_color);
-
         // Make sure we are in sync with the view.
         mViewPager.setCurrentItem(mCurrentPageIndex);
 
