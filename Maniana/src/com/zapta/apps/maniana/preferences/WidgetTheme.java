@@ -25,18 +25,18 @@ public class WidgetTheme extends Thumbnail {
 
     public static final WidgetTheme[] WIDGET_THEMES = {
             // Default
-            new WidgetTheme(R.drawable.widget_theme1_preview,
+            new WidgetTheme("Crystal Clear", R.drawable.widget_theme1_preview,
                     PreferenceConstants.DEFAULT_WIDGET_BACKGROUND_TYPE,
                     PreferenceConstants.DEFAULT_WIDGET_BACKGROUND_COLOR,
                     PreferenceConstants.DEFAULT_WIDGET_ITEM_FONT_SIZE,
                     PreferenceConstants.DEFAULT_WIDGET_TEXT_COLOR,
                     PreferenceConstants.DEFAULT_WIDGET_SHOW_TOOLBAR,
                     PreferenceConstants.DEFAULT_WIDGET_SINGLE_LINE),
-            new WidgetTheme(R.drawable.widget_theme2_preview, WidgetBackgroundType.PAPER,
+            new WidgetTheme("Paper Scrap", R.drawable.widget_theme2_preview, WidgetBackgroundType.PAPER,
                     0x00000000, WidgetItemFontSize.MEDIUM, 0xff330000, true, true),
-            new WidgetTheme(R.drawable.widget_theme3_preview, WidgetBackgroundType.SOLID,
+            new WidgetTheme("Mr. Magoo", R.drawable.widget_theme3_preview, WidgetBackgroundType.SOLID,
                     0xff000000, WidgetItemFontSize.LARGE, 0xff00ff00, true, true),
-            new WidgetTheme(R.drawable.widget_theme4_preview, WidgetBackgroundType.SOLID,
+            new WidgetTheme("No Nonesense", R.drawable.widget_theme4_preview, WidgetBackgroundType.SOLID,
                     0x600000ff, WidgetItemFontSize.SMALL, 0xffffff00, false, true) };
 
     public final WidgetBackgroundType backgroundType;
@@ -46,9 +46,9 @@ public class WidgetTheme extends Thumbnail {
     public final boolean showToolbar;
     public final boolean singleLine;
 
-    public WidgetTheme(int drawableId, WidgetBackgroundType backgroundType, int backgroundColor,
+    public WidgetTheme(String name, int drawableId, WidgetBackgroundType backgroundType, int backgroundColor,
             WidgetItemFontSize fontSize, int textColor, boolean showToolbar, boolean singleLine) {
-        super(drawableId);
+        super(name, drawableId);
         this.backgroundType = backgroundType;
         this.backgroundColor = backgroundColor;
         this.fontSize = fontSize;

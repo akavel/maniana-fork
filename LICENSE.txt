@@ -62,6 +62,12 @@ From http://markarmstrongillustration.com/2011/04/25/look-out-supe-thats-taxrego
 Cropped and desaturated.
 TBD
 
+List Widget background stain
+(part of list_widget_background.png)
+From http://www.designshard.com/freebies/20-free-original-hi-res-ink-stained-paper-textures/
+Cropped, color adjusted, superimposed
+TBD
+
 Sound clips
 -----------------
 applause_normal.mp3

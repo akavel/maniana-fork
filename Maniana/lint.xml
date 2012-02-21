@@ -10,4 +10,7 @@
     <issue id="Overdraw">
         <ignore path="res\layout\ics_menu_dialog_layout.xml" />
     </issue>
+    <issue id="UseCompoundDrawables">
+        <ignore path="res/layout/thumbnail_selector_item_layout.xml" />
+    </issue>
 </lint>

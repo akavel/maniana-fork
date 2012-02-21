@@ -17,6 +17,7 @@ package com.zapta.apps.maniana.preferences;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -37,13 +38,14 @@ public class ThumbnailSelector<T extends Thumbnail> extends Dialog {
     private final T[] mThumbnails;
     private final ThumbnailSelectorListener<T> mListener;
 
-    public ThumbnailSelector(Context context, String title, T[] thumbnails,
+    public ThumbnailSelector(Context context, T[] thumbnails,
             ThumbnailSelectorListener<T> listener) {
         super(context);
         mThumbnails = thumbnails;
         mListener = listener;
+        
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.thumbnail_selector_layout);
-        setTitle(title);
 
         ListView listView = (ListView) findViewById(R.id.selector_list);
         listView.setAdapter(new ThumbnailSelectorAdapter<T>(context, thumbnails));

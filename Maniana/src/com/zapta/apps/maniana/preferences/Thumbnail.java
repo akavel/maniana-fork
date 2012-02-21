@@ -19,13 +19,21 @@ package com.zapta.apps.maniana.preferences;
  * @author Tal Dayan
  */
 public class Thumbnail {
+    /** User visible name of this theme. */
+    private final String mName;
 
+    /** Id of resource with theme preview image. */
     private final int mDrawableId;
     
-    public Thumbnail(int drawableId) {
+    public Thumbnail(String name, int drawableId) {
+        mName = name;
         mDrawableId = drawableId;
     }
         
+    public final String getName() {
+        return mName;
+    }
+    
     public final int getDrawableId() {
         return mDrawableId;
     }

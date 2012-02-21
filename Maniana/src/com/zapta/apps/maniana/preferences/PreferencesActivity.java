@@ -156,7 +156,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     /** Handle user clicking on widget theme selection in the settings activity */
     private final void onWidgetSelectThemeClick() {
-        final Dialog dialog = new ThumbnailSelector<WidgetTheme>(this, "Select Widget Theme",
+        final Dialog dialog = new ThumbnailSelector<WidgetTheme>(this,
                 WidgetTheme.WIDGET_THEMES,
                 new ThumbnailSelector.ThumbnailSelectorListener<WidgetTheme>() {
                     @Override
