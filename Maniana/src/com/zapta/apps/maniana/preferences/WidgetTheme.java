@@ -32,11 +32,11 @@ public class WidgetTheme extends Thumbnail {
                     PreferenceConstants.DEFAULT_WIDGET_TEXT_COLOR,
                     PreferenceConstants.DEFAULT_WIDGET_SHOW_TOOLBAR,
                     PreferenceConstants.DEFAULT_WIDGET_SINGLE_LINE),
-            new WidgetTheme("Paper Scrap", R.drawable.widget_theme2_preview, WidgetBackgroundType.PAPER,
+            new WidgetTheme("Paper Trail", R.drawable.widget_theme2_preview, WidgetBackgroundType.PAPER,
                     0x00000000, WidgetItemFontSize.MEDIUM, 0xff330000, true, true),
-            new WidgetTheme("Mr. Magoo", R.drawable.widget_theme3_preview, WidgetBackgroundType.SOLID,
+            new WidgetTheme("Think Big", R.drawable.widget_theme3_preview, WidgetBackgroundType.SOLID,
                     0xff000000, WidgetItemFontSize.LARGE, 0xff00ff00, true, true),
-            new WidgetTheme("No Nonesense", R.drawable.widget_theme4_preview, WidgetBackgroundType.SOLID,
+            new WidgetTheme("Fine Print", R.drawable.widget_theme4_preview, WidgetBackgroundType.SOLID,
                     0x600000ff, WidgetItemFontSize.SMALL, 0xffffff00, false, true) };
 
     public final WidgetBackgroundType backgroundType;

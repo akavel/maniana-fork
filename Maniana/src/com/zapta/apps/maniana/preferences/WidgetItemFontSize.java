@@ -26,7 +26,7 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
  */
 public enum WidgetItemFontSize implements KeyedEnum {
     SMALL("small", 12),
-    MEDIUM("medium", 16),
+    MEDIUM("medium", 14),
     LARGE("large", 22);
 
     /** Preference value key. Should match the values in preference xml. */
