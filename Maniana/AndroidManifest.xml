@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zapta.apps.maniana"
     android:versionCode="18"
-    android:versionName="1.01.18-d02" >
+    android:versionName="1.01.18" >
 
     <uses-sdk
         android:minSdkVersion="8"
