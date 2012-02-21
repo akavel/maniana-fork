@@ -719,7 +719,6 @@ public class ViewPager extends ViewGroup {
         Collections.sort(mItems, COMPARATOR);
 
         if (newCurrItem >= 0) {
-            // TODO This currently causes a jump.
             setCurrentItemInternal(newCurrItem, false, true);
             needPopulate = true;
         }

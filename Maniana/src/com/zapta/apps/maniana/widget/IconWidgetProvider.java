@@ -67,15 +67,11 @@ public class IconWidgetProvider extends BaseWidgetProvider {
         } else {
             final LockExpirationPeriod lockExpirationPeriod = PreferencesTracker
                             .readLockExpierationPeriodPreference(sharedPreferences);
-            // TODO: reorganize the code. No need to read lock preference if date now is same as
-            // model.
-            // TODO: could reuse a temp Time member.
-            Time now = new Time();
+            final Time now = new Time();
             now.setToNow();
             List<ItemModelReadOnly> items = WidgetUtil.selectTodaysActiveItemsByTime(model, now,
-                            lockExpirationPeriod);
-            
-            label = String.format("%d", items.size());
+                            lockExpirationPeriod);            
+            label = Integer.toString(items.size());
         }
         
 

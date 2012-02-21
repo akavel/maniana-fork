@@ -84,7 +84,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 
         addPreferencesFromResource(R.xml.preferences);
 
-        // TODO: take keys from PreferenceKind enum, not from literal strings.
         mFontListPreference = (ListPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_TYPE);
         mPageFontSizeListPreference = (ListPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_SIZE);
         mPageBackgroundTypeListPreference = (ListPreference) findPreference(PreferenceKind.PAGE_BACKGROUND_TYPE);
@@ -208,7 +207,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 
         // TODO: this is a hack to force notifying the main activity and widget
         // about the change. For some reason they are not notified about it
-        // otherwise as the the non custom preference types do.
+        // as the the non custom preference types do.
         editor.putInt(PreferenceKind.PAGE_ITEM_ACTIVE_TEXT_COLOR.getKey(),
                 PreferenceConstants.DEFAULT_ITEM_TEXT_COLOR);
         editor.putInt(PreferenceKind.PAGE_ITEM_COMPLETED_TEXT_COLOR.getKey(),

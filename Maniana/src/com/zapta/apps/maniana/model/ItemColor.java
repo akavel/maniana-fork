@@ -18,14 +18,15 @@ import javax.annotation.Nullable;
 
 import android.graphics.Color;
 
+import com.zapta.apps.maniana.util.EnumUtil;
+import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
+
 /**
  * The colors set used to flag items.
  * 
- * TODO: inherit from KeyedEnum
- * 
  * @author Tal Dayan
  */
-public enum ItemColor {
+public enum ItemColor implements KeyedEnum {
     // Item order determines the color sequence the user gets when tapping the screen.
     NONE("none", Color.TRANSPARENT),
     RED("red", 0xffff0000),
@@ -35,30 +36,18 @@ public enum ItemColor {
     /** The key used for serialization. Not user visible. Should be consistent. */
     private final String mKey;
     
-    // TODO: move this out of the model, to the view. 
-    /** The android color of this enum value. */
+    /** The android argb color of this enum value. */
     private final int mColor;
 
     private ItemColor(String key, int color) {
         mColor = color;
         mKey = key;
     }
-
-    /**
-     * Map a key to an ItemColor. Used for item deserialization.
-     * 
-     * @param key the input key.
-     * @param fallBack the color to use if key did not match any color.
-     * @return the matched color of falLBack if no match.
-     */
+    
+    /** Return value with given key, fallback value if not found. */
     @Nullable
     public final static ItemColor fromKey(String key, @Nullable ItemColor fallBack) {
-        for (ItemColor itemColor : ItemColor.values()) {
-            if (key.equals(itemColor.mKey)) {
-                return itemColor;
-            }
-        }
-        return fallBack;
+        return EnumUtil.fromKey(key, ItemColor.values(), fallBack);
     }
 
     /** Return the cyclic next color. The next color of the last color is the first color. */

@@ -53,7 +53,6 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
     /** List of all widget provider classes. */
     @SuppressWarnings("rawtypes")
     public static final Class[] LIST_WIDGET_PROVIDER_CLASSES = new Class[] {
-            // TODO: split to two sets, for old and for new phones
             ListWidgetProvider4.class, ListWidgetProvider1.class, ListWidgetProvider2.class,
             ListWidgetProvider3.class, ListWidgetProviderX.class };
 
@@ -250,7 +249,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         remoteViews.addView(R.id.widget_list_item_list, itemMessageViews);
     }
 
-    // TODO: defice what we want to do with this.
+    // TODO: decide what we want to do with this.
     // An attempt to update all list widgtes by a direct call.
     public static void updateAllIconWidgetsFromModel(Context context, @Nullable AppModel model) {
         final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);

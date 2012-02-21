@@ -85,8 +85,7 @@ public class PageItemFontVariation {
     
     public static final PageItemFontVariation newFromCurrentPreferences(Context context, PreferencesTracker prefTracker) {
         final PageItemFontType fontType = prefTracker.getItemFontTypePreference();
-        // TODO: move these consts to XML file (can we use styles for this?)
-        final int Color = prefTracker.getPageItemActiveTextColorPreference();
+        final int color = prefTracker.getPageItemActiveTextColorPreference();
         final int completedColor = prefTracker.getPageItemCompletedTextColorPreference();
 
         final PageItemFontSize fontSize = prefTracker.getItemFontSizePreference();
@@ -95,17 +94,17 @@ public class PageItemFontVariation {
         switch (fontType) {
             case CURSIVE:
                 return new PageItemFontVariation(Typeface.createFromAsset(context
-                                .getAssets(), CURSIVE_ITEM_FONT_ASSET_PATH), Color,
+                                .getAssets(), CURSIVE_ITEM_FONT_ASSET_PATH), color,
                                 completedColor, (int) (22 * k), 0.9f, 10);
             case ELEGANT:
                 return new PageItemFontVariation(Typeface.createFromAsset(context
-                                .getAssets(), ELEGANT_ITEM_FONT_ASSET_PATH), Color,
+                                .getAssets(), ELEGANT_ITEM_FONT_ASSET_PATH), color,
                                 completedColor, (int) (24 * k), 1.0f, 10);
             case SAN_SERIF:
-                return new PageItemFontVariation(Typeface.SANS_SERIF, Color,
+                return new PageItemFontVariation(Typeface.SANS_SERIF, color,
                                 completedColor, (int) (18 * k), 1.1f, 10);
             case SERIF:
-                return new PageItemFontVariation(Typeface.SERIF, Color,
+                return new PageItemFontVariation(Typeface.SERIF, color,
                                 completedColor, (int) (18 * k), 1.1f, 10);
             default:
                 throw new RuntimeException("Unknown font type: " + fontType);

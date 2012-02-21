@@ -65,17 +65,16 @@ public class AppView {
 
         mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
             @Override
-            public void onPageScrollStateChanged(int arg0) {
-                // TODO: track also scroll state?
+            public void onPageScrollStateChanged(int state) {
             }
 
             @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             }
 
             @Override
-            public void onPageSelected(int pageIndex) {
-                mCurrentPageIndex = pageIndex;
+            public void onPageSelected(int position) {
+                mCurrentPageIndex = position;
             }
         });
     }

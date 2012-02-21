@@ -217,8 +217,7 @@ public class PageModel {
             }
 
             // Copy the newOrder array to mItems
-            // TODO(tal): remove messages after stabilization (cost of allocating var args array).
-            check(mItems.size() == itemsCopied, "%s vs %s", mItems.size(), itemsCopied);
+            check(mItems.size() == itemsCopied);
             for (int i = 0; i < itemsCopied; i++) {
                 mItems.set(i, newOrder[i]);
             }
