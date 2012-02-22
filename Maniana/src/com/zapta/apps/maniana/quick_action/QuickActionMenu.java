@@ -39,7 +39,7 @@ import android.widget.TextView;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.main.AppContext;
-import com.zapta.apps.maniana.main.PopupsTracker.TrackablePopup;
+import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
 
 /**
  * Quick action popup menu.

@@ -39,6 +39,7 @@ import com.zapta.apps.maniana.help.PopupMessageActivity;
 import com.zapta.apps.maniana.help.PopupMessageActivity.MessageKind;
 import com.zapta.apps.maniana.util.DateUtil;
 import com.zapta.apps.maniana.util.LogUtil;
+import com.zapta.apps.maniana.util.PopupsTracker;
 import com.zapta.apps.maniana.util.VisibleForTesting;
 
 /**
@@ -76,6 +77,9 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     /** For temp time calculations. Avoiding new object creation. */
     private Time tempTime = new Time();
+    
+    /** The open dialog tracker. */
+    private final PopupsTracker mPopupsTracker = new PopupsTracker();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,7 +160,7 @@ public class PreferencesActivity extends PreferenceActivity implements
     /** Handle user clicking on widget theme selection in the settings activity */
     private final void onWidgetSelectThemeClick() {
         final Dialog dialog = new ThumbnailSelector<WidgetTheme>(this,
-                WidgetTheme.WIDGET_THEMES,
+                WidgetTheme.WIDGET_THEMES, mPopupsTracker,
                 new ThumbnailSelector.ThumbnailSelectorListener<WidgetTheme>() {
                     @Override
                     public void onThumbnailSelection(WidgetTheme theme) {
@@ -283,6 +287,7 @@ public class PreferencesActivity extends PreferenceActivity implements
     @Override
     protected void onPause() {
         super.onPause();
+        mPopupsTracker.closeAllLeftOvers();
         getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(
                 this);
     }

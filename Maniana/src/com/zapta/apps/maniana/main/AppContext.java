@@ -23,6 +23,7 @@ import com.zapta.apps.maniana.preferences.PreferencesTracker;
 import com.zapta.apps.maniana.services.AppResources;
 import com.zapta.apps.maniana.services.AppServices;
 import com.zapta.apps.maniana.services.DateTracker;
+import com.zapta.apps.maniana.util.PopupsTracker;
 import com.zapta.apps.maniana.view.AppView;
 
 /**

@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.zapta.apps.maniana.main;
+package com.zapta.apps.maniana.util;
 
 import static com.zapta.apps.maniana.util.Assertions.check;
 
@@ -56,7 +56,7 @@ public class PopupsTracker {
         check(!mClosingAllLeftOvers, "Already in closing state");
         mClosingAllLeftOvers = true;
         try {
-            // Unspecified closing order.
+            // Closing in unspecified order.
             for (TrackablePopup popup : mTrackedPopups) {
                 popup.closeLeftOver();
             }

@@ -14,7 +14,8 @@
 
 package com.zapta.apps.maniana.preferences;
 
-import android.app.Dialog;
+import javax.annotation.Nullable;
+
 import android.content.Context;
 import android.view.View;
 import android.view.Window;
@@ -23,13 +24,15 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.util.PopupsTracker;
+import com.zapta.apps.maniana.util.TrackableDialogPopup;
 
 /**
  * Dialog to select one of a few thumbnails (e.g. theme selection)
  * 
  * @author Tal Dayan
  */
-public class ThumbnailSelector<T extends Thumbnail> extends Dialog {
+public class ThumbnailSelector<T extends Thumbnail> extends TrackableDialogPopup {
 
     public interface ThumbnailSelectorListener<T extends Thumbnail> {
         void onThumbnailSelection(T thumbnail);
@@ -38,9 +41,9 @@ public class ThumbnailSelector<T extends Thumbnail> extends Dialog {
     private final T[] mThumbnails;
     private final ThumbnailSelectorListener<T> mListener;
 
-    public ThumbnailSelector(Context context, T[] thumbnails,
+    public ThumbnailSelector(Context context, T[] thumbnails, PopupsTracker parentPopupTracker,
             ThumbnailSelectorListener<T> listener) {
-        super(context);
+        super(context, parentPopupTracker);
         mThumbnails = thumbnails;
         mListener = listener;
         

@@ -24,7 +24,7 @@ import android.widget.EditText;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.main.AppContext;
-import com.zapta.apps.maniana.main.PopupsTracker.TrackablePopup;
+import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
 
 /**
  * Item text editor dialog. Used to create new itmes and to edit existing ones.
