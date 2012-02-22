@@ -14,8 +14,6 @@
 
 package com.zapta.apps.maniana.preferences;
 
-import javax.annotation.Nullable;
-
 import android.content.Context;
 import android.view.View;
 import android.view.Window;
