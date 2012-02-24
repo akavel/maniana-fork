@@ -40,6 +40,7 @@ public enum PreferenceKind implements KeyedEnum {
     PAGE_BACKGROUND_TYPE("prefPageBackgroundTypeKey"),
     PAGE_BACKGROUND_SOLID_COLOR("prefPageBackgroundSolidColorKey"),
     PAGE_ITEM_DIVIDER_COLOR("prefPageItemDividerColorKey"),
+    PAGE_SELECT_THEME("prefPageSelectThemeKey"),
     LOCK_PERIOD("prefLockPeriodKey"),
     VERBOSE_MESSAGES("prefVerboseMessagesKey"),
     STARTUP_ANIMATION("prefStartupAnimationKey"),

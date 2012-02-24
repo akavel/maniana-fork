@@ -87,6 +87,11 @@
             android:key="prefPageItemDividerColorKey"
             android:summary="Color of lines between tasks"
             android:title="Task Divider Color" />
+        <Preference
+            android:key="prefPageSelectThemeKey"
+            android:summary="Click to select a predefined page setting"
+            android:title="Set Theme">
+        </Preference>
     </PreferenceScreen>
     <PreferenceScreen android:title="List Widget">
         <ListPreference
