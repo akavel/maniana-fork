@@ -42,7 +42,7 @@ public class PageTheme extends Thumbnail {
                     0xff000000, PageItemFontType.ELEGANT, PageItemFontSize.LARGE1, 0xffff8080,
                     0xff00aa00, 0x80ffff00),
 
-            new PageTheme("Tabloid", R.drawable.page_theme4_preview, PageBackgroundType.SOLID,
+            new PageTheme("Spartan", R.drawable.page_theme4_preview, PageBackgroundType.SOLID,
                     0xffffffff, PageItemFontType.SERIF, PageItemFontSize.SMALL1, 0xff000000,
                     0xff000000, 0x00000000),
 

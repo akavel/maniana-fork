@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/thumbnail_selector_item_background"
     android:orientation="vertical"
+    android:background="@drawable/place_holder"
     android:paddingBottom="20dip"
     android:paddingTop="20dip" >
 
@@ -20,9 +20,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="2dip"
+        android:layout_marginTop="6dip"
         android:text="@string/place_holder"
-        android:textColor="#ff666666"
+        android:textColor="@color/color_place_holder"
         android:textSize="24sp"
         android:textStyle="bold|italic" >
     </TextView>

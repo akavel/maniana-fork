@@ -15,6 +15,7 @@
 package com.zapta.apps.maniana.preferences;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,15 +31,20 @@ import com.zapta.apps.maniana.R;
  * 
  * @author Tal Dayan
  */
-public class ThumbnailSelectorAdapter <T extends Thumbnail> extends BaseAdapter {
-    
+public class ThumbnailSelectorAdapter<T extends Thumbnail> extends BaseAdapter {
+
     private final Context mContext;
-    
+
     private final T[] mThumbnails;
 
-    public ThumbnailSelectorAdapter(Context c, T[] thumbnails) {
+    private final int mTextColor;
+    private final int[] mGradientColors;
+
+    public ThumbnailSelectorAdapter(Context c, T[] thumbnails, int textColor, int[] gradientColors) {
         mContext = c;
         mThumbnails = thumbnails;
+        mTextColor = textColor;
+        mGradientColors = gradientColors;
     }
 
     public int getCount() {
@@ -56,24 +62,32 @@ public class ThumbnailSelectorAdapter <T extends Thumbnail> extends BaseAdapter 
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
         final LinearLayout itemView;
-        if (convertView != null) { 
+        if (convertView != null) {
             // Recycle
             itemView = (LinearLayout) convertView;
         } else {
             // New view
-            final LayoutInflater inflator = (LayoutInflater) mContext.getSystemService(
-                    Context.LAYOUT_INFLATER_SERVICE);
-            itemView = (LinearLayout) inflator.inflate(R.layout.thumbnail_selector_item_layout, null); 
-        } 
+            final LayoutInflater inflator = (LayoutInflater) mContext
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            itemView = (LinearLayout) inflator.inflate(R.layout.thumbnail_selector_item_layout,
+                    null);
+        }
 
-        final ImageView imageView = (ImageView) itemView.findViewById(R.id.thumbnail_selector_item_image);
-        final TextView textViwe = (TextView) itemView.findViewById(R.id.thumbnail_selector_item_text);
-        
+        final ImageView imageView = (ImageView) itemView
+                .findViewById(R.id.thumbnail_selector_item_image);
+        final TextView textView = (TextView) itemView
+                .findViewById(R.id.thumbnail_selector_item_text);
+
+        GradientDrawable g = new GradientDrawable(GradientDrawable.Orientation.TL_BR,
+                mGradientColors);
+        itemView.setBackgroundDrawable(g);
+
         final Thumbnail thumbnail = mThumbnails[position];
         imageView.setImageResource(thumbnail.getDrawableId());
-        // NOTE: the extra space at the  preventsend truncation at the end due to the italic style.
+        // NOTE: the extra space at the preventsend truncation at the end due to the italic style.
         // The extra space at the beginning is to preserve the text centring.
-        textViwe.setText(" " + thumbnail.getName() + " ");
-         return itemView;
+        textView.setText(" " + thumbnail.getName() + " ");
+        textView.setTextColor(mTextColor);
+        return itemView;
     }
 }

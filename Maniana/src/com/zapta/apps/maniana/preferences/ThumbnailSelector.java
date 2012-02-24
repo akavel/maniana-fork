@@ -44,12 +44,13 @@ public class ThumbnailSelector<T extends Thumbnail> extends TrackableDialogPopup
         super(context, parentPopupTracker);
         mThumbnails = thumbnails;
         mListener = listener;
-        
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.thumbnail_selector_layout);
 
         ListView listView = (ListView) findViewById(R.id.selector_list);
-        listView.setAdapter(new ThumbnailSelectorAdapter<T>(context, thumbnails));
+        listView.setAdapter(new ThumbnailSelectorAdapter<T>(context, thumbnails, 0xff444444,
+                new int[] { 0xff8bacf2, 0xffb0ccff }));
 
         listView.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -61,6 +62,6 @@ public class ThumbnailSelector<T extends Thumbnail> extends TrackableDialogPopup
 
     private final void handleItemClick(int index) {
         dismiss();
-        mListener.onThumbnailSelection(mThumbnails[index]);   
+        mListener.onThumbnailSelection(mThumbnails[index]);
     }
 }
