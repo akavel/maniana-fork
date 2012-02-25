@@ -22,35 +22,42 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 /**
  * Represents the preference items.
  * 
- * DO NOT REUSE THESE OLD KEYS: 
- *   - prefBackgroundKey
- *   - prefVoiceRecognitionKey
- *   
+ * DO NOT REUSE THESE OLD KEYS: - prefBackgroundKey - prefVoiceRecognitionKey
+ * 
  * @author Tal Dayan
  */
 public enum PreferenceKind implements KeyedEnum {
+    // Sound
     SOUND_ENABLED("prefAllowSoundKey"),
     APPLAUSE_LEVEL("prefApplauseLevelKey"),
+
+    // Behavior
+    STARTUP_ANIMATION("prefStartupAnimationKey"),
+    VERBOSE_MESSAGES("prefVerboseMessagesKey"),
     AUTO_SORT("prefAutoSortKey"),
     AUTO_DAILY_CLEANUP("prefAutoDailyCleanupKey"),
+    LOCK_PERIOD("prefLockPeriodKey"),
+
+    // Page
+    PAGE_BACKGROUND_TYPE("prefPageBackgroundTypeKey"),
+    PAGE_BACKGROUND_SOLID_COLOR("prefPageBackgroundSolidColorKey"),
     PAGE_ITEM_FONT_TYPE("prefItemFontKey"),
     PAGE_ITEM_FONT_SIZE("prefItemFontSizeKey"),
     PAGE_ITEM_ACTIVE_TEXT_COLOR("prefPageTextColorKey"),
     PAGE_ITEM_COMPLETED_TEXT_COLOR("prefPageCompletedTextColorKey"),
-    PAGE_BACKGROUND_TYPE("prefPageBackgroundTypeKey"),
-    PAGE_BACKGROUND_SOLID_COLOR("prefPageBackgroundSolidColorKey"),
     PAGE_ITEM_DIVIDER_COLOR("prefPageItemDividerColorKey"),
     PAGE_SELECT_THEME("prefPageSelectThemeKey"),
-    LOCK_PERIOD("prefLockPeriodKey"),
-    VERBOSE_MESSAGES("prefVerboseMessagesKey"),
-    STARTUP_ANIMATION("prefStartupAnimationKey"),
-    WIDGET_SINGLE_LINE("prefWidgetSingleLineKey"),
+
+    // Widget
     WIDGET_BACKGROUND_TYPE("prefWidgetBackgroundTypeKey"),
     WIDGET_BACKGROUND_COLOR("prefWidgetBackgroundColorKey"),
     WIDGET_ITEM_TEXT_COLOR("prefWidgetTextColorKey"),
-    WIDGET_ITEM_FONT_SIZE("prefWidgetItemFontSizeKey"), 
+    WIDGET_ITEM_FONT_SIZE("prefWidgetItemFontSizeKey"),
     WIDGET_SHOW_TOOLBAR("prefWidgetShowToolbarKey"),
+    WIDGET_SINGLE_LINE("prefWidgetSingleLineKey"),
     WIDGET_SELECT_THEME("prefWidgetSelectThemeKey"),
+    
+    // Miscellaneous
     VERSION_INFO("prefVersionInfoKey"),
     SHARE("prefShareKey"),
     FEEDBACK("prefFeedbackKey"),

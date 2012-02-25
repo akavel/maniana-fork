@@ -25,15 +25,15 @@ public class WidgetTheme extends Thumbnail {
 
     public static final WidgetTheme[] WIDGET_THEMES = {
             // Default
-            new WidgetTheme("Crystal Clear", R.drawable.widget_theme1_preview,
+            new WidgetTheme("Paper Trail", R.drawable.widget_theme1_preview,
                     PreferenceConstants.DEFAULT_WIDGET_BACKGROUND_TYPE,
                     PreferenceConstants.DEFAULT_WIDGET_BACKGROUND_COLOR,
                     PreferenceConstants.DEFAULT_WIDGET_ITEM_FONT_SIZE,
                     PreferenceConstants.DEFAULT_WIDGET_TEXT_COLOR,
                     PreferenceConstants.DEFAULT_WIDGET_SHOW_TOOLBAR,
                     PreferenceConstants.DEFAULT_WIDGET_SINGLE_LINE),
-            new WidgetTheme("Paper Trail", R.drawable.widget_theme2_preview, WidgetBackgroundType.PAPER,
-                    0x00000000, WidgetItemFontSize.MEDIUM, 0xff330000, true, true),
+            new WidgetTheme("Crystal Clear", R.drawable.widget_theme2_preview, WidgetBackgroundType.SOLID,
+                    0x44000000, WidgetItemFontSize.MEDIUM, 0xff330000, true, false),
             new WidgetTheme("Think Big", R.drawable.widget_theme3_preview, WidgetBackgroundType.SOLID,
                     0xff000000, WidgetItemFontSize.LARGE, 0xff00ff00, true, true),
             new WidgetTheme("Fine Print", R.drawable.widget_theme4_preview, WidgetBackgroundType.SOLID,

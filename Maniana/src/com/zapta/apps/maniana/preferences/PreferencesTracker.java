@@ -33,36 +33,28 @@ public class PreferencesTracker implements PreferenceConstants {
     private final AppContext mApp;
 
     private final SharedPreferences mSharedPreferences;
-    
-    private PageItemFontVariation mCachedItemFontVariation;
 
+    // Sound
     private boolean mCachedAllowSoundsPreference;
-
-    private PageItemFontType mCachedPageFontTypePreference;
-
-    private PageItemFontSize mCachedPageFontSizePreference;
-
-    private int mCachedPageItemActiveTextColorPreference;
-
-    private int mCachedPageItemCompletedTextColorPreference;
-
-    private PageBackgroundType mCachedPageBackgroundTypePreference;
-
-    private int mCachedPageBackgroundSolidColorPreference;
-
-    private int mCachedPageItemDividerColorPreference;
-
-    private LockExpirationPeriod mCachedLockExpirationPeriodPrefernece;
-
     private ApplauseLevel mCachedApplauseLevelPreference;
 
-    private boolean mCachedVerboseMessagesPreference;
-
+    // Behavior
     private boolean mCachedStartupAnimationPreference;
-
+    private boolean mCachedVerboseMessagesPreference;
     private boolean mCachedAutoSortPreference;
-    
     private boolean mCachedAutoDailyCleanupPreference;
+    private LockExpirationPeriod mCachedLockExpirationPeriodPrefernece;
+
+    // Page
+    private PageBackgroundType mCachedPageBackgroundTypePreference;
+    private int mCachedPageBackgroundSolidColorPreference;
+    private PageItemFontType mCachedPageFontTypePreference;
+    private PageItemFontSize mCachedPageFontSizePreference;
+    private int mCachedPageItemActiveTextColorPreference;
+    private int mCachedPageItemCompletedTextColorPreference;
+    private int mCachedPageItemDividerColorPreference;
+
+    private PageItemFontVariation mCachedItemFontVariation;
 
     // This is a hack to keep the listener from being garbage collected per
     // http://tinyurl.com/blkycrk. Should be unregistered explicitly when main activity is
@@ -96,7 +88,7 @@ public class PreferencesTracker implements PreferenceConstants {
         };
 
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this.mListener);
-        
+
         onItemFontVariationPreferenceChange();
     }
 
@@ -106,14 +98,14 @@ public class PreferencesTracker implements PreferenceConstants {
     }
 
     private final void updateCachedPageFontTypePreference() {
-        final String key = mSharedPreferences.getString(PreferenceKind.PAGE_ITEM_FONT_TYPE.getKey(),
-                DEFAULT_PAGE_FONT_TYPE.getKey());
+        final String key = mSharedPreferences.getString(
+                PreferenceKind.PAGE_ITEM_FONT_TYPE.getKey(), DEFAULT_PAGE_FONT_TYPE.getKey());
         mCachedPageFontTypePreference = PageItemFontType.fromKey(key, DEFAULT_PAGE_FONT_TYPE);
     }
 
     private final void updateCachedPageFontSizePreference() {
-        final String key = mSharedPreferences.getString(PreferenceKind.PAGE_ITEM_FONT_SIZE.getKey(),
-                DEFAULT_PAGE_FONT_SIZE.getKey());
+        final String key = mSharedPreferences.getString(
+                PreferenceKind.PAGE_ITEM_FONT_SIZE.getKey(), DEFAULT_PAGE_FONT_SIZE.getKey());
         mCachedPageFontSizePreference = PageItemFontSize.fromKey(key, DEFAULT_PAGE_FONT_SIZE);
     }
 
@@ -163,22 +155,25 @@ public class PreferencesTracker implements PreferenceConstants {
     }
 
     /** Read widget background type preference. */
-    public static final WidgetBackgroundType readWidgetBackgroundTypePreference(SharedPreferences sharedPreferences) {
-        final String key = sharedPreferences.getString(PreferenceKind.WIDGET_BACKGROUND_TYPE.getKey(),
+    public static final WidgetBackgroundType readWidgetBackgroundTypePreference(
+            SharedPreferences sharedPreferences) {
+        final String key = sharedPreferences.getString(
+                PreferenceKind.WIDGET_BACKGROUND_TYPE.getKey(),
                 DEFAULT_WIDGET_BACKGROUND_TYPE.getKey());
         return WidgetBackgroundType.fromKey(key, DEFAULT_WIDGET_BACKGROUND_TYPE);
     }
-    
+
     /** Read widget item text size preference. */
-    public static final WidgetItemFontSize readWidgetItemFontSizePreference(SharedPreferences sharedPreferences) {
-        final String key = sharedPreferences.getString(PreferenceKind.WIDGET_ITEM_FONT_SIZE.getKey(),
+    public static final WidgetItemFontSize readWidgetItemFontSizePreference(
+            SharedPreferences sharedPreferences) {
+        final String key = sharedPreferences.getString(
+                PreferenceKind.WIDGET_ITEM_FONT_SIZE.getKey(),
                 DEFAULT_WIDGET_ITEM_FONT_SIZE.getKey());
         return WidgetItemFontSize.fromKey(key, DEFAULT_WIDGET_ITEM_FONT_SIZE);
     }
 
-    /** 
-     * Read widget background color preference. 
-     * Used by the list widget only. Should be used only of 
+    /**
+     * Read widget background color preference. Used by the list widget only. Should be used only of
      * background type is SOLID
      */
     public static final int readWidgetBackgroundColorPreference(SharedPreferences sharedPreferences) {
@@ -200,8 +195,7 @@ public class PreferencesTracker implements PreferenceConstants {
     }
 
     /** Read widget show toolbar preference. Used by the list widget only. */
-    public static final boolean readWidgetShowToolbarPreference(
-            SharedPreferences sharedPreferences) {
+    public static final boolean readWidgetShowToolbarPreference(SharedPreferences sharedPreferences) {
         return sharedPreferences.getBoolean(PreferenceKind.WIDGET_SHOW_TOOLBAR.getKey(),
                 DEFAULT_WIDGET_SHOW_TOOLBAR);
     }
@@ -226,7 +220,7 @@ public class PreferencesTracker implements PreferenceConstants {
         mCachedAutoSortPreference = mSharedPreferences.getBoolean(
                 PreferenceKind.AUTO_SORT.getKey(), DEFAULT_AUTO_SORT);
     }
-    
+
     private final void updateCachedAutoDailyCleanupPreference() {
         mCachedAutoDailyCleanupPreference = mSharedPreferences.getBoolean(
                 PreferenceKind.AUTO_DAILY_CLEANUP.getKey(), DEFAULT_AUTO_DAILY_CLEANUP);
@@ -284,7 +278,7 @@ public class PreferencesTracker implements PreferenceConstants {
     public final boolean getAutoSortPreference() {
         return mCachedAutoSortPreference;
     }
-    
+
     public final boolean getAutoDailyCleanupPreference() {
         return mCachedAutoDailyCleanupPreference;
     }
@@ -367,14 +361,14 @@ public class PreferencesTracker implements PreferenceConstants {
         // cached the new values.
         mApp.controller().onPreferenceChange(id);
     }
-    
-    
+
     /**
      * Update cached item font variation using current preferences. Should be called whenever the
      * item font preference changes
      */
     public final void onItemFontVariationPreferenceChange() {
-        mCachedItemFontVariation = PageItemFontVariation.newFromCurrentPreferences(mApp.context(), this);
+        mCachedItemFontVariation = PageItemFontVariation.newFromCurrentPreferences(mApp.context(),
+                this);
     }
 
     /** Get current item font variation */

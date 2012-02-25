@@ -36,7 +36,7 @@
             android:summaryOn="Forcing task order (pending before completed before locked)"
             android:title="Auto Task Sort" />
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="prefAutoDailyCleanupKey"
             android:summaryOff="Daily deletion of completed tasks is disabled"
             android:summaryOn="Deleting completed tasks every midnight"
@@ -95,7 +95,7 @@
     </PreferenceScreen>
     <PreferenceScreen android:title="List Widget">
         <ListPreference
-            android:defaultValue="solid"
+            android:defaultValue="paper"
             android:entries="@array/widgetBackgroundTypeNames"
             android:entryValues="@array/widgetBackgroundTypeValues"
             android:key="prefWidgetBackgroundTypeKey"
@@ -112,7 +112,7 @@
             android:key="prefWidgetItemFontSizeKey"
             android:title="Text Size" />
         <net.margaritov.preference.colorpicker.ColorPickerPreference
-            android:defaultValue="#ffffff00"
+            android:defaultValue="#ff330000"
             android:key="prefWidgetTextColorKey"
             android:summary="List widget text color"
             android:title="Text Color" />

@@ -20,25 +20,32 @@ package com.zapta.apps.maniana.preferences;
  * @author Tal Dayan
  */
 public interface PreferenceConstants {
+    // Sound
     public static final boolean DEFAULT_ALLOWS_SOUND_EFFECTS = true;
-    public static final PageItemFontType DEFAULT_PAGE_FONT_TYPE = PageItemFontType.CURSIVE;
-    public static final PageItemFontSize DEFAULT_PAGE_FONT_SIZE = PageItemFontSize.NORMAL;
-    public static final int DEFAULT_ITEM_TEXT_COLOR = 0xff000000;
-    public static final int DEFAULT_COMPLETED_ITEM_TEXT_COLOR = 0xff888888;
-    public static final PageBackgroundType DEFAULT_PAGE_BACKGROUND_TYPE = PageBackgroundType.PAPER;
-    public static final int DEFAULT_PAGE_BACKGROUND_SOLID_COLOR = 0xffffffc0;
-    public static final int DEFAULT_PAGE_ITEM_DIVIDER_COLOR = 0xffffddaa;
-    public static final LockExpirationPeriod DEFAULT_LOCK_PERIOD = LockExpirationPeriod.NEVER;
     public static final ApplauseLevel DEFAULT_APPPLAUSE_LEVEL = ApplauseLevel.ALWAYS;
+    
+    // Behavior
+    public static final boolean DEFAULT_STARTUP_ANIMATION = true;  
     public static final boolean DEFAULT_VERBOSE_MESSAGES = true;
-    public static final boolean DEFAULT_STARTUP_ANIMATION = true;   
     public static final boolean DEFAULT_AUTO_SORT = false;  
-    public static final boolean DEFAULT_AUTO_DAILY_CLEANUP = false; 
-    public static final WidgetBackgroundType DEFAULT_WIDGET_BACKGROUND_TYPE = WidgetBackgroundType.SOLID;
+    public static final boolean DEFAULT_AUTO_DAILY_CLEANUP = true; 
+    public static final LockExpirationPeriod DEFAULT_LOCK_PERIOD = LockExpirationPeriod.NEVER;
+    
+    // Page
+    public static final PageBackgroundType DEFAULT_PAGE_BACKGROUND_TYPE = PageBackgroundType.PAPER;
+    public static final int DEFAULT_PAGE_BACKGROUND_SOLID_COLOR = 0xffffffc0;    
+    public static final PageItemFontType DEFAULT_PAGE_FONT_TYPE = PageItemFontType.CURSIVE;
+    public static final PageItemFontSize DEFAULT_PAGE_FONT_SIZE = PageItemFontSize.NORMAL;  
+    public static final int DEFAULT_ITEM_TEXT_COLOR = 0xff000000;
+    public static final int DEFAULT_COMPLETED_ITEM_TEXT_COLOR = 0xff888888;   
+    public static final int DEFAULT_PAGE_ITEM_DIVIDER_COLOR = 0xffffddaa;
+    
+    // Widget
+    public static final WidgetBackgroundType DEFAULT_WIDGET_BACKGROUND_TYPE = WidgetBackgroundType.PAPER;
     public static final int DEFAULT_WIDGET_BACKGROUND_COLOR = 0x44000000;
     public static final WidgetItemFontSize DEFAULT_WIDGET_ITEM_FONT_SIZE = WidgetItemFontSize.MEDIUM;
-    public static final int DEFAULT_WIDGET_TEXT_COLOR = 0xffffff00;
+    public static final int DEFAULT_WIDGET_TEXT_COLOR = 0xff330000;
+    public static final boolean DEFAULT_WIDGET_SHOW_TOOLBAR = true;    
     public static final boolean DEFAULT_WIDGET_SINGLE_LINE = false;
-    public static final boolean DEFAULT_WIDGET_SHOW_TOOLBAR = true;
 
 }

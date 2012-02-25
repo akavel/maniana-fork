@@ -53,27 +53,33 @@ import com.zapta.apps.maniana.util.VisibleForTesting;
 public class PreferencesActivity extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
 
-    // TODO: group variables by the settings screen hierarchy
-    private ListPreference mPageFontTypeListPreference;
-    private ListPreference mPageFontSizeListPreference;
+    // Sound
+    private CheckBoxPreference mSoundEnablePreference;
+    private ListPreference mApplauseLevelListPreference;
+
+    // Behavior
+    private ListPreference mLockPeriodListPreference;
+
+    // Page
     private ListPreference mPageBackgroundTypeListPreference;
     private ColorPickerPreference mPageSolidColorPickPreference;
+    private ListPreference mPageFontTypeListPreference;
+    private ListPreference mPageFontSizeListPreference;
     private ColorPickerPreference mPageTextActiveColorPickPreference;
-    private ColorPickerPreference mPageTextCompletedColorPickPreference;   
+    private ColorPickerPreference mPageTextCompletedColorPickPreference;
     private ColorPickerPreference mPageItemDividerColorPickPreference;
-    private ListPreference mLockPeriodListPreference;
-    private ListPreference mApplauseLevelListPreference;
-    private CheckBoxPreference mSoundEnablePreference;
     private Preference mPageSelectThemePreference;
 
+    // Widget
     private ListPreference mWidgetBackgroundTypeListPreference;
     private ColorPickerPreference mWidgetSolidColorPickPreference;
+    private ListPreference mWidgetFontSizeListPreference;
     private ColorPickerPreference mWidgetTextColorPickPreference;
     private CheckBoxPreference mWidgetShowToolbarPreference;
-    private ListPreference mWidgetFontSizeListPreference;
     private CheckBoxPreference mWidgetSingleLinePreference;
     private Preference mWidgetSelectThemePreference;
 
+    // Miscellaneous
     private Preference mVersionInfoPreference;
     private Preference mSharePreference;
     private Preference mFeedbackPreference;
@@ -81,7 +87,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     /** For temp time calculations. Avoiding new object creation. */
     private Time tempTime = new Time();
-    
+
     /** The open dialog tracker. */
     private final PopupsTracker mPopupsTracker = new PopupsTracker();
 
@@ -92,26 +98,34 @@ public class PreferencesActivity extends PreferenceActivity implements
 
         addPreferencesFromResource(R.xml.preferences);
 
+        // Sound
+        mSoundEnablePreference = (CheckBoxPreference) findPreference(PreferenceKind.SOUND_ENABLED);
+        mApplauseLevelListPreference = (ListPreference) findPreference(PreferenceKind.APPLAUSE_LEVEL);
+
+        // Behavior
+        mLockPeriodListPreference = (ListPreference) findPreference(PreferenceKind.LOCK_PERIOD);
+
+        // Pages
+        mPageBackgroundTypeListPreference = (ListPreference) findPreference(PreferenceKind.PAGE_BACKGROUND_TYPE);
+        mPageSolidColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_BACKGROUND_SOLID_COLOR);
         mPageFontTypeListPreference = (ListPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_TYPE);
         mPageFontSizeListPreference = (ListPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_SIZE);
-        mPageBackgroundTypeListPreference = (ListPreference) findPreference(PreferenceKind.PAGE_BACKGROUND_TYPE);
-        mPageSolidColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_BACKGROUND_SOLID_COLOR);      
         mPageTextActiveColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_ITEM_ACTIVE_TEXT_COLOR);
-        mPageTextCompletedColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_ITEM_COMPLETED_TEXT_COLOR);       
+        mPageTextCompletedColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_ITEM_COMPLETED_TEXT_COLOR);
         mPageItemDividerColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_ITEM_DIVIDER_COLOR);
-        mLockPeriodListPreference = (ListPreference) findPreference(PreferenceKind.LOCK_PERIOD);
-        mApplauseLevelListPreference = (ListPreference) findPreference(PreferenceKind.APPLAUSE_LEVEL);
-        mSoundEnablePreference = (CheckBoxPreference) findPreference(PreferenceKind.SOUND_ENABLED);
         mPageSelectThemePreference = findPreference(PreferenceKind.PAGE_SELECT_THEME);
-        
+
+        // Widget
         mWidgetBackgroundTypeListPreference = (ListPreference) findPreference(PreferenceKind.WIDGET_BACKGROUND_TYPE);
         mWidgetSolidColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_BACKGROUND_COLOR);
-        mWidgetFontSizeListPreference = (ListPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_SIZE);     
-        mWidgetShowToolbarPreference = (CheckBoxPreference) findPreference(PreferenceKind.WIDGET_SHOW_TOOLBAR);
+        mWidgetFontSizeListPreference = (ListPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_SIZE);
+
         mWidgetTextColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_ITEM_TEXT_COLOR);
+        mWidgetShowToolbarPreference = (CheckBoxPreference) findPreference(PreferenceKind.WIDGET_SHOW_TOOLBAR);
         mWidgetSingleLinePreference = (CheckBoxPreference) findPreference(PreferenceKind.WIDGET_SINGLE_LINE);
         mWidgetSelectThemePreference = findPreference(PreferenceKind.WIDGET_SELECT_THEME);
-        
+
+        // Miscellaneous
         mVersionInfoPreference = findPreference(PreferenceKind.VERSION_INFO);
         mSharePreference = findPreference(PreferenceKind.SHARE);
         mFeedbackPreference = findPreference(PreferenceKind.FEEDBACK);
@@ -132,7 +146,7 @@ public class PreferencesActivity extends PreferenceActivity implements
                 return true;
             }
         });
-        
+
         mWidgetSelectThemePreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 onWidgetSelectThemeClick();
@@ -171,9 +185,8 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     /** Handle the user clicking on page theme selection in the settings activity */
     private final void onPageSelectThemeClick() {
-        final Dialog dialog = new ThumbnailSelector<PageTheme>(this,
-                PageTheme.PAGE_THEMES, mPopupsTracker,
-                new ThumbnailSelector.ThumbnailSelectorListener<PageTheme>() {
+        final Dialog dialog = new ThumbnailSelector<PageTheme>(this, PageTheme.PAGE_THEMES,
+                mPopupsTracker, new ThumbnailSelector.ThumbnailSelectorListener<PageTheme>() {
                     @Override
                     public void onThumbnailSelection(PageTheme theme) {
                         handlePageThemeSelection(theme);
@@ -181,12 +194,11 @@ public class PreferencesActivity extends PreferenceActivity implements
                 });
         dialog.show();
     }
-    
+
     /** Handle the user clicking on widget theme selection in the settings activity */
     private final void onWidgetSelectThemeClick() {
-        final Dialog dialog = new ThumbnailSelector<WidgetTheme>(this,
-                WidgetTheme.WIDGET_THEMES, mPopupsTracker,
-                new ThumbnailSelector.ThumbnailSelectorListener<WidgetTheme>() {
+        final Dialog dialog = new ThumbnailSelector<WidgetTheme>(this, WidgetTheme.WIDGET_THEMES,
+                mPopupsTracker, new ThumbnailSelector.ThumbnailSelectorListener<WidgetTheme>() {
                     @Override
                     public void onThumbnailSelection(WidgetTheme theme) {
                         handleWidgetThemeSelection(theme);
@@ -194,7 +206,7 @@ public class PreferencesActivity extends PreferenceActivity implements
                 });
         dialog.show();
     }
-    
+
     /** Called when a page theme is selected from the widget theme dialog. */
     private final void handlePageThemeSelection(PageTheme theme) {
         mPageBackgroundTypeListPreference.setValue(theme.backgroundType.getKey());
@@ -214,7 +226,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         mWidgetTextColorPickPreference.onColorChanged(theme.textColor);
         mWidgetShowToolbarPreference.setChecked(theme.showToolbar);
         mWidgetSingleLinePreference.setChecked(theme.singleLine);
-      
+
     }
 
     /** Handle user selecting reset settings in the settings activity */
