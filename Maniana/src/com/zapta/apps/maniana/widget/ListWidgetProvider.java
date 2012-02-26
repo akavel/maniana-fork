@@ -15,6 +15,7 @@
 package com.zapta.apps.maniana.widget;
 
 import static com.zapta.apps.maniana.util.Assertions.check;
+import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
 
 import java.util.List;
 
@@ -26,11 +27,20 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.text.format.Time;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.MeasureSpec;
+import android.widget.LinearLayout;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.main.MainActivity;
@@ -41,6 +51,7 @@ import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
 import com.zapta.apps.maniana.preferences.PreferencesTracker;
 import com.zapta.apps.maniana.preferences.WidgetBackgroundType;
 import com.zapta.apps.maniana.services.AppServices;
+import com.zapta.apps.maniana.util.Assertions;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**
@@ -76,20 +87,24 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
 
-        // Provides access to the remote view hosted by the home launcher.
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
-                R.layout.widget_list_layout);
+        // Create the template view. We will later render it to a bitmap.
+        //
+        // NOTE: we use a template layout that is rendered to a bitmap rather rendering directly
+        // a remote view. This allows us to use custom fonts which are not supported by
+        // remote view. This also increase the complexity and makes the widget more sensitive
+        // to resizing.
+        //
+        LayoutInflater layoutInflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final LinearLayout template = (LinearLayout) layoutInflater.inflate(
+                R.layout.widget_list_template_layout, null);
 
-        // Set onClick() actions
-        setOnClickLaunch(context, remoteViews, R.id.widget_list_top_view, ResumeAction.NONE);
-
-        // Set background
+        // Set template view background
         final WidgetBackgroundType backgroundType = PreferencesTracker
                 .readWidgetBackgroundTypePreference(sharedPreferences);
         switch (backgroundType) {
             case PAPER:
-                remoteViews.setInt(R.id.widget_list_top_view, "setBackgroundResource",
-                        R.drawable.widget_background);
+                template.setBackgroundResource(R.drawable.widget_background);
                 break;
 
             default:
@@ -98,29 +113,49 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             case SOLID:
                 final int backgroundColor = PreferencesTracker
                         .readWidgetBackgroundColorPreference(sharedPreferences);
-                remoteViews
-                        .setInt(R.id.widget_list_top_view, "setBackgroundColor", backgroundColor);
+                template.setBackgroundColor(backgroundColor);
         }
 
-        // Set toolbar
+        // Set template view toolbar
         final boolean toolbarEanbled = PreferencesTracker
                 .readWidgetShowToolbarPreference(sharedPreferences);
         final boolean showToolbarBackground = toolbarEanbled
-                && (backgroundType != WidgetBackgroundType.PAPER);
-        setToolbar(context, remoteViews, toolbarEanbled, showToolbarBackground);
+               && (backgroundType != WidgetBackgroundType.PAPER);
+        setToolbar(context, template, toolbarEanbled, showToolbarBackground);
 
-        // Set item list
-        remoteViews.removeAllViews(R.id.widget_list_item_list);
+        // Set template view item list
         final int textColor = PreferencesTracker.readWidgetTextColorPreference(sharedPreferences);
-        populateItemList(context, remoteViews, model, textColor, sharedPreferences);
+        final LinearLayout itemListView = (LinearLayout) template
+                .findViewById(R.id.widget_list_template_item_list);
+        populateItemList(context, itemListView, model, textColor, sharedPreferences, layoutInflater);
 
-        // Tell the app widget manager to replace the views with the new views.
-        // This is not a partial update.
+        // Render the template view to a bitmap       
+        final int widthPixels = 300;
+        final int heightPixels = 250;
+        
+        final Bitmap bm = Bitmap.createBitmap(widthPixels, heightPixels, Bitmap.Config.ARGB_8888);
+
+        final Canvas canvas = new Canvas(bm);
+        template.measure(MeasureSpec.makeMeasureSpec(widthPixels, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(heightPixels, MeasureSpec.EXACTLY));
+        // TODO: substract '1' from ends?
+        template.layout(0, 0, widthPixels, heightPixels);
+        template.draw(canvas);
+
+        // Create a remote view and populate it from the bitmap
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
+                R.layout.widget_list_layout);
+        remoteViews.setBitmap(R.id.widget_list_bitmap, "setImageBitmap", bm);
+        
+        // Set the remote view click actions
+        setOnClickLaunch(context, remoteViews, R.id.widget_list_bitmap, ResumeAction.NONE);
+
+        // Flush the remote view
         appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
     }
 
-    private static final void populateItemList(Context context, RemoteViews remoteViews,
-            AppModel model, int textColor, SharedPreferences sharedPreferences) {
+    private static final void populateItemList(Context context, LinearLayout itemListView,
+            AppModel model, int textColor, SharedPreferences sharedPreferences,
+            LayoutInflater layoutInflater) {
         // Get text size preference in sp units
         final int fontSizeSp = PreferencesTracker.readWidgetItemFontSizePreference(
                 sharedPreferences).getSizeSp();
@@ -129,98 +164,92 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final boolean debugTimestamp = false;
         if (debugTimestamp) {
             final String message = String.format("[%s]", SystemClock.elapsedRealtime() / 1000);
-            addMessageItem(context, remoteViews, message, textColor);
+            addMessageItem(context, itemListView, message, textColor, layoutInflater);
         }
 
         if (model == null) {
-            addMessageItem(context, remoteViews, "(Maniana data not found)", textColor);
+            addMessageItem(context, itemListView, "(Maniana data not found)", textColor,
+                    layoutInflater);
             return;
         }
 
         final LockExpirationPeriod lockExpirationPeriod = PreferencesTracker
                 .readLockExpierationPeriodPreference(sharedPreferences);
-        // TODO: reorganize the code. No need to read lock preference if
-        // date now is same as the model
+        // TODO: reorganize the code. No need to read lock preference if date now is same as the model
         Time now = new Time();
         now.setToNow();
 
         final List<ItemModelReadOnly> items = WidgetUtil.selectTodaysActiveItemsByTime(model, now,
                 lockExpirationPeriod);
         if (items.isEmpty()) {
-            addMessageItem(context, remoteViews, "(no active tasks)", textColor);
+            addMessageItem(context, itemListView, "(no active tasks)", textColor, layoutInflater);
             return;
         }
 
         final boolean singleLine = PreferencesTracker
                 .readWidgetSingleLinePreference(sharedPreferences);
-        
+
         for (ItemModelReadOnly item : items) {
-            final RemoteViews remoteItemViews = new RemoteViews(context.getPackageName(),
-                    R.layout.widget_list_item_layout);
+
+            final LinearLayout itemView = (LinearLayout) layoutInflater.inflate(
+                    R.layout.widget_list_item_layout, null);
+            final TextView textView = (TextView) itemView.findViewById(R.id.widget_item_text_view);
+            final View colorView = itemView.findViewById(R.id.widget_item_color);
 
             // NOTE: TextView has a bug that does not allows more than
             // two lines when using ellipsize. Otherwise we would give the user more
             // choices about the max number of lines. More details here:
             // http://code.google.com/p/android/issues/detail?id=2254
             if (!singleLine) {
-                remoteItemViews.setBoolean(R.id.widget_item_text_view, "setSingleLine", false);
+                textView.setSingleLine(false);
                 // NOTE: on ICS (API 14) the text view behaves
                 // differently and does not limit the lines to two when ellipsize. For
                 // consistency, we limit it explicitly to two lines.
-                remoteItemViews.setInt(R.id.widget_item_text_view, "setMaxLines", 2);
+                //
+                // TODO: file an Android bug.
+                //
+                textView.setMaxLines(2);
             }
 
-            remoteItemViews.setTextViewText(R.id.widget_item_text_view, item.getText());
-            remoteItemViews.setTextColor(R.id.widget_item_text_view, textColor);
-            remoteItemViews.setFloat(R.id.widget_item_text_view, "setTextSize", fontSizeSp);
+            textView.setText(item.getText());
+            textView.setTextColor(textColor);
+            textView.setTextSize(fontSizeSp);
 
             // If color is NONE show a gray solid color to help visually
             // grouping item text lines.
             final int itemColor = item.getColor().isNone() ? 0xff808080 : item.getColor()
                     .getColor();
 
-            remoteItemViews.setInt(R.id.widget_item_color, "setBackgroundColor", itemColor);
+            colorView.setBackgroundColor(itemColor);
 
-            // These are required for ICS. Otherwise text backdround is dark
-            remoteItemViews.setInt(R.id.widget_item_text_view, "setBackgroundColor", 0x00000000);
-            remoteItemViews.setInt(R.id.widget_item_view, "setBackgroundColor", 0x00000000);
-
-            remoteViews.addView(R.id.widget_list_item_list, remoteItemViews);
+            itemListView.addView(itemView);
         }
-
     }
 
-    private static final void setToolbar(Context context, RemoteViews remoteViews,
-            boolean toolbarEnabled, boolean showToolbarBackground) {
+    private static final void setToolbar(Context context, View template, boolean toolbarEnabled,
+            boolean showToolbarBackground) {
+        final View toolbarView = template.findViewById(R.id.widget_list_template_toolbar);
+        // TODO: add toobar click actions
+        final View addTextByTextButton = toolbarView
+                .findViewById(R.id.widget_list_template_toolbar_add_by_text);
+        final View addTextByVoiceButton = toolbarView
+                .findViewById(R.id.widget_list_template_toolbar_add_by_voice);
+
         if (!toolbarEnabled) {
-            remoteViews.setInt(R.id.widget_list_toolbar, "setVisibility", View.GONE);
+            toolbarView.setVisibility(View.GONE);
             return;
         }
 
         // Make toolbar visible
-        remoteViews.setInt(R.id.widget_list_toolbar, "setVisibility", View.VISIBLE);
+        toolbarView.setVisibility(View.VISIBLE);
 
         // Show or hide toolbar background.
         if (showToolbarBackground) {
-            remoteViews.setInt(R.id.widget_list_toolbar, "setBackgroundResource",
-                    R.drawable.widget_toolbar_background);
+            toolbarView.setBackgroundResource(R.drawable.widget_toolbar_background);
         } else {
-            remoteViews.setInt(R.id.widget_list_toolbar, "setBackgroundColor", 0x00000000);
+            toolbarView.setBackgroundColor(0x00000000);
         }
 
-        // Set new task by text action.
-        setOnClickLaunch(context, remoteViews, R.id.widget_list_toolbar_add_by_text,
-                ResumeAction.ADD_NEW_ITEM_BY_TEXT);
-
-        // The voice recognition button is shown only if this device supports voice recognition.
-        if (AppServices.isVoiceRecognitionSupported(context)) {
-            remoteViews
-                    .setInt(R.id.widget_list_toolbar_add_by_voice, "setVisibility", View.VISIBLE);
-            setOnClickLaunch(context, remoteViews, R.id.widget_list_toolbar_add_by_voice,
-                    ResumeAction.ADD_NEW_ITEM_BY_VOICE);
-        } else {
-            remoteViews.setInt(R.id.widget_list_toolbar_add_by_voice, "setVisibility", View.GONE);
-        }
     }
 
     /** Set onClick() action of given remote view element to launch the app. */
@@ -236,17 +265,21 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         remoteViews.setOnClickPendingIntent(viewId, pendingIntent);
     }
 
-    private static final void addMessageItem(Context context, RemoteViews remoteViews,
-            String message, int textColor) {
+    private static final void addMessageItem(Context context, LinearLayout itemListView,
+            String message, int textColor, LayoutInflater layoutInflater) {
+
+        final LinearLayout itemView = (LinearLayout) layoutInflater.inflate(
+                R.layout.widget_list_item_layout, null);
+        final TextView textView = (TextView) itemView.findViewById(R.id.widget_item_text_view);
+        final View colorView = itemView.findViewById(R.id.widget_item_color);
+
         // TODO: setup message text using widget font size preference?
-        final RemoteViews itemMessageViews = new RemoteViews(context.getPackageName(),
-                R.layout.widget_list_item_layout);
-        final int textViewResourceId = R.id.widget_item_text_view;
-        itemMessageViews.setBoolean(R.id.widget_item_text_view, "setSingleLine", false);
-        itemMessageViews.setTextViewText(textViewResourceId, message);
-        itemMessageViews.setTextColor(textViewResourceId, textColor);
-        itemMessageViews.setInt(R.id.widget_item_color, "setVisibility", View.GONE);
-        remoteViews.addView(R.id.widget_list_item_list, itemMessageViews);
+        textView.setSingleLine(false);
+        textView.setText(message);
+        textView.setTextColor(textColor);
+        colorView.setVisibility(View.GONE);
+
+        itemListView.addView(itemView);
     }
 
     // TODO: decide what we want to do with this.

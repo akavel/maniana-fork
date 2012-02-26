@@ -1,79 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/widget_list_top_view"
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_list_bitmap"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_margin="@dimen/widget_margin"
-    android:background="#00000000"
-    android:orientation="vertical"
-    android:padding="0dp" >
+    android:scaleType="center"
+    android:src="@drawable/place_holder" >
 
-    <RelativeLayout
-        android:id="@+id/widget_list_toolbar"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="0dip"
-        android:background="@drawable/widget_toolbar_background"
-        android:padding="0dip" >
-
-        <TextView
-            android:id="@+id/widget_list_toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:background="#00000000"
-            android:paddingLeft="4dip"
-            android:text="TODAY"
-            android:textColor="#ff444444"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="0dip"
-            android:background="#00000000"
-            android:orientation="horizontal"
-            android:padding="0dip" >
-
-            <ImageButton
-                android:id="@+id/widget_list_toolbar_add_by_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#00000000"
-                android:longClickable="false"
-                android:paddingBottom="1dip"
-                android:paddingLeft="8dip"
-                android:paddingRight="8dip"
-                android:paddingTop="1dip"
-                android:src="@drawable/widget_add_by_text" >
-            </ImageButton>
-
-            <ImageButton
-                android:id="@+id/widget_list_toolbar_add_by_voice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#00000000"
-                android:longClickable="false"
-                android:paddingBottom="1dip"
-                android:paddingLeft="8dip"
-                android:paddingRight="8dip"
-                android:paddingTop="1dip"
-                android:src="@drawable/widget_add_by_voice" >
-            </ImageButton>
-        </LinearLayout>
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/widget_list_item_list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:background="#00000000"
-        android:orientation="vertical"
-        android:paddingRight="2dip" >
-    </LinearLayout>
-
-</LinearLayout>
+</ImageView>
