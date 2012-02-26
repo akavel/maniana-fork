@@ -33,7 +33,7 @@ public class WidgetTheme extends Thumbnail {
                     PreferenceConstants.DEFAULT_WIDGET_SHOW_TOOLBAR,
                     PreferenceConstants.DEFAULT_WIDGET_SINGLE_LINE),
             new WidgetTheme("Crystal Clear", R.drawable.widget_theme2_preview, WidgetBackgroundType.SOLID,
-                    0x44000000, WidgetItemFontSize.MEDIUM, 0xff330000, true, false),
+                    0x44000000, WidgetItemFontSize.MEDIUM, 0xffffff00, true, false),
             new WidgetTheme("Think Big", R.drawable.widget_theme3_preview, WidgetBackgroundType.SOLID,
                     0xff000000, WidgetItemFontSize.LARGE, 0xff00ff00, true, true),
             new WidgetTheme("Fine Print", R.drawable.widget_theme4_preview, WidgetBackgroundType.SOLID,
