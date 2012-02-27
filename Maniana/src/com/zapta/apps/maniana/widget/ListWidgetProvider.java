@@ -87,6 +87,12 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
 
+        // Create the widget remote view
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
+                R.layout.widget_list_layout);
+        // remoteViews.setBitmap(R.id.widget_list_bitmap, "setImageBitmap", bm);
+        setOnClickLaunch(context, remoteViews, R.id.widget_list_bitmap, ResumeAction.NONE);
+
         // Create the template view. We will later render it to a bitmap.
         //
         // NOTE: we use a template layout that is rendered to a bitmap rather rendering directly
@@ -120,8 +126,8 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final boolean toolbarEanbled = PreferencesTracker
                 .readWidgetShowToolbarPreference(sharedPreferences);
         final boolean showToolbarBackground = toolbarEanbled
-               && (backgroundType != WidgetBackgroundType.PAPER);
-        setToolbar(context, template, toolbarEanbled, showToolbarBackground);
+                && (backgroundType != WidgetBackgroundType.PAPER);
+        setToolbar(context, remoteViews, template, toolbarEanbled, showToolbarBackground);
 
         // Set template view item list
         final int textColor = PreferencesTracker.readWidgetTextColorPreference(sharedPreferences);
@@ -129,25 +135,21 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                 .findViewById(R.id.widget_list_template_item_list);
         populateItemList(context, itemListView, model, textColor, sharedPreferences, layoutInflater);
 
-        // Render the template view to a bitmap       
+        // Render the template view to a bitmap
         final int widthPixels = 300;
         final int heightPixels = 250;
-        
+
         final Bitmap bm = Bitmap.createBitmap(widthPixels, heightPixels, Bitmap.Config.ARGB_8888);
 
         final Canvas canvas = new Canvas(bm);
-        template.measure(MeasureSpec.makeMeasureSpec(widthPixels, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(heightPixels, MeasureSpec.EXACTLY));
+        template.measure(MeasureSpec.makeMeasureSpec(widthPixels, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(heightPixels, MeasureSpec.EXACTLY));
         // TODO: substract '1' from ends?
         template.layout(0, 0, widthPixels, heightPixels);
         template.draw(canvas);
 
-        // Create a remote view and populate it from the bitmap
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
-                R.layout.widget_list_layout);
+        // Set the template rendered bitmap in the remote views.
         remoteViews.setBitmap(R.id.widget_list_bitmap, "setImageBitmap", bm);
-        
-        // Set the remote view click actions
-        setOnClickLaunch(context, remoteViews, R.id.widget_list_bitmap, ResumeAction.NONE);
 
         // Flush the remote view
         appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
@@ -175,7 +177,8 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
         final LockExpirationPeriod lockExpirationPeriod = PreferencesTracker
                 .readLockExpierationPeriodPreference(sharedPreferences);
-        // TODO: reorganize the code. No need to read lock preference if date now is same as the model
+        // TODO: reorganize the code. No need to read lock preference if date now is same as the
+        // model
         Time now = new Time();
         now.setToNow();
 
@@ -192,7 +195,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         for (ItemModelReadOnly item : items) {
 
             final LinearLayout itemView = (LinearLayout) layoutInflater.inflate(
-                    R.layout.widget_list_item_layout, null);
+                    R.layout.widget_list_template_item_layout, null);
             final TextView textView = (TextView) itemView.findViewById(R.id.widget_item_text_view);
             final View colorView = itemView.findViewById(R.id.widget_item_color);
 
@@ -226,8 +229,12 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         }
     }
 
-    private static final void setToolbar(Context context, View template, boolean toolbarEnabled,
-            boolean showToolbarBackground) {
+    /**
+     * Set toolbar. This updates both the template portion of the toolbar and the click overlays of
+     * the remote views.
+     */
+    private static final void setToolbar(Context context, RemoteViews remoteViews, View template,
+            boolean toolbarEnabled, boolean showToolbarBackground) {
         final View toolbarView = template.findViewById(R.id.widget_list_template_toolbar);
         // TODO: add toobar click actions
         final View addTextByTextButton = toolbarView
@@ -250,6 +257,21 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             toolbarView.setBackgroundColor(0x00000000);
         }
 
+        // Set new task by text action.
+        setOnClickLaunch(context, remoteViews, R.id.widget_list_toolbar_add_by_text_overlay,
+                ResumeAction.ADD_NEW_ITEM_BY_TEXT);
+
+        // The voice recognition button is shown only if this device supports voice recognition.
+        if (AppServices.isVoiceRecognitionSupported(context)) {
+            remoteViews.setInt(R.id.widget_list_toolbar_add_by_voice_overlay, "setVisibility",
+                    View.VISIBLE);
+            setOnClickLaunch(context, remoteViews, R.id.widget_list_toolbar_add_by_voice_overlay,
+                    ResumeAction.ADD_NEW_ITEM_BY_VOICE);
+        } else {
+            remoteViews.setInt(R.id.widget_list_toolbar_add_by_voice_overlay, "setVisibility",
+                    View.GONE);
+        }
+
     }
 
     /** Set onClick() action of given remote view element to launch the app. */
@@ -269,7 +291,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             String message, int textColor, LayoutInflater layoutInflater) {
 
         final LinearLayout itemView = (LinearLayout) layoutInflater.inflate(
-                R.layout.widget_list_item_layout, null);
+                R.layout.widget_list_template_item_layout, null);
         final TextView textView = (TextView) itemView.findViewById(R.id.widget_item_text_view);
         final View colorView = itemView.findViewById(R.id.widget_item_color);
 
