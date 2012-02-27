@@ -14,6 +14,8 @@
 
 package com.zapta.apps.maniana.util;
 
+import static com.zapta.apps.maniana.util.Assertions.check;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -22,6 +24,7 @@ import java.io.InputStream;
 import javax.annotation.Nullable;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult.FileReadOutcome;
 
@@ -117,6 +120,29 @@ public final class FileUtil {
                     out.close();
                 } catch (IOException e) {
                     LogUtil.error(e, "Error closing written model file: " + fileName);
+                }
+            }
+        }
+    }
+    
+    /** Write a bitmap to a file */
+    public static void writeBitmapToPngFile(Context context, Bitmap bitmap, String fileName) {
+        FileOutputStream out = null;
+        try {
+            out = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+            final boolean ok = bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            if (!ok) {
+                throw new RuntimeException("Error writing bitmap to file: " + fileName);
+            }           
+        } catch (Exception e) {
+            // TODO: more graceful error handling?
+            throw new RuntimeException(e);
+        } finally {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    LogUtil.error(e, "Error closing written bitmap file: " + fileName);
                 }
             }
         }

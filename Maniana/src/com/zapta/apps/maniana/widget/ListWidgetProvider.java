@@ -15,7 +15,6 @@
 package com.zapta.apps.maniana.widget;
 
 import static com.zapta.apps.maniana.util.Assertions.check;
-import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
 
 import java.util.List;
 
@@ -28,10 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.text.format.Time;
@@ -41,6 +37,7 @@ import android.view.View.MeasureSpec;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.main.MainActivity;
@@ -51,7 +48,7 @@ import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
 import com.zapta.apps.maniana.preferences.PreferencesTracker;
 import com.zapta.apps.maniana.preferences.WidgetBackgroundType;
 import com.zapta.apps.maniana.services.AppServices;
-import com.zapta.apps.maniana.util.Assertions;
+import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**
@@ -147,6 +144,13 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         // TODO: substract '1' from ends?
         template.layout(0, 0, widthPixels, heightPixels);
         template.draw(canvas);
+
+        // For debugging. Should be off in production releases.
+        final boolean DUMP_DEBUG_FILE = false;
+        if (DUMP_DEBUG_FILE) {
+            LogUtil.debug("*** Writing list widget bitmap to debug file");
+            FileUtil.writeBitmapToPngFile(context, bm, "debug_list_widget.png");
+        }
 
         // Set the template rendered bitmap in the remote views.
         remoteViews.setBitmap(R.id.widget_list_bitmap, "setImageBitmap", bm);
