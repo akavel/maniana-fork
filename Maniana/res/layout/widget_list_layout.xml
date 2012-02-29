@@ -1,38 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:background="#40440000" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="0dip"
+    android:background="#ffffff00" >
 
-    <ImageView
-        android:id="@+id/widget_list_bitmap"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#40004400"
-        android:scaleType="center"
-        android:src="@drawable/place_holder" >
-    </ImageView>
+        android:layout_centerInParent="true"
+        android:background="#40440000"
+         >
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="30dip"
-        android:layout_alignRight="@id/widget_list_bitmap"
-        android:layout_alignTop="@id/widget_list_bitmap"
-        android:orientation="horizontal" >
+        <ImageView
+            android:id="@+id/widget_list_bitmap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#40004400"
+            android:scaleType="center"
+            android:src="@drawable/place_holder" >
+        </ImageView>
 
-        <FrameLayout
-            android:id="@+id/widget_list_toolbar_add_by_text_overlay"
-            android:layout_width="35dip"
-            android:layout_height="fill_parent"
-            android:background="#40004444" >
-        </FrameLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="30dip"
+            android:layout_alignRight="@id/widget_list_bitmap"
+            android:layout_alignTop="@id/widget_list_bitmap"
+            android:orientation="horizontal" >
 
-        <FrameLayout
-            android:id="@+id/widget_list_toolbar_add_by_voice_overlay"
-            android:layout_width="35dip"
-            android:layout_height="fill_parent"
-            android:background="#40442244" >
-        </FrameLayout>
-    </LinearLayout>
+            <FrameLayout
+                android:id="@+id/widget_list_toolbar_add_by_text_overlay"
+                android:layout_width="35dip"
+                android:layout_height="fill_parent"
+                android:background="#40004444" >
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/widget_list_toolbar_add_by_voice_overlay"
+                android:layout_width="35dip"
+                android:layout_height="fill_parent"
+                android:background="#40442244" >
+            </FrameLayout>
+        </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

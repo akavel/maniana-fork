@@ -708,7 +708,6 @@ public class Controller {
     /** Force a widget update with the current */
     private final void updateWidgets() {
         BaseWidgetProvider.updateAllWidgetsFromModel(mApp.context(), mApp.model());
-
     }
 
     /** Called by the main activity when it is created. */

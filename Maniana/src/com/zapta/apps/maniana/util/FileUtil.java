@@ -14,8 +14,6 @@
 
 package com.zapta.apps.maniana.util;
 
-import static com.zapta.apps.maniana.util.Assertions.check;
-
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;

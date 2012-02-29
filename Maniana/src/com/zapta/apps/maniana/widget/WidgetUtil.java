@@ -17,6 +17,10 @@ package com.zapta.apps.maniana.widget;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.Point;
 import android.text.format.Time;
 
 import com.zapta.apps.maniana.model.AppModel;
@@ -25,6 +29,7 @@ import com.zapta.apps.maniana.model.PushScope;
 import com.zapta.apps.maniana.model.ModelUtil;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
+import com.zapta.apps.maniana.util.LogUtil;
 
 /**
  * Common widget related utilities.
@@ -39,17 +44,17 @@ public abstract class WidgetUtil {
 
     /** Return a list of TODAY's active items subject to time based push. */
     public static final List<ItemModelReadOnly> selectTodaysActiveItemsByTime(AppModel model,
-                    Time timeNow, LockExpirationPeriod lockExpirationPeriod) {
+            Time timeNow, LockExpirationPeriod lockExpirationPeriod) {
         final PushScope pushScope = ModelUtil.computePushScope(model.getLastPushDateStamp(),
-                        timeNow, lockExpirationPeriod);
+                timeNow, lockExpirationPeriod);
         return selectTodaysActiveItemsByPushScope(model, pushScope);
     }
 
     /** Return a list of active TODAY's items subject given push scope */
     public static final List<ItemModelReadOnly> selectTodaysActiveItemsByPushScope(AppModel model,
-                    PushScope pushScope) {
-        final List<ItemModelReadOnly> result = new ArrayList<ItemModelReadOnly>(model
-                        .getItemCount());
+            PushScope pushScope) {
+        final List<ItemModelReadOnly> result = new ArrayList<ItemModelReadOnly>(
+                model.getItemCount());
 
         // If needed, collect items from Tomorow
         if (pushScope != PushScope.NONE) {
@@ -81,5 +86,36 @@ public abstract class WidgetUtil {
         }
 
         return result;
+    }
+
+    /**
+     * Compute the widget size in pixels.
+     * 
+     * Based on http://osdir.com/ml/Android-Developers/2011-01/msg02879.html
+     */
+    public static Point widgetPixelSize(Context context, int widthCells, int heightCells) {
+        final Resources rsources = context.getResources();
+        final float density = rsources.getDisplayMetrics().density;
+        final int orientation = rsources.getConfiguration().orientation;
+        final int widthPixels;
+        final int heightPixels;
+        switch (orientation) {
+            case Configuration.ORIENTATION_PORTRAIT:
+                widthPixels = (int) (80 * widthCells * density + .5f);
+                heightPixels = (int) (100 * heightCells * density + .5f);
+                break;
+            case Configuration.ORIENTATION_LANDSCAPE:
+                widthPixels = (int) (106 * widthCells * density + .5f);
+                heightPixels = (int) (74 * heightCells * density + .5f);
+                break;
+            case Configuration.ORIENTATION_SQUARE:
+            case Configuration.ORIENTATION_UNDEFINED:
+            default:
+                // TODO: more graceful handling?
+                throw new RuntimeException("unknown orientation: " + orientation);
+        }
+        LogUtil.debug("*** %d x %d (%d, %f) -> (%d x %d)", widthCells, heightCells, orientation,
+                density, widthPixels, heightPixels);
+        return new Point(widthPixels, heightPixels);
     }
 }

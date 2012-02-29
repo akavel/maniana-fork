@@ -14,8 +14,6 @@
 
 package com.zapta.apps.maniana.widget;
 
-import static com.zapta.apps.maniana.util.Assertions.check;
-
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -28,6 +26,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.text.format.Time;
@@ -37,7 +36,6 @@ import android.view.View.MeasureSpec;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.main.MainActivity;
@@ -58,24 +56,20 @@ import com.zapta.apps.maniana.util.LogUtil;
  */
 public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
-    /** List of all widget provider classes. */
-    @SuppressWarnings("rawtypes")
-    public static final Class[] LIST_WIDGET_PROVIDER_CLASSES = new Class[] {
-            ListWidgetProvider4.class, ListWidgetProvider1.class, ListWidgetProvider2.class,
-            ListWidgetProvider3.class, ListWidgetProviderX.class };
-
     public ListWidgetProvider() {
     }
+
+    protected abstract ListWidgetSize listWidgetSize();
 
     /** Called by the widget host. */
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        update(context, appWidgetManager, appWidgetIds, loadModel(context));
+        update(context, appWidgetManager, listWidgetSize(), appWidgetIds, loadModel(context));
     }
 
     /** Internal widget update method that accepts the model as a parameter */
     private static final void update(Context context, AppWidgetManager appWidgetManager,
-            int[] appWidgetIds, @Nullable AppModel model) {
+            ListWidgetSize listWidgetSize, int[] appWidgetIds, @Nullable AppModel model) {
 
         if (appWidgetIds.length == 0) {
             return;
@@ -87,7 +81,6 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         // Create the widget remote view
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
                 R.layout.widget_list_layout);
-        // remoteViews.setBitmap(R.id.widget_list_bitmap, "setImageBitmap", bm);
         setOnClickLaunch(context, remoteViews, R.id.widget_list_bitmap, ResumeAction.NONE);
 
         // Create the template view. We will later render it to a bitmap.
@@ -133,27 +126,32 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         populateItemList(context, itemListView, model, textColor, sharedPreferences, layoutInflater);
 
         // Render the template view to a bitmap
-        final int widthPixels = 300;
-        final int heightPixels = 250;
+        final Point widgetGrossSizeInPixels = listWidgetSize.currentGrossSizeInPixels(context);
 
-        final Bitmap bm = Bitmap.createBitmap(widthPixels, heightPixels, Bitmap.Config.ARGB_8888);
+        final int widthPixels = (widgetGrossSizeInPixels.x * 95) / 100;
+        final int hightPixels = (widgetGrossSizeInPixels.y * 95) / 100;
+        
+        // Bitmap bitmap = Bitmap.createBitmap(widthPixels, heightPixels, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap
+                .createBitmap(widthPixels, hightPixels, Bitmap.Config.ARGB_4444);
 
-        final Canvas canvas = new Canvas(bm);
+        final Canvas canvas = new Canvas(bitmap);
+
         template.measure(MeasureSpec.makeMeasureSpec(widthPixels, MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(heightPixels, MeasureSpec.EXACTLY));
+                MeasureSpec.makeMeasureSpec(hightPixels, MeasureSpec.EXACTLY));
         // TODO: substract '1' from ends?
-        template.layout(0, 0, widthPixels, heightPixels);
+        template.layout(0, 0, widthPixels, hightPixels);
         template.draw(canvas);
 
         // For debugging. Should be off in production releases.
         final boolean DUMP_DEBUG_FILE = false;
         if (DUMP_DEBUG_FILE) {
             LogUtil.debug("*** Writing list widget bitmap to debug file");
-            FileUtil.writeBitmapToPngFile(context, bm, "debug_list_widget.png");
+            FileUtil.writeBitmapToPngFile(context, bitmap, "debug_list_widget.png");
         }
 
         // Set the template rendered bitmap in the remote views.
-        remoteViews.setBitmap(R.id.widget_list_bitmap, "setImageBitmap", bm);
+        remoteViews.setBitmap(R.id.widget_list_bitmap, "setImageBitmap", bitmap);
 
         // Flush the remote view
         appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
@@ -226,9 +224,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             // grouping item text lines.
             final int itemColor = item.getColor().isNone() ? 0xff808080 : item.getColor()
                     .getColor();
-
             colorView.setBackgroundColor(itemColor);
-
             itemListView.addView(itemView);
         }
     }
@@ -240,9 +236,6 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
     private static final void setToolbar(Context context, RemoteViews remoteViews, View template,
             boolean toolbarEnabled, boolean showToolbarBackground) {
         final View toolbarView = template.findViewById(R.id.widget_list_template_toolbar);
-        // TODO: add toobar click actions
-        final View addTextByTextButton = toolbarView
-                .findViewById(R.id.widget_list_template_toolbar_add_by_text);
         final View addTextByVoiceButton = toolbarView
                 .findViewById(R.id.widget_list_template_toolbar_add_by_voice);
 
@@ -267,15 +260,16 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
         // The voice recognition button is shown only if this device supports voice recognition.
         if (AppServices.isVoiceRecognitionSupported(context)) {
+            addTextByVoiceButton.setVisibility(View.VISIBLE);
             remoteViews.setInt(R.id.widget_list_toolbar_add_by_voice_overlay, "setVisibility",
                     View.VISIBLE);
             setOnClickLaunch(context, remoteViews, R.id.widget_list_toolbar_add_by_voice_overlay,
                     ResumeAction.ADD_NEW_ITEM_BY_VOICE);
         } else {
+            addTextByVoiceButton.setVisibility(View.GONE);
             remoteViews.setInt(R.id.widget_list_toolbar_add_by_voice_overlay, "setVisibility",
                     View.GONE);
         }
-
     }
 
     /** Set onClick() action of given remote view element to launch the app. */
@@ -310,42 +304,16 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
     // TODO: decide what we want to do with this.
     // An attempt to update all list widgtes by a direct call.
-    public static void updateAllIconWidgetsFromModel(Context context, @Nullable AppModel model) {
+    public static void updateAllListWidgetsFromModel(Context context, @Nullable AppModel model) {
         final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
-        // Get ids of all widgets of this type.
-        @Nullable
-        final int[] widgetIds = getWidgetIds(context, appWidgetManager);
-
-        // Update
-        if (widgetIds != null) {
-            update(context, appWidgetManager, widgetIds, model);
+        for (ListWidgetSize listWidgetSize : ListWidgetSize.LIST_WIDGET_SIZES) {
+            final int widgetIds[] = appWidgetManager.getAppWidgetIds(new ComponentName(context,
+                    listWidgetSize.widgetProviderClass));
+            // Update
+            if (widgetIds != null) {
+                update(context, appWidgetManager, listWidgetSize, widgetIds, model);
+            }
         }
-    }
-
-    /** Return null if none, or an array if at least one. */
-    private static int[] getWidgetIds(Context context, AppWidgetManager appWidgetManager) {
-        final int[][] widgetIdLists = new int[LIST_WIDGET_PROVIDER_CLASSES.length][];
-
-        int n = 0;
-        for (int i = 0; i < LIST_WIDGET_PROVIDER_CLASSES.length; i++) {
-            widgetIdLists[i] = appWidgetManager.getAppWidgetIds(new ComponentName(context,
-                    LIST_WIDGET_PROVIDER_CLASSES[i]));
-            n += widgetIdLists[i].length;
-        }
-
-        if (n == 0) {
-            return null;
-        }
-
-        final int[] widgetIds = new int[n];
-        int m = 0;
-        for (int[] src : widgetIdLists) {
-            System.arraycopy(src, 0, widgetIds, m, src.length);
-            m += src.length;
-        }
-        check(m == n, "%s vs %s", m, n);
-
-        return widgetIds;
     }
 }

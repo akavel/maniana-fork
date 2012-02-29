@@ -44,13 +44,16 @@ public class WidgetMidnightTicker extends BroadcastReceiver {
         BaseWidgetProvider.updateAllWidgetsFromContext(context);
     }
 
-    /** Schedule or reschedule midnight widget update. */
+    /** 
+     * Schedule or reschedule midnight widget update. 
+     * 
+     * Called from few hooks to make sure we still have a pending midnight alarm.
+     */
     public static final void scheduleMidnightUpdates(Context context) {
         Intent intent = new Intent(WIDGET_UPDATE_ACTION);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
         
         final long startTimeUtcMillis = utcMillisNextMidnight() + MIDNIGHT_MARGIN_MILLIS;
-                       // - (6 * 3600 * 1000) + (0 * 60 * 1000);
                   
         final AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         am.setRepeating(AlarmManager.RTC, startTimeUtcMillis, AlarmManager.INTERVAL_DAY, pendingIntent);

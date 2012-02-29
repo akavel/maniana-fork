@@ -33,7 +33,7 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
 
     public static void updateAllWidgetsFromModel(Context context, @Nullable AppModel model) {
         IconWidgetProvider.updateAllIconWidgetsFromModel(context, model);
-        ListWidgetProvider.updateAllIconWidgetsFromModel(context, model);
+        ListWidgetProvider.updateAllListWidgetsFromModel(context, model);
     }
 
     public static void updateAllWidgetsFromContext(Context context) {
