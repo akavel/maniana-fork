@@ -50,6 +50,11 @@
             android:title="Locks Expiration" />
     </PreferenceScreen>
     <PreferenceScreen android:title="Pages">
+        <Preference
+            android:key="prefPageSelectThemeKey"
+            android:summary="Click to select a predefined page setting"
+            android:title="Set Theme">
+        </Preference>
         <ListPreference
             android:defaultValue="paper"
             android:entries="@array/pageBackgroundTypeNames"
@@ -87,13 +92,13 @@
             android:key="prefPageItemDividerColorKey"
             android:summary="Color of lines between tasks"
             android:title="Task Divider Color" />
-        <Preference
-            android:key="prefPageSelectThemeKey"
-            android:summary="Click to select a predefined page setting"
-            android:title="Set Theme">
-        </Preference>
     </PreferenceScreen>
     <PreferenceScreen android:title="List Widget">
+        <Preference
+            android:key="prefWidgetSelectThemeKey"
+            android:summary="Click to select a predefined widget setting"
+            android:title="Set Theme">
+        </Preference>
         <ListPreference
             android:defaultValue="paper"
             android:entries="@array/widgetBackgroundTypeNames"
@@ -128,11 +133,6 @@
             android:summaryOff="Wrapping longer tasks onto a second line"
             android:summaryOn="Limiting tasks to a single line"
             android:title="Single Line" />
-        <Preference
-            android:key="prefWidgetSelectThemeKey"
-            android:summary="Click to select a predefined widget setting"
-            android:title="Set Theme">
-        </Preference>
     </PreferenceScreen>
     <PreferenceScreen android:title="Miscellaneous">
         <Preference
