@@ -17,7 +17,6 @@ package com.zapta.apps.maniana.widget;
 import android.content.Context;
 import android.graphics.Point;
 
-
 /**
  * Descriptor of supproted list widget sizes.
  * 
@@ -33,22 +32,24 @@ public class ListWidgetSize {
             ListWidgetProvider3.class, 4, 3);
     protected static final ListWidgetSize LIST_WIDGET_SIZE4 = new ListWidgetSize(
             ListWidgetProvider4.class, 2, 2);
-  
+    protected static final ListWidgetSize LIST_WIDGET_SIZE5 = new ListWidgetSize(
+            ListWidgetProvider5.class, 4, 4);
+
     /** List of all list widget sizes. */
-    static final ListWidgetSize[] LIST_WIDGET_SIZES = new ListWidgetSize[] {
-            LIST_WIDGET_SIZE1, LIST_WIDGET_SIZE2,
-            LIST_WIDGET_SIZE3, LIST_WIDGET_SIZE4 };
+    static final ListWidgetSize[] LIST_WIDGET_SIZES = new ListWidgetSize[] { LIST_WIDGET_SIZE1,
+            LIST_WIDGET_SIZE2, LIST_WIDGET_SIZE3, LIST_WIDGET_SIZE4, LIST_WIDGET_SIZE5 };
 
     final Class<? extends ListWidgetProvider> widgetProviderClass;
     final int widthCells;
     final int heightCells;
 
-    ListWidgetSize(Class<? extends ListWidgetProvider> widgetProviderClass, int widthCells, int heightCells) {
+    ListWidgetSize(Class<? extends ListWidgetProvider> widgetProviderClass, int widthCells,
+            int heightCells) {
         this.widgetProviderClass = widgetProviderClass;
         this.widthCells = widthCells;
         this.heightCells = heightCells;
     }
-    
+
     /** Compute widget gross area size in pixels based on current orientation */
     Point currentGrossSizeInPixels(Context context, boolean isPortrait) {
         return WidgetUtil.widgetPixelSize(context, isPortrait, widthCells, heightCells);

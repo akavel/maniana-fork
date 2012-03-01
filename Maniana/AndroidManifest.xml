@@ -90,6 +90,17 @@
                 android:resource="@xml/widget_list_info_size_4" />
         </receiver>
         <receiver
+            android:name=".widget.ListWidgetProvider5"
+            android:label="Maniana List 4x4" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_list_info_size_5" />
+        </receiver>
+        <receiver
             android:name=".widget.IconWidgetProvider"
             android:label="Maniana Icon" >
             <intent-filter>
