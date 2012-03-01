@@ -18,16 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Point;
 import android.text.format.Time;
 
 import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.model.ItemModelReadOnly;
-import com.zapta.apps.maniana.model.PushScope;
 import com.zapta.apps.maniana.model.ModelUtil;
 import com.zapta.apps.maniana.model.PageKind;
+import com.zapta.apps.maniana.model.PushScope;
 import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
 import com.zapta.apps.maniana.util.LogUtil;
 
@@ -93,28 +91,19 @@ public abstract class WidgetUtil {
      * 
      * Based on http://osdir.com/ml/Android-Developers/2011-01/msg02879.html
      */
-    public static Point widgetPixelSize(Context context, int widthCells, int heightCells) {
-        final Resources rsources = context.getResources();
-        final float density = rsources.getDisplayMetrics().density;
-        final int orientation = rsources.getConfiguration().orientation;
+    public static Point widgetPixelSize(Context context, boolean isPortrait, int widthCells, int heightCells) {
+        final float density = context.getResources().getDisplayMetrics().density;
         final int widthPixels;
         final int heightPixels;
-        switch (orientation) {
-            case Configuration.ORIENTATION_PORTRAIT:
+        if (isPortrait) {
                 widthPixels = (int) (80 * widthCells * density + .5f);
                 heightPixels = (int) (100 * heightCells * density + .5f);
-                break;
-            case Configuration.ORIENTATION_LANDSCAPE:
+        } else {
                 widthPixels = (int) (106 * widthCells * density + .5f);
                 heightPixels = (int) (74 * heightCells * density + .5f);
-                break;
-            case Configuration.ORIENTATION_SQUARE:
-            case Configuration.ORIENTATION_UNDEFINED:
-            default:
-                // TODO: more graceful handling?
-                throw new RuntimeException("unknown orientation: " + orientation);
         }
-        LogUtil.debug("*** %d x %d (%d, %f) -> (%d x %d)", widthCells, heightCells, orientation,
+        
+        LogUtil.debug("*** %d x %d (%s, %f) -> (%d x %d)", widthCells, heightCells, isPortrait,
                 density, widthPixels, heightPixels);
         return new Point(widthPixels, heightPixels);
     }

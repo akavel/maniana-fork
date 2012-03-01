@@ -183,7 +183,6 @@ public class PreferencesTracker implements PreferenceConstants {
 
     /** Read widget text color preference. Used by the list widget only. */
     public static final int readWidgetTextColorPreference(SharedPreferences sharedPreferences) {
-
         return sharedPreferences.getInt(PreferenceKind.WIDGET_ITEM_TEXT_COLOR.getKey(),
                 DEFAULT_WIDGET_TEXT_COLOR);
     }
@@ -198,6 +197,30 @@ public class PreferencesTracker implements PreferenceConstants {
     public static final boolean readWidgetShowToolbarPreference(SharedPreferences sharedPreferences) {
         return sharedPreferences.getBoolean(PreferenceKind.WIDGET_SHOW_TOOLBAR.getKey(),
                 DEFAULT_WIDGET_SHOW_TOOLBAR);
+    }
+    
+    /** Read widget portrait width adjust percents. Used by the list widget only. */
+    public static final int readWidgetPortraitWidthAdjustPreference(SharedPreferences sharedPreferences) {
+        return sharedPreferences.getInt(PreferenceKind.WIDGET_PORTRAIT_WIDTH_ADJUST.getKey(),
+                100);
+    }
+    
+    /** Read widget portrait height adjust percents. Used by the list widget only. */
+    public static final int readWidgetPortraitHeightAdjustPreference(SharedPreferences sharedPreferences) {
+        return sharedPreferences.getInt(PreferenceKind.WIDGET_PORTRAIT_HEIGHT_ADJUST.getKey(),
+                100);
+    }
+    
+    /** Read widget landscape width adjust percents. Used by the list widget only. */
+    public static final int readWidgetLandscapeWidthAdjustPreference(SharedPreferences sharedPreferences) {
+        return sharedPreferences.getInt(PreferenceKind.WIDGET_LANDSCAPE_WIDTH_ADJUST.getKey(),
+                100);
+    }
+    
+    /** Read widget landscape height adjust percents. Used by the list widget only. */
+    public static final int readWidgetLandscapeHeightAdjustPreference(SharedPreferences sharedPreferences) {
+        return sharedPreferences.getInt(PreferenceKind.WIDGET_LANDSCAPE_HEIGHT_ADJUST.getKey(),
+                100);
     }
 
     private final void updateCachedApplauseLevelPreference() {
@@ -348,6 +371,10 @@ public class PreferencesTracker implements PreferenceConstants {
             case WIDGET_ITEM_FONT_SIZE:
             case WIDGET_SINGLE_LINE:
             case WIDGET_SHOW_TOOLBAR:
+            case WIDGET_PORTRAIT_WIDTH_ADJUST:
+            case WIDGET_PORTRAIT_HEIGHT_ADJUST:
+            case WIDGET_LANDSCAPE_WIDTH_ADJUST:
+            case WIDGET_LANDSCAPE_HEIGHT_ADJUST:
                 // These ones are not cached or used here. Just reported to controller to
                 // trigger the widget update and backup service.
                 break;

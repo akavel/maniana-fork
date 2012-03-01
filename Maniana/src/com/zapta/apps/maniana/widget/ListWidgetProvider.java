@@ -24,6 +24,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
@@ -125,15 +126,26 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                 .findViewById(R.id.widget_list_template_item_list);
         populateItemList(context, itemListView, model, textColor, sharedPreferences, layoutInflater);
 
-        // Render the template view to a bitmap
-        final Point widgetGrossSizeInPixels = listWidgetSize.currentGrossSizeInPixels(context);
+        final boolean isPortrait = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
 
-        final int widthPixels = (widgetGrossSizeInPixels.x * 95) / 100;
-        final int hightPixels = (widgetGrossSizeInPixels.y * 95) / 100;
-        
+        // Render the template view to a bitmap
+        final Point widgetGrossSizeInPixels = listWidgetSize.currentGrossSizeInPixels(context,
+                isPortrait);
+
+        // In percents. 100 means no change.
+        final int widthAdjust = isPortrait ? PreferencesTracker
+                .readWidgetPortraitWidthAdjustPreference(sharedPreferences) : PreferencesTracker
+                .readWidgetLandscapeWidthAdjustPreference(sharedPreferences);
+                
+        final int heightAdjust = isPortrait ? PreferencesTracker
+                .readWidgetPortraitHeightAdjustPreference(sharedPreferences) : PreferencesTracker
+                .readWidgetLandscapeHeightAdjustPreference(sharedPreferences);
+
+        final int widthPixels = (widgetGrossSizeInPixels.x * 95 * widthAdjust) / (100 * 100);
+        final int hightPixels = (widgetGrossSizeInPixels.y * 95 * heightAdjust) / (100 * 100);
+
         // Bitmap bitmap = Bitmap.createBitmap(widthPixels, heightPixels, Bitmap.Config.ARGB_8888);
-        Bitmap bitmap = Bitmap
-                .createBitmap(widthPixels, hightPixels, Bitmap.Config.ARGB_4444);
+        Bitmap bitmap = Bitmap.createBitmap(widthPixels, hightPixels, Bitmap.Config.ARGB_4444);
 
         final Canvas canvas = new Canvas(bitmap);
 

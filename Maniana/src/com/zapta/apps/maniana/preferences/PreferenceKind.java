@@ -39,23 +39,27 @@ public enum PreferenceKind implements KeyedEnum {
     LOCK_PERIOD("prefLockPeriodKey"),
 
     // Page
+    PAGE_SELECT_THEME("prefPageSelectThemeKey"),
     PAGE_BACKGROUND_TYPE("prefPageBackgroundTypeKey"),
     PAGE_BACKGROUND_SOLID_COLOR("prefPageBackgroundSolidColorKey"),
     PAGE_ITEM_FONT_TYPE("prefItemFontKey"),
     PAGE_ITEM_FONT_SIZE("prefItemFontSizeKey"),
     PAGE_ITEM_ACTIVE_TEXT_COLOR("prefPageTextColorKey"),
     PAGE_ITEM_COMPLETED_TEXT_COLOR("prefPageCompletedTextColorKey"),
-    PAGE_ITEM_DIVIDER_COLOR("prefPageItemDividerColorKey"),
-    PAGE_SELECT_THEME("prefPageSelectThemeKey"),
+    PAGE_ITEM_DIVIDER_COLOR("prefPageItemDividerColorKey"), 
 
     // Widget
+    WIDGET_SELECT_THEME("prefWidgetSelectThemeKey"),    
     WIDGET_BACKGROUND_TYPE("prefWidgetBackgroundTypeKey"),
     WIDGET_BACKGROUND_COLOR("prefWidgetBackgroundColorKey"),
     WIDGET_ITEM_TEXT_COLOR("prefWidgetTextColorKey"),
     WIDGET_ITEM_FONT_SIZE("prefWidgetItemFontSizeKey"),
     WIDGET_SHOW_TOOLBAR("prefWidgetShowToolbarKey"),
-    WIDGET_SINGLE_LINE("prefWidgetSingleLineKey"),
-    WIDGET_SELECT_THEME("prefWidgetSelectThemeKey"),
+    WIDGET_SINGLE_LINE("prefWidgetSingleLineKey"),   
+    WIDGET_PORTRAIT_WIDTH_ADJUST("prefWidgetPortraitWidthAdjustKey"),
+    WIDGET_PORTRAIT_HEIGHT_ADJUST("prefWidgetPortraitHeightAdjustKey"),
+    WIDGET_LANDSCAPE_WIDTH_ADJUST("prefWidgetLandscapeWidthAdjustKey"),
+    WIDGET_LANDSCAPE_HEIGHT_ADJUST("prefWidgetLandscapeHeightAdjustKey"),
     
     // Miscellaneous
     VERSION_INFO("prefVersionInfoKey"),

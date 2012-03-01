@@ -139,6 +139,10 @@ public class PreferencesActivity extends PreferenceActivity implements
         // key strings match.
         findPreference(PreferenceKind.AUTO_SORT);
         findPreference(PreferenceKind.AUTO_DAILY_CLEANUP);
+        findPreference(PreferenceKind.WIDGET_PORTRAIT_WIDTH_ADJUST);
+        findPreference(PreferenceKind.WIDGET_PORTRAIT_HEIGHT_ADJUST);
+        findPreference(PreferenceKind.WIDGET_LANDSCAPE_WIDTH_ADJUST);
+        findPreference(PreferenceKind.WIDGET_LANDSCAPE_HEIGHT_ADJUST);
 
         mPageSelectThemePreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {

@@ -3,20 +3,20 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:padding="0dip"
-    android:background="#ffffff00" >
+    android:background="#00000000" >
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="#40440000"
+        android:background="#00000000"
          >
 
         <ImageView
             android:id="@+id/widget_list_bitmap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#40004400"
+            android:background="#00000000"
             android:scaleType="center"
             android:src="@drawable/place_holder" >
         </ImageView>
@@ -32,14 +32,14 @@
                 android:id="@+id/widget_list_toolbar_add_by_text_overlay"
                 android:layout_width="35dip"
                 android:layout_height="fill_parent"
-                android:background="#40004444" >
+                android:background="#00000000" >
             </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/widget_list_toolbar_add_by_voice_overlay"
                 android:layout_width="35dip"
                 android:layout_height="fill_parent"
-                android:background="#40442244" >
+                android:background="#00000000" >
             </FrameLayout>
         </LinearLayout>
     </RelativeLayout>

@@ -47,5 +47,4 @@ public interface PreferenceConstants {
     public static final int DEFAULT_WIDGET_TEXT_COLOR = 0xff330000;
     public static final boolean DEFAULT_WIDGET_SHOW_TOOLBAR = true;    
     public static final boolean DEFAULT_WIDGET_SINGLE_LINE = false;
-
 }
