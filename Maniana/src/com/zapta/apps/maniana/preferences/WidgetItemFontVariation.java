@@ -16,7 +16,6 @@ package com.zapta.apps.maniana.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.widget.TextView;
 
@@ -38,9 +37,9 @@ public class WidgetItemFontVariation {
 
     private final Typeface mTypeFace;
     private final int mColor;
-    private final int mTextSize;
+    private final float mTextSize;
     private final float mLineSpacingMultiplier;
-    private final int mTopBottomPadding;
+    //private final int mTopBottomPadding;
 
     /**
      * Construct a new variation.
@@ -58,13 +57,13 @@ public class WidgetItemFontVariation {
      * @param topBottomPadding
      *            padding (in dip) at top and bottom of text.
      */
-    public WidgetItemFontVariation(Typeface typeFace, int color, int textSize,
-            float lineSpacingMultiplier, int topBottomPadding) {
+    private WidgetItemFontVariation(Typeface typeFace, int color, float textSize,
+            float lineSpacingMultiplier) {
         this.mTypeFace = typeFace;
         this.mColor = color;
         // this.mColorCompleted = colorCompleted;
         this.mTextSize = textSize;
-        this.mTopBottomPadding = topBottomPadding;
+        //this.mTopBottomPadding = topBottomPadding;
         this.mLineSpacingMultiplier = lineSpacingMultiplier;
     }
 
@@ -81,8 +80,8 @@ public class WidgetItemFontVariation {
         textView.setTextColor(mColor);
         textView.setTextSize(mTextSize);
         textView.setLineSpacing(0.0f, mLineSpacingMultiplier);
-        textView.setPadding(textView.getPaddingLeft(), mTopBottomPadding,
-                textView.getPaddingRight(), mTopBottomPadding);
+//        textView.setPadding(textView.getPaddingLeft(), mTopBottomPadding,
+//                textView.getPaddingRight(), mTopBottomPadding);
     }
 
     public static final WidgetItemFontVariation newFromCurrentPreferences(Context context,
@@ -91,22 +90,25 @@ public class WidgetItemFontVariation {
                 .readWidgetFontTypeFontTypePreference(sharedPreferences);
         final int color = PreferencesTracker.readWidgetTextColorPreference(sharedPreferences);
 
-        final WidgetItemFontSize fontSize = PreferencesTracker
+        final ItemFontSize fontSize = PreferencesTracker
                 .readWidgetItemFontSizePreference(sharedPreferences);
 
+        // Widget default text size
+        final int K = 14;
+        
         switch (fontType) {
             case CURSIVE:
                 return new WidgetItemFontVariation(Typeface.createFromAsset(context.getAssets(),
-                        CURSIVE_ITEM_FONT_ASSET_PATH), color, fontSize.getSizeSp(), 0.9f, 10);
+                        CURSIVE_ITEM_FONT_ASSET_PATH), color, K * fontSize.getFactor() * 1.6f, 0.9f);
             case ELEGANT:
                 return new WidgetItemFontVariation(Typeface.createFromAsset(context.getAssets(),
-                        ELEGANT_ITEM_FONT_ASSET_PATH), color, fontSize.getSizeSp(), 1.0f, 10);
+                        ELEGANT_ITEM_FONT_ASSET_PATH), color, K * fontSize.getFactor() * 1.6f, 0.9f);
             case SAN_SERIF:
                 return new WidgetItemFontVariation(Typeface.SANS_SERIF, color,
-                        fontSize.getSizeSp(), 1.1f, 10);
+                        K * fontSize.getFactor(), 1.1f);
             case SERIF:
-                return new WidgetItemFontVariation(Typeface.SERIF, color, fontSize.getSizeSp(),
-                        1.1f, 10);
+                return new WidgetItemFontVariation(Typeface.SERIF, color, K * fontSize.getFactor(),
+                        1.1f);
             default:
                 throw new RuntimeException("Unknown widget font type: " + fontType);
         }

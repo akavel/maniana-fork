@@ -35,7 +35,7 @@ public interface PreferenceConstants {
     public static final PageBackgroundType DEFAULT_PAGE_BACKGROUND_TYPE = PageBackgroundType.PAPER;
     public static final int DEFAULT_PAGE_BACKGROUND_SOLID_COLOR = 0xffffffc0;    
     public static final ItemFontType DEFAULT_PAGE_FONT_TYPE = ItemFontType.CURSIVE;
-    public static final PageItemFontSize DEFAULT_PAGE_FONT_SIZE = PageItemFontSize.NORMAL;  
+    public static final ItemFontSize DEFAULT_PAGE_FONT_SIZE = ItemFontSize.NORMAL;  
     public static final int DEFAULT_ITEM_TEXT_COLOR = 0xff000000;
     public static final int DEFAULT_COMPLETED_ITEM_TEXT_COLOR = 0xff888888;   
     public static final int DEFAULT_PAGE_ITEM_DIVIDER_COLOR = 0xffffddaa;
@@ -44,8 +44,8 @@ public interface PreferenceConstants {
     public static final WidgetBackgroundType DEFAULT_WIDGET_BACKGROUND_TYPE = WidgetBackgroundType.PAPER;
     public static final int DEFAULT_WIDGET_BACKGROUND_COLOR = 0x44000000;
     public static final ItemFontType DEFAULT_WIDGET_FONT_TYPE = ItemFontType.CURSIVE;
-    public static final WidgetItemFontSize DEFAULT_WIDGET_ITEM_FONT_SIZE = WidgetItemFontSize.MEDIUM;
-    public static final int DEFAULT_WIDGET_TEXT_COLOR = 0xff330000;
+    public static final ItemFontSize DEFAULT_WIDGET_ITEM_FONT_SIZE = ItemFontSize.NORMAL;
+    public static final int DEFAULT_WIDGET_TEXT_COLOR = 0xff000000;
     public static final boolean DEFAULT_WIDGET_SHOW_TOOLBAR = true;    
     public static final boolean DEFAULT_WIDGET_SINGLE_LINE = false;
 }

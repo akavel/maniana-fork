@@ -125,7 +125,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final WidgetItemFontVariation fontVariation = WidgetItemFontVariation.newFromCurrentPreferences(context, sharedPreferences);
         
         // Set template view item list
-        final int textColor = PreferencesTracker.readWidgetTextColorPreference(sharedPreferences);
+        //final int textColor = PreferencesTracker.readWidgetTextColorPreference(sharedPreferences);
         final LinearLayout itemListView = (LinearLayout) template
                 .findViewById(R.id.widget_list_template_item_list);
         populateItemList(context, itemListView, model, fontVariation, sharedPreferences, layoutInflater);
@@ -177,8 +177,8 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             AppModel model, WidgetItemFontVariation fontVariation, SharedPreferences sharedPreferences,
             LayoutInflater layoutInflater) {
         // Get text size preference in sp units
-        final int fontSizeSp = PreferencesTracker.readWidgetItemFontSizePreference(
-                sharedPreferences).getSizeSp();
+//        final int fontSizeSp = PreferencesTracker.readWidgetItemFontSizePreference(
+//                sharedPreferences).getSizeSp();
 
         // For debugging
         final boolean debugTimestamp = false;

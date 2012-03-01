@@ -14,10 +14,10 @@
 
 package com.zapta.apps.maniana.help;
 
-import javax.annotation.Nullable;
-
-import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
 import static com.zapta.apps.maniana.util.Assertions.check;
+import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
+
+import javax.annotation.Nullable;
 
 import android.app.Activity;
 import android.content.Context;
@@ -32,13 +32,12 @@ import android.view.Window;
 import android.webkit.WebView;
 import android.webkit.WebView.PictureListener;
 
-
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.util.FileUtil;
-import com.zapta.apps.maniana.util.LogUtil;
-import com.zapta.apps.maniana.util.PackageUtil;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult.FileReadOutcome;
+import com.zapta.apps.maniana.util.LogUtil;
+import com.zapta.apps.maniana.util.PackageUtil;
 
 /**
  * Shows a popup message such as startup splash. The message is taken from an HTML asset page.

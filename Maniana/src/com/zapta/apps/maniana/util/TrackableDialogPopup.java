@@ -14,10 +14,10 @@
 
 package com.zapta.apps.maniana.util;
 
-import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
-
 import android.app.Dialog;
 import android.content.Context;
+
+import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
 
 
 /**

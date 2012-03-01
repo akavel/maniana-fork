@@ -24,7 +24,7 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
  * 
  * @author Tal Dayan
  */
-public enum PageItemFontSize implements KeyedEnum {
+public enum ItemFontSize implements KeyedEnum {
     SMALL1("small1", 0.8f),
     NORMAL("normal", 1.0f),
     LARGE1("large1", 1.3f),
@@ -36,7 +36,7 @@ public enum PageItemFontSize implements KeyedEnum {
     /** Magnification factor. 1.0f is normal. */
     private final float mFactor;
 
-    private PageItemFontSize(String key, float factor) {
+    private ItemFontSize(String key, float factor) {
         this.mKey = key;
         this.mFactor = factor;
     }
@@ -52,7 +52,7 @@ public enum PageItemFontSize implements KeyedEnum {
 
     /** Return value with given key, fallback value if not found. */
     @Nullable
-    public final static PageItemFontSize fromKey(String key, @Nullable PageItemFontSize fallBack) {
-        return EnumUtil.fromKey(key, PageItemFontSize.values(), fallBack);
+    public final static ItemFontSize fromKey(String key, @Nullable ItemFontSize fallBack) {
+        return EnumUtil.fromKey(key, ItemFontSize.values(), fallBack);
     }
 }

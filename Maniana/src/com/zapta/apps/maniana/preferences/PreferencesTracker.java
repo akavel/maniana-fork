@@ -16,7 +16,6 @@ package com.zapta.apps.maniana.preferences;
 
 import javax.annotation.Nullable;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
@@ -50,7 +49,7 @@ public class PreferencesTracker implements PreferenceConstants {
     private PageBackgroundType mCachedPageBackgroundTypePreference;
     private int mCachedPageBackgroundSolidColorPreference;
     private ItemFontType mCachedPageFontTypePreference;
-    private PageItemFontSize mCachedPageFontSizePreference;
+    private ItemFontSize mCachedPageFontSizePreference;
     private int mCachedPageItemActiveTextColorPreference;
     private int mCachedPageItemCompletedTextColorPreference;
     private int mCachedPageItemDividerColorPreference;
@@ -107,7 +106,7 @@ public class PreferencesTracker implements PreferenceConstants {
     private final void updateCachedPageFontSizePreference() {
         final String key = mSharedPreferences.getString(
                 PreferenceKind.PAGE_ITEM_FONT_SIZE.getKey(), DEFAULT_PAGE_FONT_SIZE.getKey());
-        mCachedPageFontSizePreference = PageItemFontSize.fromKey(key, DEFAULT_PAGE_FONT_SIZE);
+        mCachedPageFontSizePreference = ItemFontSize.fromKey(key, DEFAULT_PAGE_FONT_SIZE);
     }
 
     private final void updateCachedPageBackgroundTypePreference() {
@@ -165,12 +164,12 @@ public class PreferencesTracker implements PreferenceConstants {
     }
 
     /** Read widget item text size preference. */
-    public static final WidgetItemFontSize readWidgetItemFontSizePreference(
+    public static final ItemFontSize readWidgetItemFontSizePreference(
             SharedPreferences sharedPreferences) {
         final String key = sharedPreferences.getString(
                 PreferenceKind.WIDGET_ITEM_FONT_SIZE.getKey(),
                 DEFAULT_WIDGET_ITEM_FONT_SIZE.getKey());
-        return WidgetItemFontSize.fromKey(key, DEFAULT_WIDGET_ITEM_FONT_SIZE);
+        return ItemFontSize.fromKey(key, DEFAULT_WIDGET_ITEM_FONT_SIZE);
     }
 
     /**
@@ -272,7 +271,7 @@ public class PreferencesTracker implements PreferenceConstants {
         return mCachedPageFontTypePreference;
     }
 
-    public final PageItemFontSize getItemFontSizePreference() {
+    public final ItemFontSize getItemFontSizePreference() {
         return mCachedPageFontSizePreference;
     }
 

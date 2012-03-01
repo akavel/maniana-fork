@@ -50,7 +50,7 @@ public class PageItemFontVariation {
      * @param lineSpacingMultiplier The line spacing multiplier to use.
      * @param topBottomPadding padding (in dip) at top and bottom of text.
      */
-    public PageItemFontVariation(Typeface typeFace, int color, int colorCompleted, int textSize,
+    private PageItemFontVariation(Typeface typeFace, int color, int colorCompleted, int textSize,
                     float lineSpacingMultiplier, int topBottomPadding) {
         this.mTypeFace = typeFace;
         this.mColor = color;
@@ -88,7 +88,7 @@ public class PageItemFontVariation {
         final int color = prefTracker.getPageItemActiveTextColorPreference();
         final int completedColor = prefTracker.getPageItemCompletedTextColorPreference();
 
-        final PageItemFontSize fontSize = prefTracker.getItemFontSizePreference();
+        final ItemFontSize fontSize = prefTracker.getItemFontSizePreference();
         final float k = fontSize.getFactor(); 
         
         switch (fontType) {

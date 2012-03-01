@@ -14,8 +14,8 @@
 
 package com.zapta.apps.maniana.model.persistence;
 
-import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
 import static com.zapta.apps.maniana.util.Assertions.check;
+import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
 
 import javax.annotation.Nullable;
 

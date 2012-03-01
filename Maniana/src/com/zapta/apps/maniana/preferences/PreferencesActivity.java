@@ -355,14 +355,14 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     private void updateSummaries() {
         updateListSummary(mPageFontTypeListPreference, R.array.itemFontSummaries, null);
-        updateListSummary(mPageFontSizeListPreference, R.array.pageItemFontSizeSummaries, null);
+        updateListSummary(mPageFontSizeListPreference, R.array.itemFontSizeSummaries, null);
         updateListSummary(mPageBackgroundTypeListPreference, R.array.pageBackgroundTypeSummaries,
                 null);
         
         updateListSummary(mWidgetFontTypeListPreference, R.array.itemFontSummaries, null);
         updateListSummary(mWidgetBackgroundTypeListPreference,
                 R.array.widgetBackgroundTypeSummaries, null);
-        updateListSummary(mWidgetFontSizeListPreference, R.array.widgetItemFontSizeSummaries, null);
+        updateListSummary(mWidgetFontSizeListPreference, R.array.itemFontSizeSummaries, null);
 
         // Disable applause if voice is disabled
         if (mSoundEnablePreference.isChecked()) {
