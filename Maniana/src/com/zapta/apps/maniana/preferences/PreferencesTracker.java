@@ -16,6 +16,7 @@ package com.zapta.apps.maniana.preferences;
 
 import javax.annotation.Nullable;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.preference.PreferenceManager;
@@ -48,7 +49,7 @@ public class PreferencesTracker implements PreferenceConstants {
     // Page
     private PageBackgroundType mCachedPageBackgroundTypePreference;
     private int mCachedPageBackgroundSolidColorPreference;
-    private PageItemFontType mCachedPageFontTypePreference;
+    private ItemFontType mCachedPageFontTypePreference;
     private PageItemFontSize mCachedPageFontSizePreference;
     private int mCachedPageItemActiveTextColorPreference;
     private int mCachedPageItemCompletedTextColorPreference;
@@ -100,7 +101,7 @@ public class PreferencesTracker implements PreferenceConstants {
     private final void updateCachedPageFontTypePreference() {
         final String key = mSharedPreferences.getString(
                 PreferenceKind.PAGE_ITEM_FONT_TYPE.getKey(), DEFAULT_PAGE_FONT_TYPE.getKey());
-        mCachedPageFontTypePreference = PageItemFontType.fromKey(key, DEFAULT_PAGE_FONT_TYPE);
+        mCachedPageFontTypePreference = ItemFontType.fromKey(key, DEFAULT_PAGE_FONT_TYPE);
     }
 
     private final void updateCachedPageFontSizePreference() {
@@ -181,6 +182,14 @@ public class PreferencesTracker implements PreferenceConstants {
                 DEFAULT_WIDGET_BACKGROUND_COLOR);
     }
 
+    /** Read widget font type preference. Used by the list widget only. */
+    public static final ItemFontType readWidgetFontTypeFontTypePreference(
+            SharedPreferences sharedPreferences) {
+        final String key = sharedPreferences.getString(
+                PreferenceKind.WIDGET_ITEM_FONT_TYPE.getKey(), DEFAULT_WIDGET_FONT_TYPE.getKey());
+        return ItemFontType.fromKey(key, DEFAULT_WIDGET_FONT_TYPE);
+    }
+
     /** Read widget text color preference. Used by the list widget only. */
     public static final int readWidgetTextColorPreference(SharedPreferences sharedPreferences) {
         return sharedPreferences.getInt(PreferenceKind.WIDGET_ITEM_TEXT_COLOR.getKey(),
@@ -198,29 +207,30 @@ public class PreferencesTracker implements PreferenceConstants {
         return sharedPreferences.getBoolean(PreferenceKind.WIDGET_SHOW_TOOLBAR.getKey(),
                 DEFAULT_WIDGET_SHOW_TOOLBAR);
     }
-    
+
     /** Read widget portrait width adjust percents. Used by the list widget only. */
-    public static final int readWidgetPortraitWidthAdjustPreference(SharedPreferences sharedPreferences) {
-        return sharedPreferences.getInt(PreferenceKind.WIDGET_PORTRAIT_WIDTH_ADJUST.getKey(),
-                100);
+    public static final int readWidgetPortraitWidthAdjustPreference(
+            SharedPreferences sharedPreferences) {
+        return sharedPreferences.getInt(PreferenceKind.WIDGET_PORTRAIT_WIDTH_ADJUST.getKey(), 100);
     }
-    
+
     /** Read widget portrait height adjust percents. Used by the list widget only. */
-    public static final int readWidgetPortraitHeightAdjustPreference(SharedPreferences sharedPreferences) {
-        return sharedPreferences.getInt(PreferenceKind.WIDGET_PORTRAIT_HEIGHT_ADJUST.getKey(),
-                100);
+    public static final int readWidgetPortraitHeightAdjustPreference(
+            SharedPreferences sharedPreferences) {
+        return sharedPreferences.getInt(PreferenceKind.WIDGET_PORTRAIT_HEIGHT_ADJUST.getKey(), 100);
     }
-    
+
     /** Read widget landscape width adjust percents. Used by the list widget only. */
-    public static final int readWidgetLandscapeWidthAdjustPreference(SharedPreferences sharedPreferences) {
-        return sharedPreferences.getInt(PreferenceKind.WIDGET_LANDSCAPE_WIDTH_ADJUST.getKey(),
-                100);
+    public static final int readWidgetLandscapeWidthAdjustPreference(
+            SharedPreferences sharedPreferences) {
+        return sharedPreferences.getInt(PreferenceKind.WIDGET_LANDSCAPE_WIDTH_ADJUST.getKey(), 100);
     }
-    
+
     /** Read widget landscape height adjust percents. Used by the list widget only. */
-    public static final int readWidgetLandscapeHeightAdjustPreference(SharedPreferences sharedPreferences) {
-        return sharedPreferences.getInt(PreferenceKind.WIDGET_LANDSCAPE_HEIGHT_ADJUST.getKey(),
-                100);
+    public static final int readWidgetLandscapeHeightAdjustPreference(
+            SharedPreferences sharedPreferences) {
+        return sharedPreferences
+                .getInt(PreferenceKind.WIDGET_LANDSCAPE_HEIGHT_ADJUST.getKey(), 100);
     }
 
     private final void updateCachedApplauseLevelPreference() {
@@ -258,7 +268,7 @@ public class PreferencesTracker implements PreferenceConstants {
         return mCachedApplauseLevelPreference;
     }
 
-    public final PageItemFontType getItemFontTypePreference() {
+    public final ItemFontType getItemFontTypePreference() {
         return mCachedPageFontTypePreference;
     }
 
@@ -367,6 +377,7 @@ public class PreferencesTracker implements PreferenceConstants {
                 break;
             case WIDGET_BACKGROUND_TYPE:
             case WIDGET_BACKGROUND_COLOR:
+            case WIDGET_ITEM_FONT_TYPE:
             case WIDGET_ITEM_TEXT_COLOR:
             case WIDGET_ITEM_FONT_SIZE:
             case WIDGET_SINGLE_LINE:

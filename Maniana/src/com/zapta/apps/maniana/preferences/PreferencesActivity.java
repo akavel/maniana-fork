@@ -73,6 +73,7 @@ public class PreferencesActivity extends PreferenceActivity implements
     // Widget
     private ListPreference mWidgetBackgroundTypeListPreference;
     private ColorPickerPreference mWidgetSolidColorPickPreference;
+    private ListPreference mWidgetFontTypeListPreference;
     private ListPreference mWidgetFontSizeListPreference;
     private ColorPickerPreference mWidgetTextColorPickPreference;
     private CheckBoxPreference mWidgetShowToolbarPreference;
@@ -118,6 +119,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         // Widget
         mWidgetBackgroundTypeListPreference = (ListPreference) findPreference(PreferenceKind.WIDGET_BACKGROUND_TYPE);
         mWidgetSolidColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_BACKGROUND_COLOR);
+        mWidgetFontTypeListPreference = (ListPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_TYPE);
         mWidgetFontSizeListPreference = (ListPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_SIZE);
 
         mWidgetTextColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_ITEM_TEXT_COLOR);
@@ -226,6 +228,7 @@ public class PreferencesActivity extends PreferenceActivity implements
     private final void handleWidgetThemeSelection(WidgetTheme theme) {
         mWidgetBackgroundTypeListPreference.setValue(theme.backgroundType.getKey());
         mWidgetSolidColorPickPreference.onColorChanged(theme.backgroundColor);
+        mWidgetFontTypeListPreference.setValue(theme.fontType.getKey());
         mWidgetFontSizeListPreference.setValue(theme.fontSize.getKey());
         mWidgetTextColorPickPreference.onColorChanged(theme.textColor);
         mWidgetShowToolbarPreference.setChecked(theme.showToolbar);
@@ -355,6 +358,8 @@ public class PreferencesActivity extends PreferenceActivity implements
         updateListSummary(mPageFontSizeListPreference, R.array.pageItemFontSizeSummaries, null);
         updateListSummary(mPageBackgroundTypeListPreference, R.array.pageBackgroundTypeSummaries,
                 null);
+        
+        updateListSummary(mWidgetFontTypeListPreference, R.array.itemFontSummaries, null);
         updateListSummary(mWidgetBackgroundTypeListPreference,
                 R.array.widgetBackgroundTypeSummaries, null);
         updateListSummary(mWidgetFontSizeListPreference, R.array.widgetItemFontSizeSummaries, null);

@@ -111,6 +111,12 @@
             android:summary="List widget background color"
             android:title="Background Color" />
         <ListPreference
+            android:defaultValue="cursive"
+            android:entries="@array/itemFontNames"
+            android:entryValues="@array/itemFontValues"
+            android:key="prefWidgetItemFontKey"
+            android:title="Font" />
+        <ListPreference
             android:defaultValue="medium"
             android:entries="@array/widgetItemFontSizeNames"
             android:entryValues="@array/widgetItemFontSizeValues"

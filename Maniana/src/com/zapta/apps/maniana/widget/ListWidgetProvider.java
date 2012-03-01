@@ -46,6 +46,7 @@ import com.zapta.apps.maniana.model.ItemModelReadOnly;
 import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
 import com.zapta.apps.maniana.preferences.PreferencesTracker;
 import com.zapta.apps.maniana.preferences.WidgetBackgroundType;
+import com.zapta.apps.maniana.preferences.WidgetItemFontVariation;
 import com.zapta.apps.maniana.services.AppServices;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.LogUtil;
@@ -120,11 +121,14 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                 && (backgroundType != WidgetBackgroundType.PAPER);
         setToolbar(context, remoteViews, template, toolbarEanbled, showToolbarBackground);
 
+        // TODO: cache variation or at least custom typefaces
+        final WidgetItemFontVariation fontVariation = WidgetItemFontVariation.newFromCurrentPreferences(context, sharedPreferences);
+        
         // Set template view item list
         final int textColor = PreferencesTracker.readWidgetTextColorPreference(sharedPreferences);
         final LinearLayout itemListView = (LinearLayout) template
                 .findViewById(R.id.widget_list_template_item_list);
-        populateItemList(context, itemListView, model, textColor, sharedPreferences, layoutInflater);
+        populateItemList(context, itemListView, model, fontVariation, sharedPreferences, layoutInflater);
 
         final boolean isPortrait = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
 
@@ -170,7 +174,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
     }
 
     private static final void populateItemList(Context context, LinearLayout itemListView,
-            AppModel model, int textColor, SharedPreferences sharedPreferences,
+            AppModel model, WidgetItemFontVariation fontVariation, SharedPreferences sharedPreferences,
             LayoutInflater layoutInflater) {
         // Get text size preference in sp units
         final int fontSizeSp = PreferencesTracker.readWidgetItemFontSizePreference(
@@ -180,11 +184,11 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final boolean debugTimestamp = false;
         if (debugTimestamp) {
             final String message = String.format("[%s]", SystemClock.elapsedRealtime() / 1000);
-            addMessageItem(context, itemListView, message, textColor, layoutInflater);
+            addMessageItem(context, itemListView, message, fontVariation, layoutInflater);
         }
 
         if (model == null) {
-            addMessageItem(context, itemListView, "(Maniana data not found)", textColor,
+            addMessageItem(context, itemListView, "(Maniana data not found)", fontVariation,
                     layoutInflater);
             return;
         }
@@ -199,7 +203,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final List<ItemModelReadOnly> items = WidgetUtil.selectTodaysActiveItemsByTime(model, now,
                 lockExpirationPeriod);
         if (items.isEmpty()) {
-            addMessageItem(context, itemListView, "(no active tasks)", textColor, layoutInflater);
+            addMessageItem(context, itemListView, "(no active tasks)", fontVariation, layoutInflater);
             return;
         }
 
@@ -229,8 +233,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             }
 
             textView.setText(item.getText());
-            textView.setTextColor(textColor);
-            textView.setTextSize(fontSizeSp);
+            fontVariation.apply(textView);
 
             // If color is NONE show a gray solid color to help visually
             // grouping item text lines.
@@ -298,7 +301,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
     }
 
     private static final void addMessageItem(Context context, LinearLayout itemListView,
-            String message, int textColor, LayoutInflater layoutInflater) {
+            String message, WidgetItemFontVariation fontVariation, LayoutInflater layoutInflater) {
 
         final LinearLayout itemView = (LinearLayout) layoutInflater.inflate(
                 R.layout.widget_list_template_item_layout, null);
@@ -308,7 +311,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         // TODO: setup message text using widget font size preference?
         textView.setSingleLine(false);
         textView.setText(message);
-        textView.setTextColor(textColor);
+        fontVariation.apply(textView);
         colorView.setVisibility(View.GONE);
 
         itemListView.addView(itemView);

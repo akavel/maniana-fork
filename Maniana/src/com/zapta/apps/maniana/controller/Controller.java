@@ -683,6 +683,7 @@ public class Controller {
 
             case WIDGET_BACKGROUND_TYPE:
             case WIDGET_BACKGROUND_COLOR:
+            case WIDGET_ITEM_FONT_TYPE:
             case WIDGET_ITEM_TEXT_COLOR:
             case WIDGET_ITEM_FONT_SIZE:
             case WIDGET_SINGLE_LINE:

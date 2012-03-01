@@ -22,9 +22,9 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 /** 
  * Represents possible values of Font preference. 
  * 
- * @author
+ * @author Tal Dayan
  */
-public enum PageItemFontType implements KeyedEnum {
+public enum ItemFontType implements KeyedEnum {
     CURSIVE("cursive"),
     ELEGANT("elegant"),
     SAN_SERIF("sans"),
@@ -33,7 +33,7 @@ public enum PageItemFontType implements KeyedEnum {
     /** Preference value key. Should match the values in preference xml. */
     private final String mKey;
 
-    private PageItemFontType(String key) {
+    private ItemFontType(String key) {
         this.mKey = key;
     }
 
@@ -44,7 +44,7 @@ public enum PageItemFontType implements KeyedEnum {
 
     /** Return value with given key, fallback value if not found. */
     @Nullable
-    public final static PageItemFontType fromKey(String key, @Nullable PageItemFontType fallBack) {
-        return EnumUtil.fromKey(key, PageItemFontType.values(), fallBack);
+    public final static ItemFontType fromKey(String key, @Nullable ItemFontType fallBack) {
+        return EnumUtil.fromKey(key, ItemFontType.values(), fallBack);
     }
 }

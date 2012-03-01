@@ -20,7 +20,7 @@ import android.graphics.Typeface;
 import android.widget.TextView;
 
 /**
- * Represents parameters of selected font for items text.
+ * Represents parameters of selected font for page items text.
  * 
  * Instances of this class cache the various parameters needed to set the currently selected item
  * font. This class is immutable.
@@ -84,7 +84,7 @@ public class PageItemFontVariation {
     }
     
     public static final PageItemFontVariation newFromCurrentPreferences(Context context, PreferencesTracker prefTracker) {
-        final PageItemFontType fontType = prefTracker.getItemFontTypePreference();
+        final ItemFontType fontType = prefTracker.getItemFontTypePreference();
         final int color = prefTracker.getPageItemActiveTextColorPreference();
         final int completedColor = prefTracker.getPageItemCompletedTextColorPreference();
 
