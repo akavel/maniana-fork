@@ -28,6 +28,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.text.format.Time;
@@ -36,6 +37,7 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
+import android.widget.SlidingDrawer;
 import android.widget.TextView;
 
 import com.zapta.apps.maniana.R;
@@ -48,6 +50,7 @@ import com.zapta.apps.maniana.preferences.PreferencesTracker;
 import com.zapta.apps.maniana.preferences.WidgetBackgroundType;
 import com.zapta.apps.maniana.preferences.WidgetItemFontVariation;
 import com.zapta.apps.maniana.services.AppServices;
+import com.zapta.apps.maniana.util.DebugTimer;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 
@@ -63,19 +66,28 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
     protected abstract ListWidgetSize listWidgetSize();
 
-    /** Called by the widget host. */
+    /**
+     * Called by the widget host. Updates one or more widgets of the same size.
+     */
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         update(context, appWidgetManager, listWidgetSize(), appWidgetIds, loadModel(context));
     }
 
-    /** Internal widget update method that accepts the model as a parameter */
+    /**
+     * Internal widget update method that accepts the model as a parameter. Updates one or more
+     * widgets of the same size.
+     */
     private static final void update(Context context, AppWidgetManager appWidgetManager,
             ListWidgetSize listWidgetSize, int[] appWidgetIds, @Nullable AppModel model) {
 
         if (appWidgetIds.length == 0) {
             return;
         }
+
+        // For debugging only
+        final boolean DEBUG_TIME = false;
+        final DebugTimer debugTimer = DEBUG_TIME ? new DebugTimer() : null;
 
         final SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
@@ -122,64 +134,107 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         setToolbar(context, remoteViews, template, toolbarEanbled, showToolbarBackground);
 
         // TODO: cache variation or at least custom typefaces
-        final WidgetItemFontVariation fontVariation = WidgetItemFontVariation.newFromCurrentPreferences(context, sharedPreferences);
-        
-        // Set template view item list
-        //final int textColor = PreferencesTracker.readWidgetTextColorPreference(sharedPreferences);
+        final WidgetItemFontVariation fontVariation = WidgetItemFontVariation
+                .newFromCurrentPreferences(context, sharedPreferences);
+
+        // Set template view item list final int textColor =
         final LinearLayout itemListView = (LinearLayout) template
                 .findViewById(R.id.widget_list_template_item_list);
-        populateItemList(context, itemListView, model, fontVariation, sharedPreferences, layoutInflater);
+        populateItemList(context, itemListView, model, fontVariation, sharedPreferences,
+                layoutInflater);
+
+        if (DEBUG_TIME) {
+            debugTimer.report("Template populated");
+        }
 
         final boolean isPortrait = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
 
+        final float density = context.getResources().getDisplayMetrics().density;
+
         // Render the template view to a bitmap
-        final Point widgetGrossSizeInPixels = listWidgetSize.currentGrossSizeInPixels(context,
+        final Point widgetGrossSizeInPixels = listWidgetSize.currentGrossSizeInPixels(density,
                 isPortrait);
 
         // In percents. 100 means no change.
         final int widthAdjust = isPortrait ? PreferencesTracker
                 .readWidgetPortraitWidthAdjustPreference(sharedPreferences) : PreferencesTracker
                 .readWidgetLandscapeWidthAdjustPreference(sharedPreferences);
-                
+
         final int heightAdjust = isPortrait ? PreferencesTracker
                 .readWidgetPortraitHeightAdjustPreference(sharedPreferences) : PreferencesTracker
                 .readWidgetLandscapeHeightAdjustPreference(sharedPreferences);
 
         final int widthPixels = (widgetGrossSizeInPixels.x * 95 * widthAdjust) / (100 * 100);
-        final int hightPixels = (widgetGrossSizeInPixels.y * 95 * heightAdjust) / (100 * 100);
+        final int heightPixels = (widgetGrossSizeInPixels.y * 95 * heightAdjust) / (100 * 100);
 
-        // Bitmap bitmap = Bitmap.createBitmap(widthPixels, heightPixels, Bitmap.Config.ARGB_8888);
-        Bitmap bitmap = Bitmap.createBitmap(widthPixels, hightPixels, Bitmap.Config.ARGB_4444);
+        //LogUtil."*** Actual bitmap size: %d x %d", widthPixels, heightPixels);
+
+        // NOTE: ARGB_4444 provides smaller bitmap and faster file writing time.
+        final Bitmap bitmap = Bitmap.createBitmap(widthPixels, heightPixels,
+                Bitmap.Config.ARGB_4444);
 
         final Canvas canvas = new Canvas(bitmap);
 
         template.measure(MeasureSpec.makeMeasureSpec(widthPixels, MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(hightPixels, MeasureSpec.EXACTLY));
+                MeasureSpec.makeMeasureSpec(heightPixels, MeasureSpec.EXACTLY));
         // TODO: substract '1' from ends?
-        template.layout(0, 0, widthPixels, hightPixels);
+        template.layout(0, 0, widthPixels, heightPixels);
         template.draw(canvas);
 
-        // For debugging. Should be off in production releases.
-        final boolean DUMP_DEBUG_FILE = false;
-        if (DUMP_DEBUG_FILE) {
-            LogUtil.debug("*** Writing list widget bitmap to debug file");
-            FileUtil.writeBitmapToPngFile(context, bitmap, "debug_list_widget.png");
+        if (DEBUG_TIME) {
+            debugTimer.report("Template rendered to bitmap");
         }
 
-        // Set the template rendered bitmap in the remote views.
-        remoteViews.setBitmap(R.id.widget_list_bitmap, "setImageBitmap", bitmap);
+        // NOTE: RemoteViews class has an issue with transferring large bitmaps. As a workaround, we
+        // transfer the bitmap using a file URI. We could transfer small widgets directly
+        // as bitmap but use file based transfer for all sizes for the sake of simplicity.
+        // For more information on this issue see http://tinyurl.com/75jh2yf
+        final String fileName = String.format("list_widget_image_%dx%d.png",
+                listWidgetSize.widthCells, listWidgetSize.heightCells);
+
+        // ImageViews scales down images it fetches via URI by the density factor of the device.
+        // As a workaround, we pre scale up the image by the density. Later versions of android
+        // API has View.scaleX() and View.scale(Y) methods but they are not availabe for our
+        // min api = 8.
+        final int scaledWidthPixels = (int) (widthPixels * density + 0.5f);
+        final int scaledHeightPixels = (int) (heightPixels * density + 0.5f);
+        final Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, scaledWidthPixels,
+                scaledHeightPixels, false);
+
+        if (DEBUG_TIME) {
+            debugTimer.report("Bitmap scaled up");
+        }
+
+        // We make the file world readable so the home launcher can pull it via the file URI.
+        // TODO: if there are security concerns about having this file readable, append to it
+        // a long random suffix and cleanup the old ones.
+        FileUtil.writeBitmapToPngFile(context, scaledBitmap, fileName, true);
+
+        if (DEBUG_TIME) {
+            debugTimer.report("Bitmap written to file");
+        }
+
+        final Uri uri = Uri.parse("file://" + context.getFilesDir().getAbsolutePath() + "/"
+                + fileName);
+        //LogUtil.debug("*** URI: [%s]", uri);
+
+        // NOTE: setting up a temporary dummy image to cause the image view to reload the file.
+        // TODO: can we have a cleaner solution? Appending random dummy args to the URI?
+        remoteViews.setInt(R.id.widget_list_bitmap, "setImageResource", R.drawable.place_holder);
+
+        remoteViews.setUri(R.id.widget_list_bitmap, "setImageURI", uri);
 
         // Flush the remote view
         appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
+
+        if (DEBUG_TIME) {
+            debugTimer.report("Sent remote view update.");
+        }
     }
 
     private static final void populateItemList(Context context, LinearLayout itemListView,
-            AppModel model, WidgetItemFontVariation fontVariation, SharedPreferences sharedPreferences,
-            LayoutInflater layoutInflater) {
-        // Get text size preference in sp units
-//        final int fontSizeSp = PreferencesTracker.readWidgetItemFontSizePreference(
-//                sharedPreferences).getSizeSp();
-
+            AppModel model, WidgetItemFontVariation fontVariation,
+            SharedPreferences sharedPreferences, LayoutInflater layoutInflater) {
         // For debugging
         final boolean debugTimestamp = false;
         if (debugTimestamp) {
@@ -203,7 +258,8 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final List<ItemModelReadOnly> items = WidgetUtil.selectTodaysActiveItemsByTime(model, now,
                 lockExpirationPeriod);
         if (items.isEmpty()) {
-            addMessageItem(context, itemListView, "(no active tasks)", fontVariation, layoutInflater);
+            addMessageItem(context, itemListView, "(no active tasks)", fontVariation,
+                    layoutInflater);
             return;
         }
 

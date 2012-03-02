@@ -51,7 +51,7 @@ public class ListWidgetSize {
     }
 
     /** Compute widget gross area size in pixels based on current orientation */
-    Point currentGrossSizeInPixels(Context context, boolean isPortrait) {
-        return WidgetUtil.widgetPixelSize(context, isPortrait, widthCells, heightCells);
+    Point currentGrossSizeInPixels(float density, boolean isPortrait) {
+        return WidgetUtil.widgetPixelSize(density, isPortrait, widthCells, heightCells);
     }
 }

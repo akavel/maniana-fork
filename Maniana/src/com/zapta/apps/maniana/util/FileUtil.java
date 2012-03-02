@@ -124,10 +124,11 @@ public final class FileUtil {
     }
     
     /** Write a bitmap to a file */
-    public static void writeBitmapToPngFile(Context context, Bitmap bitmap, String fileName) {
+    public static void writeBitmapToPngFile(Context context, Bitmap bitmap, String fileName, boolean isPublic) {
         FileOutputStream out = null;
         try {
-            out = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+            final int permission = isPublic ? Context.MODE_WORLD_READABLE : Context.MODE_PRIVATE;
+            out = context.openFileOutput(fileName, permission);
             final boolean ok = bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
             if (!ok) {
                 throw new RuntimeException("Error writing bitmap to file: " + fileName);

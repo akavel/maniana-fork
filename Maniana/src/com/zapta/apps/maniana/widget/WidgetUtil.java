@@ -91,8 +91,7 @@ public abstract class WidgetUtil {
      * 
      * Based on http://osdir.com/ml/Android-Developers/2011-01/msg02879.html
      */
-    public static Point widgetPixelSize(Context context, boolean isPortrait, int widthCells, int heightCells) {
-        final float density = context.getResources().getDisplayMetrics().density;
+    public static Point widgetPixelSize(float density, boolean isPortrait, int widthCells, int heightCells) {
         final int widthPixels;
         final int heightPixels;
         if (isPortrait) {
@@ -102,9 +101,6 @@ public abstract class WidgetUtil {
                 widthPixels = (int) (106 * widthCells * density + .5f);
                 heightPixels = (int) (74 * heightCells * density + .5f);
         }
-        
-        LogUtil.debug("*** %d x %d (%s, %f) -> (%d x %d)", widthCells, heightCells, isPortrait,
-                density, widthPixels, heightPixels);
         return new Point(widthPixels, heightPixels);
     }
 }

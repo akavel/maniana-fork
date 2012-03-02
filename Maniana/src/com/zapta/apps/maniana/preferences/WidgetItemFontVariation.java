@@ -80,8 +80,6 @@ public class WidgetItemFontVariation {
         textView.setTextColor(mColor);
         textView.setTextSize(mTextSize);
         textView.setLineSpacing(0.0f, mLineSpacingMultiplier);
-//        textView.setPadding(textView.getPaddingLeft(), mTopBottomPadding,
-//                textView.getPaddingRight(), mTopBottomPadding);
     }
 
     public static final WidgetItemFontVariation newFromCurrentPreferences(Context context,

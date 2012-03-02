@@ -53,7 +53,7 @@
         <Preference
             android:key="prefPageSelectThemeKey"
             android:summary="Click to select a predefined page setting"
-            android:title="Set Theme">
+            android:title="Set By Theme">
         </Preference>
         <ListPreference
             android:defaultValue="paper"
@@ -97,7 +97,7 @@
         <Preference
             android:key="prefWidgetSelectThemeKey"
             android:summary="Click to select a predefined widget setting"
-            android:title="Set Theme">
+            android:title="Set By Theme">
         </Preference>
         <ListPreference
             android:defaultValue="paper"
