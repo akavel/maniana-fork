@@ -61,10 +61,6 @@ import com.zapta.apps.maniana.util.LogUtil;
  */
 public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
-    /** ImageView slices in the template layout. */
-    private static final int[] IMAGE_SLICES = new int[] { R.id.widget_list_bitmap_slice1,
-            R.id.widget_list_bitmap_slice2, R.id.widget_list_bitmap_slice3 };
-
     public ListWidgetProvider() {
     }
 
@@ -90,11 +86,16 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         }
 
         // For debugging only
-        final boolean DEBUG_TIME = true;
+        final boolean DEBUG_TIME = false;
         final DebugTimer debugTimer = DEBUG_TIME ? new DebugTimer() : null;
 
         final SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
+
+        // Create the widget remote view
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
+                R.layout.widget_list_layout);
+        setOnClickLaunch(context, remoteViews, R.id.widget_list_bitmap, ResumeAction.NONE);
 
         // Create the template view. We will later render it to a bitmap.
         //
@@ -125,16 +126,12 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                 template.setBackgroundColor(backgroundColor);
         }
 
-        final boolean isVoiceRecognitionSupported = AppServices
-                .isVoiceRecognitionSupported(context);
-
         // Set template view toolbar
-        final boolean toolbarEnabled = PreferencesTracker
+        final boolean toolbarEanbled = PreferencesTracker
                 .readWidgetShowToolbarPreference(sharedPreferences);
-        final boolean showToolbarBackground = toolbarEnabled
+        final boolean showToolbarBackground = toolbarEanbled
                 && (backgroundType != WidgetBackgroundType.PAPER);
-        setTemplateToolbar(context, template, toolbarEnabled, isVoiceRecognitionSupported,
-                showToolbarBackground);
+        setToolbar(context, remoteViews, template, toolbarEanbled, showToolbarBackground);
 
         // TODO: cache variation or at least custom typefaces
         final WidgetItemFontVariation fontVariation = WidgetItemFontVariation
@@ -143,7 +140,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         // Set template view item list final int textColor =
         final LinearLayout itemListView = (LinearLayout) template
                 .findViewById(R.id.widget_list_template_item_list);
-        populateTemplateItemList(context, itemListView, model, fontVariation, sharedPreferences,
+        populateItemList(context, itemListView, model, fontVariation, sharedPreferences,
                 layoutInflater);
 
         if (DEBUG_TIME) {
@@ -170,7 +167,9 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final int widthPixels = (widgetGrossSizeInPixels.x * 95 * widthAdjust) / (100 * 100);
         final int heightPixels = (widgetGrossSizeInPixels.y * 95 * heightAdjust) / (100 * 100);
 
-        // NOTE: ARGB_4444 bitmaps are smaller than ARGB_8888
+        //LogUtil."*** Actual bitmap size: %d x %d", widthPixels, heightPixels);
+
+        // NOTE: ARGB_4444 provides smaller bitmap and faster file writing time.
         final Bitmap bitmap = Bitmap.createBitmap(widthPixels, heightPixels,
                 Bitmap.Config.ARGB_4444);
 
@@ -186,37 +185,66 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             debugTimer.report("Template rendered to bitmap");
         }
 
-        final boolean DEBUG_FILE = false;
-        if (DEBUG_FILE) {
-            LogUtil.debug("*** Writing widget debug bitmap file");
-            FileUtil.writeBitmapToPngFile(context, bitmap, "debug_widget_list_image", true);
-            if (DEBUG_TIME) {
-                debugTimer.report("Bitmap written to debug file");
-            }
+        // NOTE: RemoteViews class has an issue with transferring large bitmaps. As a workaround, we
+        // transfer the bitmap using a file URI. We could transfer small widgets directly
+        // as bitmap but use file based transfer for all sizes for the sake of simplicity.
+        // For more information on this issue see http://tinyurl.com/75jh2yf
+        final String fileName = String.format("list_widget_image_%dx%d.png",
+                listWidgetSize.widthCells, listWidgetSize.heightCells);
+
+        // ImageViews scales down images it fetches via URI by the density factor of the device.
+        // As a workaround, we pre scale up the image by the density. Later versions of android
+        // API has View.scaleX() and View.scale(Y) methods but they are not availabe for our
+        // min api = 8.
+        final int scaledWidthPixels = (int) (widthPixels * density + 0.5f);
+        final int scaledHeightPixels = (int) (heightPixels * density + 0.5f);
+        final Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, scaledWidthPixels,
+                scaledHeightPixels, false);
+
+        if (DEBUG_TIME) {
+            debugTimer.report("Bitmap scaled up");
         }
 
-        updateRemoteViews(context, appWidgetManager, appWidgetIds, bitmap, toolbarEnabled,
-                isVoiceRecognitionSupported);
+        // We make the file world readable so the home launcher can pull it via the file URI.
+        // TODO: if there are security concerns about having this file readable, append to it
+        // a long random suffix and cleanup the old ones.
+        FileUtil.writeBitmapToPngFile(context, scaledBitmap, fileName, true);
+
+        if (DEBUG_TIME) {
+            debugTimer.report("Bitmap written to file");
+        }
+
+        final Uri uri = Uri.parse("file://" + context.getFilesDir().getAbsolutePath() + "/"
+                + fileName);
+        //LogUtil.debug("*** URI: [%s]", uri);
+
+        // NOTE: setting up a temporary dummy image to cause the image view to reload the file.
+        // TODO: can we have a cleaner solution? Appending random dummy args to the URI?
+        remoteViews.setInt(R.id.widget_list_bitmap, "setImageResource", R.drawable.place_holder);
+
+        remoteViews.setUri(R.id.widget_list_bitmap, "setImageURI", uri);
+
+        // Flush the remote view
+        appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
 
         if (DEBUG_TIME) {
             debugTimer.report("Sent remote view update.");
         }
     }
 
-    /** Add model items to the template layout. */
-    private static final void populateTemplateItemList(Context context, LinearLayout itemListView,
+    private static final void populateItemList(Context context, LinearLayout itemListView,
             AppModel model, WidgetItemFontVariation fontVariation,
             SharedPreferences sharedPreferences, LayoutInflater layoutInflater) {
         // For debugging
         final boolean debugTimestamp = false;
         if (debugTimestamp) {
             final String message = String.format("[%s]", SystemClock.elapsedRealtime() / 1000);
-            addTemplateMessageItem(context, itemListView, message, fontVariation, layoutInflater);
+            addMessageItem(context, itemListView, message, fontVariation, layoutInflater);
         }
 
         if (model == null) {
-            addTemplateMessageItem(context, itemListView, "(Maniana data not found)",
-                    fontVariation, layoutInflater);
+            addMessageItem(context, itemListView, "(Maniana data not found)", fontVariation,
+                    layoutInflater);
             return;
         }
 
@@ -230,7 +258,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final List<ItemModelReadOnly> items = WidgetUtil.selectTodaysActiveItemsByTime(model, now,
                 lockExpirationPeriod);
         if (items.isEmpty()) {
-            addTemplateMessageItem(context, itemListView, "(no active tasks)", fontVariation,
+            addMessageItem(context, itemListView, "(no active tasks)", fontVariation,
                     layoutInflater);
             return;
         }
@@ -239,6 +267,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                 .readWidgetSingleLinePreference(sharedPreferences);
 
         for (ItemModelReadOnly item : items) {
+
             final LinearLayout itemView = (LinearLayout) layoutInflater.inflate(
                     R.layout.widget_list_template_item_layout, null);
             final TextView textView = (TextView) itemView.findViewById(R.id.widget_item_text_view);
@@ -272,11 +301,11 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
     }
 
     /**
-     * Set toolbar in the template layout.
+     * Set toolbar. This updates both the template portion of the toolbar and the click overlays of
+     * the remote views.
      */
-    private static final void setTemplateToolbar(Context context, View template,
-            boolean toolbarEnabled, boolean isVoiceRecognitionSupported,
-            boolean showToolbarBackground) {
+    private static final void setToolbar(Context context, RemoteViews remoteViews, View template,
+            boolean toolbarEnabled, boolean showToolbarBackground) {
         final View toolbarView = template.findViewById(R.id.widget_list_template_toolbar);
         final View addTextByVoiceButton = toolbarView
                 .findViewById(R.id.widget_list_template_toolbar_add_by_voice);
@@ -296,62 +325,21 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             toolbarView.setBackgroundColor(0x00000000);
         }
 
+        // Set new task by text action.
+        setOnClickLaunch(context, remoteViews, R.id.widget_list_toolbar_add_by_text_overlay,
+                ResumeAction.ADD_NEW_ITEM_BY_TEXT);
+
         // The voice recognition button is shown only if this device supports voice recognition.
-        if (isVoiceRecognitionSupported) {
+        if (AppServices.isVoiceRecognitionSupported(context)) {
             addTextByVoiceButton.setVisibility(View.VISIBLE);
+            remoteViews.setInt(R.id.widget_list_toolbar_add_by_voice_overlay, "setVisibility",
+                    View.VISIBLE);
+            setOnClickLaunch(context, remoteViews, R.id.widget_list_toolbar_add_by_voice_overlay,
+                    ResumeAction.ADD_NEW_ITEM_BY_VOICE);
         } else {
             addTextByVoiceButton.setVisibility(View.GONE);
-        }
-    }
-
-    /**
-     * Update the widget remote views with the rendered template bitmap.
-     * 
-     * NOTE: RemoteViews class has an issue with transferring large bitmaps. As a workaround, we
-     * Updated the remote view images in smaller slices. For more information on this issue see
-     * http://tinyurl.com/75jh2yf
-     */
-    private static final void updateRemoteViews(Context context, AppWidgetManager appWidgetManager,
-            int[] appWidgetIds, Bitmap bitmap, boolean toolbarEnabled,
-            boolean isVoiceRecognitionSupported) {
-        final int N = IMAGE_SLICES.length;
-        final int W = bitmap.getWidth();
-        final int H = bitmap.getHeight();
-
-        // TODO: for smaller widgets use less slices. This will speedup the rendering.
-        int sliceBaseY = 0;
-        for (int i = 0; i < N; i++) {
-
-            final RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
-                    R.layout.widget_list_layout);
-
-            // We set the onclick intents only in the first remoteviews update. No need to repeat.
-            if (i == 0) {
-                setOnClickLaunch(context, remoteViews, R.id.widget_list_bitmaps, ResumeAction.NONE);
-                setOnClickLaunch(context, remoteViews,
-                        R.id.widget_list_toolbar_add_by_text_overlay,
-                        ResumeAction.ADD_NEW_ITEM_BY_TEXT);
-                if (isVoiceRecognitionSupported) {
-                    // addTextByVoiceButton.setVisibility(View.VISIBLE);
-                    remoteViews.setInt(R.id.widget_list_toolbar_add_by_voice_overlay,
-                            "setVisibility", View.VISIBLE);
-                    setOnClickLaunch(context, remoteViews,
-                            R.id.widget_list_toolbar_add_by_voice_overlay,
-                            ResumeAction.ADD_NEW_ITEM_BY_VOICE);
-                } else {
-                    // addTextByVoiceButton.setVisibility(View.GONE);
-                    remoteViews.setInt(R.id.widget_list_toolbar_add_by_voice_overlay,
-                            "setVisibility", View.GONE);
-                }
-            }
-
-            final int sliceHeight = (i < (N - 1)) ? (W / N) : (H - sliceBaseY);
-            final Bitmap slice = Bitmap.createBitmap(bitmap, 0, sliceBaseY, W, sliceHeight);
-            sliceBaseY += sliceHeight;
-
-            remoteViews.setImageViewBitmap(IMAGE_SLICES[i], slice);
-            appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
-
+            remoteViews.setInt(R.id.widget_list_toolbar_add_by_voice_overlay, "setVisibility",
+                    View.GONE);
         }
     }
 
@@ -368,7 +356,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         remoteViews.setOnClickPendingIntent(viewId, pendingIntent);
     }
 
-    private static final void addTemplateMessageItem(Context context, LinearLayout itemListView,
+    private static final void addMessageItem(Context context, LinearLayout itemListView,
             String message, WidgetItemFontVariation fontVariation, LayoutInflater layoutInflater) {
 
         final LinearLayout itemView = (LinearLayout) layoutInflater.inflate(

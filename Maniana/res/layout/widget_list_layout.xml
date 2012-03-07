@@ -2,52 +2,30 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#00000000"
-    android:padding="0dip" >
+    android:padding="0dip"
+    android:background="#00000000" >
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="#00000000" >
+        android:background="#00000000"
+         >
 
-        <LinearLayout
-            android:id="@+id/widget_list_bitmaps"
+        <ImageView
+            android:id="@+id/widget_list_bitmap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00000000"
-            android:orientation="vertical" >
-
-            <ImageView
-                android:id="@+id/widget_list_bitmap_slice1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#00000000"
-                android:scaleType="center" >
-            </ImageView>
-
-            <ImageView
-                android:id="@+id/widget_list_bitmap_slice2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#00000000"
-                android:scaleType="center" >
-            </ImageView>
-
-            <ImageView
-                android:id="@+id/widget_list_bitmap_slice3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#00000000"
-                android:scaleType="center" >
-            </ImageView>
-        </LinearLayout>
+            android:scaleType="center"
+            android:src="@drawable/place_holder" >
+        </ImageView>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="30dip"
-            android:layout_alignRight="@id/widget_list_bitmaps"
-            android:layout_alignTop="@id/widget_list_bitmaps"
+            android:layout_alignRight="@id/widget_list_bitmap"
+            android:layout_alignTop="@id/widget_list_bitmap"
             android:orientation="horizontal" >
 
             <FrameLayout
