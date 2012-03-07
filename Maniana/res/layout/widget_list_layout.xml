@@ -23,8 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#00000000"
-                android:scaleType="center"
-                android:src="@drawable/place_holder" >
+                android:scaleType="center" >
             </ImageView>
 
             <ImageView
@@ -32,8 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#00000000"
-                android:scaleType="center"
-                android:src="@drawable/place_holder" >
+                android:scaleType="center" >
             </ImageView>
 
             <ImageView
@@ -41,17 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="#00000000"
-                android:scaleType="center"
-                android:src="@drawable/place_holder" >
-            </ImageView>
-
-            <ImageView
-                android:id="@+id/widget_list_bitmap_slice4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#00000000"
-                android:scaleType="center"
-                android:src="@drawable/place_holder" >
+                android:scaleType="center" >
             </ImageView>
         </LinearLayout>
 

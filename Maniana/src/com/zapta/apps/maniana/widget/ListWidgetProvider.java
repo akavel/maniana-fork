@@ -15,7 +15,6 @@
 package com.zapta.apps.maniana.widget;
 
 import java.util.List;
-import java.util.Random;
 
 import javax.annotation.Nullable;
 
@@ -28,8 +27,8 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.text.format.Time;
@@ -38,6 +37,7 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
+import android.widget.SlidingDrawer;
 import android.widget.TextView;
 
 import com.zapta.apps.maniana.R;
@@ -63,8 +63,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
     /** ImageView slices in the template layout. */
     private static final int[] IMAGE_SLICES = new int[] { R.id.widget_list_bitmap_slice1,
-            R.id.widget_list_bitmap_slice2, R.id.widget_list_bitmap_slice3,
-            R.id.widget_list_bitmap_slice4 };
+            R.id.widget_list_bitmap_slice2, R.id.widget_list_bitmap_slice3 };
 
     public ListWidgetProvider() {
     }
@@ -76,7 +75,6 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
      */
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-
         update(context, appWidgetManager, listWidgetSize(), appWidgetIds, loadModel(context));
     }
 
@@ -200,8 +198,6 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         updateRemoteViews(context, appWidgetManager, appWidgetIds, bitmap, toolbarEnabled,
                 isVoiceRecognitionSupported);
 
-        bitmap.recycle();
-
         if (DEBUG_TIME) {
             debugTimer.report("Sent remote view update.");
         }
@@ -318,41 +314,19 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
     private static final void updateRemoteViews(Context context, AppWidgetManager appWidgetManager,
             int[] appWidgetIds, Bitmap bitmap, boolean toolbarEnabled,
             boolean isVoiceRecognitionSupported) {
-
-       
-
         final int N = IMAGE_SLICES.length;
         final int W = bitmap.getWidth();
         final int H = bitmap.getHeight();
 
-        LogUtil.debug("Bitmap to slice: %d x %d", W, H);
-
-        // For debug only. Used to confirm the update and stiching.
-        final boolean DEBUG_WATERMARK = true;
-        if (DEBUG_WATERMARK) {
-            LogUtil.info("Drawing list widget bitmap debug watermark");
-
-            final Paint paint = new Paint();
-            paint.setARGB(200, 100, 100, 50);
-            final Canvas c = new Canvas(bitmap);
-//            c.drawLine(0, 0, W - 1, H - 1, paint);
-//            c.drawLine(W - 1, 0, 0, H - 1, paint);
-            final Random rand = new Random();
-            final int x = rand.nextInt(W - 20) + 10;
-            c.drawLine(x, 0, x, H - 1, paint);
-        }
-
         // TODO: for smaller widgets use less slices. This will speedup the rendering.
         int sliceBaseY = 0;
         for (int i = 0; i < N; i++) {
-            System.gc();
-            
-            final boolean isLastSlice = (i == (N - 1));
+
             final RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
                     R.layout.widget_list_layout);
 
             // We set the onclick intents only in the first remoteviews update. No need to repeat.
-            if (isLastSlice) {
+            if (i == 0) {
                 setOnClickLaunch(context, remoteViews, R.id.widget_list_bitmaps, ResumeAction.NONE);
                 setOnClickLaunch(context, remoteViews,
                         R.id.widget_list_toolbar_add_by_text_overlay,
@@ -371,24 +345,12 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                 }
             }
 
-            final int sliceHeight = isLastSlice ? (H - sliceBaseY) : (H / N);
-            LogUtil.debug("Slice %d: base = %d, height = %d", i, sliceBaseY, sliceHeight);
+            final int sliceHeight = (i < (N - 1)) ? (W / N) : (H - sliceBaseY);
             final Bitmap slice = Bitmap.createBitmap(bitmap, 0, sliceBaseY, W, sliceHeight);
             sliceBaseY += sliceHeight;
 
-//            final Paint paint = new Paint();
-//            paint.setARGB(200, 100, 100, 50);
-//            final Canvas c = new Canvas(slice);
-//            c.drawLine(0, 0, W - 1, sliceHeight - 1, paint);
-//            c.drawLine(W - 1, 0, 0, sliceHeight - 1, paint);
-
             remoteViews.setImageViewBitmap(IMAGE_SLICES[i], slice);
-            // if (i == 0) {
-            LogUtil.debug("Flushing remoteview slice %d", i);
             appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
-
-            slice.recycle();
-            // }
 
         }
     }
@@ -426,7 +388,6 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
     // TODO: decide what we want to do with this.
     // An attempt to update all list widgtes by a direct call.
     public static void updateAllListWidgetsFromModel(Context context, @Nullable AppModel model) {
-
         final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
         for (ListWidgetSize listWidgetSize : ListWidgetSize.LIST_WIDGET_SIZES) {
