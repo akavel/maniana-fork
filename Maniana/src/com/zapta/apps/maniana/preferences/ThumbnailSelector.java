@@ -49,8 +49,7 @@ public class ThumbnailSelector<T extends Thumbnail> extends TrackableDialogPopup
         setContentView(R.layout.thumbnail_selector_layout);
 
         ListView listView = (ListView) findViewById(R.id.selector_list);
-        listView.setAdapter(new ThumbnailSelectorAdapter<T>(context, thumbnails, 0xff444444,
-                new int[] { 0xff8bacf2, 0xffb0ccff }));
+        listView.setAdapter(new ThumbnailSelectorAdapter<T>(context, thumbnails, 0xff444444));
 
         listView.setOnItemClickListener(new OnItemClickListener() {
             @Override

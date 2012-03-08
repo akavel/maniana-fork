@@ -3,9 +3,8 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@drawable/place_holder"
-    android:paddingBottom="20dip"
-    android:paddingTop="20dip" >
+    android:paddingBottom="30dip"
+    android:paddingTop="50dip" >
 
     <ImageView
         android:id="@+id/thumbnail_selector_item_image"

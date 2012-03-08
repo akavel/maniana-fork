@@ -38,13 +38,12 @@ public class ThumbnailSelectorAdapter<T extends Thumbnail> extends BaseAdapter {
     private final T[] mThumbnails;
 
     private final int mTextColor;
-    private final int[] mGradientColors;
 
-    public ThumbnailSelectorAdapter(Context c, T[] thumbnails, int textColor, int[] gradientColors) {
+
+    public ThumbnailSelectorAdapter(Context c, T[] thumbnails, int textColor) {
         mContext = c;
         mThumbnails = thumbnails;
         mTextColor = textColor;
-        mGradientColors = gradientColors;
     }
 
     public int getCount() {
@@ -78,9 +77,6 @@ public class ThumbnailSelectorAdapter<T extends Thumbnail> extends BaseAdapter {
         final TextView textView = (TextView) itemView
                 .findViewById(R.id.thumbnail_selector_item_text);
 
-        GradientDrawable g = new GradientDrawable(GradientDrawable.Orientation.TL_BR,
-                mGradientColors);
-        itemView.setBackgroundDrawable(g);
 
         final Thumbnail thumbnail = mThumbnails[position];
         imageView.setImageResource(thumbnail.getDrawableId());
@@ -89,5 +85,5 @@ public class ThumbnailSelectorAdapter<T extends Thumbnail> extends BaseAdapter {
         textView.setText(" " + thumbnail.getName() + " ");
         textView.setTextColor(mTextColor);
         return itemView;
-    }
+    }   
 }
