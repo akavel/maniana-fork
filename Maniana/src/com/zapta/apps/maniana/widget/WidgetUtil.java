@@ -17,7 +17,6 @@ package com.zapta.apps.maniana.widget;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
 import android.graphics.Point;
 import android.text.format.Time;
 
@@ -27,7 +26,6 @@ import com.zapta.apps.maniana.model.ModelUtil;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.model.PushScope;
 import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
-import com.zapta.apps.maniana.util.LogUtil;
 
 /**
  * Common widget related utilities.

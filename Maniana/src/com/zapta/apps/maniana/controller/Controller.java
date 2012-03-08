@@ -170,21 +170,24 @@ public class Controller {
         // Close any leftover dialogs. This provides a more intuitive user experience.
         mApp.popupsTracker().closeAllLeftOvers();
         
+        flushModelChanges();
+    }
+    
+    /** If model is dirty then persist and update widgets. */
+    private final void flushModelChanges() {
         // If state is dirty save it, so we don't lose it if the app is note resumed.
         if (mApp.model().isDirty()) {
-            PersistenceMetadata metadata = new PersistenceMetadata(mApp.services()
+            final PersistenceMetadata metadata = new PersistenceMetadata(mApp.services()
                     .getAppVersionCode(), mApp.services().getAppVersionName());
             // NOTE(tal): this clears the dirty bit.
             ModelPersistence.saveData(mApp, mApp.model(), metadata);
             check(!mApp.model().isDirty());
             onBackupDataChange();
+            
+            updateWidgets();
         }
-
-        // In any case, update the widgets. This will solve the issue of app data restored
-        // (e.g. by Titanium Backup) and widgets not updated until the model is actually
-        // mutated.
-        updateWidgets();
     }
+    
 
     /** Called when the main activity is resumed, including after app creation. */
     public final void onMainActivityResume(ResumeAction resumeAction) {      

@@ -15,7 +15,6 @@
 package com.zapta.apps.maniana.preferences;
 
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

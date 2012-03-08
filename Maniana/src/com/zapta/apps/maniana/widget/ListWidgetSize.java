@@ -14,7 +14,6 @@
 
 package com.zapta.apps.maniana.widget;
 
-import android.content.Context;
 import android.graphics.Point;
 
 /**

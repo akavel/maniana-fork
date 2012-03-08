@@ -37,7 +37,6 @@ import android.view.View;
 import android.view.View.MeasureSpec;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
-import android.widget.SlidingDrawer;
 import android.widget.TextView;
 
 import com.zapta.apps.maniana.R;
@@ -164,14 +163,15 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                 .readWidgetPortraitHeightAdjustPreference(sharedPreferences) : PreferencesTracker
                 .readWidgetLandscapeHeightAdjustPreference(sharedPreferences);
 
-        final int widthPixels = (widgetGrossSizeInPixels.x * 95 * widthAdjust) / (100 * 100);
-        final int heightPixels = (widgetGrossSizeInPixels.y * 95 * heightAdjust) / (100 * 100);
+        // BaseSize * 90% * Adjustment
+        final int widthPixels = (widgetGrossSizeInPixels.x * 90 * widthAdjust) / (100 * 100);
+        final int heightPixels = (widgetGrossSizeInPixels.y * 90 * heightAdjust) / (100 * 100);
 
         //LogUtil."*** Actual bitmap size: %d x %d", widthPixels, heightPixels);
 
-        // NOTE: ARGB_4444 provides smaller bitmap and faster file writing time.
+        // TODO: does ARGB_4444 result is smaller file and faster widget update?.
         final Bitmap bitmap = Bitmap.createBitmap(widthPixels, heightPixels,
-                Bitmap.Config.ARGB_4444);
+                Bitmap.Config.ARGB_8888);
 
         final Canvas canvas = new Canvas(bitmap);
 
@@ -185,12 +185,6 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             debugTimer.report("Template rendered to bitmap");
         }
 
-        // NOTE: RemoteViews class has an issue with transferring large bitmaps. As a workaround, we
-        // transfer the bitmap using a file URI. We could transfer small widgets directly
-        // as bitmap but use file based transfer for all sizes for the sake of simplicity.
-        // For more information on this issue see http://tinyurl.com/75jh2yf
-        final String fileName = String.format("list_widget_image_%dx%d.png",
-                listWidgetSize.widthCells, listWidgetSize.heightCells);
 
         // ImageViews scales down images it fetches via URI by the density factor of the device.
         // As a workaround, we pre scale up the image by the density. Later versions of android
@@ -205,9 +199,17 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             debugTimer.report("Bitmap scaled up");
         }
 
+        // NOTE: RemoteViews class has an issue with transferring large bitmaps. As a workaround, we
+        // transfer the bitmap using a file URI. We could transfer small widgets directly
+        // as bitmap but use file based transfer for all sizes for the sake of simplicity.
+        // For more information on this issue see http://tinyurl.com/75jh2yf
+        final String fileName = String.format("list_widget_image_%dx%d.png",
+                listWidgetSize.widthCells, listWidgetSize.heightCells);
+
         // We make the file world readable so the home launcher can pull it via the file URI.
         // TODO: if there are security concerns about having this file readable, append to it
         // a long random suffix and cleanup the old ones.
+        LogUtil.info("Updating widget bitmap: " + fileName);
         FileUtil.writeBitmapToPngFile(context, scaledBitmap, fileName, true);
 
         if (DEBUG_TIME) {
