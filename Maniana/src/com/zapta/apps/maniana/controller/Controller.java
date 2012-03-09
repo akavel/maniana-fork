@@ -50,6 +50,7 @@ import com.zapta.apps.maniana.preferences.PreferenceKind;
 import com.zapta.apps.maniana.preferences.PreferencesActivity;
 import com.zapta.apps.maniana.quick_action.QuickActionItem;
 import com.zapta.apps.maniana.util.LogUtil;
+import com.zapta.apps.maniana.util.Orientation;
 import com.zapta.apps.maniana.view.AppView;
 import com.zapta.apps.maniana.view.AppView.ItemAnimationType;
 import com.zapta.apps.maniana.widget.BaseWidgetProvider;
@@ -77,11 +78,19 @@ public class Controller {
      * app re-entry.
      */
     private boolean mInSubActivity = false;
-    
+
     /**
      * Preallocated temp object. Used to reduce object alloctation.
      */
     private final OrganizePageSummary mTempSummary = new OrganizePageSummary();
+
+    /**
+     * The device orientation the last time widget were updated by a call directly from the
+     * controller. This is a hackish and not full proof workaround to cause widget update when
+     * orientation changed. Null indicates unknown orientation.
+     */
+    @Nullable
+    private Orientation mLastWidgetOrientation = null;
 
     public Controller(AppContext app) {
         mApp = app;
@@ -169,32 +178,39 @@ public class Controller {
     public final void onMainActivityPause() {
         // Close any leftover dialogs. This provides a more intuitive user experience.
         mApp.popupsTracker().closeAllLeftOvers();
-        
+
         flushModelChanges();
     }
-    
+
     /** If model is dirty then persist and update widgets. */
     private final void flushModelChanges() {
         // If state is dirty save it, so we don't lose it if the app is note resumed.
-        if (mApp.model().isDirty()) {
+        final boolean wasDirty = mApp.model().isDirty();
+        if (wasDirty) {
             final PersistenceMetadata metadata = new PersistenceMetadata(mApp.services()
                     .getAppVersionCode(), mApp.services().getAppVersionName());
             // NOTE(tal): this clears the dirty bit.
             ModelPersistence.saveData(mApp, mApp.model(), metadata);
             check(!mApp.model().isDirty());
             onBackupDataChange();
-            
-            updateWidgets();
+        }
+
+        // HACK: if the orientation changed since last time we updated the widgets
+        // from the controller then force an update even if model is not dirty.
+        // Should be replaced with a safe widget update on orientation change.
+        final Orientation currentOrientation = Orientation.currentOrientation(mApp.context());
+        if (wasDirty || currentOrientation != mLastWidgetOrientation) {
+            updateAllWidgets();
+            mLastWidgetOrientation = currentOrientation;
         }
     }
-    
 
     /** Called when the main activity is resumed, including after app creation. */
-    public final void onMainActivityResume(ResumeAction resumeAction) {      
+    public final void onMainActivityResume(ResumeAction resumeAction) {
         // This may leave undo items in case we cleanup completed tasks.
-        maybeHandleDateChange();        
-        
-        // NOTE: if we want the cleaned up items to stay in the undo buffers, move this 
+        maybeHandleDateChange();
+
+        // NOTE: if we want the cleaned up items to stay in the undo buffers, move this
         // statement before the maybeHandleDateChange above.
         clearAllUndo();
 
@@ -280,7 +296,8 @@ public class Controller {
             final boolean deleteCompletedItems = mApp.pref().getAutoDailyCleanupPreference();
             LogUtil.info("Model push scope: %s, auto_cleanup=%s", pushScope, deleteCompletedItems);
             mApp.model().pushToToday(expireAllLocks, deleteCompletedItems);
-            // Not bothering to test if anything changed. Always updating. This happens only once a day.
+            // Not bothering to test if anything changed. Always updating. This happens only once a
+            // day.
             mApp.view().updatePages();
         }
 
@@ -490,7 +507,7 @@ public class Controller {
         if (upperCaseIt) {
             cleanedValue = cleanedValue.substring(0, 1).toUpperCase() + cleanedValue.substring(1);
         }
-        
+
         ItemModel item = new ItemModel(cleanedValue, false, false, ItemColor.NONE);
 
         mApp.model().insertItem(pageKind, 0, item);
@@ -556,7 +573,7 @@ public class Controller {
     /** Called by the app view when the user click or long press the clean page button. */
     public final void onCleanPageButton(final PageKind pageKind, boolean isLongPress) {
         final boolean deleteCompletedItems = isLongPress;
-        
+
         // NOTE: reusing mTempSummary.
         mApp.model().organizePageWithUndo(pageKind, deleteCompletedItems, -1, mTempSummary);
 
@@ -699,7 +716,7 @@ public class Controller {
                 // Home button immediately, going back to the widgets. The widget update at
                 // onAppPause() is not triggered in this case because the main activity is already
                 // paused.
-                updateWidgets();
+                updateAllWidgets();
                 break;
 
             default:
@@ -714,14 +731,14 @@ public class Controller {
     }
 
     /** Force a widget update with the current */
-    private final void updateWidgets() {
+    private final void updateAllWidgets() {
         BaseWidgetProvider.updateAllWidgetsFromModel(mApp.context(), mApp.model());
     }
 
     /** Called by the main activity when it is created. */
     public final void onMainActivityCreated(StartupKind startupKind) {
         // NOTE: at this point the model has not been processed yet for potential
-        // task move/cleanup due to date change. This is done later in the 
+        // task move/cleanup due to date change. This is done later in the
         // onMainActivityResume() event.
 
         switch (startupKind) {
@@ -844,7 +861,8 @@ public class Controller {
                             mApp.view().getRootView().post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    briefItemHighlight(pageKind, mTempSummary.itemOfInterestNewIndex, 300);
+                                    briefItemHighlight(pageKind,
+                                            mTempSummary.itemOfInterestNewIndex, 300);
                                 }
                             });
 

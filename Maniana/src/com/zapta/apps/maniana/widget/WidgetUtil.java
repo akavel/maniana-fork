@@ -26,6 +26,7 @@ import com.zapta.apps.maniana.model.ModelUtil;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.model.PushScope;
 import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
+import com.zapta.apps.maniana.util.Orientation;
 
 /**
  * Common widget related utilities.
@@ -87,17 +88,23 @@ public abstract class WidgetUtil {
     /**
      * Compute the widget size in pixels.
      * 
-     * Based on http://osdir.com/ml/Android-Developers/2011-01/msg02879.html
+     * Based on 
+     * http://osdir.com/ml/Android-Developers/2011-01/msg02879.html
+     * 
+     * See also (2 dip inset)
+     * http://blog.doityourselfandroid.com/2011/05/24/developing-android-home-screenwidgets/
+     * 
      */
-    public static Point widgetPixelSize(float density, boolean isPortrait, int widthCells, int heightCells) {
+    public static Point widgetGrossPixelSize(float density, Orientation orientation,
+            int widthCells, int heightCells) {
         final int widthPixels;
         final int heightPixels;
-        if (isPortrait) {
-                widthPixels = (int) (80 * widthCells * density + .5f);
-                heightPixels = (int) (100 * heightCells * density + .5f);
+        if (orientation.isPortrait) {
+            widthPixels = (int) ((80 * widthCells - 4) * density + .5f);
+            heightPixels = (int) ((100 * heightCells - 4) * density + .5f);
         } else {
-                widthPixels = (int) (106 * widthCells * density + .5f);
-                heightPixels = (int) (74 * heightCells * density + .5f);
+            widthPixels = (int) ((106 * widthCells - 4) * density + .5f);
+            heightPixels = (int) ((74 * heightCells - 4) * density + .5f);
         }
         return new Point(widthPixels, heightPixels);
     }

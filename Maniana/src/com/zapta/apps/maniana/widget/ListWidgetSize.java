@@ -14,6 +14,8 @@
 
 package com.zapta.apps.maniana.widget;
 
+import com.zapta.apps.maniana.util.Orientation;
+
 import android.graphics.Point;
 
 /**
@@ -24,33 +26,42 @@ import android.graphics.Point;
 public class ListWidgetSize {
 
     protected static final ListWidgetSize LIST_WIDGET_SIZE1 = new ListWidgetSize(
-            ListWidgetProvider1.class, 4, 1);
+            ListWidgetProvider1.class, 4, 1, 14);
     protected static final ListWidgetSize LIST_WIDGET_SIZE2 = new ListWidgetSize(
-            ListWidgetProvider2.class, 4, 2);
+            ListWidgetProvider2.class, 4, 2, 14);
     protected static final ListWidgetSize LIST_WIDGET_SIZE3 = new ListWidgetSize(
-            ListWidgetProvider3.class, 4, 3);
+            ListWidgetProvider3.class, 4, 3, 24);
     protected static final ListWidgetSize LIST_WIDGET_SIZE4 = new ListWidgetSize(
-            ListWidgetProvider4.class, 2, 2);
+            ListWidgetProvider4.class, 2, 2, 14);
     protected static final ListWidgetSize LIST_WIDGET_SIZE5 = new ListWidgetSize(
-            ListWidgetProvider5.class, 4, 4);
+            ListWidgetProvider5.class, 4, 4, 24);
 
     /** List of all list widget sizes. */
     static final ListWidgetSize[] LIST_WIDGET_SIZES = new ListWidgetSize[] { LIST_WIDGET_SIZE1,
             LIST_WIDGET_SIZE2, LIST_WIDGET_SIZE3, LIST_WIDGET_SIZE4, LIST_WIDGET_SIZE5 };
 
+    /** The actual concrete provider class for this widget size. */
     final Class<? extends ListWidgetProvider> widgetProviderClass;
+    
+    /** Widget width in home launcher cells. */
     final int widthCells;
+    
+    /** Widget height in home launcher cells. */
     final int heightCells;
+    
+    /** Text size of 'TODAY' title in sp units. */
+    final int titleSize;
 
     ListWidgetSize(Class<? extends ListWidgetProvider> widgetProviderClass, int widthCells,
-            int heightCells) {
+            int heightCells, int titleSize) {
         this.widgetProviderClass = widgetProviderClass;
         this.widthCells = widthCells;
         this.heightCells = heightCells;
+        this.titleSize = titleSize;
     }
 
     /** Compute widget gross area size in pixels based on current orientation */
-    Point currentGrossSizeInPixels(float density, boolean isPortrait) {
-        return WidgetUtil.widgetPixelSize(density, isPortrait, widthCells, heightCells);
+    Point grossPixelSizeForOrientation(float density, Orientation orientation) {
+        return WidgetUtil.widgetGrossPixelSize(density, orientation, widthCells, heightCells);
     }
 }

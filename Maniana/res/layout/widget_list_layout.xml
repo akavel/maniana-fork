@@ -21,7 +21,7 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="30dip"
+            android:layout_height="35dip"
             android:layout_alignRight="@id/widget_list_bitmap"
             android:layout_alignTop="@id/widget_list_bitmap"
             android:orientation="horizontal" >

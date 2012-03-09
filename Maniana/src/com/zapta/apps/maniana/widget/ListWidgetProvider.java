@@ -24,7 +24,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
@@ -52,6 +51,7 @@ import com.zapta.apps.maniana.services.AppServices;
 import com.zapta.apps.maniana.util.DebugTimer;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.LogUtil;
+import com.zapta.apps.maniana.util.Orientation;
 
 /**
  * Base class for the task list widgets.
@@ -84,17 +84,12 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             return;
         }
 
-        // For debugging only
-        final boolean DEBUG_TIME = false;
+        // For debugging only. Reports timing.
+        final boolean DEBUG_TIME = true;
         final DebugTimer debugTimer = DEBUG_TIME ? new DebugTimer() : null;
 
         final SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
-
-        // Create the widget remote view
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
-                R.layout.widget_list_layout);
-        setOnClickLaunch(context, remoteViews, R.id.widget_list_bitmap, ResumeAction.NONE);
 
         // Create the template view. We will later render it to a bitmap.
         //
@@ -130,46 +125,46 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                 .readWidgetShowToolbarPreference(sharedPreferences);
         final boolean showToolbarBackground = toolbarEanbled
                 && (backgroundType != WidgetBackgroundType.PAPER);
-        setToolbar(context, remoteViews, template, toolbarEanbled, showToolbarBackground);
+        setTemplateToolbar(context, template, toolbarEanbled, showToolbarBackground,
+                listWidgetSize.titleSize);
 
         // TODO: cache variation or at least custom typefaces
         final WidgetItemFontVariation fontVariation = WidgetItemFontVariation
                 .newFromCurrentPreferences(context, sharedPreferences);
 
-        // Set template view item list final int textColor =
+        // Set template view item list
         final LinearLayout itemListView = (LinearLayout) template
                 .findViewById(R.id.widget_list_template_item_list);
-        populateItemList(context, itemListView, model, fontVariation, sharedPreferences,
+        populateTemplateItemList(context, itemListView, model, fontVariation, sharedPreferences,
                 layoutInflater);
 
         if (DEBUG_TIME) {
             debugTimer.report("Template populated");
         }
 
-        final boolean isPortrait = context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-
+        // Template view is now fully populated. Render it as a bitmap. First we render it
+        // using screen native resolution.
+        final Orientation orientation = Orientation.currentOrientation(context);
         final float density = context.getResources().getDisplayMetrics().density;
+        final Point widgetGrossSizeInPixels = listWidgetSize.grossPixelSizeForOrientation(density,
+                orientation);
 
-        // Render the template view to a bitmap
-        final Point widgetGrossSizeInPixels = listWidgetSize.currentGrossSizeInPixels(density,
-                isPortrait);
-
-        // In percents. 100 means no change.
-        final int widthAdjust = isPortrait ? PreferencesTracker
+        // Bitmap size manual adjustment in percents. 100 means no change.
+        final int widthAdjust = orientation.isPortrait ? PreferencesTracker
                 .readWidgetPortraitWidthAdjustPreference(sharedPreferences) : PreferencesTracker
                 .readWidgetLandscapeWidthAdjustPreference(sharedPreferences);
 
-        final int heightAdjust = isPortrait ? PreferencesTracker
+        final int heightAdjust = orientation.isPortrait ? PreferencesTracker
                 .readWidgetPortraitHeightAdjustPreference(sharedPreferences) : PreferencesTracker
                 .readWidgetLandscapeHeightAdjustPreference(sharedPreferences);
 
-        // BaseSize * 90% * Adjustment
-        final int widthPixels = (widgetGrossSizeInPixels.x * 90 * widthAdjust) / (100 * 100);
-        final int heightPixels = (widgetGrossSizeInPixels.y * 90 * heightAdjust) / (100 * 100);
+        // size = (BaseSize - inset) * Adjustment%
+        final int insetPixels = (int) (5 * 2 * density);
+        final int widthPixels = ((widgetGrossSizeInPixels.x - insetPixels) * widthAdjust) / 100;
+        final int heightPixels = ((widgetGrossSizeInPixels.y - insetPixels) * heightAdjust) / 100;
 
-        //LogUtil."*** Actual bitmap size: %d x %d", widthPixels, heightPixels);
-
-        // TODO: does ARGB_4444 result is smaller file and faster widget update?.
+        // NTOE: ARGB_4444 results in a smaller file than ARGB_8888 (e.g. 50K vs 150k) 
+        // but does not look as good.
         final Bitmap bitmap = Bitmap.createBitmap(widthPixels, heightPixels,
                 Bitmap.Config.ARGB_8888);
 
@@ -185,7 +180,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             debugTimer.report("Template rendered to bitmap");
         }
 
-
+        // Template view is now rendered to a bitmap using screen native resolution.
         // ImageViews scales down images it fetches via URI by the density factor of the device.
         // As a workaround, we pre scale up the image by the density. Later versions of android
         // API has View.scaleX() and View.scale(Y) methods but they are not availabe for our
@@ -216,37 +211,42 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             debugTimer.report("Bitmap written to file");
         }
 
-        final Uri uri = Uri.parse("file://" + context.getFilesDir().getAbsolutePath() + "/"
-                + fileName);
-        //LogUtil.debug("*** URI: [%s]", uri);
+        // Create the widget remote view
+        final RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
+                R.layout.widget_list_layout);
+        setOnClickLaunch(context, remoteViews, R.id.widget_list_bitmap, ResumeAction.NONE);
+
+        setRemoteViewsToolbar(context, remoteViews, toolbarEanbled);
 
         // NOTE: setting up a temporary dummy image to cause the image view to reload the file.
-        // TODO: can we have a cleaner solution? Appending random dummy args to the URI?
+        // TODO: can we have a cleaner solution? E.g. appending random dummy args to the URI?
         remoteViews.setInt(R.id.widget_list_bitmap, "setImageResource", R.drawable.place_holder);
 
+        final Uri uri = Uri.parse("file://" + context.getFilesDir().getAbsolutePath() + "/"
+                + fileName);
         remoteViews.setUri(R.id.widget_list_bitmap, "setImageURI", uri);
 
         // Flush the remote view
         appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
 
         if (DEBUG_TIME) {
-            debugTimer.report("Sent remote view update.");
+            debugTimer.report("Remote views flushed.");
         }
     }
 
-    private static final void populateItemList(Context context, LinearLayout itemListView,
+    private static final void populateTemplateItemList(Context context, LinearLayout itemListView,
             AppModel model, WidgetItemFontVariation fontVariation,
             SharedPreferences sharedPreferences, LayoutInflater layoutInflater) {
         // For debugging
         final boolean debugTimestamp = false;
         if (debugTimestamp) {
             final String message = String.format("[%s]", SystemClock.elapsedRealtime() / 1000);
-            addMessageItem(context, itemListView, message, fontVariation, layoutInflater);
+            addTemplateMessageItem(context, itemListView, message, fontVariation, layoutInflater);
         }
 
         if (model == null) {
-            addMessageItem(context, itemListView, "(Maniana data not found)", fontVariation,
-                    layoutInflater);
+            addTemplateMessageItem(context, itemListView, "(Maniana data not found)",
+                    fontVariation, layoutInflater);
             return;
         }
 
@@ -260,7 +260,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final List<ItemModelReadOnly> items = WidgetUtil.selectTodaysActiveItemsByTime(model, now,
                 lockExpirationPeriod);
         if (items.isEmpty()) {
-            addMessageItem(context, itemListView, "(no active tasks)", fontVariation,
+            addTemplateMessageItem(context, itemListView, "(no active tasks)", fontVariation,
                     layoutInflater);
             return;
         }
@@ -302,44 +302,78 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         }
     }
 
-    /**
-     * Set toolbar. This updates both the template portion of the toolbar and the click overlays of
-     * the remote views.
-     */
-    private static final void setToolbar(Context context, RemoteViews remoteViews, View template,
-            boolean toolbarEnabled, boolean showToolbarBackground) {
-        final View toolbarView = template.findViewById(R.id.widget_list_template_toolbar);
-        final View addTextByVoiceButton = toolbarView
+    /** Add an item to the given template. Item can be an actual task or an informative message. */
+    private static final void addTemplateMessageItem(Context context, LinearLayout itemListView,
+            String message, WidgetItemFontVariation fontVariation, LayoutInflater layoutInflater) {
+
+        final LinearLayout itemView = (LinearLayout) layoutInflater.inflate(
+                R.layout.widget_list_template_item_layout, null);
+        final TextView textView = (TextView) itemView.findViewById(R.id.widget_item_text_view);
+        final View colorView = itemView.findViewById(R.id.widget_item_color);
+
+        // TODO: setup message text using widget font size preference?
+        textView.setSingleLine(false);
+        textView.setText(message);
+        fontVariation.apply(textView);
+        colorView.setVisibility(View.GONE);
+
+        itemListView.addView(itemView);
+    }
+
+    /** Set the toolbar portion of the template view */
+    private static final void setTemplateToolbar(Context context, View template,
+            boolean toolbarEnabled, boolean showToolbarBackground, int titleSize) {
+        final View templateToolbarView = template.findViewById(R.id.widget_list_template_toolbar);
+        final TextView templateToolbarTitleView = (TextView) templateToolbarView
+                .findViewById(R.id.widget_list_template_toolbar_title);
+        final View templateAddTextByVoiceButton = templateToolbarView
                 .findViewById(R.id.widget_list_template_toolbar_add_by_voice);
 
         if (!toolbarEnabled) {
-            toolbarView.setVisibility(View.GONE);
+            templateToolbarView.setVisibility(View.GONE);
             return;
         }
 
         // Make toolbar visible
-        toolbarView.setVisibility(View.VISIBLE);
+        templateToolbarView.setVisibility(View.VISIBLE);
+        templateToolbarTitleView.setTextSize(titleSize);
 
         // Show or hide toolbar background.
         if (showToolbarBackground) {
-            toolbarView.setBackgroundResource(R.drawable.widget_toolbar_background);
+            templateToolbarView.setBackgroundResource(R.drawable.widget_toolbar_background);
         } else {
-            toolbarView.setBackgroundColor(0x00000000);
+            templateToolbarView.setBackgroundColor(0x00000000);
         }
-
-        // Set new task by text action.
-        setOnClickLaunch(context, remoteViews, R.id.widget_list_toolbar_add_by_text_overlay,
-                ResumeAction.ADD_NEW_ITEM_BY_TEXT);
 
         // The voice recognition button is shown only if this device supports voice recognition.
         if (AppServices.isVoiceRecognitionSupported(context)) {
-            addTextByVoiceButton.setVisibility(View.VISIBLE);
+            templateAddTextByVoiceButton.setVisibility(View.VISIBLE);
+        } else {
+            templateAddTextByVoiceButton.setVisibility(View.GONE);
+        }
+    }
+
+    /** Set/disable the toolbar click overlay in the remote views layout. */
+    private static final void setRemoteViewsToolbar(Context context, RemoteViews remoteViews,
+            boolean toolbarEnabled) {
+        // Set or disable the click overlay of the add-item-by-text button.
+        if (toolbarEnabled) {
+            remoteViews.setInt(R.id.widget_list_toolbar_add_by_text_overlay, "setVisibility",
+                    View.VISIBLE);
+            setOnClickLaunch(context, remoteViews, R.id.widget_list_toolbar_add_by_text_overlay,
+                    ResumeAction.ADD_NEW_ITEM_BY_TEXT);
+        } else { // templateAddTextByVoiceButton.setVisibility(View.GONE);
+            remoteViews.setInt(R.id.widget_list_toolbar_add_by_text_overlay, "setVisibility",
+                    View.GONE);
+        }
+
+        // Set or disable the click overlay of the add-item-by-voice button.
+        if (toolbarEnabled && AppServices.isVoiceRecognitionSupported(context)) {
             remoteViews.setInt(R.id.widget_list_toolbar_add_by_voice_overlay, "setVisibility",
                     View.VISIBLE);
             setOnClickLaunch(context, remoteViews, R.id.widget_list_toolbar_add_by_voice_overlay,
                     ResumeAction.ADD_NEW_ITEM_BY_VOICE);
         } else {
-            addTextByVoiceButton.setVisibility(View.GONE);
             remoteViews.setInt(R.id.widget_list_toolbar_add_by_voice_overlay, "setVisibility",
                     View.GONE);
         }
@@ -356,23 +390,6 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(viewId, pendingIntent);
-    }
-
-    private static final void addMessageItem(Context context, LinearLayout itemListView,
-            String message, WidgetItemFontVariation fontVariation, LayoutInflater layoutInflater) {
-
-        final LinearLayout itemView = (LinearLayout) layoutInflater.inflate(
-                R.layout.widget_list_template_item_layout, null);
-        final TextView textView = (TextView) itemView.findViewById(R.id.widget_item_text_view);
-        final View colorView = itemView.findViewById(R.id.widget_item_color);
-
-        // TODO: setup message text using widget font size preference?
-        textView.setSingleLine(false);
-        textView.setText(message);
-        fontVariation.apply(textView);
-        colorView.setVisibility(View.GONE);
-
-        itemListView.addView(itemView);
     }
 
     // TODO: decide what we want to do with this.
