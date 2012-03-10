@@ -14,6 +14,8 @@
 
 package com.hlidskialf.android.preference;
 
+import javax.annotation.Nullable;
+
 import android.content.Context;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
@@ -35,9 +37,6 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     private static final String androidns = "http://schemas.android.com/apk/res/android";
 
     private final Context mContext;
-    
-    /** Static message to display in the dialog. */
-    private final String mDialogMessage;
     
     /** Format string for running label in dialog. Should contain %d. Attribute: text*/
     private final String mLabelFormat;
@@ -70,7 +69,6 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     public SeekBarPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
-        mDialogMessage = attrs.getAttributeValue(androidns, "dialogMessage");
         mLabelFormat = attrs.getAttributeValue(androidns, "text");
         mDefaultValue = attrs.getAttributeIntValue(androidns, "defaultValue", 50);
         mMinValue = attrs.getAttributeIntValue(androidns, "minLevel", 0);
@@ -87,16 +85,9 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
         layout.setOrientation(LinearLayout.VERTICAL);
         layout.setPadding(6, 6, 6, 6);
 
-        final TextView dialogMessageTextView = new TextView(mContext);
-        if (mDialogMessage != null) {
-            dialogMessageTextView.setText(mDialogMessage);
-        }
-        layout.addView(dialogMessageTextView);
-
         mValueTextView = new TextView(mContext);
-
         mValueTextView.setGravity(Gravity.CENTER_HORIZONTAL);
-        mValueTextView.setPadding(0, 40, 0, 0);
+        mValueTextView.setPadding(0, 15, 0, 0);
         mValueTextView.setTextSize(64);
         final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
