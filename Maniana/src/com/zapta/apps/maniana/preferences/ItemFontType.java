@@ -25,16 +25,20 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
  * @author Tal Dayan
  */
 public enum ItemFontType implements KeyedEnum {
-    CURSIVE("cursive"),
-    ELEGANT("elegant"),
-    SAN_SERIF("sans"),
-    SERIF("serif");
+    CURSIVE("cursive", 1.4f),
+    ELEGANT("elegant", 1.6f),
+    SAN_SERIF("sans", 1.2f),
+    SERIF("serif", 1.2f);
 
     /** Preference value key. Should match the values in preference xml. */
     private final String mKey;
+    
+    /** Relative scale to normalize size among font types. */
+    public final float scale;
 
-    private ItemFontType(String key) {
+    private ItemFontType(String key, float scale) {
         this.mKey = key;
+        this.scale = scale;
     }
 
     @Override

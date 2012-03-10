@@ -71,12 +71,15 @@
             android:entryValues="@array/itemFontValues"
             android:key="prefItemFontKey"
             android:title="Font" />
-        <ListPreference
-            android:defaultValue="normal"
-            android:entries="@array/itemFontSizeNames"
-            android:entryValues="@array/itemFontSizeValues"
-            android:key="prefItemFontSizeKey"
-            android:title="Text Size" />
+        <com.hlidskialf.android.preference.SeekBarPreference
+            android:key="prefPageItemFontSizeSpKey"
+            android:title="Text Size"
+            android:summary="Using %d point font"
+            android:dialogMessage="Select task text size"
+            android:defaultValue="16"
+            android:text="%dpt"
+            android:maxLevel="26"
+            android:minLevel="12" />
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#ff000000"
             android:key="prefPageTextColorKey"

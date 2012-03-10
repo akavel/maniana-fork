@@ -35,15 +35,15 @@ public class PageTheme extends Thumbnail {
                     PreferenceConstants.DEFAULT_PAGE_ITEM_DIVIDER_COLOR),
 
             new PageTheme("Yellow Pages", R.drawable.page_theme2_preview, PageBackgroundType.SOLID,
-                    0xfffcfcb8, ItemFontType.SAN_SERIF, ItemFontSize.NORMAL, 0xff333333,
+                    0xfffcfcb8, ItemFontType.SAN_SERIF, 18, 0xff333333,
                     0xff909090, 0x4def9900),
 
             new PageTheme("Dark Knight", R.drawable.page_theme3_preview, PageBackgroundType.SOLID,
-                    0xff000000, ItemFontType.ELEGANT, ItemFontSize.LARGE1, 0xffff8080,
+                    0xff000000, ItemFontType.ELEGANT, 20, 0xffff8080,
                     0xff00aa00, 0x80ffff00),
 
             new PageTheme("Spartan", R.drawable.page_theme4_preview, PageBackgroundType.SOLID,
-                    0xffffffff, ItemFontType.SERIF, ItemFontSize.SMALL1, 0xff000000,
+                    0xffffffff, ItemFontType.SERIF, 14, 0xff000000,
                     0xff000000, 0x00000000),
 
     };
@@ -51,13 +51,13 @@ public class PageTheme extends Thumbnail {
     public final PageBackgroundType backgroundType;
     public final int backgroundSolidColor;
     public final ItemFontType fontType;
-    public final ItemFontSize fontSize;
+    public final int fontSize;
     public final int textColor;
     public final int completedTextColor;
     public final int itemDividerColor;
 
     public PageTheme(String name, int drawableId, PageBackgroundType backgroundType,
-            int backgroundSolidColor, ItemFontType fontType, ItemFontSize fontSize,
+            int backgroundSolidColor, ItemFontType fontType, int fontSize,
             int textColor, int completedTextColor, int itemDividerColor) {
         super(name, drawableId);
         this.backgroundType = backgroundType;

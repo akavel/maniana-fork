@@ -49,7 +49,7 @@ public class PreferencesTracker implements PreferenceConstants {
     private PageBackgroundType mCachedPageBackgroundTypePreference;
     private int mCachedPageBackgroundSolidColorPreference;
     private ItemFontType mCachedPageFontTypePreference;
-    private ItemFontSize mCachedPageFontSizePreference;
+    private int mCachedPageFontSizePreference;
     private int mCachedPageItemActiveTextColorPreference;
     private int mCachedPageItemCompletedTextColorPreference;
     private int mCachedPageItemDividerColorPreference;
@@ -104,9 +104,8 @@ public class PreferencesTracker implements PreferenceConstants {
     }
 
     private final void updateCachedPageFontSizePreference() {
-        final String key = mSharedPreferences.getString(
-                PreferenceKind.PAGE_ITEM_FONT_SIZE.getKey(), DEFAULT_PAGE_FONT_SIZE.getKey());
-        mCachedPageFontSizePreference = ItemFontSize.fromKey(key, DEFAULT_PAGE_FONT_SIZE);
+        mCachedPageFontSizePreference = mSharedPreferences.getInt(
+                PreferenceKind.PAGE_ITEM_FONT_SIZE.getKey(), DEFAULT_PAGE_FONT_SIZE);
     }
 
     private final void updateCachedPageBackgroundTypePreference() {
@@ -271,7 +270,7 @@ public class PreferencesTracker implements PreferenceConstants {
         return mCachedPageFontTypePreference;
     }
 
-    public final ItemFontSize getItemFontSizePreference() {
+    public final int getItemFontSizePreference() {
         return mCachedPageFontSizePreference;
     }
 

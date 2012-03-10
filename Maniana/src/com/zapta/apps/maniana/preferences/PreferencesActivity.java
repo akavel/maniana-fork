@@ -34,6 +34,7 @@ import android.preference.PreferenceActivity;
 import android.text.format.Time;
 import android.widget.Toast;
 
+import com.hlidskialf.android.preference.SeekBarPreference;
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
 import com.zapta.apps.maniana.help.PopupMessageActivity.MessageKind;
@@ -64,7 +65,7 @@ public class PreferencesActivity extends PreferenceActivity implements
     private ListPreference mPageBackgroundTypeListPreference;
     private ColorPickerPreference mPageSolidColorPickPreference;
     private ListPreference mPageFontTypeListPreference;
-    private ListPreference mPageFontSizeListPreference;
+    private SeekBarPreference mPageFontSizePreference;
     private ColorPickerPreference mPageTextActiveColorPickPreference;
     private ColorPickerPreference mPageTextCompletedColorPickPreference;
     private ColorPickerPreference mPageItemDividerColorPickPreference;
@@ -110,7 +111,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         mPageBackgroundTypeListPreference = (ListPreference) findPreference(PreferenceKind.PAGE_BACKGROUND_TYPE);
         mPageSolidColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_BACKGROUND_SOLID_COLOR);
         mPageFontTypeListPreference = (ListPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_TYPE);
-        mPageFontSizeListPreference = (ListPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_SIZE);
+        mPageFontSizePreference = (SeekBarPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_SIZE);
         mPageTextActiveColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_ITEM_ACTIVE_TEXT_COLOR);
         mPageTextCompletedColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_ITEM_COMPLETED_TEXT_COLOR);
         mPageItemDividerColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_ITEM_DIVIDER_COLOR);
@@ -218,7 +219,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         mPageBackgroundTypeListPreference.setValue(theme.backgroundType.getKey());
         mPageSolidColorPickPreference.onColorChanged(theme.backgroundSolidColor);
         mPageFontTypeListPreference.setValue(theme.fontType.getKey());
-        mPageFontSizeListPreference.setValue(theme.fontSize.getKey());
+        mPageFontSizePreference.setValue(theme.fontSize);
         mPageTextActiveColorPickPreference.onColorChanged(theme.textColor);
         mPageTextCompletedColorPickPreference.onColorChanged(theme.completedTextColor);
         mPageItemDividerColorPickPreference.onColorChanged(theme.itemDividerColor);
@@ -282,6 +283,10 @@ public class PreferencesActivity extends PreferenceActivity implements
         // We also need to set boolean preferences whose default value is false.
         // Otherwise their change is not broadcast to the tracker for some reason.
         editor.putBoolean(PreferenceKind.AUTO_SORT.getKey(), false);
+        
+        // TODO: do we need to set the seekbar preferences or can we make them
+        // to broadcast the reset event?
+        editor.putInt(PreferenceKind.PAGE_ITEM_FONT_SIZE.getKey(), PreferenceConstants.DEFAULT_PAGE_FONT_SIZE);
 
         editor.commit();
 
@@ -355,7 +360,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     private void updateSummaries() {
         updateListSummary(mPageFontTypeListPreference, R.array.itemFontSummaries, null);
-        updateListSummary(mPageFontSizeListPreference, R.array.itemFontSizeSummaries, null);
         updateListSummary(mPageBackgroundTypeListPreference, R.array.pageBackgroundTypeSummaries,
                 null);
         

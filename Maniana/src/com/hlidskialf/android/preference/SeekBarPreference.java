@@ -159,16 +159,21 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
         // We accept changes only if the user clicked OK
         if (positiveResult) {
             final int newValue = mSeekBar.getProgress() + mMinValue;
-            if (newValue != mValue) {
-                mValue = newValue;
-                updateSummaryWithCurrentValue();
-                if (shouldPersist()) {
-                    persistInt(mValue);
-                }
-                // TODO: the javadoc of this method says it should be called before persisting
-                // and its return value should control the persistence.
-                callChangeListener(new Integer(mValue));
+            setValue(newValue);
+        }
+    }
+    
+    public void setValue(int newValue) {
+        if (newValue != mValue) {
+            // Enforce range
+            mValue = Math.min(mMaxValue, Math.max(mMinValue, newValue));
+            updateSummaryWithCurrentValue();
+            if (shouldPersist()) {
+                persistInt(mValue);
             }
+            // TODO: the javadoc of this method says it should be called before persisting
+            // and its return value should control the persistence.
+            callChangeListener(new Integer(mValue));
         }
     }
     
