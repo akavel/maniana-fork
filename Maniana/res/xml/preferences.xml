@@ -144,19 +144,19 @@
                 <com.hlidskialf.android.preference.SeekBarPreference
                     android:key="prefWidgetPortraitWidthAdjustKey"
                     android:title="Width Ajudstment"
-                    android:summary="Width micro adjustment"
+                    android:summary="Portrait width adjustment (%d%%)"
                     android:dialogMessage="Adjust list widget width"
                     android:defaultValue="100"
-                    android:text="%"
+                    android:text="%d%%"
                     android:maxLevel="120"
                     android:minLevel="80" />
                 <com.hlidskialf.android.preference.SeekBarPreference
                     android:key="prefWidgetPortraitHeightAdjustKey"
                     android:title="Height Ajudstment"
-                    android:summary="Height micro adjustment"
+                    android:summary="Portrait height adjustment (%d%%)"
                     android:dialogMessage="Adjust list widget height"
                     android:defaultValue="100"
-                    android:text="%"
+                    android:text="%d%%"
                     android:maxLevel="120"
                     android:minLevel="80" />
             </PreferenceCategory>
@@ -164,19 +164,19 @@
                 <com.hlidskialf.android.preference.SeekBarPreference
                     android:key="prefWidgetLandscapeWidthAdjustKey"
                     android:title="Width Ajudstment"
-                    android:summary="Width micro adjustment"
+                    android:summary="Landscape width adjustment (%d%%)"
                     android:dialogMessage="Adjust list widget width"
                     android:defaultValue="100"
-                    android:text="%"
+                    android:text="%d%%"
                     android:maxLevel="120"
                     android:minLevel="80" />
                 <com.hlidskialf.android.preference.SeekBarPreference
                     android:key="prefWidgetLandscapeHeightAdjustKey"
                     android:title="Height Ajudstment"
-                    android:summary="Height micro adjustment"
+                    android:summary="Landscpae height adjustment (%d%%)"
                     android:dialogMessage="Adjust list widget height"
                     android:defaultValue="100"
-                    android:text="%"
+                    android:text="%d%%"
                     android:maxLevel="120"
                     android:minLevel="80" />
             </PreferenceCategory>

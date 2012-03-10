@@ -285,7 +285,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                 // differently and does not limit the lines to two when ellipsize. For
                 // consistency, we limit it explicitly to two lines.
                 //
-                // TODO: file an Android bug.
+                // TODO: file an Android bug about the different ICS behavior.
                 //
                 textView.setMaxLines(2);
             }
@@ -302,7 +302,10 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         }
     }
 
-    /** Add an item to the given template. Item can be an actual task or an informative message. */
+    /** 
+     * Add an informative message to the item list. 
+     * These messages are formatted differently than actual tasks.
+     */
     private static final void addTemplateMessageItem(Context context, LinearLayout itemListView,
             String message, WidgetItemFontVariation fontVariation, LayoutInflater layoutInflater) {
 

@@ -23,8 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.zapta.apps.maniana.util.LogUtil;
-
 /**
  * Custom preference for selecting an integer within range.
  * 
@@ -37,26 +35,49 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     private static final String androidns = "http://schemas.android.com/apk/res/android";
 
     private final Context mContext;
+    
+    /** Static message to display in the dialog. */
     private final String mDialogMessage;
-    private final String mSuffix;
-    private final int mDefault;
-    private final int mMin;
-    private final int mMax;
+    
+    /** Format string for running label in dialog. Should contain %d. Attribute: text*/
+    private final String mLabelFormat;
+    
+    /** Default value. Attribute: defaultValue */
+    private final int mDefaultValue;
+    
+    /** Min value (inclusive). Attribute: minLevel */
+    private final int mMinValue;
+    
+    /** Max value, (inclusive). Attribute: maxLevel */
+    private final int mMaxValue;
+    
+    /** Current preference value. Updated when the user OKs a new value. */
     private int mValue;
     
+    /** 
+     * Format string for preference summary string (when dialog is closed). 
+     * Can contain a single %d for current value. 
+     */
+    private String mSummaryFormat;
+    
+    /** The SeekBar in the dialog. */
     private SeekBar mSeekBar;
-    private TextView mValueText;
+    
+    /** The running value string field in the dialog. */
+    private TextView mValueTextView;
 
 
     public SeekBarPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
         mDialogMessage = attrs.getAttributeValue(androidns, "dialogMessage");
-        mSuffix = attrs.getAttributeValue(androidns, "text");
-        mDefault = attrs.getAttributeIntValue(androidns, "defaultValue", 50);
-        mMin = attrs.getAttributeIntValue(androidns, "minLevel", 0);
-        mMax = attrs.getAttributeIntValue(androidns, "maxLevel", 100);
-        mValue = shouldPersist() ? getPersistedInt(mDefault) : mDefault;
+        mLabelFormat = attrs.getAttributeValue(androidns, "text");
+        mDefaultValue = attrs.getAttributeIntValue(androidns, "defaultValue", 50);
+        mMinValue = attrs.getAttributeIntValue(androidns, "minLevel", 0);
+        mMaxValue = attrs.getAttributeIntValue(androidns, "maxLevel", 100);
+        mValue = shouldPersist() ? getPersistedInt(mDefaultValue) : mDefaultValue;
+        mSummaryFormat = attrs.getAttributeValue(androidns, "summary");
+        updateSummaryWithCurrentValue();
     }
 
     /** Dialog preference */
@@ -72,14 +93,14 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
         }
         layout.addView(dialogMessageTextView);
 
-        mValueText = new TextView(mContext);
+        mValueTextView = new TextView(mContext);
 
-        mValueText.setGravity(Gravity.CENTER_HORIZONTAL);
-        mValueText.setPadding(0, 40, 0, 0);
-        mValueText.setTextSize(64);
+        mValueTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+        mValueTextView.setPadding(0, 40, 0, 0);
+        mValueTextView.setTextSize(64);
         final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layout.addView(mValueText, params);
+        layout.addView(mValueTextView, params);
 
         mSeekBar = new SeekBar(mContext);
         mSeekBar.setOnSeekBarChangeListener(this);
@@ -87,8 +108,8 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
         layout.addView(mSeekBar, new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
-        mSeekBar.setMax(mMax - mMin);
-        mSeekBar.setProgress(mValue - mMin);
+        mSeekBar.setMax(mMaxValue - mMinValue);
+        mSeekBar.setProgress(mValue - mMinValue);
         return layout;
     }
 
@@ -97,8 +118,8 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     protected void onBindDialogView(View v) {
         super.onBindDialogView(v);
         // NOTE: SeekBar values are zero relative so we offset them accordingly
-        mSeekBar.setMax(mMax - mMin);
-        mSeekBar.setProgress(mValue - mMin);
+        mSeekBar.setMax(mMaxValue - mMinValue);
+        mSeekBar.setProgress(mValue - mMinValue);
     }
 
     /** Preference */
@@ -106,18 +127,18 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     protected void onSetInitialValue(boolean restore, Object defaultValue) {
         super.onSetInitialValue(restore, defaultValue);
         if (restore) {
-            mValue = shouldPersist() ? getPersistedInt(mDefault) : mDefault;
+            mValue = shouldPersist() ? getPersistedInt(mDefaultValue) : mDefaultValue;
         } else {
             mValue = (Integer) defaultValue;
         }
+        updateSummaryWithCurrentValue();
     }
 
     /** Called from mSeekBar. */
     @Override
     public void onProgressChanged(SeekBar seek, int seekBarValue, boolean fromTouch) {
-        final int currentValue = seekBarValue + mMin;
-        final String t = String.valueOf(currentValue);
-        mValueText.setText(mSuffix == null ? t : t.concat(mSuffix));
+        final int currentValue = seekBarValue + mMinValue;
+        mValueTextView.setText(String.format(mLabelFormat, currentValue));
     }
 
     /** Called from mSeekBar. */
@@ -134,13 +155,13 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     
     @Override
     protected void onDialogClosed(boolean positiveResult) {
-        LogUtil.debug("*** onDialogCloses(%s) called", positiveResult);
         super.onDialogClosed(positiveResult);
         // We accept changes only if the user clicked OK
         if (positiveResult) {
-            final int newValue = mSeekBar.getProgress() + mMin;
+            final int newValue = mSeekBar.getProgress() + mMinValue;
             if (newValue != mValue) {
                 mValue = newValue;
+                updateSummaryWithCurrentValue();
                 if (shouldPersist()) {
                     persistInt(mValue);
                 }
@@ -149,5 +170,21 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
                 callChangeListener(new Integer(mValue));
             }
         }
-    }     
+    }
+    
+    private final void updateSummaryWithCurrentValue() {
+        super.setSummary(String.format( mSummaryFormat, mValue));
+    }
+
+    @Override
+    public void setSummary(CharSequence summary) {
+        // TODO(tal): capture base summary and expand with current value.
+        super.setSummary(summary + " (TBD)");
+    }
+
+    @Override
+    public void setSummary(int summaryResId) {
+        // TODO: read resource into a string and append current value.
+        super.setSummary(summaryResId);
+    }      
 }
