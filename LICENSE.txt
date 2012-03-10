@@ -16,10 +16,14 @@ SIL OPEN FONT LICENSE Version 1.1
 Pompiere font
 asserts/fonts/Pompiere/*
 SIL OPEN FONT LICENSE Version 1.1
+Font file modified (using FontForge) to fix the U+FEFF problem described in answer 2 here:
+http://tinyurl.com/7x9qbxt
 
 Vavont font
 asserts/fonts/Vavont/*
 GPL
+Font file modified (using FontForge) to fix the U+FEFF problem described in answer 2 here:
+http://tinyurl.com/7x9qbxt
  
 Icons
 ----- 

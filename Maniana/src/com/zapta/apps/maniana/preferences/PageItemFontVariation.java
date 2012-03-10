@@ -29,9 +29,9 @@ import android.widget.TextView;
  */
 public class PageItemFontVariation {
     /** Path to page title fonts relative to assets directory. */
-    private static final String CURSIVE_ITEM_FONT_ASSET_PATH = "fonts/Vavont/Vavont.ttf";
+    private static final String CURSIVE_ITEM_FONT_ASSET_PATH = "fonts/Vavont/Vavont-modified.ttf";
 
-    private static final String ELEGANT_ITEM_FONT_ASSET_PATH = "fonts/Pompiere/Pompiere-Regular.ttf";
+    private static final String ELEGANT_ITEM_FONT_ASSET_PATH = "fonts/Pompiere/Pompiere-Regular-modified.ttf";
     
     private final Typeface mTypeFace;
     private final int mColor;
