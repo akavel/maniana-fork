@@ -108,4 +108,12 @@ public abstract class WidgetUtil {
         }
         return new Point(widthPixels, heightPixels);
     }
+    
+    /** Compute the list widget TODAY title text size. */ 
+    public static int titleTextSize(ListWidgetSize listWidgetSize, int itemTextSize) {
+        // NOTE: this heuristic provides good results. If needed adjust as needed, possibly
+        // considering also the widget size. No deep thinking here, just anything that looks
+        // good across different widget and text sizes.
+        return (int)(itemTextSize * 0.8);
+    }
 }

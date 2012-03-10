@@ -26,15 +26,15 @@ import android.graphics.Point;
 public class ListWidgetSize {
 
     protected static final ListWidgetSize LIST_WIDGET_SIZE1 = new ListWidgetSize(
-            ListWidgetProvider1.class, 4, 1, 14);
+            ListWidgetProvider1.class, 4, 1);
     protected static final ListWidgetSize LIST_WIDGET_SIZE2 = new ListWidgetSize(
-            ListWidgetProvider2.class, 4, 2, 14);
+            ListWidgetProvider2.class, 4, 2);
     protected static final ListWidgetSize LIST_WIDGET_SIZE3 = new ListWidgetSize(
-            ListWidgetProvider3.class, 4, 3, 24);
+            ListWidgetProvider3.class, 4, 3);
     protected static final ListWidgetSize LIST_WIDGET_SIZE4 = new ListWidgetSize(
-            ListWidgetProvider4.class, 2, 2, 14);
+            ListWidgetProvider4.class, 2, 2);
     protected static final ListWidgetSize LIST_WIDGET_SIZE5 = new ListWidgetSize(
-            ListWidgetProvider5.class, 4, 4, 24);
+            ListWidgetProvider5.class, 4, 4);
 
     /** List of all list widget sizes. */
     static final ListWidgetSize[] LIST_WIDGET_SIZES = new ListWidgetSize[] { LIST_WIDGET_SIZE1,
@@ -48,16 +48,12 @@ public class ListWidgetSize {
     
     /** Widget height in home launcher cells. */
     final int heightCells;
-    
-    /** Text size of 'TODAY' title in sp units. */
-    final int titleSize;
 
     ListWidgetSize(Class<? extends ListWidgetProvider> widgetProviderClass, int widthCells,
-            int heightCells, int titleSize) {
+            int heightCells) {
         this.widgetProviderClass = widgetProviderClass;
         this.widthCells = widthCells;
         this.heightCells = heightCells;
-        this.titleSize = titleSize;
     }
 
     /** Compute widget gross area size in pixels based on current orientation */

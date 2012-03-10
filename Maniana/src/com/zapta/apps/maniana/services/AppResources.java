@@ -28,7 +28,7 @@ import com.zapta.apps.maniana.main.AppContext;
  */
 public class AppResources {
     /** Path to page title fonts relative to assets directory. */
-    private static final String TITLE_FONT_ASSET_PATH = "fonts/Damion/Damion-Regular.ttf";
+    public static final String TITLE_FONT_ASSET_PATH = "fonts/Damion/Damion-Regular.ttf";
 
     /** App context. */
     private final AppContext mApp;

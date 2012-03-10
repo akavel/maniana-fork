@@ -37,7 +37,7 @@ public class WidgetItemFontVariation {
 
     private final Typeface mTypeFace;
     private final int mColor;
-    private final float mTextSize;
+    private final int mTextSize;
     private final float mLineSpacingMultiplier;
 
     /**
@@ -56,7 +56,7 @@ public class WidgetItemFontVariation {
      * @param topBottomPadding
      *            padding (in dip) at top and bottom of text.
      */
-    private WidgetItemFontVariation(Typeface typeFace, int color, float textSize,
+    private WidgetItemFontVariation(Typeface typeFace, int color, int textSize,
             float lineSpacingMultiplier) {
         this.mTypeFace = typeFace;
         this.mColor = color;
@@ -89,8 +89,7 @@ public class WidgetItemFontVariation {
 
         final int rawFontSize = PreferencesTracker
                 .readWidgetItemFontSizePreference(sharedPreferences);
-        final int fontSize = (int) (rawFontSize * fontType.scale);
-
+        final int fontSize = (int)(rawFontSize * fontType.scale);
 
         switch (fontType) {
             case CURSIVE:
@@ -106,5 +105,9 @@ public class WidgetItemFontVariation {
             default:
                 throw new RuntimeException("Unknown widget font type: " + fontType);
         }
+    }
+    
+    public int getTextSize() {
+        return mTextSize;
     }
 }

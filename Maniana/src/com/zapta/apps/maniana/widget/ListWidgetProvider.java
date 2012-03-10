@@ -119,18 +119,19 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                         .readWidgetBackgroundColorPreference(sharedPreferences);
                 template.setBackgroundColor(backgroundColor);
         }
+        
+        // TODO: cache variation or at least custom typefaces
+        final WidgetItemFontVariation fontVariation = WidgetItemFontVariation
+                .newFromCurrentPreferences(context, sharedPreferences);
 
         // Set template view toolbar
         final boolean toolbarEanbled = PreferencesTracker
                 .readWidgetShowToolbarPreference(sharedPreferences);
         final boolean showToolbarBackground = toolbarEanbled
                 && (backgroundType != WidgetBackgroundType.PAPER);
+        final int titleSize = WidgetUtil.titleTextSize(listWidgetSize, fontVariation.getTextSize());
         setTemplateToolbar(context, template, toolbarEanbled, showToolbarBackground,
-                listWidgetSize.titleSize);
-
-        // TODO: cache variation or at least custom typefaces
-        final WidgetItemFontVariation fontVariation = WidgetItemFontVariation
-                .newFromCurrentPreferences(context, sharedPreferences);
+                titleSize);
 
         // Set template view item list
         final LinearLayout itemListView = (LinearLayout) template
@@ -323,7 +324,11 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         itemListView.addView(itemView);
     }
 
-    /** Set the toolbar portion of the template view */
+    /** 
+     * Set the toolbar portion of the template view.
+     * 
+     * showToolbarBackground and titleSize are ignored if not toolbarEnabled. titleSize.
+     */
     private static final void setTemplateToolbar(Context context, View template,
             boolean toolbarEnabled, boolean showToolbarBackground, int titleSize) {
         final View templateToolbarView = template.findViewById(R.id.widget_list_template_toolbar);
