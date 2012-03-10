@@ -72,7 +72,7 @@
             android:key="prefItemFontKey"
             android:title="Font" />
         <com.hlidskialf.android.preference.SeekBarPreference
-            android:key="prefPageItemFontSizeSpKey"
+            android:key="prefPageItemFontSizePtKey"
             android:title="Text Size"
             android:summary="Using %d points text size"
             android:defaultValue="16"
@@ -118,12 +118,14 @@
             android:entryValues="@array/itemFontValues"
             android:key="prefWidgetItemFontKey"
             android:title="Font" />
-        <ListPreference
-            android:defaultValue="medium"
-            android:entries="@array/itemFontSizeNames"
-            android:entryValues="@array/itemFontSizeValues"
-            android:key="prefWidgetItemFontSizeKey"
-            android:title="Text Size" />
+        <com.hlidskialf.android.preference.SeekBarPreference
+            android:key="prefWidgetItemFontSizePtKey"
+            android:title="Text Size"
+            android:summary="Using %d points text size"
+            android:defaultValue="14"
+            android:text="%dpt"
+            android:maxLevel="24"
+            android:minLevel="10" />
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#ff330000"
             android:key="prefWidgetTextColorKey"

@@ -163,12 +163,9 @@ public class PreferencesTracker implements PreferenceConstants {
     }
 
     /** Read widget item text size preference. */
-    public static final ItemFontSize readWidgetItemFontSizePreference(
-            SharedPreferences sharedPreferences) {
-        final String key = sharedPreferences.getString(
-                PreferenceKind.WIDGET_ITEM_FONT_SIZE.getKey(),
-                DEFAULT_WIDGET_ITEM_FONT_SIZE.getKey());
-        return ItemFontSize.fromKey(key, DEFAULT_WIDGET_ITEM_FONT_SIZE);
+    public static final int readWidgetItemFontSizePreference(SharedPreferences sharedPreferences) {
+        return sharedPreferences.getInt(PreferenceKind.WIDGET_ITEM_FONT_SIZE.getKey(),
+                DEFAULT_WIDGET_ITEM_FONT_SIZE);
     }
 
     /**

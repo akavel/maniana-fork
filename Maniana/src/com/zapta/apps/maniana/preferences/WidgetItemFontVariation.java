@@ -39,7 +39,6 @@ public class WidgetItemFontVariation {
     private final int mColor;
     private final float mTextSize;
     private final float mLineSpacingMultiplier;
-    //private final int mTopBottomPadding;
 
     /**
      * Construct a new variation.
@@ -63,7 +62,7 @@ public class WidgetItemFontVariation {
         this.mColor = color;
         // this.mColorCompleted = colorCompleted;
         this.mTextSize = textSize;
-        //this.mTopBottomPadding = topBottomPadding;
+        // this.mTopBottomPadding = topBottomPadding;
         this.mLineSpacingMultiplier = lineSpacingMultiplier;
     }
 
@@ -88,25 +87,22 @@ public class WidgetItemFontVariation {
                 .readWidgetFontTypeFontTypePreference(sharedPreferences);
         final int color = PreferencesTracker.readWidgetTextColorPreference(sharedPreferences);
 
-        final ItemFontSize fontSize = PreferencesTracker
+        final int rawFontSize = PreferencesTracker
                 .readWidgetItemFontSizePreference(sharedPreferences);
+        final int fontSize = (int) (rawFontSize * fontType.scale);
 
-        // Widget default text size
-        final int K = 14;
-        
+
         switch (fontType) {
             case CURSIVE:
                 return new WidgetItemFontVariation(Typeface.createFromAsset(context.getAssets(),
-                        CURSIVE_ITEM_FONT_ASSET_PATH), color, K * fontSize.getFactor() * 1.6f, 0.9f);
+                        CURSIVE_ITEM_FONT_ASSET_PATH), color, fontSize, 0.9f);
             case ELEGANT:
                 return new WidgetItemFontVariation(Typeface.createFromAsset(context.getAssets(),
-                        ELEGANT_ITEM_FONT_ASSET_PATH), color, K * fontSize.getFactor() * 1.6f, 0.9f);
+                        ELEGANT_ITEM_FONT_ASSET_PATH), color, fontSize, 0.9f);
             case SAN_SERIF:
-                return new WidgetItemFontVariation(Typeface.SANS_SERIF, color,
-                        K * fontSize.getFactor(), 1.1f);
+                return new WidgetItemFontVariation(Typeface.SANS_SERIF, color, fontSize, 1.1f);
             case SERIF:
-                return new WidgetItemFontVariation(Typeface.SERIF, color, K * fontSize.getFactor(),
-                        1.1f);
+                return new WidgetItemFontVariation(Typeface.SERIF, color, fontSize, 1.1f);
             default:
                 throw new RuntimeException("Unknown widget font type: " + fontType);
         }

@@ -75,7 +75,7 @@ public class PreferencesActivity extends PreferenceActivity implements
     private ListPreference mWidgetBackgroundTypeListPreference;
     private ColorPickerPreference mWidgetSolidColorPickPreference;
     private ListPreference mWidgetFontTypeListPreference;
-    private ListPreference mWidgetFontSizeListPreference;
+    private SeekBarPreference mWidgetFontSizePreference;
     private ColorPickerPreference mWidgetTextColorPickPreference;
     private CheckBoxPreference mWidgetShowToolbarPreference;
     private CheckBoxPreference mWidgetSingleLinePreference;
@@ -121,7 +121,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         mWidgetBackgroundTypeListPreference = (ListPreference) findPreference(PreferenceKind.WIDGET_BACKGROUND_TYPE);
         mWidgetSolidColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_BACKGROUND_COLOR);
         mWidgetFontTypeListPreference = (ListPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_TYPE);
-        mWidgetFontSizeListPreference = (ListPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_SIZE);
+        mWidgetFontSizePreference = (SeekBarPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_SIZE);
 
         mWidgetTextColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_ITEM_TEXT_COLOR);
         mWidgetShowToolbarPreference = (CheckBoxPreference) findPreference(PreferenceKind.WIDGET_SHOW_TOOLBAR);
@@ -230,7 +230,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         mWidgetBackgroundTypeListPreference.setValue(theme.backgroundType.getKey());
         mWidgetSolidColorPickPreference.onColorChanged(theme.backgroundColor);
         mWidgetFontTypeListPreference.setValue(theme.fontType.getKey());
-        mWidgetFontSizeListPreference.setValue(theme.fontSize.getKey());
+        mWidgetFontSizePreference.setValue(theme.fontSize);
         mWidgetTextColorPickPreference.onColorChanged(theme.textColor);
         mWidgetShowToolbarPreference.setChecked(theme.showToolbar);
         mWidgetSingleLinePreference.setChecked(theme.singleLine);
@@ -283,10 +283,13 @@ public class PreferencesActivity extends PreferenceActivity implements
         // We also need to set boolean preferences whose default value is false.
         // Otherwise their change is not broadcast to the tracker for some reason.
         editor.putBoolean(PreferenceKind.AUTO_SORT.getKey(), false);
-        
+
         // TODO: do we need to set the seekbar preferences or can we make them
         // to broadcast the reset event?
-        editor.putInt(PreferenceKind.PAGE_ITEM_FONT_SIZE.getKey(), PreferenceConstants.DEFAULT_PAGE_FONT_SIZE);
+        editor.putInt(PreferenceKind.PAGE_ITEM_FONT_SIZE.getKey(),
+                PreferenceConstants.DEFAULT_PAGE_FONT_SIZE);
+        editor.putInt(PreferenceKind.WIDGET_ITEM_FONT_SIZE.getKey(),
+                PreferenceConstants.DEFAULT_WIDGET_ITEM_FONT_SIZE);
 
         editor.commit();
 
@@ -362,11 +365,10 @@ public class PreferencesActivity extends PreferenceActivity implements
         updateListSummary(mPageFontTypeListPreference, R.array.itemFontSummaries, null);
         updateListSummary(mPageBackgroundTypeListPreference, R.array.pageBackgroundTypeSummaries,
                 null);
-        
+
         updateListSummary(mWidgetFontTypeListPreference, R.array.itemFontSummaries, null);
         updateListSummary(mWidgetBackgroundTypeListPreference,
                 R.array.widgetBackgroundTypeSummaries, null);
-        updateListSummary(mWidgetFontSizeListPreference, R.array.itemFontSizeSummaries, null);
 
         // Disable applause if voice is disabled
         if (mSoundEnablePreference.isChecked()) {

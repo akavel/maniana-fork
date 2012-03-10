@@ -14,8 +14,6 @@
 
 package com.hlidskialf.android.preference;
 
-import javax.annotation.Nullable;
-
 import android.content.Context;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;

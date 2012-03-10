@@ -19,24 +19,6 @@
         <item>Using San Serif font</item>
         <item>Using Serif font</item>
     </string-array>
-    <string-array name="itemFontSizeNames">
-        <item>Small</item>
-        <item>Normal</item>
-        <item>Large</item>
-        <item>Very Large</item>
-    </string-array>
-    <string-array name="itemFontSizeValues">
-        <item>small1</item>
-        <item>normal</item>
-        <item>large1</item>
-        <item>large2</item>
-    </string-array>
-    <string-array name="itemFontSizeSummaries">
-        <item>Using small text size</item>
-        <item>Using normal text size</item>
-        <item>Using large text size</item>
-        <item>Using very large text size</item>
-    </string-array>
     <string-array name="pageBackgroundTypeNames">
         <item>Stained paper</item>
         <item>Solid color</item>

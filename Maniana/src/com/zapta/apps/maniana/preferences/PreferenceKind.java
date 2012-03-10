@@ -22,7 +22,7 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 /**
  * Represents the preference items.
  * 
- * DO NOT REUSE THESE OLD KEYS: prefBackgroundKey, prefVoiceRecognitionKey, prefItemFontSizeKey
+ * DO NOT REUSE THESE OLD KEYS: prefBackgroundKey, prefVoiceRecognitionKey, prefItemFontSizeKey, prefWidgetItemFontSizeKey
  * 
  * @author Tal Dayan
  */
@@ -43,7 +43,7 @@ public enum PreferenceKind implements KeyedEnum {
     PAGE_BACKGROUND_TYPE("prefPageBackgroundTypeKey"),
     PAGE_BACKGROUND_SOLID_COLOR("prefPageBackgroundSolidColorKey"),
     PAGE_ITEM_FONT_TYPE("prefItemFontKey"),
-    PAGE_ITEM_FONT_SIZE("prefPageItemFontSizeSpKey"), 
+    PAGE_ITEM_FONT_SIZE("prefPageItemFontSizePtKey"), 
     PAGE_ITEM_ACTIVE_TEXT_COLOR("prefPageTextColorKey"),
     PAGE_ITEM_COMPLETED_TEXT_COLOR("prefPageCompletedTextColorKey"),
     PAGE_ITEM_DIVIDER_COLOR("prefPageItemDividerColorKey"), 
@@ -54,7 +54,7 @@ public enum PreferenceKind implements KeyedEnum {
     WIDGET_BACKGROUND_COLOR("prefWidgetBackgroundColorKey"),
     WIDGET_ITEM_FONT_TYPE("prefWidgetItemFontKey"),
     WIDGET_ITEM_TEXT_COLOR("prefWidgetTextColorKey"),
-    WIDGET_ITEM_FONT_SIZE("prefWidgetItemFontSizeKey"),
+    WIDGET_ITEM_FONT_SIZE("prefWidgetItemFontSizePtKey"),
     WIDGET_SHOW_TOOLBAR("prefWidgetShowToolbarKey"),
     WIDGET_SINGLE_LINE("prefWidgetSingleLineKey"),   
     WIDGET_PORTRAIT_WIDTH_ADJUST("prefWidgetPortraitWidthAdjustKey"),
