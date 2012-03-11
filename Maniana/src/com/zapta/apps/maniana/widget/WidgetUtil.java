@@ -111,9 +111,9 @@ public abstract class WidgetUtil {
     
     /** Compute the list widget TODAY title text size. */ 
     public static int titleTextSize(ListWidgetSize listWidgetSize, int itemTextSize) {
-        // NOTE: this heuristic provides good results. If needed adjust as needed, possibly
-        // considering also the widget size. No deep thinking here, just anything that looks
-        // good across different widget and text sizes.
-        return (int)(itemTextSize * 0.8);
+        // A monotonic function of text size and widget height that provides good results.
+        final int t = (int)( 2 + (itemTextSize * 0.5f) + (listWidgetSize.heightCells * 2));
+        // Clip on min/max
+        return Math.max(10, Math.min(22, t));
     }
 }
