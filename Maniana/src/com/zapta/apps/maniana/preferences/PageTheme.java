@@ -24,31 +24,27 @@ import com.zapta.apps.maniana.R;
 public class PageTheme extends Thumbnail {
 
     public static final PageTheme[] PAGE_THEMES = {
-            // Default
-            new PageTheme("On Paper", R.drawable.page_theme1_preview,
-                    PreferenceConstants.DEFAULT_PAGE_BACKGROUND_TYPE,
-                    PreferenceConstants.DEFAULT_PAGE_BACKGROUND_SOLID_COLOR,
-                    PreferenceConstants.DEFAULT_PAGE_FONT_TYPE,
-                    PreferenceConstants.DEFAULT_PAGE_FONT_SIZE,
-                    PreferenceConstants.DEFAULT_ITEM_TEXT_COLOR,
-                    PreferenceConstants.DEFAULT_COMPLETED_ITEM_TEXT_COLOR,
-                    PreferenceConstants.DEFAULT_PAGE_ITEM_DIVIDER_COLOR),
+        // Default
+        new PageTheme("On Paper", R.drawable.page_theme1_preview,
+                PreferenceConstants.DEFAULT_PAGE_BACKGROUND_PAPER,
+                PreferenceConstants.DEFAULT_PAGE_BACKGROUND_SOLID_COLOR,
+                PreferenceConstants.DEFAULT_PAGE_FONT_TYPE,
+                PreferenceConstants.DEFAULT_PAGE_FONT_SIZE,
+                PreferenceConstants.DEFAULT_ITEM_TEXT_COLOR,
+                PreferenceConstants.DEFAULT_COMPLETED_ITEM_TEXT_COLOR,
+                PreferenceConstants.DEFAULT_PAGE_ITEM_DIVIDER_COLOR),
 
-            new PageTheme("Yellow Pages", R.drawable.page_theme2_preview, PageBackgroundType.SOLID,
-                    0xfffcfcb8, ItemFontType.SAN_SERIF, 18, 0xff333333,
-                    0xff909090, 0x4def9900),
+        new PageTheme("Yellow Pages", R.drawable.page_theme2_preview, false, 0xfffcfcb8,
+                ItemFontType.SAN_SERIF, 18, 0xff333333, 0xff909090, 0x4def9900),
 
-            new PageTheme("Dark Knight", R.drawable.page_theme3_preview, PageBackgroundType.SOLID,
-                    0xff000000, ItemFontType.ELEGANT, 20, 0xffff8080,
-                    0xff00aa00, 0x80ffff00),
+        new PageTheme("Dark Knight", R.drawable.page_theme3_preview, false, 0xff000000,
+                ItemFontType.ELEGANT, 20, 0xffff8080, 0xff00aa00, 0x80ffff00),
 
-            new PageTheme("Spartan", R.drawable.page_theme4_preview, PageBackgroundType.SOLID,
-                    0xffffffff, ItemFontType.SERIF, 14, 0xff000000,
-                    0xff000000, 0x00000000),
-
+        new PageTheme("Spartan", R.drawable.page_theme4_preview, false, 0xffffffff,
+                ItemFontType.SERIF, 14, 0xff000000, 0xff000000, 0x00000000),
     };
 
-    public final PageBackgroundType backgroundType;
+    public final boolean backgroundPaper;
     public final int backgroundSolidColor;
     public final ItemFontType fontType;
     public final int fontSize;
@@ -56,11 +52,11 @@ public class PageTheme extends Thumbnail {
     public final int completedTextColor;
     public final int itemDividerColor;
 
-    public PageTheme(String name, int drawableId, PageBackgroundType backgroundType,
-            int backgroundSolidColor, ItemFontType fontType, int fontSize,
-            int textColor, int completedTextColor, int itemDividerColor) {
+    public PageTheme(String name, int drawableId, boolean backgroundPaper,
+            int backgroundSolidColor, ItemFontType fontType, int fontSize, int textColor,
+            int completedTextColor, int itemDividerColor) {
         super(name, drawableId);
-        this.backgroundType = backgroundType;
+        this.backgroundPaper = backgroundPaper;
         this.backgroundSolidColor = backgroundSolidColor;
         this.fontType = fontType;
         this.fontSize = fontSize;

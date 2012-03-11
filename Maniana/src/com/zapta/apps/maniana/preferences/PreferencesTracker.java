@@ -46,7 +46,7 @@ public class PreferencesTracker implements PreferenceConstants {
     private LockExpirationPeriod mCachedLockExpirationPeriodPrefernece;
 
     // Page
-    private PageBackgroundType mCachedPageBackgroundTypePreference;
+    private boolean mCachedPageBackgroundPaperPreference;
     private int mCachedPageBackgroundSolidColorPreference;
     private ItemFontType mCachedPageFontTypePreference;
     private int mCachedPageFontSizePreference;
@@ -73,7 +73,7 @@ public class PreferencesTracker implements PreferenceConstants {
         updateCachedPageFontSizePreference();
         updateCachedPageItemActiveTextColorPreference();
         updateCachedPageItemCompletedTextColorPreference();
-        updateCachedPageBackgroundTypePreference();
+        updateCachedPageBackgroundPaperPreference();
         updateCachedPageBackgroundSolidColorPreference();
         updateCachedPageItemDividerColorPreference();
         updateCachedLockExpierationPeriodPreference();
@@ -108,12 +108,9 @@ public class PreferencesTracker implements PreferenceConstants {
                 PreferenceKind.PAGE_ITEM_FONT_SIZE.getKey(), DEFAULT_PAGE_FONT_SIZE);
     }
 
-    private final void updateCachedPageBackgroundTypePreference() {
-        final String key = mSharedPreferences
-                .getString(PreferenceKind.PAGE_BACKGROUND_TYPE.getKey(),
-                        DEFAULT_PAGE_BACKGROUND_TYPE.getKey());
-        mCachedPageBackgroundTypePreference = PageBackgroundType.fromKey(key,
-                DEFAULT_PAGE_BACKGROUND_TYPE);
+    private final void updateCachedPageBackgroundPaperPreference() {
+        mCachedPageBackgroundPaperPreference = mSharedPreferences.getBoolean(
+                PreferenceKind.PAGE_BACKGROUND_PAPER.getKey(), DEFAULT_PAGE_BACKGROUND_PAPER);
     }
 
     private final void updateCachedPageBackgroundSolidColorPreference() {
@@ -279,8 +276,8 @@ public class PreferencesTracker implements PreferenceConstants {
         return mCachedPageItemCompletedTextColorPreference;
     }
 
-    public final PageBackgroundType getBackgroundTypePreference() {
-        return mCachedPageBackgroundTypePreference;
+    public final boolean getBackgroundPaperPreference() {
+        return mCachedPageBackgroundPaperPreference;
     }
 
     public final int getPageBackgroundSolidColorPreference() {
@@ -352,8 +349,8 @@ public class PreferencesTracker implements PreferenceConstants {
             case PAGE_ITEM_COMPLETED_TEXT_COLOR:
                 updateCachedPageItemCompletedTextColorPreference();
                 break;
-            case PAGE_BACKGROUND_TYPE:
-                updateCachedPageBackgroundTypePreference();
+            case PAGE_BACKGROUND_PAPER:
+                updateCachedPageBackgroundPaperPreference();
                 break;
             case PAGE_BACKGROUND_SOLID_COLOR:
                 updateCachedPageBackgroundSolidColorPreference();

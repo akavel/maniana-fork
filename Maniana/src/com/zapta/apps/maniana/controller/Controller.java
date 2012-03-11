@@ -679,7 +679,7 @@ public class Controller {
                 mApp.view().onItemFontVariationPreferenceChange();
                 break;
 
-            case PAGE_BACKGROUND_TYPE:
+            case PAGE_BACKGROUND_PAPER:
             case PAGE_BACKGROUND_SOLID_COLOR:
                 mApp.view().onPageBackgroundPreferenceChange();
                 break;

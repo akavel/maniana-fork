@@ -62,7 +62,7 @@ public class PreferencesActivity extends PreferenceActivity implements
     private ListPreference mLockPeriodListPreference;
 
     // Page
-    private ListPreference mPageBackgroundTypeListPreference;
+    private CheckBoxPreference mPageBackgroundPaperPreference;
     private ColorPickerPreference mPageSolidColorPickPreference;
     private ListPreference mPageFontTypeListPreference;
     private SeekBarPreference mPageFontSizePreference;
@@ -108,7 +108,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         mLockPeriodListPreference = (ListPreference) findPreference(PreferenceKind.LOCK_PERIOD);
 
         // Pages
-        mPageBackgroundTypeListPreference = (ListPreference) findPreference(PreferenceKind.PAGE_BACKGROUND_TYPE);
+        mPageBackgroundPaperPreference = (CheckBoxPreference) findPreference(PreferenceKind.PAGE_BACKGROUND_PAPER);
         mPageSolidColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_BACKGROUND_SOLID_COLOR);
         mPageFontTypeListPreference = (ListPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_TYPE);
         mPageFontSizePreference = (SeekBarPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_SIZE);
@@ -216,7 +216,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     /** Called when a page theme is selected from the widget theme dialog. */
     private final void handlePageThemeSelection(PageTheme theme) {
-        mPageBackgroundTypeListPreference.setValue(theme.backgroundType.getKey());
+        mPageBackgroundPaperPreference.setChecked(theme.backgroundPaper);
         mPageSolidColorPickPreference.onColorChanged(theme.backgroundSolidColor);
         mPageFontTypeListPreference.setValue(theme.fontType.getKey());
         mPageFontSizePreference.setValue(theme.fontSize);
@@ -363,8 +363,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     private void updateSummaries() {
         updateListSummary(mPageFontTypeListPreference, R.array.itemFontSummaries, null);
-        updateListSummary(mPageBackgroundTypeListPreference, R.array.pageBackgroundTypeSummaries,
-                null);
 
         updateListSummary(mWidgetFontTypeListPreference, R.array.itemFontSummaries, null);
         updateListSummary(mWidgetBackgroundTypeListPreference,
@@ -378,12 +376,12 @@ public class PreferencesActivity extends PreferenceActivity implements
         }
 
         // Disable page solid background color picker if page background type is stained paper
-        if (PageBackgroundType.SOLID.getKey().equals(mPageBackgroundTypeListPreference.getValue())) {
-            mPageSolidColorPickPreference.setEnabled(true);
-            mPageSolidColorPickPreference.setSummary("Solid background color");
-        } else {
+        if (mPageBackgroundPaperPreference.isChecked()) {
             mPageSolidColorPickPreference.setEnabled(false);
-            mPageSolidColorPickPreference.setSummary("Solid background color not used");
+            mPageSolidColorPickPreference.setSummary("Using paper background, color disabled");
+        } else {
+            mPageSolidColorPickPreference.setEnabled(true);
+            mPageSolidColorPickPreference.setSummary("Using solid background color");
         }
 
         // Disable widget solid background color picker if widget background type is stained paper

@@ -46,12 +46,14 @@ public class PageView extends FrameLayout {
     /** Candidates for TODAY page title color. Selected by distance from background color. */
     private static final int[] TODAY_TITLE_CANDIDATE_COLORS = new int[] {
         0xff0077ff,
-        0xff88aaff };
+        0xff88aaff
+    };
 
     /** Candidates for TOMOROW page title color. Selected by distance from background color. */
     private static final int[] TOMOROW_TITLE_CANDIDATE_COLORS = new int[] {
         0xffcc0000,
-        0xffff8888 };
+        0xffff8888
+    };
 
     /** Candidates for day/date color. Selected by distance from background color. */
     private static final int[] DATE_CANDIDATE_COLORS = new int[] {
@@ -62,27 +64,32 @@ public class PageView extends FrameLayout {
         0xffee2222,
         0xffee22ee,
         0xffeeee22,
-        0xffeeeeee };
+        0xffeeeeee
+    };
 
     private static final int[] OVERFLOW_DRAWABLE_CANDIDATE_COLORS = new int[] {
         0xff707070,
-        0xff909090 };
+        0xff909090
+    };
 
     private static final int[] OVERFLOW_RESOURCES_CANDIDATE_IDS = new int[] {
         R.drawable.ics_menu_overflow_button_version_1,
-        R.drawable.ics_menu_overflow_button_version_2 };
-    
+        R.drawable.ics_menu_overflow_button_version_2
+    };
+
     private static final int[] ITEM_HIGHLIGHT_CANDIDATE_COLORS = new int[] {
         0xff0000ff,
         0xffff0000,
         0xff00ff00,
-        0xffffff00 };
+        0xffffff00
+    };
 
     private static final int[] ITEM_HIGHLIGHT_RESOURCES_CANDIDATE_IDS = new int[] {
         R.drawable.item_highlight_blue,
         R.drawable.item_highlight_red,
         R.drawable.item_highlight_green,
-        R.drawable.item_highlight_yellow};
+        R.drawable.item_highlight_yellow
+    };
 
     private final AppContext mApp;
     private final PageKind mPageKind;
@@ -117,7 +124,7 @@ public class PageView extends FrameLayout {
 
         // NOTE: could also use !ViewConfiguration.get(context).hasPermanentMenuKey();
         mUsesIcsMenuOverflowButton = FORCE_OVERFLOW_MENU_ON_ALL_DEVICES
-                        || (android.os.Build.VERSION.SDK_INT >= 11);
+                || (android.os.Build.VERSION.SDK_INT >= 11);
 
         mDayTextView = (TextView) findViewById(R.id.page_day_text);
         mDateTextView = (TextView) findViewById(R.id.page_date_text);
@@ -256,39 +263,31 @@ public class PageView extends FrameLayout {
 
         // Set the background color or image
         final int baseBackgroundColor;
-        switch (mApp.pref().getBackgroundTypePreference()) {
-            case PAPER: {
-                final int backgroundImageId = (mPageKind.isToday()) ? R.drawable.page_bg_left
-                                : R.drawable.page_bg_right;
-                setBackgroundResource(backgroundImageId);
-                // Consider paper to be white for color distance purposes.
-                baseBackgroundColor = 0xffffffff;
-                break;
-            }
-            case SOLID: {
-                final int backgroundColor = mApp.pref().getPageBackgroundSolidColorPreference();
-                setBackgroundColor(backgroundColor);
-                baseBackgroundColor = backgroundColor;
-                break;
-            }
-            default:
-                throw new RuntimeException("Unknown background type: "
-                                + mApp.pref().getBackgroundTypePreference());
+        if (mApp.pref().getBackgroundPaperPreference()) {
+            final int backgroundImageId = (mPageKind.isToday()) ? R.drawable.page_bg_left
+                    : R.drawable.page_bg_right;
+            setBackgroundResource(backgroundImageId);
+            // Consider paper to be white for color distance purposes.
+            baseBackgroundColor = 0xffffffff;
+        } else {
+            final int backgroundColor = mApp.pref().getPageBackgroundSolidColorPreference();
+            setBackgroundColor(backgroundColor);
+            baseBackgroundColor = backgroundColor;
         }
 
         // Update page title text color based on background color
         {
             final int[] titleCandidateColors = mPageKind.isToday() ? TODAY_TITLE_CANDIDATE_COLORS
-                            : TOMOROW_TITLE_CANDIDATE_COLORS;
+                    : TOMOROW_TITLE_CANDIDATE_COLORS;
             final int titleColor = ColorUtil.selectFurthestColor(baseBackgroundColor,
-                            titleCandidateColors);
+                    titleCandidateColors);
             mPageTitleTextView.setTextColor(titleColor);
         }
 
         // Update date text to have max contrast from the background
         if (mPageKind.isToday()) {
             final int dayAndDateColor = ColorUtil.selectFurthestColor(baseBackgroundColor,
-                            DATE_CANDIDATE_COLORS);
+                    DATE_CANDIDATE_COLORS);
             mDayTextView.setTextColor(dayAndDateColor);
             mDateTextView.setTextColor(dayAndDateColor);
         }
@@ -296,17 +295,17 @@ public class PageView extends FrameLayout {
         // Update ICS menu overflow icon to have max contrast from the background
         if (mUsesIcsMenuOverflowButton) {
             final int colorIndex = ColorUtil.selectFurthestColorIndex(baseBackgroundColor,
-                            OVERFLOW_DRAWABLE_CANDIDATE_COLORS);
+                    OVERFLOW_DRAWABLE_CANDIDATE_COLORS);
             final int resourceId = OVERFLOW_RESOURCES_CANDIDATE_IDS[colorIndex];
             mIcsMenuOverflowButtonView.setImageResource(resourceId);
         }
-        
+
         // Update item list view highlight drawable to max contrast from page background
         {
             final int colorIndex = ColorUtil.selectFurthestColorIndex(baseBackgroundColor,
-                            ITEM_HIGHLIGHT_CANDIDATE_COLORS);
+                    ITEM_HIGHLIGHT_CANDIDATE_COLORS);
             final int resourceId = ITEM_HIGHLIGHT_RESOURCES_CANDIDATE_IDS[colorIndex];
-            mItemListView.setItemHighlightDrawableResourceId(resourceId);            
+            mItemListView.setItemHighlightDrawableResourceId(resourceId);
         }
 
     }
@@ -320,21 +319,22 @@ public class PageView extends FrameLayout {
     public void setItemViewHighlight(int itemIndex, boolean isHighlight) {
         mItemListView.setItemViewHighlight(itemIndex, isHighlight);
     }
-    
+
     /**
      * Start animating given item.
      * 
-     * @param initialDelayMillis - wait this time in milliseconds before starting the animation.
-     *            Note that the method returns immediately even if a non zero delay is specified.
+     * @param initialDelayMillis
+     *            - wait this time in milliseconds before starting the animation. Note that the
+     *            method returns immediately even if a non zero delay is specified.
      */
     public final void startItemAnimation(int itemIndex, AppView.ItemAnimationType animationType,
-                    int initialDelayMillis, @Nullable Runnable callback) {
+            int initialDelayMillis, @Nullable Runnable callback) {
         mItemListView.startItemAnimation(itemIndex, animationType, initialDelayMillis, callback);
     }
 
     /** Popup an item menu for the given item. */
     public void showItemMenu(final int itemIndex, QuickActionItem actions[],
-                    final int dismissActionId) {
+            final int dismissActionId) {
         mItemListView.showItemMenu(itemIndex, actions, dismissActionId);
     }
 
@@ -367,13 +367,14 @@ public class PageView extends FrameLayout {
 
         // The alpha at the edge is 25% of the center alpha
         final int endGradiantColor = (dividerColor & 0x00ffffff)
-                        | ((dividerColor >> 3) & 0x1f000000);
+                | ((dividerColor >> 3) & 0x1f000000);
         final int colors[] = new int[] {
             endGradiantColor,
             dividerColor,
-            endGradiantColor };
+            endGradiantColor
+        };
         final GradientDrawable drawable = new GradientDrawable(
-                        GradientDrawable.Orientation.LEFT_RIGHT, colors);
+                GradientDrawable.Orientation.LEFT_RIGHT, colors);
         drawable.setShape(GradientDrawable.RECTANGLE);
         drawable.setGradientType(GradientDrawable.LINEAR_GRADIENT);
 

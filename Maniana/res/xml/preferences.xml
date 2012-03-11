@@ -55,12 +55,12 @@
             android:summary="Click to select a predefined page setting"
             android:title="Set By Theme">
         </Preference>
-        <ListPreference
-            android:defaultValue="paper"
-            android:entries="@array/pageBackgroundTypeNames"
-            android:entryValues="@array/pageBackgroundTypeValues"
-            android:key="prefPageBackgroundTypeKey"
-            android:title="Background Type" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="prefPageBackgroundPaperKey"
+            android:summaryOff="Paper background disabled"
+            android:summaryOn="Using paper background"
+            android:title="Paper" />
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#ffffffc0"
             android:key="prefPageBackgroundSolidColorKey"
@@ -201,7 +201,7 @@
         <Preference
             android:key="prefRestoreDefaultsKey"
             android:summary="Click to restore the original settings. Does not affect task data"
-            android:title="Reset Settings">
+            android:title="Reset All Settings">
         </Preference>
     </PreferenceScreen>
 </PreferenceScreen>
