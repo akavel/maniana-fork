@@ -20,9 +20,9 @@ package com.zapta.apps.maniana.model;
  * @author Tal Dayan.
  */
 public interface ItemModelReadOnly {
-    
+
     /** Number of groups by which items are sorted. */
-   public static final int SORTING_GROUPS = 4;
+    public static final int SORTING_GROUPS = 4;
 
     String getText();
 
@@ -31,7 +31,7 @@ public interface ItemModelReadOnly {
     boolean isLocked();
 
     ItemColor getColor();
-    
+
     /** Returns [0 .. SORTING_GROUPS). */
     int sortingGroupIndex();
 }

@@ -14,9 +14,9 @@
 
 package com.zapta.apps.maniana.model;
 
-/** 
- * What items should be moved from Tomorow to Today 
- *
+/**
+ * What items should be moved from Tomorow to Today
+ * 
  * @author Tal Dayan
  */
 public enum PushScope {

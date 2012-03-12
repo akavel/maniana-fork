@@ -26,20 +26,23 @@ import android.graphics.Bitmap;
 
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult.FileReadOutcome;
 
-/** 
- * File read/write utils. 
+/**
+ * File read/write utils.
  * 
  * @author Tal Dayan
  */
 public final class FileUtil {
-    
+
     /** Do not instantiate */
-    private FileUtil() {}
+    private FileUtil() {
+    }
 
     /** The result of a file read operation. */
     public static class FileReadResult {
         public static enum FileReadOutcome {
-            READ_OK, NOT_FOUND, READ_ERROR;
+            READ_OK,
+            NOT_FOUND,
+            READ_ERROR;
         }
 
         public final FileReadOutcome outcoe;
@@ -53,8 +56,8 @@ public final class FileUtil {
         }
     }
 
-    /** 
-     * Read a file into a string. 
+    /**
+     * Read a file into a string.
      * 
      * @param context the activity context.
      * @param fileName the file name.
@@ -122,9 +125,10 @@ public final class FileUtil {
             }
         }
     }
-    
+
     /** Write a bitmap to a file */
-    public static void writeBitmapToPngFile(Context context, Bitmap bitmap, String fileName, boolean isPublic) {
+    public static void writeBitmapToPngFile(Context context, Bitmap bitmap, String fileName,
+            boolean isPublic) {
         FileOutputStream out = null;
         try {
             final int permission = isPublic ? Context.MODE_WORLD_READABLE : Context.MODE_PRIVATE;
@@ -132,7 +136,7 @@ public final class FileUtil {
             final boolean ok = bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
             if (!ok) {
                 throw new RuntimeException("Error writing bitmap to file: " + fileName);
-            }           
+            }
         } catch (Exception e) {
             // TODO: more graceful error handling?
             throw new RuntimeException(e);

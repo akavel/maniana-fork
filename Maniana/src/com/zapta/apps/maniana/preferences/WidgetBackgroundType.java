@@ -19,13 +19,14 @@ import javax.annotation.Nullable;
 import com.zapta.apps.maniana.util.EnumUtil;
 import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 
-/** 
- * Represents the possible choices for widget background preference. 
+/**
+ * Represents the possible choices for widget background preference.
  * 
  * @author Tal Dayan
  */
 public enum WidgetBackgroundType implements KeyedEnum {
-    PAPER("paper"), SOLID("solid");
+    PAPER("paper"),
+    SOLID("solid");
 
     /** Preference item key. Matches the preference option value defined in XMl. */
     private final String mKey;
@@ -41,7 +42,8 @@ public enum WidgetBackgroundType implements KeyedEnum {
 
     /** Return value with given key or fallback value if not found. */
     @Nullable
-    public final static WidgetBackgroundType fromKey(String key, @Nullable WidgetBackgroundType fallBack) {
+    public final static WidgetBackgroundType fromKey(String key,
+            @Nullable WidgetBackgroundType fallBack) {
         return EnumUtil.fromKey(key, WidgetBackgroundType.values(), fallBack);
     }
 }

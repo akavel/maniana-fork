@@ -38,7 +38,6 @@ public class ThumbnailSelectorAdapter<T extends Thumbnail> extends BaseAdapter {
 
     private final int mTextColor;
 
-
     public ThumbnailSelectorAdapter(Context c, T[] thumbnails, int textColor) {
         mContext = c;
         mThumbnails = thumbnails;
@@ -76,7 +75,6 @@ public class ThumbnailSelectorAdapter<T extends Thumbnail> extends BaseAdapter {
         final TextView textView = (TextView) itemView
                 .findViewById(R.id.thumbnail_selector_item_text);
 
-
         final Thumbnail thumbnail = mThumbnails[position];
         imageView.setImageResource(thumbnail.getDrawableId());
         // NOTE: the extra space at the preventsend truncation at the end due to the italic style.
@@ -84,5 +82,5 @@ public class ThumbnailSelectorAdapter<T extends Thumbnail> extends BaseAdapter {
         textView.setText(" " + thumbnail.getName() + " ");
         textView.setTextColor(mTextColor);
         return itemView;
-    }   
+    }
 }

@@ -19,13 +19,12 @@ import android.content.Context;
 
 import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
 
-
 /**
  * Base class for dialogs that can be tracked by a PopupsTracker.
  * 
  * @author Tal Dayan
  */
-public abstract  class TrackableDialogPopup extends Dialog implements TrackablePopup {
+public abstract class TrackableDialogPopup extends Dialog implements TrackablePopup {
 
     private final PopupsTracker mParentPopupTracker;
 
@@ -37,15 +36,15 @@ public abstract  class TrackableDialogPopup extends Dialog implements TrackableP
     /** Called when the parent preference activity is paused. */
     @Override
     public void closeLeftOver() {
-        dismiss();   
+        dismiss();
     }
 
     @Override
-    public void show() {  
+    public void show() {
         mParentPopupTracker.track(this);
-        super.show();   
-    }  
-    
+        super.show();
+    }
+
     @Override
     public void dismiss() {
         super.dismiss();

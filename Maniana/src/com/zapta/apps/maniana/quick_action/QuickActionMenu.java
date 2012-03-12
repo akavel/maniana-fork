@@ -44,8 +44,8 @@ import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
 /**
  * Quick action popup menu.
  * 
- * @author Tal Dayan (adapted to Maniana)
- * Based on example by Lorensius W. L. T <lorenz@londatiga.net>.
+ * @author Tal Dayan (adapted to Maniana) Based on example by Lorensius W. L. T
+ *         <lorenz@londatiga.net>.
  */
 public class QuickActionMenu implements OnDismissListener, TrackablePopup {
 
@@ -90,8 +90,8 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
 
         mOutcomeListener = checkNotNull(outcomeListener);
 
-        mTopView = (ViewGroup) mApp.services().layoutInflater().inflate(R.layout.quick_action_menu,
-                        null);
+        mTopView = (ViewGroup) mApp.services().layoutInflater()
+                .inflate(R.layout.quick_action_menu, null);
 
         mItemContainerView = (ViewGroup) mTopView.findViewById(R.id.itemsContainer);
 
@@ -99,7 +99,7 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
         mUpArrowView = (ImageView) mTopView.findViewById(R.id.arrow_up);
 
         mTopView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-                        LayoutParams.WRAP_CONTENT));
+                LayoutParams.WRAP_CONTENT));
 
         mMenuWindow.setContentView(mTopView);
         mMenuWindow.setOnDismissListener(this);
@@ -119,11 +119,11 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
         actionItems.add(actionItem);
 
         // TODO: rename this to action_wrapper here and in the layout.
-        final View wrapperView = mApp.services().layoutInflater().inflate(
-                        R.layout.quick_action_item, null);
+        final View wrapperView = mApp.services().layoutInflater()
+                .inflate(R.layout.quick_action_item, null);
 
         final ImageView imageView = (ImageView) wrapperView
-                        .findViewById(R.id.quick_action_item_icon);
+                .findViewById(R.id.quick_action_item_icon);
         imageView.setImageDrawable(actionItem.getIcon());
 
         final TextView textView = (TextView) wrapperView.findViewById(R.id.quick_action_item_text);
@@ -136,8 +136,7 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     wrapperView.setBackgroundResource(R.drawable.quick_action_item_selected);
                 } else if (event.getAction() == MotionEvent.ACTION_CANCEL
-                                || event.getAction() == MotionEvent.ACTION_UP
-                                || !wrapperView.isPressed()) {
+                        || event.getAction() == MotionEvent.ACTION_UP || !wrapperView.isPressed()) {
                     wrapperView.setBackgroundColor(Color.TRANSPARENT);
                 }
                 return false;
@@ -158,11 +157,11 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
 
         // If not first, add seperator before it.
         if (mItemContainerView.getChildCount() > 0) {
-            final View separator = mApp.services().layoutInflater().inflate(
-                            R.layout.quick_action_item_separator, null);
+            final View separator = mApp.services().layoutInflater()
+                    .inflate(R.layout.quick_action_item_separator, null);
             // TODO: move this configuration to the XML
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                            LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
+                    LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
             separator.setLayoutParams(params);
             separator.setPadding(5, 0, 5, 0);
 
@@ -202,8 +201,8 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
         anchorView.getLocationOnScreen(anchorXYOnsScreen);
 
         final Rect anchorRectOnScreen = new Rect(anchorXYOnsScreen[0], anchorXYOnsScreen[1],
-                        anchorXYOnsScreen[0] + anchorView.getWidth(), anchorXYOnsScreen[1]
-                                        + anchorView.getHeight());
+                anchorXYOnsScreen[0] + anchorView.getWidth(), anchorXYOnsScreen[1]
+                        + anchorView.getHeight());
 
         mTopView.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
@@ -238,7 +237,7 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
 
         showArrow(((showAbove) ? R.id.arrow_down : R.id.arrow_up), arrowPos);
         mMenuWindow.setAnimationStyle((showAbove) ? R.style.Animations_QuickActionAbove
-                        : R.style.Animations_QuickActionBelow);
+                : R.style.Animations_QuickActionBelow);
         mMenuWindow.showAtLocation(anchorView, Gravity.NO_GRAVITY, xPos, yPos);
     }
 
@@ -256,7 +255,7 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
         final int arrowWidth = mUpArrowView.getMeasuredWidth();
         showArrow.setVisibility(View.VISIBLE);
         ViewGroup.MarginLayoutParams param = (ViewGroup.MarginLayoutParams) showArrow
-                        .getLayoutParams();
+                .getLayoutParams();
         param.leftMargin = requestedX - arrowWidth / 2;
         hideArrow.setVisibility(View.INVISIBLE);
     }
@@ -272,7 +271,7 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
         /** Action item is null if dismissed with no selection. */
         void onOutcome(QuickActionMenu source, /* @Nullable */QuickActionItem actionItem);
     }
-    
+
     @Override
     public final void closeLeftOver() {
         // NOTE: we don't bother here to early report the dismissal, as we do with the item editor,

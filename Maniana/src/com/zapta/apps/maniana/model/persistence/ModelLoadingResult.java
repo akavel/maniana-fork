@@ -25,7 +25,7 @@ public class ModelLoadingResult {
         FILE_READ_OK,
         FILE_NOT_FOUND,
         FILE_HAS_ERRORS;
-        
+
         public final boolean isOk() {
             return this == FILE_READ_OK;
         }
@@ -39,15 +39,15 @@ public class ModelLoadingResult {
 
     /** Constructor for OK outcome. */
     public ModelLoadingResult(ModelLoadingOutcome outcome, PersistenceMetadata metadata) {
-        check(outcome.isOk());  
-        this.outcome = outcome;           
-        this.metadata =checkNotNull(metadata);
+        check(outcome.isOk());
+        this.outcome = outcome;
+        this.metadata = checkNotNull(metadata);
     }
-    
+
     /** Constructor for an error outcome. */
     public ModelLoadingResult(ModelLoadingOutcome outcome) {
         check(!outcome.isOk());
-        this.outcome = outcome;      
+        this.outcome = outcome;
         this.metadata = null;
     }
 }

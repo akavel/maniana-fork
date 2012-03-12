@@ -88,8 +88,7 @@ public abstract class WidgetUtil {
     /**
      * Compute the widget size in pixels.
      * 
-     * Based on 
-     * http://osdir.com/ml/Android-Developers/2011-01/msg02879.html
+     * Based on http://osdir.com/ml/Android-Developers/2011-01/msg02879.html
      * 
      * See also (2 dip inset)
      * http://blog.doityourselfandroid.com/2011/05/24/developing-android-home-screenwidgets/
@@ -108,11 +107,11 @@ public abstract class WidgetUtil {
         }
         return new Point(widthPixels, heightPixels);
     }
-    
-    /** Compute the list widget TODAY title text size. */ 
+
+    /** Compute the list widget TODAY title text size. */
     public static int titleTextSize(ListWidgetSize listWidgetSize, int itemTextSize) {
         // A monotonic function of text size and widget height that provides good results.
-        final int t = (int)( 2 + (itemTextSize * 0.5f) + (listWidgetSize.heightCells * 2));
+        final int t = (int) (2 + (itemTextSize * 0.5f) + (listWidgetSize.heightCells * 2));
         // Clip on min/max
         return Math.max(10, Math.min(22, t));
     }

@@ -19,13 +19,13 @@ import org.json.JSONObject;
 
 /** Represents additional data that is persisted with the model. */
 public class PersistenceMetadata {
-    
+
     public static final int DEFAULT_WRITER_VERSION_CODE = 0;
     public static final String DEFAULT_WRITER_VERSION_NAME = "";
 
     /** Build number of the app that wrote the model. Same as the field of same in the app manifest */
     public int writerVersionCode;
-    
+
     /** Build name of the app that wrote the model. Same as the field of same in the app manifest */
     public String writerVersionName;
 
@@ -56,7 +56,6 @@ public class PersistenceMetadata {
         clear();
         // These two fields are required but we provide default to avoid force close, just in case.
         writerVersionCode = json.optInt("writer_ver_code", DEFAULT_WRITER_VERSION_CODE);
-        writerVersionName = json.optString("writer_ver_name",
-                        DEFAULT_WRITER_VERSION_NAME);
+        writerVersionName = json.optString("writer_ver_name", DEFAULT_WRITER_VERSION_NAME);
     }
 }

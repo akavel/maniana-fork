@@ -65,7 +65,7 @@ public class QuickActionsCache {
         }
         return mCachedActionDone;
     }
-    
+
     public QuickActionItem getToDoAction() {
         if (mCachedActionTodo == null) {
             mCachedActionTodo = newItem(TODO_ACTION_ID, "To Do", R.drawable.item_menu_todo);
@@ -79,28 +79,27 @@ public class QuickActionsCache {
         }
         return mCachedActionEdit;
     }
-    
+
     public QuickActionItem getDeleteAction() {
         if (mCachedActionDelete == null) {
             mCachedActionDelete = newItem(DELETE_ACTION_ID, "Delete", R.drawable.item_menu_delete);
         }
         return mCachedActionDelete;
     }
-    
+
     public QuickActionItem getLockAction() {
         if (mCachedActionLock == null) {
             mCachedActionLock = newItem(LOCK_ACTION_ID, "Lock", R.drawable.item_menu_lock);
         }
         return mCachedActionLock;
     }
-    
+
     public QuickActionItem getUnlockAction() {
         if (mCachedActionUnlock == null) {
             mCachedActionUnlock = newItem(UNLOCK_ACTION_ID, "Unlock", R.drawable.item_menu_unlock);
         }
         return mCachedActionUnlock;
     }
-   
 
     private QuickActionItem newItem(int id, String label, int imageResourceId) {
         return new QuickActionItem(id, label, mApp.resources().getDrawable(imageResourceId));

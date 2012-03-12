@@ -193,12 +193,11 @@ public class AppModel {
      * Move non locked items from Tomorow to Today. It's the caller responsibility to also set the
      * last push datestamp. This method clears any previous undo buffer content of both pages.
      * 
-     * @param expireAllLocks
-     *            if true, locked items are also pushed, after changing their status to unlocked.
+     * @param expireAllLocks if true, locked items are also pushed, after changing their status to
+     *        unlocked.
      * 
-     * @param deleteCompletedItems
-     *            if true, delete completed items, leaving them in the undo buffers of their
-     *            respective pages.
+     * @param deleteCompletedItems if true, delete completed items, leaving them in the undo buffers
+     *        of their respective pages.
      */
     public final void pushToToday(boolean expireAllLocks, boolean deleteCompletedItems) {
         clearAllUndo();
@@ -215,7 +214,8 @@ public class AppModel {
                     item.setIsLocked(false);
                 }
 
-                // If delete completed and item is completed (even if blocked), move it to undo buffer.
+                // If delete completed and item is completed (even if blocked), move it to undo
+                // buffer.
                 if (deleteCompletedItems && item.isCompleted()) {
                     iterator.remove();
                     mTomorrowPageMode.appendItemToUndo(item);

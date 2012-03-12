@@ -136,11 +136,9 @@ public class AppServices {
     /**
      * Start a sound affect if allowed.
      * 
-     * @param fxEffectType
-     *            the sound effect to use (one of )
-     * @param fallBackToShortVibration
-     *            indicates what to do if sound effects are disabled in settings. If true then
-     *            activate a short vibration instead, otherwise do nothing.
+     * @param fxEffectType the sound effect to use (one of )
+     * @param fallBackToShortVibration indicates what to do if sound effects are disabled in
+     *        settings. If true then activate a short vibration instead, otherwise do nothing.
      */
     public final void maybePlayStockSound(int fxEffectType, boolean fallBackToShortVibration) {
         if (mApp.pref().getSoundEnabledPreference()) {

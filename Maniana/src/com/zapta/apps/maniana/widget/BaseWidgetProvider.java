@@ -46,7 +46,7 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
         // Load model
         final AppModel model = new AppModel();
         final ModelLoadingResult modelLoadingResult = ModelPersistence.loadModelDataFile(context,
-                        model);
+                model);
         return modelLoadingResult.outcome.isOk() ? model : null;
     }
 

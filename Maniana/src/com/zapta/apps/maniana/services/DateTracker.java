@@ -37,7 +37,7 @@ public class DateTracker {
 
     /** Caching of the last updated date. */
     private Time mCachedDate = new Time();
-    
+
     /** Used to avoid object instantiation. */
     private Time mTempTime = new Time();
 
@@ -54,7 +54,7 @@ public class DateTracker {
         if (!DateUtil.isSameDate(mTempTime, mCachedDate)) {
             mCachedDate.set(mTempTime);
             mCachedDateString = DateUtil.dateToString(mCachedDate);
-            //final long time = now.getTimeInMillis();
+            // final long time = now.getTimeInMillis();
             mUserDayOfWeekString = mCachedDate.format("%A");
             mUserMonthDayString = mCachedDate.format("%b %d");
         }
@@ -74,9 +74,9 @@ public class DateTracker {
     public final String getDateStampString() {
         return mCachedDateString;
     }
-    
+
     public PushScope computePushScope(String lastPushTimestamp,
-                    LockExpirationPeriod lockExpirationPeriod) {
+            LockExpirationPeriod lockExpirationPeriod) {
         return ModelUtil.computePushScope(lastPushTimestamp, mCachedDate, lockExpirationPeriod);
     }
 }

@@ -134,10 +134,8 @@ public class Controller {
     /**
      * Move a model item to the other page.
      * 
-     * @param pageKind
-     *            the source page.
-     * @param itemIndex
-     *            item index in the source page.
+     * @param pageKind the source page.
+     * @param itemIndex item index in the source page.
      */
     private final void moveItemToOtherPage(PageKind pageKind, int itemIndex) {
         // Remove item from current page.
@@ -325,7 +323,12 @@ public class Controller {
         final QuickActionItem deleteAction = mQuickActionCache.getDeleteAction();
 
         // Action list
-        final QuickActionItem actions[] = { doneAction, editAction, lockAction, deleteAction };
+        final QuickActionItem actions[] = {
+            doneAction,
+            editAction,
+            lockAction,
+            deleteAction
+        };
 
         mApp.view().setItemViewHighlight(pageKind, itemIndex, true);
         mApp.view().showItemMenu(pageKind, itemIndex, actions,
@@ -594,8 +597,7 @@ public class Controller {
     /**
      * Compose the message to show to the user after a page cleanup operation.
      * 
-     * @param summary
-     *            the page cleanup summary.
+     * @param summary the page cleanup summary.
      * @return the message or null if no message should me shown.
      */
     @Nullable
@@ -664,8 +666,7 @@ public class Controller {
     /**
      * Called by the app preferences client when app preferences changed.
      * 
-     * @param id
-     *            the id of the preference item that was changed.
+     * @param id the id of the preference item that was changed.
      */
     public final void onPreferenceChange(PreferenceKind id) {
         onBackupDataChange();
@@ -833,10 +834,9 @@ public class Controller {
     }
 
     /**
-     * @param pageKind
-     *            the page
-     * @param itemOfInteresttOriginalIndex
-     *            if >= 0, the pre sort index of the item to highlight post sort.
+     * @param pageKind the page
+     * @param itemOfInteresttOriginalIndex if >= 0, the pre sort index of the item to highlight post
+     *        sort.
      */
     private final void maybeAutosortPageWithItemOfInterest(final PageKind pageKind,
             final int itemOfInteresttOriginalIndex) {

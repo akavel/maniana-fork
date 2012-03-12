@@ -14,8 +14,8 @@
 
 package com.zapta.apps.maniana.controller;
 
-/** 
- * The app starts with these cases of model loading. 
+/**
+ * The app starts with these cases of model loading.
  * 
  * @author Tal Dayan
  */

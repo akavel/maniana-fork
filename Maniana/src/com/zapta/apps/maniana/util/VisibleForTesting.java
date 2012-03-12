@@ -14,9 +14,9 @@
 
 package com.zapta.apps.maniana.util;
 
-/** 
- * Annotation for private methods and classes that are exposed for testing. 
- *
+/**
+ * Annotation for private methods and classes that are exposed for testing.
+ * 
  * @author Tal Dayan
  */
 public @interface VisibleForTesting {

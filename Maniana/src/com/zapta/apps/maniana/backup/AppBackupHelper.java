@@ -48,7 +48,7 @@ public class AppBackupHelper extends BackupAgentHelper {
 
         // Helper for serialized model data file.
         final FileBackupHelper dataFileHelper = new FileBackupHelper(this,
-                        ModelPersistence.DATA_FILE_NAME);
+                ModelPersistence.DATA_FILE_NAME);
         addHelper(DATA_FILE_HELPER_KEY, dataFileHelper);
 
         // Helper for shared preferences file
@@ -56,13 +56,13 @@ public class AppBackupHelper extends BackupAgentHelper {
         // LogUtil.info("AppBackupHelper.onCreate(), Default pref file: %s, %s", defaultPrefFile,
         // this);
         final SharedPreferencesBackupHelper preferencesFileHelper = new SharedPreferencesBackupHelper(
-                        getApplicationContext(), defaultPrefFile);
+                getApplicationContext(), defaultPrefFile);
         addHelper(PREFERENCES_HELPER_KEY, preferencesFileHelper);
     }
 
     @Override
     public void onBackup(ParcelFileDescriptor oldState, BackupDataOutput data,
-                    ParcelFileDescriptor newState) throws IOException {
+            ParcelFileDescriptor newState) throws IOException {
         LogUtil.info("Google backup agent: onBackup()");
         // TODO: do we need a lock also for the shared preferences?
         synchronized (ModelPersistence.sDataFileLock) {
@@ -73,7 +73,7 @@ public class AppBackupHelper extends BackupAgentHelper {
 
     @Override
     public void onRestore(BackupDataInput data, int appVersionCode, ParcelFileDescriptor newState)
-                    throws IOException {
+            throws IOException {
         LogUtil.info("Google backup agent: onRestore()");
         // TODO: do we need a lock also for the shared preferences?
         synchronized (ModelPersistence.sDataFileLock) {

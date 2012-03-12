@@ -14,13 +14,12 @@
 
 package com.zapta.apps.maniana.widget;
 
-
-/** 
+/**
  * @author Tal Dayan
  */
-public class ListWidgetProvider2 extends ListWidgetProvider{
+public class ListWidgetProvider2 extends ListWidgetProvider {
 
-    @Override 
+    @Override
     protected ListWidgetSize listWidgetSize() {
         return ListWidgetSize.LIST_WIDGET_SIZE2;
     }

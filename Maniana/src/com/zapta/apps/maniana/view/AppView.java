@@ -97,9 +97,10 @@ public class AppView {
     }
 
     public final void startItemAnimation(PageKind pageKind, int itemIndex,
-                    ItemAnimationType animationType, int initialDelayMillis, @Nullable final Runnable callback) {
+            ItemAnimationType animationType, int initialDelayMillis,
+            @Nullable final Runnable callback) {
         getPageView(pageKind).startItemAnimation(itemIndex, animationType, initialDelayMillis,
-                        callback);
+                callback);
     }
 
     public void setItemViewHighlight(PageKind pageKind, int itemIndex, boolean isHighlight) {
@@ -107,7 +108,7 @@ public class AppView {
     }
 
     public void showItemMenu(PageKind pageKind, final int itemIndex, QuickActionItem actions[],
-                    final int dismissActionId) {
+            final int dismissActionId) {
         getPageView(pageKind).showItemMenu(itemIndex, actions, dismissActionId);
     }
 
@@ -130,7 +131,7 @@ public class AppView {
         mTodayPageView.updateUndoButton();
         mTomorowPageView.updateUndoButton();
     }
-    
+
     public final void onItemDividerColorPreferenceChange() {
         mTodayPageView.onItemDividerColorPreferenceChange();
         mTomorowPageView.onItemDividerColorPreferenceChange();

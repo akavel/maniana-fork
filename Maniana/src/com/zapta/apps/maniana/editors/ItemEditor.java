@@ -149,14 +149,10 @@ public class ItemEditor extends Dialog implements TrackablePopup {
     /**
      * Show an item editor.
      * 
-     * @param app
-     *            app context.
-     * @param title
-     *            title to display in the editor.
-     * @param initialText
-     *            initial edited item text
-     * @param listener
-     *            listener to callback on changes and on end.
+     * @param app app context.
+     * @param title title to display in the editor.
+     * @param initialText initial edited item text
+     * @param listener listener to callback on changes and on end.
      */
     public static void startEditor(final AppContext app, String title, String initialText,
             final ItemEditorListener listener) {

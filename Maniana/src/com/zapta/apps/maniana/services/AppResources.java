@@ -43,7 +43,7 @@ public class AppResources {
         this.mApp = app;
 
         mTitleTypeFace = Typeface
-                        .createFromAsset(mApp.context().getAssets(), TITLE_FONT_ASSET_PATH);
+                .createFromAsset(mApp.context().getAssets(), TITLE_FONT_ASSET_PATH);
         mAudioManager = (AudioManager) mApp.context().getSystemService(Context.AUDIO_SERVICE);
     }
 

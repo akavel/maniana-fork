@@ -119,7 +119,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                         .readWidgetBackgroundColorPreference(sharedPreferences);
                 template.setBackgroundColor(backgroundColor);
         }
-        
+
         // TODO: cache variation or at least custom typefaces
         final WidgetItemFontVariation fontVariation = WidgetItemFontVariation
                 .newFromCurrentPreferences(context, sharedPreferences);
@@ -130,8 +130,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final boolean showToolbarBackground = toolbarEanbled
                 && (backgroundType != WidgetBackgroundType.PAPER);
         final int titleSize = WidgetUtil.titleTextSize(listWidgetSize, fontVariation.getTextSize());
-        setTemplateToolbar(context, template, toolbarEanbled, showToolbarBackground,
-                titleSize);
+        setTemplateToolbar(context, template, toolbarEanbled, showToolbarBackground, titleSize);
 
         // Set template view item list
         final LinearLayout itemListView = (LinearLayout) template
@@ -164,7 +163,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final int widthPixels = ((widgetGrossSizeInPixels.x - insetPixels) * widthAdjust) / 100;
         final int heightPixels = ((widgetGrossSizeInPixels.y - insetPixels) * heightAdjust) / 100;
 
-        // NTOE: ARGB_4444 results in a smaller file than ARGB_8888 (e.g. 50K vs 150k) 
+        // NTOE: ARGB_4444 results in a smaller file than ARGB_8888 (e.g. 50K vs 150k)
         // but does not look as good.
         final Bitmap bitmap = Bitmap.createBitmap(widthPixels, heightPixels,
                 Bitmap.Config.ARGB_8888);
@@ -303,9 +302,9 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         }
     }
 
-    /** 
-     * Add an informative message to the item list. 
-     * These messages are formatted differently than actual tasks.
+    /**
+     * Add an informative message to the item list. These messages are formatted differently than
+     * actual tasks.
      */
     private static final void addTemplateMessageItem(Context context, LinearLayout itemListView,
             String message, WidgetItemFontVariation fontVariation, LayoutInflater layoutInflater) {
@@ -324,7 +323,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         itemListView.addView(itemView);
     }
 
-    /** 
+    /**
      * Set the toolbar portion of the template view.
      * 
      * showToolbarBackground and titleSize are ignored if not toolbarEnabled. titleSize.

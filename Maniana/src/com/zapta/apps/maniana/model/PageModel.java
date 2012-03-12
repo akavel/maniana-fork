@@ -47,7 +47,7 @@ public class PageModel {
     List<ItemModel> getUndoItemsCloneForTesting() {
         return new ArrayList<ItemModel>(mUndoItems);
     }
-    
+
     /** For testing only. */
     @VisibleForTesting
     void appendUndoItemForTesting(ItemModel item) {
@@ -142,14 +142,13 @@ public class PageModel {
     /**
      * Peform a page organization operation.
      * 
-     * @param deleteCompletedItems
-     *            indicates if the operation should also delete all completed items.
-     * @param itemOfInterestItem
-     *            optional item index or -1 if not specified. If specified, this is the index of an
-     *            item of interest. Upon return, the summary contains the location of the new index
-     *            of the item of interest or -1 if the item was not specified or was deleted.
-     * @param summary
-     *            an object is set with the operation summary.
+     * @param deleteCompletedItems indicates if the operation should also delete all completed
+     *        items.
+     * @param itemOfInterestItem optional item index or -1 if not specified. If specified, this is
+     *        the index of an item of interest. Upon return, the summary contains the location of
+     *        the new index of the item of interest or -1 if the item was not specified or was
+     *        deleted.
+     * @param summary an object is set with the operation summary.
      */
     public void organizePageWithUndo(boolean deleteCompletedItems, int itemOfInterestIndex,
             OrganizePageSummary summary) {
@@ -203,7 +202,8 @@ public class PageModel {
             int itemsCopied = 0;
 
             // Performing one pass per sorting group. On each pass, picking the items of that
-            // group and adding to newOrder. This algorithm is optimized for minimal object creation.
+            // group and adding to newOrder. This algorithm is optimized for minimal object
+            // creation.
             for (int groupIndex = 0; groupIndex < ItemModelReadOnly.SORTING_GROUPS; groupIndex++) {
                 for (int itemIndex = 0; itemIndex < mItems.size(); itemIndex++) {
                     final ItemModel item = mItems.get(itemIndex);
@@ -222,7 +222,7 @@ public class PageModel {
                 mItems.set(i, newOrder[i]);
             }
         }
-        
+
         // If requested, locate new location of item of interest.
         if (itemOfInterest != null) {
             final int itemOfInteresetNewIndex = mItems.indexOf(itemOfInterest);

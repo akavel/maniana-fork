@@ -27,8 +27,7 @@ import com.zapta.apps.maniana.util.PopupsTracker;
 import com.zapta.apps.maniana.view.AppView;
 
 /**
- * Central references to all parts of the application. Initialized once upon main activity
- * creation.
+ * Central references to all parts of the application. Initialized once upon main activity creation.
  * 
  * @author Tal Dayan.
  */
@@ -56,17 +55,17 @@ public class AppContext {
 
     /** The app view. */
     private AppView mView;
-    
+
     /** The open dialog tracker. */
     private final PopupsTracker mPopupsTracker = new PopupsTracker();
 
     AppContext(MainActivity mainActivity) {
         mMainActivity = checkNotNull(mainActivity);
-        mModel = new AppModel(); 
+        mModel = new AppModel();
         mAppPreferences = new PreferencesTracker(this);
         mResources = new AppResources(this);
         mServices = new AppServices(this);
-        mController = new Controller(this);       
+        mController = new Controller(this);
         mView = new AppView(this);
     }
 
@@ -86,7 +85,7 @@ public class AppContext {
     public final DateTracker dateTracker() {
         return mDateTracker;
     }
-    
+
     public final PopupsTracker popupsTracker() {
         return mPopupsTracker;
     }

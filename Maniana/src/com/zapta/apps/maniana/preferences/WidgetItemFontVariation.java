@@ -43,18 +43,12 @@ public class WidgetItemFontVariation {
     /**
      * Construct a new variation.
      * 
-     * @param typeFace
-     *            the typeface t use
-     * @param color
-     *            the text color for non completed items.
-     * @param colorCompleted
-     *            the text color for completed items.
-     * @param textSize
-     *            the text size.
-     * @param lineSpacingMultiplier
-     *            The line spacing multiplier to use.
-     * @param topBottomPadding
-     *            padding (in dip) at top and bottom of text.
+     * @param typeFace the typeface t use
+     * @param color the text color for non completed items.
+     * @param colorCompleted the text color for completed items.
+     * @param textSize the text size.
+     * @param lineSpacingMultiplier The line spacing multiplier to use.
+     * @param topBottomPadding padding (in dip) at top and bottom of text.
      */
     private WidgetItemFontVariation(Typeface typeFace, int color, int textSize,
             float lineSpacingMultiplier) {
@@ -69,10 +63,8 @@ public class WidgetItemFontVariation {
     /**
      * Apply this font variation to given text view.
      * 
-     * @param textView
-     *            the item's text view.
-     * @param isCompleted
-     *            true if the item is completed.
+     * @param textView the item's text view.
+     * @param isCompleted true if the item is completed.
      */
     public void apply(TextView textView) {
         textView.setTypeface(mTypeFace);
@@ -89,7 +81,7 @@ public class WidgetItemFontVariation {
 
         final int rawFontSize = PreferencesTracker
                 .readWidgetItemFontSizePreference(sharedPreferences);
-        final int fontSize = (int)(rawFontSize * fontType.scale);
+        final int fontSize = (int) (rawFontSize * fontType.scale);
 
         switch (fontType) {
             case CURSIVE:
@@ -106,7 +98,7 @@ public class WidgetItemFontVariation {
                 throw new RuntimeException("Unknown widget font type: " + fontType);
         }
     }
-    
+
     public int getTextSize() {
         return mTextSize;
     }

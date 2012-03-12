@@ -19,15 +19,15 @@ import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
 import com.zapta.apps.maniana.util.DateUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 
-/** 
- * Model related utilities 
+/**
+ * Model related utilities
  * 
  * @author Tal Dayan
  */
 public class ModelUtil {
 
-    /** 
-     * Determine a task push scope upon app resume. 
+    /**
+     * Determine a task push scope upon app resume.
      * 
      * @param lastPushTimestamp model timestamp of last push.
      * @param someTimeToday a Time with today's date (time of day ignored)
@@ -36,17 +36,17 @@ public class ModelUtil {
      * @return The scope of the task push to do, if at all.
      */
     public static PushScope computePushScope(String lastPushTimestamp, Time someTimeToday,
-                    LockExpirationPeriod lockExpirationPeriod) {
+            LockExpirationPeriod lockExpirationPeriod) {
         // Convert timestamp to time
         final Time lastPushTime = new Time();
         final boolean parsedOk = DateUtil.setFromString(lastPushTime, lastPushTimestamp);
-        
+
         // If timestamp not parsed ok assume only a day change with no lock expiration.
         if (!parsedOk) {
             LogUtil.warning("Could not parse model timestamp: %s", lastPushTimestamp);
-           return PushScope.UNLOCKED_ONLY;  
+            return PushScope.UNLOCKED_ONLY;
         }
-        
+
         // Handle the case of same day.
         if (DateUtil.isSameDate(someTimeToday, lastPushTime)) {
             return PushScope.NONE;

@@ -26,8 +26,8 @@ public final class DateUtil {
     /** Do not instantiate */
     private DateUtil() {
     }
-    
-    // Ignoring any time component within the day. */ 
+
+    // Ignoring any time component within the day. */
     public static final boolean isEarilerDate(Time t1, Time t2) {
         if (t1.year != t2.year) {
             return t1.year < t2.year;
@@ -37,24 +37,24 @@ public final class DateUtil {
         }
         return t1.monthDay < t2.monthDay;
     }
-    
-    // Ignoring any time component within the day. */ 
+
+    // Ignoring any time component within the day. */
     public static final boolean isSameDate(Time t1, Time t2) {
         return (t1.monthDay == t2.monthDay) && (t1.month == t2.month) && (t1.year == t2.year);
     }
-    
-    // Ignoring any time component within the day. */ 
+
+    // Ignoring any time component within the day. */
     public static final boolean isSameMonth(Time t1, Time t2) {
         return (t1.month == t2.month) && (t1.year == t2.year);
     }
-    
-    // Ignoring any time component within the day. */ 
+
+    // Ignoring any time component within the day. */
     public static final boolean isSameWeek(Time t1, Time t2) {
         // A quick calculation for the most frequent case.
         if (isSameDate(t1, t2)) {
             return true;
         }
-        
+
         // Sort the two dates. x.date <= y.date
         final Time x;
         final Time y;
@@ -66,52 +66,51 @@ public final class DateUtil {
             x = t2;
             y = t1;
         }
-        
+
         // Get the beginning of day y.
         final Time t = new Time();
         t.set(y.monthDay, y.month, y.year);
-        
+
         y.normalize(false);
         int n = y.weekDay;
         // Substract n days
-        while(n > 0) {
+        while (n > 0) {
             final int daysLeftInMonth = t.monthDay - 1;
             // Go across month/year boundary
-            if (daysLeftInMonth == 0) {               
-              decrementOneDay(t);
-              n--;
-              continue;
+            if (daysLeftInMonth == 0) {
+                decrementOneDay(t);
+                n--;
+                continue;
             }
-            
+
             // Decrement within the month
             final int d = Math.min(n, daysLeftInMonth);
             t.monthDay -= d;
             n -= d;
         }
-        
+
         return !isEarilerDate(x, t);
     }
-    
+
     private static final void decrementOneDay(Time t) {
         if (t.monthDay > 1) {
             t.monthDay--;
             return;
         }
-        
+
         if (t.month > 0) {
             t.month--;
-           
+
         } else {
             t.year--;
             t.month = 11;
         }
-        
+
         // Set day to end of month
-        t.monthDay = 1;  // temporary, have a valid date
-        t.monthDay = t.getActualMaximum(Time.MONTH_DAY); 
+        t.monthDay = 1; // temporary, have a valid date
+        t.monthDay = t.getActualMaximum(Time.MONTH_DAY);
     }
-    
- 
+
     /** Return true if ok. t is not changed otherwise. */
     public final static boolean setFromString(Time t, String str) {
         int year;
@@ -132,13 +131,13 @@ public final class DateUtil {
         }
         return false;
     }
-    
+
     public static final String dateToString(Time t) {
         return String.format("%04d%02d%02d", t.year, t.month + 1, t.monthDay);
     }
 
-    /** 
-     * Return number of whole hoursto the end of the week of a given time. 
+    /**
+     * Return number of whole hoursto the end of the week of a given time.
      * 
      * @param the time (can contains hours, minutes, seconds, millis).
      */
@@ -147,19 +146,19 @@ public final class DateUtil {
         t.normalize(false);
         final int hoursPassedInWeek = (t.weekDay * 24) + t.hour;
         // NOTE: clipping at zero just in case. Should not happen.
-        return Math.max(0,  (7 * 24) - hoursPassedInWeek);
+        return Math.max(0, (7 * 24) - hoursPassedInWeek);
     }
 
-    /** 
-     * Return number of whole hours to the end of month of a given time. 
-     *  
+    /**
+     * Return number of whole hours to the end of month of a given time.
+     * 
      * @param the time (can contains hours, minutes, seconds, millis).
      */
     public static final int hoursToEndOfMonth(Time t) {
-        // [1..31]  (actually 28, 29, 30, 31).
+        // [1..31] (actually 28, 29, 30, 31).
         final int hoursInThisMonth = 24 * t.getActualMaximum(Time.MONTH_DAY);
         final int hoursPassedInThisMonth = ((t.monthDay - 1) * 24) + t.hour;
         // NOTE: clipping to zero just in case. Should not happen.
-        return Math.max(0,  hoursInThisMonth - hoursPassedInThisMonth);
+        return Math.max(0, hoursInThisMonth - hoursPassedInThisMonth);
     }
 }

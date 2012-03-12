@@ -19,7 +19,8 @@ import android.content.res.Configuration;
 
 /** Represents screen orientations. It is safe to assume that this type is binary. */
 public enum Orientation {
-    PORTRAIT(true, false), LANDSCAPE(false, true);
+    PORTRAIT(true, false),
+    LANDSCAPE(false, true);
 
     public final boolean isPortrait;
     public final boolean isLandscape;

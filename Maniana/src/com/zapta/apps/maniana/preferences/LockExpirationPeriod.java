@@ -19,13 +19,15 @@ import javax.annotation.Nullable;
 import com.zapta.apps.maniana.util.EnumUtil;
 import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 
-/** 
- * Represents the possible values of the lock expiration preference. 
- *
+/**
+ * Represents the possible values of the lock expiration preference.
+ * 
  * @author Tal Dayan
  */
 public enum LockExpirationPeriod implements KeyedEnum {
-    WEEKLY("weekly"), MONTHLY("monthly"), NEVER("never");
+    WEEKLY("weekly"),
+    MONTHLY("monthly"),
+    NEVER("never");
 
     /** Value key. Persisted. Change only if must. Should match keys in the preferences XML. */
     private final String mKey;
@@ -41,7 +43,8 @@ public enum LockExpirationPeriod implements KeyedEnum {
 
     /** Return value with given key or fallback value if not found */
     @Nullable
-    public final static LockExpirationPeriod fromKey(String key, @Nullable LockExpirationPeriod fallBack) {
+    public final static LockExpirationPeriod fromKey(String key,
+            @Nullable LockExpirationPeriod fallBack) {
         return EnumUtil.fromKey(key, LockExpirationPeriod.values(), fallBack);
     }
 }

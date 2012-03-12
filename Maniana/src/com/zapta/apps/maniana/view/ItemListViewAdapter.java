@@ -76,12 +76,12 @@ public class ItemListViewAdapter extends BaseAdapter {
             itemView = (ItemView) (convertView);
             itemView.clearHighlight();
             itemView.updateFromItem(itemModel);
-            
+
             // NOTE(tal): in case of a font setting change, we invalidate all the item
             // views in the item list view. This causes the ItemListView to call this
             // method for each of its item views. The line below update the item view
             // font in case it changed, otherwise it does nothing.
-//            itemView.updateItemFontVariation(itemModel.isCompleted());
+            // itemView.updateItemFontVariation(itemModel.isCompleted());
         }
 
         return itemView;

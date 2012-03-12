@@ -15,7 +15,7 @@ package com.zapta.apps.maniana.preferences;
 
 /**
  * Base class for selectable thumbnails.
- *
+ * 
  * @author Tal Dayan
  */
 public class Thumbnail {
@@ -24,16 +24,16 @@ public class Thumbnail {
 
     /** Id of resource with theme preview image. */
     private final int mDrawableId;
-    
+
     public Thumbnail(String name, int drawableId) {
         mName = name;
         mDrawableId = drawableId;
     }
-        
+
     public final String getName() {
         return mName;
     }
-    
+
     public final int getDrawableId() {
         return mDrawableId;
     }

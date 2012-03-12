@@ -23,43 +23,43 @@ import android.text.format.Time;
 
 import com.zapta.apps.maniana.util.LogUtil;
 
-/** 
- * Provides midnight trigger for updating the widgets 
- *
+/**
+ * Provides midnight trigger for updating the widgets
+ * 
  * @author Tal Dayan
  */
 // TODO: have this receiver responding also to date or time zone change by user. Since they may
 // also affect the widgets.
 public class WidgetMidnightTicker extends BroadcastReceiver {
-    
+
     // Should match AndroidManifest.xml.
     public static final String WIDGET_UPDATE_ACTION = "com.zapta.apps.maniana.widget.WIDGET_UPDATE_ACTION";
-    
+
     /** Trigger slightly after midnight to avoid truncation and timing errors, etc. */
     private static final int MIDNIGHT_MARGIN_MILLIS = 60000;
-    
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        LogUtil.info("WidgetMidnightTicker onRecieve: " + intent); 
+        LogUtil.info("WidgetMidnightTicker onRecieve: " + intent);
         BaseWidgetProvider.updateAllWidgetsFromContext(context);
     }
 
-    /** 
-     * Schedule or reschedule midnight widget update. 
+    /**
+     * Schedule or reschedule midnight widget update.
      * 
      * Called from few hooks to make sure we still have a pending midnight alarm.
      */
     public static final void scheduleMidnightUpdates(Context context) {
         Intent intent = new Intent(WIDGET_UPDATE_ACTION);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-        
+
         final long startTimeUtcMillis = utcMillisNextMidnight() + MIDNIGHT_MARGIN_MILLIS;
-                  
-        final AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        am.setRepeating(AlarmManager.RTC, startTimeUtcMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
+
+        final AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        am.setRepeating(AlarmManager.RTC, startTimeUtcMillis, AlarmManager.INTERVAL_DAY,
+                pendingIntent);
     }
 
-    
     /** Get time of next midnight in UTC millis. */
     public static final long utcMillisNextMidnight() {
         Time t = new Time();

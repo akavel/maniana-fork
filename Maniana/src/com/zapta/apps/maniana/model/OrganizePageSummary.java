@@ -14,25 +14,25 @@
 
 package com.zapta.apps.maniana.model;
 
-/** 
+/**
  * Contains the results of a page cleanup operation.
  * 
  * @author Tal Dayan
  */
 public class OrganizePageSummary {
-	public int completedItemsFound;
-	public int completedItemsDeleted;
-	public boolean orderChanged;
-	public int itemOfInterestNewIndex;
-	
-	public final void clear() {
-		completedItemsFound = 0;
-		completedItemsDeleted = 0;
-		itemOfInterestNewIndex = -1;
-		orderChanged = false;	
-	}
-	
-	public final boolean pageChanged() {
-	    return (completedItemsDeleted > 0) || orderChanged;
-	}
+    public int completedItemsFound;
+    public int completedItemsDeleted;
+    public boolean orderChanged;
+    public int itemOfInterestNewIndex;
+
+    public final void clear() {
+        completedItemsFound = 0;
+        completedItemsDeleted = 0;
+        itemOfInterestNewIndex = -1;
+        orderChanged = false;
+    }
+
+    public final boolean pageChanged() {
+        return (completedItemsDeleted > 0) || orderChanged;
+    }
 }

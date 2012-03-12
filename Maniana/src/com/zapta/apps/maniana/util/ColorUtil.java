@@ -89,16 +89,11 @@ public final class ColorUtil {
     /**
      * Compute the combined color component (R, G or B) of layer 2 over layer 1.
      * 
-     * @param c1
-     *            color of layer 1 [0 .. 255]
-     * @param a1
-     *            alpha of layer 1 [0 .. 255]
-     * @param c2
-     *            color of layer 2 [0 .. 255]
-     * @param a2
-     *            alpha of layer 1 [0 .. 255]
-     * @param a
-     *            compositeAlpha(a1, a2)
+     * @param c1 color of layer 1 [0 .. 255]
+     * @param a1 alpha of layer 1 [0 .. 255]
+     * @param c2 color of layer 2 [0 .. 255]
+     * @param a2 alpha of layer 1 [0 .. 255]
+     * @param a compositeAlpha(a1, a2)
      * @return the composite color component [0..255]
      */
     @VisibleForTesting

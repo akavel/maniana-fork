@@ -323,9 +323,8 @@ public class PageView extends FrameLayout {
     /**
      * Start animating given item.
      * 
-     * @param initialDelayMillis
-     *            - wait this time in milliseconds before starting the animation. Note that the
-     *            method returns immediately even if a non zero delay is specified.
+     * @param initialDelayMillis - wait this time in milliseconds before starting the animation.
+     *        Note that the method returns immediately even if a non zero delay is specified.
      */
     public final void startItemAnimation(int itemIndex, AppView.ItemAnimationType animationType,
             int initialDelayMillis, @Nullable Runnable callback) {

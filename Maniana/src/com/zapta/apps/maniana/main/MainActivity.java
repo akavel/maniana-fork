@@ -38,7 +38,7 @@ import com.zapta.apps.maniana.util.LogUtil;
 public class MainActivity extends Activity {
 
     private AppContext mApp;
-    
+
     /** Used to pass resume action from onNewIntent() to onResume(). */
     private ResumeAction resumeAction = ResumeAction.NONE;
 
@@ -53,8 +53,8 @@ public class MainActivity extends Activity {
         mApp = new AppContext(this);
 
         // Load model from file
-        final ModelLoadingResult modelLoadResult = ModelPersistence.loadModelDataFile(mApp
-                        .context(), mApp.model());
+        final ModelLoadingResult modelLoadResult = ModelPersistence.loadModelDataFile(
+                mApp.context(), mApp.model());
 
         final StartupKind startupKind;
         switch (modelLoadResult.outcome) {
@@ -64,16 +64,16 @@ public class MainActivity extends Activity {
                 final boolean isSameVersion = (oldVersionCode == newVersionCode);
                 final boolean isSilentUpgrade = isSilentUpgrade(oldVersionCode, newVersionCode);
                 startupKind = isSameVersion ? StartupKind.NORMAL
-                                : (isSilentUpgrade ? StartupKind.NEW_VERSION_SILENT
-                                                : StartupKind.NEW_VERSION_ANNOUNCE);
+                        : (isSilentUpgrade ? StartupKind.NEW_VERSION_SILENT
+                                : StartupKind.NEW_VERSION_ANNOUNCE);
                 break;
             }
             case FILE_NOT_FOUND: {
                 // If this returnes an error, the model is guaranteed to be cleared.
                 final ModelLoadingResult sampleLoadingResult = ModelPersistence
-                                .loadSampleModelAsset(mApp.context(), mApp.model());
+                        .loadSampleModelAsset(mApp.context(), mApp.model());
                 startupKind = (sampleLoadingResult.outcome.isOk()) ? StartupKind.NEW_USER
-                                : StartupKind.SAMPLE_DATA_ERROR;
+                        : StartupKind.SAMPLE_DATA_ERROR;
                 // Prevent moving item from Tomorow to Today.
                 mApp.model().setLastPushDateStamp(mApp.dateTracker().getDateStampString());
                 break;
@@ -96,7 +96,7 @@ public class MainActivity extends Activity {
 
         // Track resume action from the launch intent
         trackResumeAction(getIntent());
-          
+
         // Tell the controller the app was just created.
         mApp.controller().onMainActivityCreated(startupKind);
 
@@ -105,7 +105,7 @@ public class MainActivity extends Activity {
     /** Is this a minor upgrade that should supress the startup message? */
     private static final boolean isSilentUpgrade(int oldVersionCode, int newVersionCode) {
         // Return here true if combination of old and new version code does not warrant
-    	// bothering some users with the What's New popup.
+        // bothering some users with the What's New popup.
 
         // By default, upgrdes are not silent.
         return false;
@@ -128,12 +128,12 @@ public class MainActivity extends Activity {
         final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         return true;
-        
+
         // NOTE: alternative implementation to use the ICS popup menu instead. We don't
-        // use it because it shows the menu at the bottom of the screen far from the 
+        // use it because it shows the menu at the bottom of the screen far from the
         // menu overlow button (bad user experience)
-        //IcsMainMenuDialog.showMenu(mApp);
-        //return false;
+        // IcsMainMenuDialog.showMenu(mApp);
+        // return false;
     }
 
     /** Called by the framework when the user make a selection in the app main menu. */
@@ -173,11 +173,11 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        
+
         // Get the action for this resume
         final ResumeAction thisResumeAction = resumeAction;
         resumeAction = ResumeAction.NONE;
-        
+
         // Inform the controller
         mApp.controller().onMainActivityResume(thisResumeAction);
     }
@@ -196,20 +196,20 @@ public class MainActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         mApp.controller().onActivityResult(requestCode, resultCode, intent);
     }
-    
-    /** 
-     * Called when the activity recieves an intent. Used to detect launches from
-     * list widget action buttons.
+
+    /**
+     * Called when the activity recieves an intent. Used to detect launches from list widget action
+     * buttons.
      */
-     @Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);		
-		trackResumeAction(intent);
-	}
-	
-	/** Update the resume action from the given launch intent. */
-	private final void trackResumeAction(Intent launchIntent)  {
-		// TODO: should we condition test first that the intent is a launcher intent?
-		resumeAction = ResumeAction.fromIntent(launchIntent);
-	}
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        trackResumeAction(intent);
+    }
+
+    /** Update the resume action from the given launch intent. */
+    private final void trackResumeAction(Intent launchIntent) {
+        // TODO: should we condition test first that the intent is a launcher intent?
+        resumeAction = ResumeAction.fromIntent(launchIntent);
+    }
 }

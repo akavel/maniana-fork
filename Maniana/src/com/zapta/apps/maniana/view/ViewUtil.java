@@ -21,21 +21,21 @@ import android.view.MotionEvent;
  * 
  * @author Tal Dayan
  */
-public class ViewUtil {	
+public class ViewUtil {
 
-	/** Return a developer friendly action name. Not user visible. */
-	public static String actionDebugName(int action) {
-		switch (action) {
-			case MotionEvent.ACTION_DOWN:
-				return "DOWN";
-			case MotionEvent.ACTION_CANCEL:
-				return "CANCEL";
-			case MotionEvent.ACTION_UP:
-				return "UP";
-			case MotionEvent.ACTION_MOVE:
-				return "MOVE";
-			default:
-				return String.format("UNKNOWN(%d)", action);
-		}
-	}
+    /** Return a developer friendly action name. Not user visible. */
+    public static String actionDebugName(int action) {
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                return "DOWN";
+            case MotionEvent.ACTION_CANCEL:
+                return "CANCEL";
+            case MotionEvent.ACTION_UP:
+                return "UP";
+            case MotionEvent.ACTION_MOVE:
+                return "MOVE";
+            default:
+                return String.format("UNKNOWN(%d)", action);
+        }
+    }
 }

@@ -37,15 +37,20 @@ public class ListWidgetSize {
             ListWidgetProvider5.class, 4, 4);
 
     /** List of all list widget sizes. */
-    static final ListWidgetSize[] LIST_WIDGET_SIZES = new ListWidgetSize[] { LIST_WIDGET_SIZE1,
-            LIST_WIDGET_SIZE2, LIST_WIDGET_SIZE3, LIST_WIDGET_SIZE4, LIST_WIDGET_SIZE5 };
+    static final ListWidgetSize[] LIST_WIDGET_SIZES = new ListWidgetSize[] {
+        LIST_WIDGET_SIZE1,
+        LIST_WIDGET_SIZE2,
+        LIST_WIDGET_SIZE3,
+        LIST_WIDGET_SIZE4,
+        LIST_WIDGET_SIZE5
+    };
 
     /** The actual concrete provider class for this widget size. */
     final Class<? extends ListWidgetProvider> widgetProviderClass;
-    
+
     /** Widget width in home launcher cells. */
     final int widthCells;
-    
+
     /** Widget height in home launcher cells. */
     final int heightCells;
 

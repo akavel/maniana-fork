@@ -45,7 +45,7 @@ public class ModelPersistence {
 
     public static final ModelLoadingResult loadModelDataFile(Context context, AppModel resultModel) {
         ModelLoadingResult result = internalLoadModelFile(context, resultModel, DATA_FILE_NAME,
-                        false);
+                false);
         if (result.outcome.isOk()) {
             // Model is same as persistence file and no version change.
             resultModel.setClean();
@@ -57,9 +57,9 @@ public class ModelPersistence {
     }
 
     public static final ModelLoadingResult loadSampleModelAsset(Context context,
-                    AppModel resultModel) {
+            AppModel resultModel) {
         ModelLoadingResult result = internalLoadModelFile(context, resultModel,
-                        NEW_USER_MODEL_ASSET_NAME, true);
+                NEW_USER_MODEL_ASSET_NAME, true);
         // Since we did not load the model from the data file, it is dirty and need to be
         // persisted.
         resultModel.setDirty();
@@ -71,9 +71,9 @@ public class ModelPersistence {
      * is cleared.
      */
     private static final ModelLoadingResult internalLoadModelFile(Context context,
-                    AppModel resultModel, String fileName, boolean isAsset) {
+            AppModel resultModel, String fileName, boolean isAsset) {
         LogUtil.info("Going to read data from " + (isAsset ? "assert" : "data File") + " "
-                        + fileName);
+                + fileName);
 
         resultModel.clear();
 
@@ -91,7 +91,7 @@ public class ModelPersistence {
         try {
             PersistenceMetadata resultMetadata = new PersistenceMetadata();
             ModelDeserialization.deserializeModel(resultModel, resultMetadata,
-                            fileReadResult.content);
+                    fileReadResult.content);
             return new ModelLoadingResult(ModelLoadingOutcome.FILE_READ_OK, resultMetadata);
 
         } catch (JSONException e) {

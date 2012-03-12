@@ -28,50 +28,50 @@ import android.view.View;
  */
 public class PagerViewAdapter extends PagerAdapter {
     /** A list with today and tomorow pages. */
-	private final ArrayList<PageView> pages;
+    private final ArrayList<PageView> pages;
 
-	public PagerViewAdapter(PageView todayPageView, PageView tomorrowPageView) {
-		pages = new ArrayList<PageView>();
-		pages.add(todayPageView);
-		pages.add(tomorrowPageView);
-	}
+    public PagerViewAdapter(PageView todayPageView, PageView tomorrowPageView) {
+        pages = new ArrayList<PageView>();
+        pages.add(todayPageView);
+        pages.add(tomorrowPageView);
+    }
 
-	@Override
-	public int getCount() {
-		return pages.size();
-	}
+    @Override
+    public int getCount() {
+        return pages.size();
+    }
 
-	/** Return the page view at given index. */
-	@Override
-	public Object instantiateItem(View parentView, int position) {
-		((ViewPager) parentView).addView(pages.get(position), 0);
-		return pages.get(position);
-	}
+    /** Return the page view at given index. */
+    @Override
+    public Object instantiateItem(View parentView, int position) {
+        ((ViewPager) parentView).addView(pages.get(position), 0);
+        return pages.get(position);
+    }
 
-	@Override
-	public void destroyItem(View parentView, int position, Object childView) {
-		((ViewPager) parentView).removeView((PageView) childView);
-	}
+    @Override
+    public void destroyItem(View parentView, int position, Object childView) {
+        ((ViewPager) parentView).removeView((PageView) childView);
+    }
 
-	@Override
-	public boolean isViewFromObject(View view, Object childView) {
-		return view == ((PageView) childView);
-	}
+    @Override
+    public boolean isViewFromObject(View view, Object childView) {
+        return view == ((PageView) childView);
+    }
 
-	@Override
-	public void finishUpdate(View arg0) {
-	}
+    @Override
+    public void finishUpdate(View arg0) {
+    }
 
-	@Override
-	public void restoreState(Parcelable arg0, ClassLoader arg1) {
-	}
+    @Override
+    public void restoreState(Parcelable arg0, ClassLoader arg1) {
+    }
 
-	@Override
-	public Parcelable saveState() {
-		return null;
-	}
+    @Override
+    public Parcelable saveState() {
+        return null;
+    }
 
-	@Override
-	public void startUpdate(View arg0) {
-	}
+    @Override
+    public void startUpdate(View arg0) {
+    }
 }

@@ -33,7 +33,7 @@ public class ModelSerialization {
     // Format Step:
     // 1: initial. Model fields at top level, with format.
     // 2: added top level "metadata". Move model fields to "model". Format field stays at
-    //    top level.
+    // top level.
     private static final int FORMAT_STEP = 2;
 
     public static final String serializeModel(AppModel model, PersistenceMetadata metadata) {
@@ -61,7 +61,7 @@ public class ModelSerialization {
 
     /** Serialize one page */
     private static final JSONArray pageItemsToJson(AppModel appModel, PageKind pageKind)
-                    throws JSONException {
+            throws JSONException {
 
         final JSONArray result = new JSONArray();
         final int n = appModel.getPageItemCount(pageKind);

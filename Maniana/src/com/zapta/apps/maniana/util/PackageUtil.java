@@ -31,7 +31,7 @@ public final class PackageUtil {
     /** Safe to call also from widget or from non main acitivties. */
     public static final PackageInfo getPackageInfo(Context context) {
         final PackageManager manager = context.getPackageManager();
-         try {
+        try {
             return manager.getPackageInfo(context.getPackageName(), 0);
         } catch (NameNotFoundException e) {
             throw new RuntimeException("Failed to access package info", e);

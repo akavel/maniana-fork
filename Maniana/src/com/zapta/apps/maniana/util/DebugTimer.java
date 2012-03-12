@@ -14,7 +14,6 @@
 
 package com.zapta.apps.maniana.util;
 
-
 /**
  * Debug utility to measure operation timing.
  * 

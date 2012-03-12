@@ -121,24 +121,23 @@ public class PopupMessageActivity extends Activity {
                 frame.setVisibility(View.VISIBLE);
             }
         });
-        
+
         displayFromAsset(webview, messageKind);
     }
-    
-    
+
     private final void displayFromAsset(WebView webView, MessageKind messageKind) {
-         final FileReadResult fileReadResult = FileUtil.readFileToString(this,
-                         messageKind.assetRelativePath, true);
+        final FileReadResult fileReadResult = FileUtil.readFileToString(this,
+                messageKind.assetRelativePath, true);
 
-         // TODO: handle this more gracefully?
-         check(fileReadResult.outcoe == FileReadOutcome.READ_OK,
-                         "Error reading asset file: %s, outcome: %s", messageKind.assetRelativePath,
-                         fileReadResult.outcoe);
-         
-         final String htmlPage = expandMacros(fileReadResult.content);
+        // TODO: handle this more gracefully?
+        check(fileReadResult.outcoe == FileReadOutcome.READ_OK,
+                "Error reading asset file: %s, outcome: %s", messageKind.assetRelativePath,
+                fileReadResult.outcoe);
 
-         webView.loadDataWithBaseURL(ASSETS_BASE_URL + messageKind.assetRelativePath, htmlPage,
-                         null, "UTF-8", null);
+        final String htmlPage = expandMacros(fileReadResult.content);
+
+        webView.loadDataWithBaseURL(ASSETS_BASE_URL + messageKind.assetRelativePath, htmlPage,
+                null, "UTF-8", null);
     }
 
     private final String expandMacros(String text) {
@@ -168,7 +167,7 @@ public class PopupMessageActivity extends Activity {
             messageKind = MessageKind.valueOf(messageKindName);
         } catch (IllegalArgumentException e) {
             LogUtil.error("Unknown message kind name [%s] in intent: %s", messageKindName,
-                            getIntent());
+                    getIntent());
             // finish();
             return null;
         }

@@ -20,7 +20,8 @@ package com.zapta.apps.maniana.model;
  * @author Tal Dayan
  */
 public enum PageKind {
-    TODAY, TOMOROW;
+    TODAY,
+    TOMOROW;
 
     public final boolean isToday() {
         return this == TODAY;

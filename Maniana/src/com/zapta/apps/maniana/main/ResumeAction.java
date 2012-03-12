@@ -26,38 +26,40 @@ import com.zapta.apps.maniana.util.LogUtil;
  * @author Tal Dayan
  */
 public enum ResumeAction {
-	 NONE, ADD_NEW_ITEM_BY_TEXT, ADD_NEW_ITEM_BY_VOICE;
+    NONE,
+    ADD_NEW_ITEM_BY_TEXT,
+    ADD_NEW_ITEM_BY_VOICE;
 
-	/** Key for serializing resume actions in intents. Not persisted. */
-	private static final String RESUME_ACTION_KEY = "maniana_resume_action";
+    /** Key for serializing resume actions in intents. Not persisted. */
+    private static final String RESUME_ACTION_KEY = "maniana_resume_action";
 
-	/** Default action when action is not specified in the launch intent. */
-	private static final ResumeAction DEFAULT_ACTION = NONE;
+    /** Default action when action is not specified in the launch intent. */
+    private static final ResumeAction DEFAULT_ACTION = NONE;
 
-	public boolean isNone() {
-		return this == NONE;
-	}
-	
-	/** Serialize a resume action in an intent. */
-	public static void setInIntent(Intent intent, ResumeAction resumeAction) {
-		intent.putExtra(RESUME_ACTION_KEY, resumeAction.toString());
-	}
+    public boolean isNone() {
+        return this == NONE;
+    }
 
-	/** Deserialize a resume action from an intent */
-	public static ResumeAction fromIntent(Intent intent) {
-		@Nullable
-		final String strValue = intent.getStringExtra(RESUME_ACTION_KEY);
-		if (strValue == null) {
-			return DEFAULT_ACTION;
-		}
+    /** Serialize a resume action in an intent. */
+    public static void setInIntent(Intent intent, ResumeAction resumeAction) {
+        intent.putExtra(RESUME_ACTION_KEY, resumeAction.toString());
+    }
 
-		@Nullable
-		final ResumeAction value = ResumeAction.valueOf(strValue);
-		if (value == null) {
-			LogUtil.error("Unknown resume action string: [%s]", strValue);
-			return DEFAULT_ACTION;
-		}
+    /** Deserialize a resume action from an intent */
+    public static ResumeAction fromIntent(Intent intent) {
+        @Nullable
+        final String strValue = intent.getStringExtra(RESUME_ACTION_KEY);
+        if (strValue == null) {
+            return DEFAULT_ACTION;
+        }
 
-		return value;
-	}
+        @Nullable
+        final ResumeAction value = ResumeAction.valueOf(strValue);
+        if (value == null) {
+            LogUtil.error("Unknown resume action string: [%s]", strValue);
+            return DEFAULT_ACTION;
+        }
+
+        return value;
+    }
 }

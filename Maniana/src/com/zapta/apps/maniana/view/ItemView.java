@@ -80,7 +80,7 @@ public class ItemView extends FrameLayout {
         mArrowView = (ImageView) findViewById(R.id.page_item_arrow);
 
         mArrowView.setImageResource(mPageKind.isToday() ? R.drawable.arrow_right
-                        : R.drawable.arrow_left);
+                : R.drawable.arrow_left);
 
         updateFromItem(item);
     }
@@ -91,8 +91,8 @@ public class ItemView extends FrameLayout {
     }
 
     public void startItemAnimation(final int itemIndex,
-                    final AppView.ItemAnimationType animationType, int initialDelayMillis,
-                    final Runnable callback) {
+            final AppView.ItemAnimationType animationType, int initialDelayMillis,
+            final Runnable callback) {
 
         final Animation animation;
 
@@ -103,7 +103,7 @@ public class ItemView extends FrameLayout {
             }
             case MOVING_ITEM_TO_OTHER_PAGE: {
                 final int animationId = mPageKind.isToday() ? R.anim.item_move_right
-                                : R.anim.item_move_left;
+                        : R.anim.item_move_left;
                 animation = AnimationUtils.loadAnimation(getContext(), animationId);
                 break;
             }

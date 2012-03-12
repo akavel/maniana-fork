@@ -19,8 +19,8 @@ import javax.annotation.Nullable;
 import com.zapta.apps.maniana.util.EnumUtil;
 import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 
-/** 
- * Represents possible values of Font preference. 
+/**
+ * Represents possible values of Font preference.
  * 
  * @author Tal Dayan
  */
@@ -32,7 +32,7 @@ public enum ItemFontType implements KeyedEnum {
 
     /** Preference value key. Should match the values in preference xml. */
     private final String mKey;
-    
+
     /** Relative scale to normalize size among font types. */
     public final float scale;
 

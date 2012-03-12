@@ -24,8 +24,8 @@ import com.zapta.apps.maniana.controller.MainMenuEntry;
 import com.zapta.apps.maniana.main.AppContext;
 
 /**
- * Main menu dialog for API > 10 (e.g. Ice Cream Sandwich). The old option menu
- * has been deprecated for these API levels.
+ * Main menu dialog for API > 10 (e.g. Ice Cream Sandwich). The old option menu has been deprecated
+ * for these API levels.
  * 
  * @author Tal Dayan
  */

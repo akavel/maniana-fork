@@ -14,56 +14,55 @@
 
 package com.zapta.apps.maniana.model;
 
-
 /**
  * Represents the data of a single item.
  * 
  * @author Tal Dayan.
  */
 public class ItemModel implements ItemModelReadOnly {
-	
+
     /** The item text. */
-	private String mText;
-	
-	/** Is this item done? */
-	private boolean mIsCompleted;
-	
-	/** Is this item blocked. */
-	private boolean mIsLocked;
-	
-	/** The item color. */
-	private ItemColor mColor;
+    private String mText;
 
-	/** Default constructor. */
-	public ItemModel() {
-		mText = "";
-		mIsCompleted = false;
-		mIsLocked = false;
-		mColor = ItemColor.NONE;
-	}
-	
-	/** Constructor with initial values. */
-	public ItemModel(String text, boolean isCompleted, boolean isLocked, ItemColor color) {
-		mText = text;
-		mIsCompleted = isCompleted;
-		mIsLocked = isLocked;
-		mColor = color;
-	}
-	
-	/** Copy constructor. Create an identical but independent instance */
-	public ItemModel(ItemModel other) {
-		copyFrom(other);
-	}
-	
-	/** Set to same values as other item. */
-	public final void copyFrom(ItemModel other) {
-		mText = other.mText;
-		mIsCompleted = other.mIsCompleted;
-		mIsLocked = other.mIsLocked;
-		mColor = other.mColor;
-	}
+    /** Is this item done? */
+    private boolean mIsCompleted;
 
-	@Override
+    /** Is this item blocked. */
+    private boolean mIsLocked;
+
+    /** The item color. */
+    private ItemColor mColor;
+
+    /** Default constructor. */
+    public ItemModel() {
+        mText = "";
+        mIsCompleted = false;
+        mIsLocked = false;
+        mColor = ItemColor.NONE;
+    }
+
+    /** Constructor with initial values. */
+    public ItemModel(String text, boolean isCompleted, boolean isLocked, ItemColor color) {
+        mText = text;
+        mIsCompleted = isCompleted;
+        mIsLocked = isLocked;
+        mColor = color;
+    }
+
+    /** Copy constructor. Create an identical but independent instance */
+    public ItemModel(ItemModel other) {
+        copyFrom(other);
+    }
+
+    /** Set to same values as other item. */
+    public final void copyFrom(ItemModel other) {
+        mText = other.mText;
+        mIsCompleted = other.mIsCompleted;
+        mIsLocked = other.mIsLocked;
+        mColor = other.mColor;
+    }
+
+    @Override
     public final String getText() {
         return mText;
     }
@@ -80,10 +79,10 @@ public class ItemModel implements ItemModelReadOnly {
     public final void setIsCompleted(boolean isCompleted) {
         mIsCompleted = isCompleted;
     }
-    
+
     public final int sortingGroupIndex() {
-        return mIsCompleted ? (mIsLocked? 2 : 1) : (mIsLocked? 3 : 0);
-     }
+        return mIsCompleted ? (mIsLocked ? 2 : 1) : (mIsLocked ? 3 : 0);
+    }
 
     @Override
     public final boolean isLocked() {

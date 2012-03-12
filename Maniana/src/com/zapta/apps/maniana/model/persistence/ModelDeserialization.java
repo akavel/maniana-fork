@@ -37,15 +37,15 @@ public class ModelDeserialization {
      * Deserialize a model from a JSON doc.
      * 
      * @param resultModel filled in with the deserialize model data. All previous content is lost,
-     *            regardless of the outcome.
+     *        regardless of the outcome.
      * 
      * @param resultMetadata filled in with the deserialized metadata. All previous content is lost,
-     *            regardless of the outcome.
+     *        regardless of the outcome.
      * 
      * @throws JSONException
      */
     public static final void deserializeModel(AppModel resultModel,
-                    PersistenceMetadata resultMetadata, String jsonString) throws JSONException {
+            PersistenceMetadata resultMetadata, String jsonString) throws JSONException {
         resultModel.clear();
         resultMetadata.clear();
 
@@ -69,7 +69,7 @@ public class ModelDeserialization {
      * level and in format >= 2, the model fields are in a 'model' sub field.
      */
     private static final void populateModelFields(JSONObject root, AppModel appModel)
-                    throws JSONException {
+            throws JSONException {
         appModel.setLastPushDateStamp(root.optString("last_push_date", ""));
         populateItemListFromJason(root.getJSONArray("today"), appModel, PageKind.TODAY);
         populateItemListFromJason(root.getJSONArray("tomorow"), appModel, PageKind.TOMOROW);
@@ -77,7 +77,7 @@ public class ModelDeserialization {
 
     /** Deserialize a page item list */
     private static final void populateItemListFromJason(JSONArray jsonItems, AppModel appModel,
-                    PageKind pageKind) throws JSONException {
+            PageKind pageKind) throws JSONException {
         for (int i = 0; i < jsonItems.length(); i++) {
             final ItemModel item = modelItemFromJson(jsonItems.getJSONObject(i));
             // Force item in the today page to be unlocked.

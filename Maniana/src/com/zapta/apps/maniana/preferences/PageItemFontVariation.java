@@ -43,18 +43,12 @@ public class PageItemFontVariation {
     /**
      * Construct a new variation.
      * 
-     * @param typeFace
-     *            the typeface t use
-     * @param color
-     *            the text color for non completed items.
-     * @param colorCompleted
-     *            the text color for completed items.
-     * @param textSize
-     *            the text size.
-     * @param lineSpacingMultiplier
-     *            The line spacing multiplier to use.
-     * @param topBottomPadding
-     *            padding (in dip) at top and bottom of text.
+     * @param typeFace the typeface t use
+     * @param color the text color for non completed items.
+     * @param colorCompleted the text color for completed items.
+     * @param textSize the text size.
+     * @param lineSpacingMultiplier The line spacing multiplier to use.
+     * @param topBottomPadding padding (in dip) at top and bottom of text.
      */
     private PageItemFontVariation(Typeface typeFace, int color, int colorCompleted, int textSize,
             float lineSpacingMultiplier, int topBottomPadding) {
@@ -69,10 +63,8 @@ public class PageItemFontVariation {
     /**
      * Apply this font variation to given text view.
      * 
-     * @param textView
-     *            the item's text view.
-     * @param isCompleted
-     *            true if the item is completed.
+     * @param textView the item's text view.
+     * @param isCompleted true if the item is completed.
      */
     public void apply(TextView textView, boolean isCompleted, boolean applyAlsoColor) {
         textView.setTypeface(mTypeFace);

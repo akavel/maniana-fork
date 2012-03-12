@@ -35,7 +35,7 @@ public enum ItemColor implements KeyedEnum {
 
     /** The key used for serialization. Not user visible. Should be consistent. */
     private final String mKey;
-    
+
     /** The android argb color of this enum value. */
     private final int mColor;
 
@@ -43,7 +43,7 @@ public enum ItemColor implements KeyedEnum {
         mColor = color;
         mKey = key;
     }
-    
+
     /** Return value with given key, fallback value if not found. */
     @Nullable
     public final static ItemColor fromKey(String key, @Nullable ItemColor fallBack) {
@@ -63,10 +63,8 @@ public enum ItemColor implements KeyedEnum {
     public final int getColor() {
         return mColor;
     }
-    
+
     public final boolean isNone() {
         return (this == NONE);
     }
-    
-    
 }

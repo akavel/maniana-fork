@@ -311,8 +311,7 @@ public class PreferencesTracker implements PreferenceConstants {
     /**
      * Handle preferences change.
      * 
-     * @param key
-     *            the preference key string as defined in preferences.xml.
+     * @param key the preference key string as defined in preferences.xml.
      */
     private final void onPreferenceChange(String key) {
         // Null if not found.

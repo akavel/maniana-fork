@@ -24,21 +24,23 @@ import com.zapta.apps.maniana.R;
 public class WidgetTheme extends Thumbnail {
 
     public static final WidgetTheme[] WIDGET_THEMES = {
-            // Default
-            new WidgetTheme("Paper Trail", R.drawable.widget_theme1_preview,
-                    PreferenceConstants.DEFAULT_WIDGET_BACKGROUND_TYPE,
-                    PreferenceConstants.DEFAULT_WIDGET_BACKGROUND_COLOR,
-                    PreferenceConstants.DEFAULT_WIDGET_FONT_TYPE,
-                    PreferenceConstants.DEFAULT_WIDGET_ITEM_FONT_SIZE,
-                    PreferenceConstants.DEFAULT_WIDGET_TEXT_COLOR,
-                    PreferenceConstants.DEFAULT_WIDGET_SHOW_TOOLBAR,
-                    PreferenceConstants.DEFAULT_WIDGET_SINGLE_LINE),
-            new WidgetTheme("Crystal Clear", R.drawable.widget_theme2_preview, WidgetBackgroundType.SOLID,
-                    0x44000000, ItemFontType.SAN_SERIF, 14, 0xffffff00, true, false),
-            new WidgetTheme("Think Big", R.drawable.widget_theme3_preview, WidgetBackgroundType.SOLID,
-                    0xff000000, ItemFontType.SAN_SERIF, 18, 0xff00ff00, true, true),
-            new WidgetTheme("Fine Print", R.drawable.widget_theme4_preview, WidgetBackgroundType.SOLID,
-                    0x600000ff, ItemFontType.SAN_SERIF, 12, 0xffffff00, false, true) };
+        // Default
+        new WidgetTheme("Paper Trail", R.drawable.widget_theme1_preview,
+                PreferenceConstants.DEFAULT_WIDGET_BACKGROUND_TYPE,
+                PreferenceConstants.DEFAULT_WIDGET_BACKGROUND_COLOR,
+                PreferenceConstants.DEFAULT_WIDGET_FONT_TYPE,
+                PreferenceConstants.DEFAULT_WIDGET_ITEM_FONT_SIZE,
+                PreferenceConstants.DEFAULT_WIDGET_TEXT_COLOR,
+                PreferenceConstants.DEFAULT_WIDGET_SHOW_TOOLBAR,
+                PreferenceConstants.DEFAULT_WIDGET_SINGLE_LINE),
+        new WidgetTheme("Crystal Clear", R.drawable.widget_theme2_preview,
+                WidgetBackgroundType.SOLID, 0x44000000, ItemFontType.SAN_SERIF, 14, 0xffffff00,
+                true, false),
+        new WidgetTheme("Think Big", R.drawable.widget_theme3_preview, WidgetBackgroundType.SOLID,
+                0xff000000, ItemFontType.SAN_SERIF, 18, 0xff00ff00, true, true),
+        new WidgetTheme("Fine Print", R.drawable.widget_theme4_preview, WidgetBackgroundType.SOLID,
+                0x600000ff, ItemFontType.SAN_SERIF, 12, 0xffffff00, false, true)
+    };
 
     public final WidgetBackgroundType backgroundType;
     public final int backgroundColor;
@@ -48,8 +50,9 @@ public class WidgetTheme extends Thumbnail {
     public final boolean showToolbar;
     public final boolean singleLine;
 
-    public WidgetTheme(String name, int drawableId, WidgetBackgroundType backgroundType, int backgroundColor,
-            ItemFontType fontType, int fontSize, int textColor, boolean showToolbar, boolean singleLine) {
+    public WidgetTheme(String name, int drawableId, WidgetBackgroundType backgroundType,
+            int backgroundColor, ItemFontType fontType, int fontSize, int textColor,
+            boolean showToolbar, boolean singleLine) {
         super(name, drawableId);
         this.backgroundType = backgroundType;
         this.backgroundColor = backgroundColor;

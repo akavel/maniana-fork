@@ -66,7 +66,7 @@ public class ItemListView extends ListView {
      * button areas for click classification purposes.
      */
     private static final int TEXT_AREA_HORIZONTAL_PERCENTILE = 80;
-    
+
     /** Time interval for scrolling during drag. */
     private static final int DRAG_SCROLL_TICK_MILLIS = 100;
 
@@ -83,7 +83,7 @@ public class ItemListView extends ListView {
      * When > 0, indicates that an animation is running. Should ignore user input during this time.
      */
     private int mAnimationsInProgress = 0;
-    
+
     /** Resource ID of drawable to use for background highlight. */
     private int mItemHighlightDrawableResourceId = 0;
 
@@ -267,8 +267,8 @@ public class ItemListView extends ListView {
         final int action = ev.getAction();
 
         if (LogUtil.DEBUG_LEVEL >= 3) {
-            LogUtil.debug("onInterceptTouchEvent(): action = %s, state = %s (%d, %d)", ViewUtil
-                            .actionDebugName(action), mState, (int) ev.getX(), (int) ev.getY());
+            LogUtil.debug("onInterceptTouchEvent(): action = %s, state = %s (%d, %d)",
+                    ViewUtil.actionDebugName(action), mState, (int) ev.getX(), (int) ev.getY());
         }
 
         // True when the parent is doing vertical scrolling. We don't interrupt
@@ -277,10 +277,12 @@ public class ItemListView extends ListView {
 
         // TODO(tal): if this does not get triggered by Jone 2012, remove the error message string
         // since it instanciates a var arg parameter array (performance)
-        check(ev.getAction() == MotionEvent.ACTION_DOWN, "Expected action DOWN, found %d", ev.getAction());
-        
+        check(ev.getAction() == MotionEvent.ACTION_DOWN, "Expected action DOWN, found %d",
+                ev.getAction());
+
         // Crash report on the Android market:
-        // v1.01.15   Jan 16, 2012 1:06:45 PM
+        // @formatter:off
+        // v1.01.15 Jan 16, 2012 1:06:45 PM
         // java.lang.RuntimeException: Assertion failed: Expected UP, found: DOWN_PASSIVE
         //    at com.zapta.apps.maniana.util.Assertions.check(Assertions.java:26)
         //    at com.zapta.apps.maniana.view.ItemListView.onInterceptTouchEvent(ItemListView.java:260)
@@ -304,6 +306,7 @@ public class ItemListView extends ListView {
         //    at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:866)
         //    at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:624)
         //    at dalvik.system.NativeStart.main(Native Method)
+        // @formatter:on
         //
         // check(mState == State.UP, "Expected UP, found: " + mState);
         //
@@ -325,7 +328,7 @@ public class ItemListView extends ListView {
         final int itemIndex = pointToPosition(eventXInListView, eventYInListView);
 
         if (doNotStealEvents || itemIndex == AdapterView.INVALID_POSITION
-                        || mAnimationsInProgress > 0) {
+                || mAnimationsInProgress > 0) {
             transitionUpToDownPassive();
         } else {
             transitionUpToDownStable(ev, itemIndex, eventXInListView, eventYInListView);
@@ -333,7 +336,7 @@ public class ItemListView extends ListView {
 
         if (LogUtil.DEBUG_LEVEL >= 3) {
             LogUtil.debug("super.onInterceptTouchEvent(ev) = %s (%s) -> %s", doNotStealEvents,
-                            ViewUtil.actionDebugName(ev.getAction()), mState);
+                    ViewUtil.actionDebugName(ev.getAction()), mState);
         }
 
         return doNotStealEvents;
@@ -366,9 +369,9 @@ public class ItemListView extends ListView {
         final int action = event.getAction();
 
         if (LogUtil.DEBUG_LEVEL >= 3) {
-            LogUtil.debug("onTouchEvent(): action = %s, state = %s (%d, %d)", ViewUtil
-                            .actionDebugName(action), mState, (int) event.getX(), (int) event
-                            .getY());
+            LogUtil.debug("onTouchEvent(): action = %s, state = %s (%d, %d)",
+                    ViewUtil.actionDebugName(action), mState, (int) event.getX(),
+                    (int) event.getY());
         }
 
         switch (action) {
@@ -394,7 +397,7 @@ public class ItemListView extends ListView {
                     final int totalMovementLimit = movementLimitInDownStable();
                     if (LogUtil.DEBUG_LEVEL >= 3) {
                         LogUtil.debug("Movement = %s, limit = %s", totalMovement,
-                                        totalMovementLimit);
+                                totalMovementLimit);
                     }
                     if (totalMovement > totalMovementLimit) {
                         transitionDownStableToUnstable();
@@ -413,8 +416,10 @@ public class ItemListView extends ListView {
 
                     mDragedItemImageViewWindowParams.x = 0;
                     mDragedItemImageViewWindowParams.y = eventYInListView - mPressPointInItemViewY
-                                    + mListViewOffsetInScreenY;
-                    mApp.services().windowManager().updateViewLayout(mDragedItemImageView,
+                            + mListViewOffsetInScreenY;
+                    mApp.services()
+                            .windowManager()
+                            .updateViewLayout(mDragedItemImageView,
                                     mDragedItemImageViewWindowParams);
                     updateViewsDuringDrag();
 
@@ -440,44 +445,38 @@ public class ItemListView extends ListView {
                 final int cachedPressDownItemIndex = mPressDownItemIndex;
                 final ItemArea cachedPressedItemArea = mPressedItemArea;
                 final int cachedDragCurrentHighlightedItemIndex = mDragCurrentHighlightedItemIndex;
-                //final int cachedTimeMillisSinceDown = timeMillisSinceDown();
+                // final int cachedTimeMillisSinceDown = timeMillisSinceDown();
 
                 // NOTE: this clears the down related members. Use only cached values.
                 transitionToUp();
 
-                if (cachedLastState == State.DOWN_STABLE
-                                && action == MotionEvent.ACTION_UP)
-                              //  && cachedTimeMillisSinceDown <= mApp.resources()
-                              //                  .getClickMaxMillis()) 
-                {
+                if (cachedLastState == State.DOWN_STABLE && action == MotionEvent.ACTION_UP) {
                     switch (cachedPressedItemArea) {
                         case COLOR:
                             mApp.controller().onItemColorClick(mAdapter.pageKind(),
-                                            cachedPressDownItemIndex);
+                                    cachedPressDownItemIndex);
                             break;
                         case TEXT:
                             mApp.controller().onItemTextClick(mAdapter.pageKind(),
-                                            cachedPressDownItemIndex);
+                                    cachedPressDownItemIndex);
                             break;
                         case BUTTON:
                             mApp.controller().onItemArrowClick(mAdapter.pageKind(),
-                                            cachedPressDownItemIndex);
+                                    cachedPressDownItemIndex);
                             break;
                         default:
                             throw new RuntimeException("Unexpected pressed zone: "
-                                            + mPressedItemArea);
+                                    + mPressedItemArea);
                     }
                     return OnTouchEventOutcome.CALL_SUPER;
                 }
 
                 if (cachedLastState == State.DOWN_DRAG
-                                && cachedDragCurrentHighlightedItemIndex >= 0
-                                && cachedDragCurrentHighlightedItemIndex < getCount()
-                                && cachedDragCurrentHighlightedItemIndex != cachedPressDownItemIndex) {
-                    mApp.controller()
-                                    .onItemMoveInPage(mAdapter.pageKind(),
-                                                    cachedPressDownItemIndex,
-                                                    cachedDragCurrentHighlightedItemIndex);
+                        && cachedDragCurrentHighlightedItemIndex >= 0
+                        && cachedDragCurrentHighlightedItemIndex < getCount()
+                        && cachedDragCurrentHighlightedItemIndex != cachedPressDownItemIndex) {
+                    mApp.controller().onItemMoveInPage(mAdapter.pageKind(),
+                            cachedPressDownItemIndex, cachedDragCurrentHighlightedItemIndex);
                     return OnTouchEventOutcome.CALL_SUPER;
                 }
             }
@@ -502,9 +501,9 @@ public class ItemListView extends ListView {
 
     /** Start given animation on view of given item. View is assumed to be visible. */
     public final void startItemAnimation(int itemIndex,
-                    final AppView.ItemAnimationType animationType, int initialDelayMillis,
-                    @Nullable final Runnable callback) {
-       
+            final AppView.ItemAnimationType animationType, int initialDelayMillis,
+            @Nullable final Runnable callback) {
+
         @Nullable
         final ItemView itemView = getItemViewIfVisible(itemIndex);
         // NOTE: this should always be non null but handling gracefully to avoid a
@@ -515,9 +514,9 @@ public class ItemListView extends ListView {
             }
             return;
         }
-        
+
         mAnimationsInProgress++;
-        
+
         itemView.startItemAnimation(itemIndex, animationType, initialDelayMillis, new Runnable() {
             @Override
             public void run() {
@@ -525,12 +524,13 @@ public class ItemListView extends ListView {
                 if (mAnimationsInProgress != 0) {
                     // NOTE(tal): we expect to have one animation at a time though this is not an
                     // absolute requirement.
-                    LogUtil.warning("mAnimationsInProgress is non zero after an animation: %s, type: %s",
-                                    mAnimationsInProgress, animationType);
+                    LogUtil.warning(
+                            "mAnimationsInProgress is non zero after an animation: %s, type: %s",
+                            mAnimationsInProgress, animationType);
                 }
                 check(mAnimationsInProgress >= 0);
                 if (callback != null) {
-                  callback.run();
+                    callback.run();
                 }
             }
         });
@@ -539,7 +539,7 @@ public class ItemListView extends ListView {
 
     /** Transition from UP to DOWN_STABLE as a result of a DOWN event on an item */
     private final void transitionUpToDownStable(MotionEvent ev, int itemIndex,
-                    int eventXInListView, int eventYInListView) {
+            int eventXInListView, int eventYInListView) {
         check(mState == State.UP);
         check(itemIndex >= 0);
 
@@ -560,17 +560,17 @@ public class ItemListView extends ListView {
         mDragedItemImageViewWindowParams = new WindowManager.LayoutParams();
         mDragedItemImageViewWindowParams.gravity = Gravity.TOP | Gravity.LEFT;
         mDragedItemImageViewWindowParams.x = eventXInListView - mPressPointInItemViewX
-                        + mListViewOffsetInScreenX;
+                + mListViewOffsetInScreenX;
         mDragedItemImageViewWindowParams.y = eventYInListView - mPressPointInItemViewY
-                        + mListViewOffsetInScreenY;
+                + mListViewOffsetInScreenY;
 
         mDragedItemImageViewWindowParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
         mDragedItemImageViewWindowParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
         mDragedItemImageViewWindowParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                        | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-                        | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-                        | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
-                        | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+                | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         mDragedItemImageViewWindowParams.format = PixelFormat.TRANSLUCENT;
         mDragedItemImageViewWindowParams.windowAnimations = 0;
 
@@ -582,16 +582,16 @@ public class ItemListView extends ListView {
 
         // Post a delayed message for the long press timeout period.
         final boolean ok = mMessageHandler.sendEmptyMessageDelayed(MESSAGE_DOWN_STABLE_TIMEOUT,
-                        ViewConfiguration.getLongPressTimeout());
-                       // mApp.resources().getLongPressMinMillis());
+                ViewConfiguration.getLongPressTimeout());
+        // mApp.resources().getLongPressMinMillis());
         check(ok);
 
         // TODO: prepare and enable drag only when down on button.
         final int xPercentile = (eventXInListView * 100) / mDragBitmap.getWidth();
 
         mPressedItemArea = (xPercentile <= COLOR_AREA_HORIZONTAL_PERCENTILE) ? ItemArea.COLOR
-                        : ((xPercentile <= TEXT_AREA_HORIZONTAL_PERCENTILE) ? ItemArea.TEXT
-                                        : ItemArea.BUTTON);
+                : ((xPercentile <= TEXT_AREA_HORIZONTAL_PERCENTILE) ? ItemArea.TEXT
+                        : ItemArea.BUTTON);
         if (LogUtil.DEBUG_LEVEL >= 5) {
             LogUtil.debug("Pressed on %s", mPressedItemArea);
         }
@@ -623,8 +623,8 @@ public class ItemListView extends ListView {
             LogUtil.debug("down to drag");
         }
         mApp.services().vibrateForLongPress();
-        mApp.services().windowManager().addView(mDragedItemImageView,
-                        mDragedItemImageViewWindowParams);
+        mApp.services().windowManager()
+                .addView(mDragedItemImageView, mDragedItemImageViewWindowParams);
         setState(State.DOWN_DRAG);
 
         // NOTE(tal): updated by updateViewsDuringDrag
@@ -642,18 +642,18 @@ public class ItemListView extends ListView {
 
     /** Display item menu on top of given item */
     public void showItemMenu(final int itemIndex, QuickActionItem actions[],
-                    final int dismissActionId) {
+            final int dismissActionId) {
         final QuickActionMenu quickActionMenu = new QuickActionMenu(mApp,
-                        new OnActionItemOutcomeListener() {
-                            @Override
-                            public void onOutcome(QuickActionMenu source, QuickActionItem actionItem) {
-                                mApp.popupsTracker().untrack(source);
-                                final int actionId = (actionItem != null) ? actionItem
-                                                .getActionId() : dismissActionId;
-                                mApp.controller().onItemMenuSelection(mAdapter.pageKind(),
-                                                itemIndex, actionId);
-                            }
-                        });
+                new OnActionItemOutcomeListener() {
+                    @Override
+                    public void onOutcome(QuickActionMenu source, QuickActionItem actionItem) {
+                        mApp.popupsTracker().untrack(source);
+                        final int actionId = (actionItem != null) ? actionItem.getActionId()
+                                : dismissActionId;
+                        mApp.controller().onItemMenuSelection(mAdapter.pageKind(), itemIndex,
+                                actionId);
+                    }
+                });
 
         for (QuickActionItem action : actions) {
             quickActionMenu.addActionItem(action);
@@ -678,7 +678,7 @@ public class ItemListView extends ListView {
         check(!mPedningDragScrollTick);
         final long millis = now ? 1 : DRAG_SCROLL_TICK_MILLIS;
         final boolean ok = mMessageHandler
-                        .sendEmptyMessageDelayed(MESSAGE_DRAG_SCROLL_TICK, millis);
+                .sendEmptyMessageDelayed(MESSAGE_DRAG_SCROLL_TICK, millis);
         check(ok);
         mPedningDragScrollTick = true;
     }
@@ -764,7 +764,7 @@ public class ItemListView extends ListView {
         final int visibleIndex = itemIndex - firstVisibleItem;
         if (visibleIndex < 0) {
             LogUtil.error("Tried to access a view before the visible range: %s vs %s", itemIndex,
-                            firstVisibleItem);
+                    firstVisibleItem);
             return null;
         }
         // check(itemIndex >= firstVisibleItem, "Non visible");
@@ -772,7 +772,7 @@ public class ItemListView extends ListView {
 
         if (result == null) {
             LogUtil.error("Could not find visible(?) item, index: %s , first visible: %s",
-                            itemIndex, firstVisibleItem);
+                    itemIndex, firstVisibleItem);
         }
         return result;
     }
@@ -791,7 +791,7 @@ public class ItemListView extends ListView {
 
         // Mid y, relative to list view, of the hovering view.
         final int midY = mDragedItemImageViewWindowParams.y - mListViewOffsetInScreenY
-                        + (mDragedItemImageView.getHeight() / 2);
+                + (mDragedItemImageView.getHeight() / 2);
 
         final int itemIndex = getUnderlyingItemDuringDrag(midY);
 
@@ -808,7 +808,7 @@ public class ItemListView extends ListView {
      * Clear highlight of all views. Set view of item with given index to highlight.
      * 
      * @param the index of the model item whose view should be highlighted. Use out of range value
-     *            (e.g. -1) to clear highlight of all items.
+     *        (e.g. -1) to clear highlight of all items.
      */
     private final void updateViewsHighlight(int itemIndexToHighlight) {
         check(mState == State.DOWN_DRAG);
@@ -861,11 +861,11 @@ public class ItemListView extends ListView {
     private final int directionToScroll() {
         check(mState == State.DOWN_DRAG);
         if (mDragCurrentHighlightedItemIndex > 0
-                        && mDragCurrentHighlightedItemIndex <= getFirstVisiblePosition() + 1) {
+                && mDragCurrentHighlightedItemIndex <= getFirstVisiblePosition() + 1) {
             return -1;
         }
         if (mDragCurrentHighlightedItemIndex < getCount() - 1
-                        && mDragCurrentHighlightedItemIndex >= getLastVisiblePosition() - 1) {
+                && mDragCurrentHighlightedItemIndex >= getLastVisiblePosition() - 1) {
             return 1;
         }
         return 0;
@@ -893,7 +893,6 @@ public class ItemListView extends ListView {
         // http://tinyurl.com/7ao2bga
         invalidateViews();
     }
-    
 
     /** Does nothing if item is non visible. */
     public void setItemViewHighlight(int itemIndex, boolean isHighlight) {
@@ -904,7 +903,6 @@ public class ItemListView extends ListView {
             setItemViewHighlight(itemView, isHighlight);
         }
     }
-    
 
     private final void setItemViewHighlight(ItemView itemView, boolean isHighlight) {
         if (isHighlight) {
@@ -913,10 +911,10 @@ public class ItemListView extends ListView {
             itemView.clearHighlight();
         }
     }
-    
+
     public void setItemHighlightDrawableResourceId(int drawableResourceId) {
         check(drawableResourceId != 0, "Zero resource id");
-        mItemHighlightDrawableResourceId = drawableResourceId;    
+        mItemHighlightDrawableResourceId = drawableResourceId;
     }
 
     private final void checkConsistency() {

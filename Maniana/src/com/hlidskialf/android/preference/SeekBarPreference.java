@@ -35,34 +35,33 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     private static final String androidns = "http://schemas.android.com/apk/res/android";
 
     private final Context mContext;
-    
-    /** Format string for running label in dialog. Should contain %d. Attribute: text*/
+
+    /** Format string for running label in dialog. Should contain %d. Attribute: text */
     private final String mLabelFormat;
-    
+
     /** Default value. Attribute: defaultValue */
     private final int mDefaultValue;
-    
+
     /** Min value (inclusive). Attribute: minLevel */
     private final int mMinValue;
-    
+
     /** Max value, (inclusive). Attribute: maxLevel */
     private final int mMaxValue;
-    
+
     /** Current preference value. Updated when the user OKs a new value. */
     private int mValue;
-    
-    /** 
-     * Format string for preference summary string (when dialog is closed). 
-     * Can contain a single %d for current value. 
+
+    /**
+     * Format string for preference summary string (when dialog is closed). Can contain a single %d
+     * for current value.
      */
     private String mSummaryFormat;
-    
+
     /** The SeekBar in the dialog. */
     private SeekBar mSeekBar;
-    
+
     /** The running value string field in the dialog. */
     private TextView mValueTextView;
-
 
     public SeekBarPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -141,7 +140,7 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     public void onStopTrackingTouch(SeekBar arg0) {
         // Nothing to do here
     }
-    
+
     @Override
     protected void onDialogClosed(boolean positiveResult) {
         super.onDialogClosed(positiveResult);
@@ -151,7 +150,7 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
             setValue(newValue);
         }
     }
-    
+
     public void setValue(int newValue) {
         if (newValue != mValue) {
             // Enforce range
@@ -165,9 +164,9 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
             callChangeListener(new Integer(mValue));
         }
     }
-    
+
     private final void updateSummaryWithCurrentValue() {
-        super.setSummary(String.format( mSummaryFormat, mValue));
+        super.setSummary(String.format(mSummaryFormat, mValue));
     }
 
     @Override
@@ -180,5 +179,5 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     public void setSummary(int summaryResId) {
         // TODO: read resource into a string and append current value.
         super.setSummary(summaryResId);
-    }      
+    }
 }

@@ -22,16 +22,16 @@ package com.zapta.apps.maniana.util;
 public final class Assertions {
 
     /** Do not instantiate */
-    private Assertions() {}
-    
+    private Assertions() {
+    }
+
     /** Assert a boolean condition, with formatted message. */
-	public final static void check(boolean expr, String format, Object... args) {
-		if (!expr) {
-			throw new RuntimeException("Assertion failed: "
-					+ String.format(format, args));
-		}
-	}
-	
+    public final static void check(boolean expr, String format, Object... args) {
+        if (!expr) {
+            throw new RuntimeException("Assertion failed: " + String.format(format, args));
+        }
+    }
+
     /** Assert a boolean condition, with simple string message. */
     public final static void check(boolean expr, String message) {
         if (!expr) {
@@ -39,23 +39,22 @@ public final class Assertions {
         }
     }
 
-	/** Assert a boolean condition. No message. */
-	public final static void check(boolean expr) {
-	    if (!expr) {
+    /** Assert a boolean condition. No message. */
+    public final static void check(boolean expr) {
+        if (!expr) {
             throw new RuntimeException("Assertion failed");
         }
-	}
-	
-	/** Assert a non null reference with formatted message and pass it through. */
-	public final static <T> T checkNotNull(T object, String format, Object... args) {
-		if (object == null) {
-			throw new RuntimeException("Assertion failed: "
-					+ String.format(format, args));
-		}
-		return object;
-	}
-	
-	/** Assert a non null reference with simple message and pass it through. */
+    }
+
+    /** Assert a non null reference with formatted message and pass it through. */
+    public final static <T> T checkNotNull(T object, String format, Object... args) {
+        if (object == null) {
+            throw new RuntimeException("Assertion failed: " + String.format(format, args));
+        }
+        return object;
+    }
+
+    /** Assert a non null reference with simple message and pass it through. */
     public final static <T> T checkNotNull(T object, String message) {
         if (object == null) {
             throw new RuntimeException("Assertion failed: " + message);
@@ -63,8 +62,8 @@ public final class Assertions {
         return object;
     }
 
-	/** Assert a non null reference with no message and pass it through. */
-	public final static <T> T checkNotNull(T object) {
-		return checkNotNull(object, "");
-	}
+    /** Assert a non null reference with no message and pass it through. */
+    public final static <T> T checkNotNull(T object) {
+        return checkNotNull(object, "");
+    }
 }

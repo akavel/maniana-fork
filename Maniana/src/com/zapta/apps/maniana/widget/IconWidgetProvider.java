@@ -47,37 +47,36 @@ public class IconWidgetProvider extends BaseWidgetProvider {
 
     /** Called by the widget host. */
     @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {        
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         update(context, appWidgetManager, appWidgetIds, loadModel(context));
     }
 
     /** Internal widget update method. */
     private static final void update(Context context, AppWidgetManager appWidgetManager,
-                    int[] appWidgetIds, @Nullable AppModel model) {
+            int[] appWidgetIds, @Nullable AppModel model) {
         if (appWidgetIds.length == 0) {
             return;
         }
 
         final SharedPreferences sharedPreferences = PreferenceManager
-                        .getDefaultSharedPreferences(context);
+                .getDefaultSharedPreferences(context);
 
         final String label;
         if (model == null) {
             label = "??";
         } else {
             final LockExpirationPeriod lockExpirationPeriod = PreferencesTracker
-                            .readLockExpierationPeriodPreference(sharedPreferences);
+                    .readLockExpierationPeriodPreference(sharedPreferences);
             final Time now = new Time();
             now.setToNow();
             List<ItemModelReadOnly> items = WidgetUtil.selectTodaysActiveItemsByTime(model, now,
-                            lockExpirationPeriod);            
+                    lockExpirationPeriod);
             label = Integer.toString(items.size());
         }
-        
 
         // Provides access to the remote view hosted by the home launcher.
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
-                        R.layout.widget_icon_layout);
+                R.layout.widget_icon_layout);
 
         // Set widget on click to trigger the Manian app
         final Intent intent = new Intent(context, MainActivity.class);
@@ -86,17 +85,17 @@ public class IconWidgetProvider extends BaseWidgetProvider {
 
         remoteViews.setTextViewText(R.id.widget_icon_label_text_view, label);
 
-        // Tell the app widget manager to replace the views with the new views. This is not a 
+        // Tell the app widget manager to replace the views with the new views. This is not a
         // partial update.
         appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
     }
-    
+
     public static void updateAllIconWidgetsFromModel(Context context, @Nullable AppModel model) {
         // Get list of all widget ids
         final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-        final int[] widgetIds =  appWidgetManager.getAppWidgetIds(new ComponentName(context,
-                      IconWidgetProvider.class));
-        
+        final int[] widgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(context,
+                IconWidgetProvider.class));
+
         // Update (ignores silently if widgetIds is empty)
         update(context, appWidgetManager, widgetIds, model);
     }
