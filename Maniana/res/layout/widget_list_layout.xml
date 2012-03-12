@@ -6,16 +6,19 @@
     android:padding="0dip" >
 
     <RelativeLayout
+        android:id="@+id/widget_list_paper"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="#00000000" >
+        android:background="#00000000"
+        android:padding="0dip" >
 
         <ImageView
             android:id="@+id/widget_list_bitmap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00000000"
+             android:padding="0dip"
             android:scaleType="center" >
         </ImageView>
 

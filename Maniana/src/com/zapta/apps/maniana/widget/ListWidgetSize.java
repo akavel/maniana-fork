@@ -14,6 +14,7 @@
 
 package com.zapta.apps.maniana.widget;
 
+import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.util.Orientation;
 
 import android.graphics.Point;
@@ -26,15 +27,17 @@ import android.graphics.Point;
 public class ListWidgetSize {
 
     protected static final ListWidgetSize LIST_WIDGET_SIZE1 = new ListWidgetSize(
-            ListWidgetProvider1.class, 4, 1);
+            ListWidgetProvider1.class, 4, 1, R.drawable.widget_paper_4x1);
     protected static final ListWidgetSize LIST_WIDGET_SIZE2 = new ListWidgetSize(
-            ListWidgetProvider2.class, 4, 2);
+            ListWidgetProvider2.class, 4, 2, R.drawable.widget_paper_4x2);
     protected static final ListWidgetSize LIST_WIDGET_SIZE3 = new ListWidgetSize(
-            ListWidgetProvider3.class, 4, 3);
+            ListWidgetProvider3.class, 4, 3, R.drawable.widget_paper_4x3);
     protected static final ListWidgetSize LIST_WIDGET_SIZE4 = new ListWidgetSize(
-            ListWidgetProvider4.class, 2, 2);
+            ListWidgetProvider4.class, 2, 2, R.drawable.widget_paper_2x2);
+    // NOTE: we reuse the 4x3 paper also for the 4x4 widget. This reduces the APK
+    // size and the stretching does not affect the resolution much.
     protected static final ListWidgetSize LIST_WIDGET_SIZE5 = new ListWidgetSize(
-            ListWidgetProvider5.class, 4, 4);
+            ListWidgetProvider5.class, 4, 4, R.drawable.widget_paper_4x3);
 
     /** List of all list widget sizes. */
     static final ListWidgetSize[] LIST_WIDGET_SIZES = new ListWidgetSize[] {
@@ -53,12 +56,16 @@ public class ListWidgetSize {
 
     /** Widget height in home launcher cells. */
     final int heightCells;
+    
+    /** Resource ID of paper drawable to use. We want to use the largest that does not overflow the widget. */
+    final int paperResourceId;
 
     ListWidgetSize(Class<? extends ListWidgetProvider> widgetProviderClass, int widthCells,
-            int heightCells) {
+            int heightCells, int paperResourceId) {
         this.widgetProviderClass = widgetProviderClass;
         this.widthCells = widthCells;
         this.heightCells = heightCells;
+        this.paperResourceId = paperResourceId;
     }
 
     /** Compute widget gross area size in pixels based on current orientation */

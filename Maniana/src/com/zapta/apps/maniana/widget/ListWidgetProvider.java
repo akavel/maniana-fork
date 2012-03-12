@@ -84,8 +84,8 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         }
 
         // For debugging only. Reports timing.
-        final boolean DEBUG_TIME = true;
-        final DebugTimer debugTimer = DEBUG_TIME ? new DebugTimer() : null;
+        final boolean DEBUG_TRACE_TIME = false;
+        final DebugTimer debugTimer = DEBUG_TRACE_TIME ? new DebugTimer() : null;
 
         final SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
@@ -102,16 +102,14 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final LinearLayout template = (LinearLayout) layoutInflater.inflate(
                 R.layout.widget_list_template_layout, null);
 
-        // Set template view background
+        // Set template background. If paper backend is enable the template rendered with
+        // a transparent background and the paper layer is placed at the back at the
+        // remote views level (reduces template bitmap size and speeds up rendering).
         final boolean backgroundPaper = PreferencesTracker
                 .readWidgetBackgroundPaperPreference(sharedPreferences);
-        if (backgroundPaper) {
-            template.setBackgroundResource(R.drawable.widget_background);
-        } else {
-            final int backgroundColor = PreferencesTracker
-                    .readWidgetBackgroundColorPreference(sharedPreferences);
-            template.setBackgroundColor(backgroundColor);
-        }
+        final int templateBackgroundColor = backgroundPaper ? 0x00000000 : PreferencesTracker
+                .readWidgetBackgroundColorPreference(sharedPreferences);
+        template.setBackgroundColor(templateBackgroundColor);
 
         // TODO: cache variation or at least custom typefaces
         final WidgetItemFontVariation fontVariation = WidgetItemFontVariation
@@ -130,7 +128,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         populateTemplateItemList(context, itemListView, model, fontVariation, sharedPreferences,
                 layoutInflater);
 
-        if (DEBUG_TIME) {
+        if (DEBUG_TRACE_TIME) {
             debugTimer.report("Template populated");
         }
 
@@ -168,7 +166,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         template.layout(0, 0, widthPixels, heightPixels);
         template.draw(canvas);
 
-        if (DEBUG_TIME) {
+        if (DEBUG_TRACE_TIME) {
             debugTimer.report("Template rendered to bitmap");
         }
 
@@ -182,7 +180,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, scaledWidthPixels,
                 scaledHeightPixels, false);
 
-        if (DEBUG_TIME) {
+        if (DEBUG_TRACE_TIME) {
             debugTimer.report("Bitmap scaled up");
         }
 
@@ -199,7 +197,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         LogUtil.info("Updating widget bitmap: " + fileName);
         FileUtil.writeBitmapToPngFile(context, scaledBitmap, fileName, true);
 
-        if (DEBUG_TIME) {
+        if (DEBUG_TRACE_TIME) {
             debugTimer.report("Bitmap written to file");
         }
 
@@ -209,6 +207,15 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         setOnClickLaunch(context, remoteViews, R.id.widget_list_bitmap, ResumeAction.NONE);
 
         setRemoteViewsToolbar(context, remoteViews, toolbarEanbled);
+
+        // Set paper or transparent background layer. This will be shown up below the
+        // ImageView view with the rendered template bitmap.
+        if (backgroundPaper) {
+            remoteViews.setInt(R.id.widget_list_paper, "setBackgroundResource",
+                    listWidgetSize.paperResourceId);
+        } else {
+            remoteViews.setInt(R.id.widget_list_paper, "setBackgroundColor", 0x00000000);
+        }
 
         // NOTE: setting up a temporary dummy image to cause the image view to reload the file.
         // TODO: can we have a cleaner solution? E.g. appending random dummy args to the URI?
@@ -221,7 +228,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         // Flush the remote view
         appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
 
-        if (DEBUG_TIME) {
+        if (DEBUG_TRACE_TIME) {
             debugTimer.report("Remote views flushed.");
         }
     }
