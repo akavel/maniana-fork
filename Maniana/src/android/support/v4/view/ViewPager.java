@@ -87,7 +87,7 @@ public class ViewPager extends ViewGroup {
     private static final int MAX_SETTLE_DURATION = 600; // ms
     private static final int MIN_DISTANCE_FOR_FLING = 25; // dips
 	
-	// -----------------------------------------------------------
+    // -----------------------------------------------------------
     // NOTE(tal): hack to control scroll duration. Ignored if < 0.
     public int mForcedScrollDurationMillis = -1;
     // -----------------------------------------------------------
