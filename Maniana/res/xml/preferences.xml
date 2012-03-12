@@ -101,12 +101,12 @@
             android:summary="Click to select a predefined widget setting"
             android:title="Set By Theme">
         </Preference>
-        <ListPreference
-            android:defaultValue="paper"
-            android:entries="@array/widgetBackgroundTypeNames"
-            android:entryValues="@array/widgetBackgroundTypeValues"
-            android:key="prefWidgetBackgroundTypeKey"
-            android:title="Background Type" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="prefWidgetBackgroundPaperKey"
+            android:summaryOff="Paper background disabled"
+            android:summaryOn="Using paper background"
+            android:title="Paper" />
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#44000000"
             android:key="prefWidgetBackgroundColorKey"

@@ -19,30 +19,6 @@
         <item>Using San Serif font</item>
         <item>Using Serif font</item>
     </string-array>
-    <string-array name="pageBackgroundTypeNames">
-        <item>Stained paper</item>
-        <item>Solid color</item>
-    </string-array>
-    <string-array name="pageBackgroundTypeValues">
-        <item>paper</item>
-        <item>solid</item>
-    </string-array>
-    <string-array name="pageBackgroundTypeSummaries">
-        <item>Using stained paper page background</item>
-        <item>Using solid background page color</item>
-    </string-array>
-    <string-array name="widgetBackgroundTypeNames">
-        <item>Wrinkled paper</item>
-        <item>Solid color</item>
-    </string-array>
-    <string-array name="widgetBackgroundTypeValues">
-        <item>paper</item>
-        <item>solid</item>
-    </string-array>
-    <string-array name="widgetBackgroundTypeSummaries">
-        <item>Using wrinkled paper widget background</item>
-        <item>Using solid background widget color</item>
-    </string-array>
     <string-array name="lockPeriodNames">
         <item>Once a Week</item>
         <item>Once a Month</item>

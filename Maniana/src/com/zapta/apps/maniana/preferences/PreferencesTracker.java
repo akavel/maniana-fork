@@ -151,12 +151,10 @@ public class PreferencesTracker implements PreferenceConstants {
     }
 
     /** Read widget background type preference. */
-    public static final WidgetBackgroundType readWidgetBackgroundTypePreference(
+    public static final boolean readWidgetBackgroundPaperPreference(
             SharedPreferences sharedPreferences) {
-        final String key = sharedPreferences.getString(
-                PreferenceKind.WIDGET_BACKGROUND_TYPE.getKey(),
-                DEFAULT_WIDGET_BACKGROUND_TYPE.getKey());
-        return WidgetBackgroundType.fromKey(key, DEFAULT_WIDGET_BACKGROUND_TYPE);
+        return sharedPreferences.getBoolean(PreferenceKind.WIDGET_BACKGROUND_PAPER.getKey(),
+                DEFAULT_WIDGET_BACKGROUND_PAPER);
     }
 
     /** Read widget item text size preference. */
@@ -366,7 +364,7 @@ public class PreferencesTracker implements PreferenceConstants {
             case STARTUP_ANIMATION:
                 updateCachedStartupAnimationPreference();
                 break;
-            case WIDGET_BACKGROUND_TYPE:
+            case WIDGET_BACKGROUND_PAPER:
             case WIDGET_BACKGROUND_COLOR:
             case WIDGET_ITEM_FONT_TYPE:
             case WIDGET_ITEM_TEXT_COLOR:

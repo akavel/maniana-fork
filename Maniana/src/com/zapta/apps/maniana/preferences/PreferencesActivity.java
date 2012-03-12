@@ -72,7 +72,7 @@ public class PreferencesActivity extends PreferenceActivity implements
     private Preference mPageSelectThemePreference;
 
     // Widget
-    private ListPreference mWidgetBackgroundTypeListPreference;
+    private CheckBoxPreference mWidgetBackgroundPaperPreference;
     private ColorPickerPreference mWidgetSolidColorPickPreference;
     private ListPreference mWidgetFontTypeListPreference;
     private SeekBarPreference mWidgetFontSizePreference;
@@ -118,7 +118,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         mPageSelectThemePreference = findPreference(PreferenceKind.PAGE_SELECT_THEME);
 
         // Widget
-        mWidgetBackgroundTypeListPreference = (ListPreference) findPreference(PreferenceKind.WIDGET_BACKGROUND_TYPE);
+        mWidgetBackgroundPaperPreference = (CheckBoxPreference) findPreference(PreferenceKind.WIDGET_BACKGROUND_PAPER);
         mWidgetSolidColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_BACKGROUND_COLOR);
         mWidgetFontTypeListPreference = (ListPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_TYPE);
         mWidgetFontSizePreference = (SeekBarPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_SIZE);
@@ -227,7 +227,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     /** Called when a widget theme is selected from the widget theme dialog. */
     private final void handleWidgetThemeSelection(WidgetTheme theme) {
-        mWidgetBackgroundTypeListPreference.setValue(theme.backgroundType.getKey());
+        mWidgetBackgroundPaperPreference.setChecked(theme.backgroundPaper);
         mWidgetSolidColorPickPreference.onColorChanged(theme.backgroundColor);
         mWidgetFontTypeListPreference.setValue(theme.fontType.getKey());
         mWidgetFontSizePreference.setValue(theme.fontSize);
@@ -363,10 +363,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     private void updateSummaries() {
         updateListSummary(mPageFontTypeListPreference, R.array.itemFontSummaries, null);
-
         updateListSummary(mWidgetFontTypeListPreference, R.array.itemFontSummaries, null);
-        updateListSummary(mWidgetBackgroundTypeListPreference,
-                R.array.widgetBackgroundTypeSummaries, null);
 
         // Disable applause if voice is disabled
         if (mSoundEnablePreference.isChecked()) {
@@ -385,13 +382,12 @@ public class PreferencesActivity extends PreferenceActivity implements
         }
 
         // Disable widget solid background color picker if widget background type is stained paper
-        if (WidgetBackgroundType.SOLID.getKey().equals(
-                mWidgetBackgroundTypeListPreference.getValue())) {
-            mWidgetSolidColorPickPreference.setEnabled(true);
-            mWidgetSolidColorPickPreference.setSummary("Solid background color");
-        } else {
+        if (mWidgetBackgroundPaperPreference.isChecked()) {
             mWidgetSolidColorPickPreference.setEnabled(false);
-            mWidgetSolidColorPickPreference.setSummary("Solid background color not used");
+            mWidgetSolidColorPickPreference.setSummary("Using paper background, color disabled");
+        } else {
+            mWidgetSolidColorPickPreference.setEnabled(true);
+            mWidgetSolidColorPickPreference.setSummary("Using background color");
         }
 
         // For lock expiration preference, also show the time until next expiration. This require

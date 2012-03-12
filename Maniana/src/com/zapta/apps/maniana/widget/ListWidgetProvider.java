@@ -45,7 +45,6 @@ import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.model.ItemModelReadOnly;
 import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
 import com.zapta.apps.maniana.preferences.PreferencesTracker;
-import com.zapta.apps.maniana.preferences.WidgetBackgroundType;
 import com.zapta.apps.maniana.preferences.WidgetItemFontVariation;
 import com.zapta.apps.maniana.services.AppServices;
 import com.zapta.apps.maniana.util.DebugTimer;
@@ -104,20 +103,14 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                 R.layout.widget_list_template_layout, null);
 
         // Set template view background
-        final WidgetBackgroundType backgroundType = PreferencesTracker
-                .readWidgetBackgroundTypePreference(sharedPreferences);
-        switch (backgroundType) {
-            case PAPER:
-                template.setBackgroundResource(R.drawable.widget_background);
-                break;
-
-            default:
-                LogUtil.error("Unknown widget background type: %s", backgroundType);
-                // fall through to Solid
-            case SOLID:
-                final int backgroundColor = PreferencesTracker
-                        .readWidgetBackgroundColorPreference(sharedPreferences);
-                template.setBackgroundColor(backgroundColor);
+        final boolean backgroundPaper = PreferencesTracker
+                .readWidgetBackgroundPaperPreference(sharedPreferences);
+        if (backgroundPaper) {
+            template.setBackgroundResource(R.drawable.widget_background);
+        } else {
+            final int backgroundColor = PreferencesTracker
+                    .readWidgetBackgroundColorPreference(sharedPreferences);
+            template.setBackgroundColor(backgroundColor);
         }
 
         // TODO: cache variation or at least custom typefaces
@@ -127,8 +120,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         // Set template view toolbar
         final boolean toolbarEanbled = PreferencesTracker
                 .readWidgetShowToolbarPreference(sharedPreferences);
-        final boolean showToolbarBackground = toolbarEanbled
-                && (backgroundType != WidgetBackgroundType.PAPER);
+        final boolean showToolbarBackground = (toolbarEanbled && !backgroundPaper);
         final int titleSize = WidgetUtil.titleTextSize(listWidgetSize, fontVariation.getTextSize());
         setTemplateToolbar(context, template, toolbarEanbled, showToolbarBackground, titleSize);
 

@@ -22,12 +22,15 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 /**
  * Represents the preference items.
  * 
- * DO NOT REUSE THESE OLD KEYS: <br>
- * prefBackgroundKey <br>
- * prefItemFontKey <br>
- * prefItemFontSizeKey <br>
- * prefVoiceRecognitionKey <br>
- * prefWidgetItemFontSizeKey <br>
+ * DO NOT REUSE THESE OLD KEYS:
+ * <code>
+ *   prefBackgroundKey
+ *   prefItemFontKey
+ *   prefItemFontSizeKey
+ *   prefVoiceRecognitionKey
+ *   prefWidgetBackgroundTypeKey
+ *   prefWidgetItemFontSizeKey
+ * </code>
  * 
  * @author Tal Dayan
  */
@@ -55,7 +58,7 @@ public enum PreferenceKind implements KeyedEnum {
 
     // Widget
     WIDGET_SELECT_THEME("prefWidgetSelectThemeKey"),
-    WIDGET_BACKGROUND_TYPE("prefWidgetBackgroundTypeKey"),
+    WIDGET_BACKGROUND_PAPER("prefWidgetBackgroundPaperKey"),
     WIDGET_BACKGROUND_COLOR("prefWidgetBackgroundColorKey"),
     WIDGET_ITEM_FONT_TYPE("prefWidgetItemFontKey"),
     WIDGET_ITEM_TEXT_COLOR("prefWidgetTextColorKey"),

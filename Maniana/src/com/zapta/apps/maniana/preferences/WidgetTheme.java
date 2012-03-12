@@ -26,7 +26,7 @@ public class WidgetTheme extends Thumbnail {
     public static final WidgetTheme[] WIDGET_THEMES = {
         // Default
         new WidgetTheme("Paper Trail", R.drawable.widget_theme1_preview,
-                PreferenceConstants.DEFAULT_WIDGET_BACKGROUND_TYPE,
+                PreferenceConstants.DEFAULT_WIDGET_BACKGROUND_PAPER,
                 PreferenceConstants.DEFAULT_WIDGET_BACKGROUND_COLOR,
                 PreferenceConstants.DEFAULT_WIDGET_FONT_TYPE,
                 PreferenceConstants.DEFAULT_WIDGET_ITEM_FONT_SIZE,
@@ -34,15 +34,15 @@ public class WidgetTheme extends Thumbnail {
                 PreferenceConstants.DEFAULT_WIDGET_SHOW_TOOLBAR,
                 PreferenceConstants.DEFAULT_WIDGET_SINGLE_LINE),
         new WidgetTheme("Crystal Clear", R.drawable.widget_theme2_preview,
-                WidgetBackgroundType.SOLID, 0x44000000, ItemFontType.SAN_SERIF, 14, 0xffffff00,
+                false, 0x44000000, ItemFontType.SAN_SERIF, 14, 0xffffff00,
                 true, false),
-        new WidgetTheme("Think Big", R.drawable.widget_theme3_preview, WidgetBackgroundType.SOLID,
+        new WidgetTheme("Think Big", R.drawable.widget_theme3_preview, false,
                 0xff000000, ItemFontType.SAN_SERIF, 18, 0xff00ff00, true, true),
-        new WidgetTheme("Fine Print", R.drawable.widget_theme4_preview, WidgetBackgroundType.SOLID,
+        new WidgetTheme("Fine Print", R.drawable.widget_theme4_preview, false,
                 0x600000ff, ItemFontType.SAN_SERIF, 12, 0xffffff00, false, true)
     };
 
-    public final WidgetBackgroundType backgroundType;
+    public final boolean backgroundPaper;
     public final int backgroundColor;
     public final ItemFontType fontType;
     public final int fontSize;
@@ -50,11 +50,11 @@ public class WidgetTheme extends Thumbnail {
     public final boolean showToolbar;
     public final boolean singleLine;
 
-    public WidgetTheme(String name, int drawableId, WidgetBackgroundType backgroundType,
+    public WidgetTheme(String name, int drawableId, boolean backgroundPaper,
             int backgroundColor, ItemFontType fontType, int fontSize, int textColor,
             boolean showToolbar, boolean singleLine) {
         super(name, drawableId);
-        this.backgroundType = backgroundType;
+        this.backgroundPaper = backgroundPaper;
         this.backgroundColor = backgroundColor;
         this.fontType = fontType;
         this.fontSize = fontSize;
