@@ -22,9 +22,11 @@ import com.zapta.apps.maniana.R;
  * @author Tal Dayan
  */
 public class WidgetTheme extends Thumbnail {
-
+    // NOTE: preview images are taken on CM7 Nexus S with 4x2 widget
+    // with 80% width and 90% height on a solid #c7d4ff wallpaper and then
+    // captured with DDMS and cropped with GIMP.
     public static final WidgetTheme[] WIDGET_THEMES = {
-        // Default
+        // Default theme
         new WidgetTheme("Paper Trail", R.drawable.widget_theme1_preview,
                 PreferenceConstants.DEFAULT_WIDGET_BACKGROUND_PAPER,
                 PreferenceConstants.DEFAULT_WIDGET_BACKGROUND_COLOR,
@@ -33,13 +35,14 @@ public class WidgetTheme extends Thumbnail {
                 PreferenceConstants.DEFAULT_WIDGET_TEXT_COLOR,
                 PreferenceConstants.DEFAULT_WIDGET_SHOW_TOOLBAR,
                 PreferenceConstants.DEFAULT_WIDGET_SINGLE_LINE),
-        new WidgetTheme("Crystal Clear", R.drawable.widget_theme2_preview,
-                false, 0x44000000, ItemFontType.SAN_SERIF, 14, 0xffffff00,
-                true, false),
-        new WidgetTheme("Think Big", R.drawable.widget_theme3_preview, false,
-                0xff000000, ItemFontType.SAN_SERIF, 18, 0xff00ff00, true, true),
-        new WidgetTheme("Fine Print", R.drawable.widget_theme4_preview, false,
-                0x600000ff, ItemFontType.SAN_SERIF, 12, 0xffffff00, false, true)
+        new WidgetTheme("Crystal Clear", R.drawable.widget_theme2_preview, false, 0x44000000,
+                ItemFontType.SAN_SERIF, 14, 0xffffff00, true, false),
+        new WidgetTheme("Think Big", R.drawable.widget_theme3_preview, false, 0xff000000,
+                ItemFontType.SAN_SERIF, 18, 0xff00ff00, true, true),
+        new WidgetTheme("Fine Print", R.drawable.widget_theme4_preview, false, 0x600000ff,
+                ItemFontType.SAN_SERIF, 12, 0xffffff00, false, true),
+        new WidgetTheme("Legaly Blond", R.drawable.widget_theme5_preview, false, 0x90ff00ff,
+                ItemFontType.CURSIVE, 18, 0xffffff40, true, false)
     };
 
     public final boolean backgroundPaper;
@@ -50,9 +53,9 @@ public class WidgetTheme extends Thumbnail {
     public final boolean showToolbar;
     public final boolean singleLine;
 
-    public WidgetTheme(String name, int drawableId, boolean backgroundPaper,
-            int backgroundColor, ItemFontType fontType, int fontSize, int textColor,
-            boolean showToolbar, boolean singleLine) {
+    public WidgetTheme(String name, int drawableId, boolean backgroundPaper, int backgroundColor,
+            ItemFontType fontType, int fontSize, int textColor, boolean showToolbar,
+            boolean singleLine) {
         super(name, drawableId);
         this.backgroundPaper = backgroundPaper;
         this.backgroundColor = backgroundColor;

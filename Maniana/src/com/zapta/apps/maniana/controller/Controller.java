@@ -411,8 +411,6 @@ public class Controller {
                 // If lock and in Today page, we also move it to the Tomorrow page, with an
                 // animation.
                 if (pageKind == PageKind.TODAY && actionId == QuickActionsCache.LOCK_ACTION_ID) {
-                    // mApp.services().vibrateShort();
-
                     // We do a short delay before the animation to let the use see the icon change
                     // to lock before the item is moved to the other page.
                     mApp.view().startItemAnimation(pageKind, itemIndex,
