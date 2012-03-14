@@ -47,6 +47,7 @@ import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
 import com.zapta.apps.maniana.preferences.PreferencesTracker;
 import com.zapta.apps.maniana.preferences.WidgetItemFontVariation;
 import com.zapta.apps.maniana.services.AppServices;
+import com.zapta.apps.maniana.util.BitmapUtil;
 import com.zapta.apps.maniana.util.DebugTimer;
 import com.zapta.apps.maniana.util.DisplayUtil;
 import com.zapta.apps.maniana.util.FileUtil;
@@ -171,6 +172,18 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             debugTimer.report("Template rendered to bitmap");
         }
 
+        // NOTE: rounding the bitmap here when paper background is selected will do nothing 
+        // since the paper background is added later via the remote views.
+        final Bitmap preScaleBitmap;
+        if (backgroundPaper) {
+            preScaleBitmap = bitmap;
+        } else {
+            preScaleBitmap = BitmapUtil.roundCornersRGB888(bitmap, (int)(4 * density + 0.5f));
+            if (DEBUG_TRACE_TIME) {
+                debugTimer.report("Rounded corners");
+            }
+        }
+    
         // Template view is now rendered to a bitmap using screen native resolution.
         // ImageViews scales down images it fetches via URI by the density factor of the device.
         // As a workaround, we pre scale up the image by the density. Later versions of android
@@ -178,7 +191,8 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         // min api = 8.
         final int scaledWidthPixels = (int) (widthPixels * density + 0.5f);
         final int scaledHeightPixels = (int) (heightPixels * density + 0.5f);
-        final Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, scaledWidthPixels,
+
+        final Bitmap scaledBitmap = Bitmap.createScaledBitmap(preScaleBitmap, scaledWidthPixels,
                 scaledHeightPixels, false);
 
         if (DEBUG_TRACE_TIME) {

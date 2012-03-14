@@ -136,7 +136,6 @@ public class AppServices {
     }
     
     /** Convert dip to pixels using underlying density. */
-    @@@ use this everywhere
     public final int dipToPixels(int dip) {
         return (int) (dip * mDensity + 0.5f);
     }
