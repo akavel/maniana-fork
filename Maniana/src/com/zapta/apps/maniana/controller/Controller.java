@@ -196,7 +196,7 @@ public class Controller {
         // HACK: if the orientation changed since last time we updated the widgets
         // from the controller then force an update even if model is not dirty.
         // Should be replaced with a safe widget update on orientation change.
-        final Orientation currentOrientation = Orientation.currentOrientation(mApp.context());
+        final Orientation currentOrientation = Orientation.currentDeviceOrientation(mApp.context());
         if (wasDirty || currentOrientation != mLastWidgetOrientation) {
             updateAllWidgets();
             mLastWidgetOrientation = currentOrientation;

@@ -134,7 +134,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
         // Template view is now fully populated. Render it as a bitmap. First we render it
         // using screen native resolution.
-        final Orientation orientation = Orientation.currentOrientation(context);
+        final Orientation orientation = Orientation.currentDeviceOrientation(context);
         final float density = context.getResources().getDisplayMetrics().density;
         final Point widgetGrossSizeInPixels = listWidgetSize.grossPixelSizeForOrientation(density,
                 orientation);

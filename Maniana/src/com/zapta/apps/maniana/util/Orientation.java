@@ -30,7 +30,7 @@ public enum Orientation {
         this.isLandscape = isLandscape;
     }
 
-    public static final Orientation currentOrientation(Context context) {
+    public static final Orientation currentDeviceOrientation(Context context) {
         final int rawOrientation = context.getResources().getConfiguration().orientation;
         // TODO: all non portrait default to landscape. Consider to add UNKNOWN.
         return (rawOrientation == Configuration.ORIENTATION_PORTRAIT) ? PORTRAIT : LANDSCAPE;

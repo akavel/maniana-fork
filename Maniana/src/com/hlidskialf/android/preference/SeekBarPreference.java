@@ -14,6 +14,8 @@
 
 package com.hlidskialf.android.preference;
 
+import com.zapta.apps.maniana.util.Orientation;
+
 import android.content.Context;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
@@ -78,21 +80,24 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     /** Dialog preference */
     @Override
     protected View onCreateDialogView() {
+        // NOTE: in landscape mode we use tighter vertical spacing so everything
+        // fits in screen.
+        final boolean isPortrait = Orientation.currentDeviceOrientation(mContext).isPortrait;
         final LinearLayout layout = new LinearLayout(mContext);
         layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setPadding(6, 6, 6, 6);
+        layout.setPadding(10, 0, 10, 0);
 
         mValueTextView = new TextView(mContext);
         mValueTextView.setGravity(Gravity.CENTER_HORIZONTAL);
-        mValueTextView.setPadding(0, 15, 0, 0);
-        mValueTextView.setTextSize(64);
+        mValueTextView.setPadding(0, isPortrait ? 15 : 5, 0, 0);
+        mValueTextView.setTextSize(isPortrait ? 64 : 50);
         final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         layout.addView(mValueTextView, params);
 
         mSeekBar = new SeekBar(mContext);
         mSeekBar.setOnSeekBarChangeListener(this);
-        mSeekBar.setPadding(0, 40, 0, 40);
+        mSeekBar.setPadding(0, isPortrait ? 40 : 10, 0, isPortrait ? 40 : 10);
         layout.addView(mSeekBar, new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
