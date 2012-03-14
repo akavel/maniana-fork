@@ -39,10 +39,10 @@ public class WidgetTheme extends Thumbnail {
                 ItemFontType.SAN_SERIF, 14, 0xffffff00, true, false),
         new WidgetTheme("Think Big", R.drawable.widget_theme3_preview, false, 0xff000000,
                 ItemFontType.SAN_SERIF, 18, 0xff00ff00, true, true),
+        new WidgetTheme("Legally Blonde", R.drawable.widget_theme5_preview, false, 0x90ff00ff,
+                ItemFontType.CURSIVE, 18, 0xffffff40, true, false),
         new WidgetTheme("Fine Print", R.drawable.widget_theme4_preview, false, 0x600000ff,
-                ItemFontType.SAN_SERIF, 12, 0xffffff00, false, true),
-        new WidgetTheme("Legaly Blond", R.drawable.widget_theme5_preview, false, 0x90ff00ff,
-                ItemFontType.CURSIVE, 18, 0xffffff40, true, false)
+                ItemFontType.SAN_SERIF, 12, 0xffffff00, false, true)
     };
 
     public final boolean backgroundPaper;
