@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.main.AppContext;
+import com.zapta.apps.maniana.util.DisplayUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.PackageUtil;
 
@@ -82,6 +83,8 @@ public class AppServices {
     private final Random mRandom;
 
     private final BackupManager mBackupManager;
+    
+    private final float mDensity;
 
     @Nullable
     private MediaPlayer mMediaPlayer;
@@ -103,6 +106,8 @@ public class AppServices {
         mRandom = new Random();
 
         mBackupManager = new BackupManager(mApp.context());
+        
+        mDensity = DisplayUtil.getDensity(app.context());
     }
 
     public int getAppVersionCode() {
@@ -123,6 +128,17 @@ public class AppServices {
 
     public final LayoutInflater layoutInflater() {
         return mLayoutInflater;
+    }
+    
+    /** Get screen density. This is an invariant and can be cached safely. */
+    public final float density() {
+        return mDensity;
+    }
+    
+    /** Convert dip to pixels using underlying density. */
+    @@@ use this everywhere
+    public final int dipToPixels(int dip) {
+        return (int) (dip * mDensity + 0.5f);
     }
 
     /** Activate a medium length vibration */

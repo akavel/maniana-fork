@@ -33,6 +33,7 @@ import android.webkit.WebView;
 import android.webkit.WebView.PictureListener;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.util.DisplayUtil;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult.FileReadOutcome;
@@ -107,8 +108,8 @@ public class PopupMessageActivity extends Activity {
         final View frame = findViewById(R.id.message_small_frame);
         final GradientDrawable gradientDrawable = (GradientDrawable) frame.getBackground();
 
-        final float scale = getResources().getDisplayMetrics().density;
-        final int strokeWidthPixels = (int) ((BORDER_WIDTH_DIP * scale) + 0.5f);
+        final float density = DisplayUtil.getDensity(this);
+        final int strokeWidthPixels = (int) ((BORDER_WIDTH_DIP * density) + 0.5f);
         gradientDrawable.setStroke(strokeWidthPixels, messageKind.frameColor);
 
         final WebView webview = (WebView) findViewById(R.id.message_small_webview);

@@ -209,11 +209,12 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
         final int rootHeight = mTopView.getMeasuredHeight();
         final int screenHeight = mApp.services().windowManager().getDefaultDisplay().getHeight();
 
-        // Arrow position is slightly to the left.
+        // Arrow position is slightly to the right of the left upper/lower cornet.
         // TODO: define const.
-        final int xPos = 50;
+        // TODO: scale by density?
+        final int xPosPixels = 50;
 
-        final int arrowPos = anchorRectOnScreen.left + xPos;
+        final int arrowPos = anchorRectOnScreen.left + xPosPixels;
 
         int spaceAbove = anchorRectOnScreen.top;
         int spaceBelow = screenHeight - anchorRectOnScreen.bottom;
@@ -221,15 +222,16 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
         final boolean showAbove = spaceAbove >= rootHeight;
 
         // TODO: make a const or param.
+        // TODO: scale by density?
         final int ARROW_VERTICAL_OVERLAP = 15;
 
-        final int yPos;
+        final int yPosPixels;
 
         if (showAbove) {
             check(rootHeight <= spaceAbove);
-            yPos = anchorRectOnScreen.top - rootHeight + ARROW_VERTICAL_OVERLAP;
+            yPosPixels = anchorRectOnScreen.top - rootHeight + ARROW_VERTICAL_OVERLAP;
         } else {
-            yPos = anchorRectOnScreen.bottom - ARROW_VERTICAL_OVERLAP;
+            yPosPixels = anchorRectOnScreen.bottom - ARROW_VERTICAL_OVERLAP;
             if (rootHeight > spaceBelow) {
                 mItemContainerView.getLayoutParams().height = spaceBelow;
             }
@@ -238,7 +240,7 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
         showArrow(((showAbove) ? R.id.arrow_down : R.id.arrow_up), arrowPos);
         mMenuWindow.setAnimationStyle((showAbove) ? R.style.Animations_QuickActionAbove
                 : R.style.Animations_QuickActionBelow);
-        mMenuWindow.showAtLocation(anchorView, Gravity.NO_GRAVITY, xPos, yPos);
+        mMenuWindow.showAtLocation(anchorView, Gravity.NO_GRAVITY, xPosPixels, yPosPixels);
     }
 
     /**

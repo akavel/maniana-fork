@@ -48,6 +48,7 @@ import com.zapta.apps.maniana.preferences.PreferencesTracker;
 import com.zapta.apps.maniana.preferences.WidgetItemFontVariation;
 import com.zapta.apps.maniana.services.AppServices;
 import com.zapta.apps.maniana.util.DebugTimer;
+import com.zapta.apps.maniana.util.DisplayUtil;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.Orientation;
@@ -135,7 +136,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         // Template view is now fully populated. Render it as a bitmap. First we render it
         // using screen native resolution.
         final Orientation orientation = Orientation.currentDeviceOrientation(context);
-        final float density = context.getResources().getDisplayMetrics().density;
+        final float density = DisplayUtil.getDensity(context);
         final Point widgetGrossSizeInPixels = listWidgetSize.grossPixelSizeForOrientation(density,
                 orientation);
 

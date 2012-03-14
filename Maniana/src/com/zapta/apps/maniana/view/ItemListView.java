@@ -610,7 +610,6 @@ public class ItemListView extends ListView {
     /** Returns the max allowable distance in pixles to stay in DOWN_STABLE. */
     private final int movementLimitInDownStable() {
         // TODO: normalize to screen size or pixel density?
-        // TODO: use const.
         return Math.min(30, 10 + (timeMillisSinceDown() * 20) / 1000);
     }
 
