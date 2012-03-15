@@ -22,8 +22,7 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 /**
  * Represents the preference items.
  * 
- * DO NOT REUSE THESE OLD KEYS:
- * <code>
+ * DO NOT REUSE THESE OLD KEYS: <code>
  *   prefBackgroundKey
  *   prefItemFontKey
  *   prefItemFontSizeKey

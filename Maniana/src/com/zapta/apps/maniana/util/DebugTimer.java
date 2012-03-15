@@ -32,7 +32,7 @@ public final class DebugTimer {
 
     public void report(String message) {
         final long timeNow = System.currentTimeMillis();
-        LogUtil.debug("[%d, %d] - %s", timeNow - mStartTimeMillis, timeNow - mLastStartTimeMillies,
+        LogUtil.info("[%d, %d] - %s", timeNow - mStartTimeMillis, timeNow - mLastStartTimeMillies,
                 message);
         mLastStartTimeMillies = timeNow;
     }

@@ -172,18 +172,18 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             debugTimer.report("Template rendered to bitmap");
         }
 
-        // NOTE: rounding the bitmap here when paper background is selected will do nothing 
+        // NOTE: rounding the bitmap here when paper background is selected will do nothing
         // since the paper background is added later via the remote views.
         final Bitmap preScaleBitmap;
         if (backgroundPaper) {
             preScaleBitmap = bitmap;
         } else {
-            preScaleBitmap = BitmapUtil.roundCornersRGB888(bitmap, (int)(4 * density + 0.5f));
+            preScaleBitmap = BitmapUtil.roundCornersRGB888(bitmap, (int) (4 * density + 0.5f));
             if (DEBUG_TRACE_TIME) {
                 debugTimer.report("Rounded corners");
             }
         }
-    
+
         // Template view is now rendered to a bitmap using screen native resolution.
         // ImageViews scales down images it fetches via URI by the density factor of the device.
         // As a workaround, we pre scale up the image by the density. Later versions of android
@@ -219,7 +219,8 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         // Create the widget remote view
         final RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
                 R.layout.widget_list_layout);
-        setOnClickLaunch(context, remoteViews, R.id.widget_list_bitmap, ResumeAction.NONE);
+        setOnClickLaunch(context, remoteViews, R.id.widget_list_bitmap,
+                ResumeAction.ONLY_RESET_PAGE);
 
         setRemoteViewsToolbar(context, remoteViews, toolbarEanbled);
 

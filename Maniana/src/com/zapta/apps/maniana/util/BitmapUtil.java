@@ -14,11 +14,9 @@
 
 package com.zapta.apps.maniana.util;
 
-import static com.zapta.apps.maniana.util.Assertions.check;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;

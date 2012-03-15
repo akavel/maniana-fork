@@ -225,12 +225,14 @@ public class Controller {
             mApp.view().scrollToTop(PageKind.TOMOROW);
             mApp.view().scrollToTop(PageKind.TODAY);
 
-            // Force showing today's page. This is done with animation or immedietly
+            // Force showing today's page. This is done with animation or immediately
             // depending on settings. In case of an actual resume action, we skip
             // the animation to save user's time.
             final boolean isAppStartup = (mOnAppResumeCount == 1);
-            if (isAppStartup && mApp.pref().getStartupAnimationPreference()
-                    && resumeAction.isNone()) {
+            final boolean actionAllowsAnimation = (resumeAction.isNone() || resumeAction == ResumeAction.ONLY_RESET_PAGE);
+            final boolean doAnimation = isAppStartup && mApp.pref().getStartupAnimationPreference()
+                    && actionAllowsAnimation;
+            if (doAnimation) {
                 // Show initial animation
                 mApp.view().setCurrentPage(PageKind.TOMOROW, -1);
                 mApp.view().getRootView().postDelayed(new Runnable() {
@@ -260,6 +262,8 @@ public class Controller {
             case ADD_NEW_ITEM_BY_VOICE:
                 onAddItemByVoiceButton(PageKind.TODAY);
                 break;
+            case NONE:
+            case ONLY_RESET_PAGE:
             default:
                 // Do nothing
         }
@@ -285,7 +289,7 @@ public class Controller {
                 mApp.pref().getLockExpirationPeriodPrefernece());
 
         if (pushScope == PushScope.NONE) {
-            // Not exepected because of the quick check above
+            // Not expected because of the quick check above
             LogUtil.error("*** Unexpected condition, pushScope=NONE,"
                     + " modelTimestamp=%s, trackerDateStamp=%s", modelPushDateStamp,
                     trackerTodayDateStamp);

@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
     private AppContext mApp;
 
     /** Used to pass resume action from onNewIntent() to onResume(). */
-    private ResumeAction resumeAction = ResumeAction.NONE;
+    private ResumeAction mResumeAction = ResumeAction.NONE;
 
     /** Called by the Android framework to initialize the activity. */
     @Override
@@ -164,7 +164,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        resumeAction = ResumeAction.NONE;
+        mResumeAction = ResumeAction.NONE;
         // Inform the controller.
         mApp.controller().onMainActivityPause();
     }
@@ -175,8 +175,8 @@ public class MainActivity extends Activity {
         super.onResume();
 
         // Get the action for this resume
-        final ResumeAction thisResumeAction = resumeAction;
-        resumeAction = ResumeAction.NONE;
+        final ResumeAction thisResumeAction = mResumeAction;
+        mResumeAction = ResumeAction.NONE;
 
         // Inform the controller
         mApp.controller().onMainActivityResume(thisResumeAction);
@@ -198,7 +198,7 @@ public class MainActivity extends Activity {
     }
 
     /**
-     * Called when the activity recieves an intent. Used to detect launches from list widget action
+     * Called when the activity receives an intent. Used to detect launches from list widget action
      * buttons.
      */
     @Override
@@ -210,6 +210,6 @@ public class MainActivity extends Activity {
     /** Update the resume action from the given launch intent. */
     private final void trackResumeAction(Intent launchIntent) {
         // TODO: should we condition test first that the intent is a launcher intent?
-        resumeAction = ResumeAction.fromIntent(launchIntent);
+        mResumeAction = ResumeAction.fromIntent(launchIntent);
     }
 }

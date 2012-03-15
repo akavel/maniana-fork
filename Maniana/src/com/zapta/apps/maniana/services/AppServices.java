@@ -83,7 +83,7 @@ public class AppServices {
     private final Random mRandom;
 
     private final BackupManager mBackupManager;
-    
+
     private final float mDensity;
 
     @Nullable
@@ -106,7 +106,7 @@ public class AppServices {
         mRandom = new Random();
 
         mBackupManager = new BackupManager(mApp.context());
-        
+
         mDensity = DisplayUtil.getDensity(app.context());
     }
 
@@ -129,12 +129,12 @@ public class AppServices {
     public final LayoutInflater layoutInflater() {
         return mLayoutInflater;
     }
-    
+
     /** Get screen density. This is an invariant and can be cached safely. */
     public final float density() {
         return mDensity;
     }
-    
+
     /** Convert dip to pixels using underlying density. */
     public final int dipToPixels(int dip) {
         return (int) (dip * mDensity + 0.5f);

@@ -56,8 +56,11 @@ public class ListWidgetSize {
 
     /** Widget height in home launcher cells. */
     final int heightCells;
-    
-    /** Resource ID of paper drawable to use. We want to use the largest that does not overflow the widget. */
+
+    /**
+     * Resource ID of paper drawable to use. We want to use the largest that does not overflow the
+     * widget.
+     */
     final int paperResourceId;
 
     ListWidgetSize(Class<? extends ListWidgetProvider> widgetProviderClass, int widthCells,
