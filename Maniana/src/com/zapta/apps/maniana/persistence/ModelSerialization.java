@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.zapta.apps.maniana.model.persistence;
+package com.zapta.apps.maniana.persistence;
 
 import org.json.JSONArray;
 import org.json.JSONException;

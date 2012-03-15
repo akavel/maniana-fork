@@ -57,7 +57,7 @@ com.zapta.apps.maniana.model
     made of three levels, AppMode, PageModel and ItemModel (tasks are called 'items' in the source
     code).  
 
-com.zapta.apps.maniana.model.persistence
+com.zapta.apps.maniana.persistence
     Contains the persistence logic of the model. The model is persisted as a JASON 
     file to the android internal storage of the app.
 

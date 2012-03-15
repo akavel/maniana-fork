@@ -21,8 +21,8 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.zapta.apps.maniana.model.AppModel;
-import com.zapta.apps.maniana.model.persistence.ModelLoadingResult;
-import com.zapta.apps.maniana.model.persistence.ModelPersistence;
+import com.zapta.apps.maniana.persistence.ModelLoadingResult;
+import com.zapta.apps.maniana.persistence.ModelPersistence;
 
 /**
  * Base class widget providers.

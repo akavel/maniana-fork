@@ -26,8 +26,8 @@ import android.view.Window;
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.controller.MainMenuEntry;
 import com.zapta.apps.maniana.controller.StartupKind;
-import com.zapta.apps.maniana.model.persistence.ModelLoadingResult;
-import com.zapta.apps.maniana.model.persistence.ModelPersistence;
+import com.zapta.apps.maniana.persistence.ModelLoadingResult;
+import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**

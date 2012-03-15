@@ -23,7 +23,7 @@ import android.app.backup.FileBackupHelper;
 import android.app.backup.SharedPreferencesBackupHelper;
 import android.os.ParcelFileDescriptor;
 
-import com.zapta.apps.maniana.model.persistence.ModelPersistence;
+import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**

@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.zapta.apps.maniana.model.persistence;
+package com.zapta.apps.maniana.persistence;
 
 import org.json.JSONException;
 
@@ -20,7 +20,7 @@ import android.content.Context;
 
 import com.zapta.apps.maniana.main.AppContext;
 import com.zapta.apps.maniana.model.AppModel;
-import com.zapta.apps.maniana.model.persistence.ModelLoadingResult.ModelLoadingOutcome;
+import com.zapta.apps.maniana.persistence.ModelLoadingResult.ModelLoadingOutcome;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult.FileReadOutcome;

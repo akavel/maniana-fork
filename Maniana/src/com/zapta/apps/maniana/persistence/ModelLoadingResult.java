@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.zapta.apps.maniana.model.persistence;
+package com.zapta.apps.maniana.persistence;
 
 import static com.zapta.apps.maniana.util.Assertions.check;
 import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
