@@ -95,7 +95,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.preferences);
@@ -163,7 +162,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 
         mRestoreDefaultsPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
-                onResetSettingsClick();
+                onResetSettingsInitialClick();
                 return true;
             }
         });
@@ -238,13 +237,13 @@ public class PreferencesActivity extends PreferenceActivity implements
     }
 
     /** Handle user selecting reset settings in the settings activity */
-    private final void onResetSettingsClick() {
+    private final void onResetSettingsInitialClick() {
         final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        onConfirmedResetSettingsClick();
+                        onResetSettingsConfirmed();
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -260,7 +259,7 @@ public class PreferencesActivity extends PreferenceActivity implements
                 .setNegativeButton("No", dialogClickListener).show();
     }
 
-    private final void onConfirmedResetSettingsClick() {
+    private final void onResetSettingsConfirmed() {
         Editor editor = getPreferenceScreen().getEditor();
         editor.clear();
 
@@ -280,10 +279,9 @@ public class PreferencesActivity extends PreferenceActivity implements
         editor.putInt(PreferenceKind.WIDGET_ITEM_TEXT_COLOR.getKey(),
                 PreferenceConstants.DEFAULT_WIDGET_TEXT_COLOR);
 
-        // We also need to set boolean preferences whose default value is false.
-        // Otherwise their change is not broadcast to the tracker for some reason.
-        editor.putBoolean(PreferenceKind.AUTO_SORT.getKey(), false);
-
+        // NOTE: for checkbox whose default value is false, need to set them
+        // here to false. Currently there is none.
+ 
         // TODO: do we need to set the seekbar preferences or can we make them
         // to broadcast the reset event?
         editor.putInt(PreferenceKind.PAGE_ITEM_FONT_SIZE.getKey(),

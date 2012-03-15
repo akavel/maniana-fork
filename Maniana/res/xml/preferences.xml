@@ -30,7 +30,7 @@
             android:summaryOn="Enabled (trainee mode)"
             android:title="Detailed Messages" />
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="prefAutoSortKey"
             android:summaryOff="Allowing arbitrary task order"
             android:summaryOn="Forcing task order (pending before completed before locked)"
