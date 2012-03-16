@@ -27,11 +27,11 @@ public interface FieldNames {
     static String FIELD_MODEL = "model";
     static String FIELD_METADATA = "metadata";
     static String FIELD_LAST_PUSH_DATE = "last_push_date";
-    static String TODAY = "today";
+    static String FIELD_TODAY = "today";
     // NOTE: do not correct the value's spelling. This will break compatability.
-    static String TOMOROW = "tomorow";
-    static String TEXT = "text";
-    static String DONE = "done";
-    static String LOCKED = "locked";
-    static String COLOR = "color";
+    static String FIELD_TOMOROW = "tomorow";
+    static String FIELD_TEXT = "text";
+    static String FIELD_DONE = "done";
+    static String FIELD_LOCKED = "locked";
+    static String FIELD_COLOR = "color";
 }

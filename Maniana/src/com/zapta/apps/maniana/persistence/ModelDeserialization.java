@@ -31,7 +31,7 @@ import com.zapta.apps.maniana.util.LogUtil;
  * 
  * @author Tal Dayan
  */
-public class ModelDeserialization {
+public class ModelDeserialization implements FieldNames {
 
     /**
      * Deserialize a model from a JSON doc.
@@ -51,7 +51,7 @@ public class ModelDeserialization {
 
         final JSONObject root = new JSONObject(jsonString);
 
-        final int format = root.getInt("format");
+        final int format = root.getInt(FIELD_FORMAT);
         if (format < 2) {
             LogUtil.info("Loading data file in old format: " + format);
             // In format version 1 the model fields were at top level and we did not have metadata.
@@ -59,8 +59,8 @@ public class ModelDeserialization {
             // NOTE: metadata was already cleared above.
         } else {
             // For format >= 2.
-            populateModelFields(root.getJSONObject("model"), resultModel);
-            resultMetadata.fromJson(root.getJSONObject("metadata"));
+            populateModelFields(root.getJSONObject(FIELD_MODEL), resultModel);
+            resultMetadata.fromJson(root.getJSONObject(FIELD_METADATA));
         }
     }
 
@@ -70,9 +70,9 @@ public class ModelDeserialization {
      */
     private static final void populateModelFields(JSONObject root, AppModel appModel)
             throws JSONException {
-        appModel.setLastPushDateStamp(root.optString("last_push_date", ""));
-        populateItemListFromJason(root.getJSONArray("today"), appModel, PageKind.TODAY);
-        populateItemListFromJason(root.getJSONArray("tomorow"), appModel, PageKind.TOMOROW);
+        appModel.setLastPushDateStamp(root.optString(FIELD_LAST_PUSH_DATE, ""));
+        populateItemListFromJason(root.getJSONArray(FIELD_TODAY), appModel, PageKind.TODAY);
+        populateItemListFromJason(root.getJSONArray(FIELD_TOMOROW), appModel, PageKind.TOMOROW);
     }
 
     /** Deserialize a page item list */
@@ -92,10 +92,10 @@ public class ModelDeserialization {
     /** Deserialize a single item */
     private static final ItemModel modelItemFromJson(JSONObject jsonItem) throws JSONException {
         final ItemModel result = new ItemModel();
-        result.setText(jsonItem.getString("text"));
-        result.setIsCompleted(jsonItem.optBoolean("done"));
-        result.setIsLocked(jsonItem.optBoolean("locked"));
-        final String optColorKey = jsonItem.optString("color", null);
+        result.setText(jsonItem.getString(FIELD_TEXT));
+        result.setIsCompleted(jsonItem.optBoolean(FIELD_DONE));
+        result.setIsLocked(jsonItem.optBoolean(FIELD_LOCKED));
+        final String optColorKey = jsonItem.optString(FIELD_COLOR, null);
         if (optColorKey != null) {
             result.setColor(ItemColor.fromKey(optColorKey, ItemColor.NONE));
         }

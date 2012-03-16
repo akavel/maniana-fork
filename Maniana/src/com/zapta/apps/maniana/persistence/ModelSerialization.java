@@ -28,7 +28,7 @@ import com.zapta.apps.maniana.model.PageKind;
  * 
  * @author Tal Dayan
  */
-public class ModelSerialization {
+public class ModelSerialization implements FieldNames {
 
     // Format Step:
     // 1: initial. Model fields at top level, with format.
@@ -39,9 +39,9 @@ public class ModelSerialization {
     public static final String serializeModel(AppModel model, PersistenceMetadata metadata) {
         try {
             final JSONObject root = new JSONObject();
-            root.put("format", FORMAT_STEP);
-            root.put("metadata", metadata.toJason());
-            root.put("model", modelToJason(model));
+            root.put(FIELD_FORMAT, FORMAT_STEP);
+            root.put(FIELD_METADATA, metadata.toJason());
+            root.put(FIELD_MODEL, modelToJason(model));
 
             // NOTE: using indent of only 1 to reduce file size.
             return root.toString(1);
@@ -53,9 +53,9 @@ public class ModelSerialization {
     /** Serialize a model to a JSON object. */
     private static final JSONObject modelToJason(AppModel model) throws JSONException {
         final JSONObject root = new JSONObject();
-        root.put("last_push_date", model.getLastPushDateStamp());
-        root.put("today", pageItemsToJson(model, PageKind.TODAY));
-        root.put("tomorow", pageItemsToJson(model, PageKind.TOMOROW));
+        root.put(FIELD_LAST_PUSH_DATE, model.getLastPushDateStamp());
+        root.put(FIELD_TODAY, pageItemsToJson(model, PageKind.TODAY));
+        root.put(FIELD_TOMOROW, pageItemsToJson(model, PageKind.TOMOROW));
         return root;
     }
 
@@ -71,18 +71,18 @@ public class ModelSerialization {
         return result;
     }
 
-    /** Serialzie one itme */
+    /** Serialzie one item */
     private static final JSONObject itemToJson(ItemModelReadOnly itemModel) throws JSONException {
         final JSONObject result = new JSONObject();
-        result.put("text", itemModel.getText());
+        result.put(FIELD_TEXT, itemModel.getText());
         if (itemModel.isCompleted()) {
-            result.put("done", itemModel.isCompleted());
+            result.put(FIELD_DONE, itemModel.isCompleted());
         }
         if (itemModel.isLocked()) {
-            result.put("locked", itemModel.isLocked());
+            result.put(FIELD_LOCKED, itemModel.isLocked());
         }
         if (itemModel.getColor() != ItemColor.NONE) {
-            result.put("color", itemModel.getColor().getKey());
+            result.put(FIELD_COLOR, itemModel.getColor().getKey());
         }
         return result;
     }
