@@ -73,7 +73,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         update(context, appWidgetManager, listWidgetSize(), appWidgetIds, loadModel(context));
     }
-
+    
     /**
      * Internal widget update method that accepts the model as a parameter. Updates one or more
      * widgets of the same size.
