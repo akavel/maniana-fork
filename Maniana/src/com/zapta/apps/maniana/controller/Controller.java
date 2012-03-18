@@ -84,14 +84,6 @@ public class Controller {
      */
     private final OrganizePageSummary mTempSummary = new OrganizePageSummary();
 
-    /**
-     * The device orientation the last time widget were updated by a call directly from the
-     * controller. This is a hackish and not full proof workaround to cause widget update when
-     * orientation changed. Null indicates unknown orientation.
-     */
-    @Nullable
-    private Orientation mLastWidgetOrientation = null;
-
     public Controller(AppContext app) {
         mApp = app;
         mQuickActionCache = new QuickActionsCache(app);
@@ -182,24 +174,15 @@ public class Controller {
 
     /** If model is dirty then persist and update widgets. */
     private final void flushModelChanges() {
-        // If state is dirty save it, so we don't lose it if the app is note resumed.
-        final boolean wasDirty = mApp.model().isDirty();
-        if (wasDirty) {
+        // If state is dirty persist data so we don't lose it if the app will not resumed.
+        if (mApp.model().isDirty()) {
             final PersistenceMetadata metadata = new PersistenceMetadata(mApp.services()
                     .getAppVersionCode(), mApp.services().getAppVersionName());
             // NOTE(tal): this clears the dirty bit.
             ModelPersistence.saveData(mApp, mApp.model(), metadata);
             check(!mApp.model().isDirty());
             onBackupDataChange();
-        }
-
-        // HACK: if the orientation changed since last time we updated the widgets
-        // from the controller then force an update even if model is not dirty.
-        // Should be replaced with a safe widget update on orientation change.
-        final Orientation currentOrientation = Orientation.currentDeviceOrientation(mApp.context());
-        if (wasDirty || currentOrientation != mLastWidgetOrientation) {
             updateAllWidgets();
-            mLastWidgetOrientation = currentOrientation;
         }
     }
 
