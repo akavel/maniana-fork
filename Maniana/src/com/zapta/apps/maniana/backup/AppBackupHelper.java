@@ -53,8 +53,6 @@ public class AppBackupHelper extends BackupAgentHelper {
 
         // Helper for shared preferences file
         final String defaultPrefFile = getPackageName() + "_preferences";
-        // LogUtil.info("AppBackupHelper.onCreate(), Default pref file: %s, %s", defaultPrefFile,
-        // this);
         final SharedPreferencesBackupHelper preferencesFileHelper = new SharedPreferencesBackupHelper(
                 getApplicationContext(), defaultPrefFile);
         addHelper(PREFERENCES_HELPER_KEY, preferencesFileHelper);
