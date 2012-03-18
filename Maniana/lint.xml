@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
-    <issue id="ContentDescription" severity="informational" />
+    <issue id="ContentDescription" severity="ignore" />
     <issue id="HardcodedText" severity="informational" />
     <issue id="IconDensities" severity="informational" />
     <issue id="IconDipSize" severity="informational" />
