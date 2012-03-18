@@ -19,9 +19,9 @@
 <dimen name="list_widget_width_1x_landscape">112dp</dimen>
 <dimen name="list_widget_width_2x_landscape">206dp</dimen>
 <dimen name="list_widget_width_3x_landscape">318dp</dimen>
-<dimen name="list_widget_width_4x_landscape">412dp</dimen>
+<dimen name="list_widget_width_4x_landscape">430dp</dimen>
 
-<dimen name="list_widget_height_x1_landscape">65dp</dimen>
+<dimen name="list_widget_height_x1_landscape">72dp</dimen>
 <dimen name="list_widget_height_x2_landscape">140dp</dimen>
 <dimen name="list_widget_height_x3_landscape">208dp</dimen>
 <dimen name="list_widget_height_x4_landscape">278dp</dimen>
