@@ -6,4 +6,24 @@
 <dimen name="icon_widget_label_top_margin">12dp</dimen>
 <dimen name="icon_widget_label_right_margin">0dp</dimen>
 
+<dimen name="list_widget_width_1x_portrait">80dp</dimen>
+<dimen name="list_widget_width_2x_portrait">150dp</dimen>
+<dimen name="list_widget_width_3x_portrait">240dp</dimen>
+<dimen name="list_widget_width_4x_portrait">310dp</dimen>
+
+<dimen name="list_widget_height_x1_portrait">90dp</dimen>
+<dimen name="list_widget_height_x2_portrait">200dp</dimen>
+<dimen name="list_widget_height_x3_portrait">300dp</dimen>
+<dimen name="list_widget_height_x4_portrait">400dp</dimen>
+
+<dimen name="list_widget_width_1x_landscape">112dp</dimen>
+<dimen name="list_widget_width_2x_landscape">206dp</dimen>
+<dimen name="list_widget_width_3x_landscape">318dp</dimen>
+<dimen name="list_widget_width_4x_landscape">412dp</dimen>
+
+<dimen name="list_widget_height_x1_landscape">65dp</dimen>
+<dimen name="list_widget_height_x2_landscape">140dp</dimen>
+<dimen name="list_widget_height_x3_landscape">208dp</dimen>
+<dimen name="list_widget_height_x4_landscape">278dp</dimen>
+
 </resources>

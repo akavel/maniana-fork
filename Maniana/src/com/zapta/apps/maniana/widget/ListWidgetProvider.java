@@ -26,7 +26,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -53,6 +52,7 @@ import com.zapta.apps.maniana.util.DisplayUtil;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.Orientation;
+import com.zapta.apps.maniana.widget.ListWidgetSize.OrientationInfo;
 
 /**
  * Base class for the task list widgets.
@@ -73,7 +73,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         update(context, appWidgetManager, listWidgetSize(), appWidgetIds, loadModel(context));
     }
-    
+
     /**
      * Internal widget update method that accepts the model as a parameter. Updates one or more
      * widgets of the same size.
@@ -134,92 +134,10 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             debugTimer.report("Template populated");
         }
 
-        // Template view is now fully populated. Render it as a bitmap. First we render it
-        // using screen native resolution.
-        final Orientation orientation = Orientation.currentDeviceOrientation(context);
-        final float density = DisplayUtil.getDensity(context);
-        final Point widgetGrossSizeInPixels = listWidgetSize.grossPixelSizeForOrientation(density,
-                orientation);
-
-        // Bitmap size manual adjustment in percents. 100 means no change.
-        final int widthAdjust = orientation.isPortrait ? PreferencesTracker
-                .readWidgetPortraitWidthAdjustPreference(sharedPreferences) : PreferencesTracker
-                .readWidgetLandscapeWidthAdjustPreference(sharedPreferences);
-
-        final int heightAdjust = orientation.isPortrait ? PreferencesTracker
-                .readWidgetPortraitHeightAdjustPreference(sharedPreferences) : PreferencesTracker
-                .readWidgetLandscapeHeightAdjustPreference(sharedPreferences);
-
-        // size = (BaseSize - inset) * Adjustment%
-        final int insetPixels = (int) (5 * 2 * density);
-        final int widthPixels = ((widgetGrossSizeInPixels.x - insetPixels) * widthAdjust) / 100;
-        final int heightPixels = ((widgetGrossSizeInPixels.y - insetPixels) * heightAdjust) / 100;
-
-        // NTOE: ARGB_4444 results in a smaller file than ARGB_8888 (e.g. 50K vs 150k)
-        // but does not look as good.
-        final Bitmap bitmap = Bitmap.createBitmap(widthPixels, heightPixels,
-                Bitmap.Config.ARGB_8888);
-
-        final Canvas canvas = new Canvas(bitmap);
-
-        template.measure(MeasureSpec.makeMeasureSpec(widthPixels, MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(heightPixels, MeasureSpec.EXACTLY));
-        // TODO: substract '1' from ends?
-        template.layout(0, 0, widthPixels, heightPixels);
-        template.draw(canvas);
-
-        if (DEBUG_TRACE_TIME) {
-            debugTimer.report("Template rendered to bitmap");
-        }
-
-        // NOTE: rounding the bitmap here when paper background is selected will do nothing
-        // since the paper background is added later via the remote views.
-        final Bitmap preScaleBitmap;
-        if (backgroundPaper) {
-            preScaleBitmap = bitmap;
-        } else {
-            preScaleBitmap = BitmapUtil.roundCornersRGB888(bitmap, (int) (4 * density + 0.5f));
-            if (DEBUG_TRACE_TIME) {
-                debugTimer.report("Rounded corners");
-            }
-        }
-
-        // Template view is now rendered to a bitmap using screen native resolution.
-        // ImageViews scales down images it fetches via URI by the density factor of the device.
-        // As a workaround, we pre scale up the image by the density. Later versions of android
-        // API has View.scaleX() and View.scale(Y) methods but they are not availabe for our
-        // min api = 8.
-        final int scaledWidthPixels = (int) (widthPixels * density + 0.5f);
-        final int scaledHeightPixels = (int) (heightPixels * density + 0.5f);
-
-        final Bitmap scaledBitmap = Bitmap.createScaledBitmap(preScaleBitmap, scaledWidthPixels,
-                scaledHeightPixels, false);
-
-        if (DEBUG_TRACE_TIME) {
-            debugTimer.report("Bitmap scaled up");
-        }
-
-        // NOTE: RemoteViews class has an issue with transferring large bitmaps. As a workaround, we
-        // transfer the bitmap using a file URI. We could transfer small widgets directly
-        // as bitmap but use file based transfer for all sizes for the sake of simplicity.
-        // For more information on this issue see http://tinyurl.com/75jh2yf
-        final String fileName = String.format("list_widget_image_%dx%d.png",
-                listWidgetSize.widthCells, listWidgetSize.heightCells);
-
-        // We make the file world readable so the home launcher can pull it via the file URI.
-        // TODO: if there are security concerns about having this file readable, append to it
-        // a long random suffix and cleanup the old ones.
-        LogUtil.info("Updating widget bitmap: " + fileName);
-        FileUtil.writeBitmapToPngFile(context, scaledBitmap, fileName, true);
-
-        if (DEBUG_TRACE_TIME) {
-            debugTimer.report("Bitmap written to file");
-        }
-
         // Create the widget remote view
         final RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
                 R.layout.widget_list_layout);
-        setOnClickLaunch(context, remoteViews, R.id.widget_list_bitmap,
+        setOnClickLaunch(context, remoteViews, R.id.widget_list_bitmaps,
                 ResumeAction.ONLY_RESET_PAGE);
 
         setRemoteViewsToolbar(context, remoteViews, toolbarEanbled);
@@ -233,19 +151,95 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             remoteViews.setInt(R.id.widget_list_paper, "setBackgroundColor", 0x00000000);
         }
 
-        // NOTE: setting up a temporary dummy image to cause the image view to reload the file.
-        // TODO: can we have a cleaner solution? E.g. appending random dummy args to the URI?
-        remoteViews.setInt(R.id.widget_list_bitmap, "setImageResource", R.drawable.place_holder);
-
-        final Uri uri = Uri.parse("file://" + context.getFilesDir().getAbsolutePath() + "/"
-                + fileName);
-        remoteViews.setUri(R.id.widget_list_bitmap, "setImageURI", uri);
+        renderAndSet(context, remoteViews, template, listWidgetSize, Orientation.PORTRAIT,
+                backgroundPaper);
+        renderAndSet(context, remoteViews, template, listWidgetSize, Orientation.LANDSCAPE,
+                backgroundPaper);
 
         // Flush the remote view
         appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
 
         if (DEBUG_TRACE_TIME) {
             debugTimer.report("Remote views flushed.");
+        }
+    }
+
+    /** Set the image of a single orientation. */
+    private static final void renderAndSet(Context context, RemoteViews remoteViews, View template,
+            ListWidgetSize listWidgetSize, Orientation orientation, boolean backgroundPaper) {
+
+        // Template view is now fully populated. Render it as a bitmap. First we render it
+        // using screen native resolution.
+        final float density = DisplayUtil.getDensity(context);
+
+        final OrientationInfo orientationInfo = orientation.isPortrait ? listWidgetSize.portraitInfo
+                : listWidgetSize.landscapeInfo;
+
+        LogUtil.debug("processing orientation info: %s", orientationInfo.imageFileName);
+        LogUtil.debug("width_dimen: 0x%x,  height_dimen: 0x%x", orientationInfo.widthDipResourceId,
+                orientationInfo.heightDipResourceId);
+        final int widthPixels = (int) context.getResources().getDimensionPixelSize(
+                orientationInfo.widthDipResourceId);
+
+        final int heightPixels = (int) context.getResources().getDimensionPixelSize(
+                orientationInfo.heightDipResourceId);
+
+
+        // NTOE: ARGB_4444 results in a smaller file than ARGB_8888 (e.g. 50K vs 150k)
+        // but does not look as good.
+        final Bitmap bitmap1 = Bitmap.createBitmap(widthPixels, heightPixels,
+                Bitmap.Config.ARGB_8888);
+
+        final Canvas canvas = new Canvas(bitmap1);
+
+        template.measure(MeasureSpec.makeMeasureSpec(widthPixels, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(heightPixels, MeasureSpec.EXACTLY));
+        // TODO: substract '1' from ends?
+        template.layout(0, 0, widthPixels, heightPixels);
+
+        template.draw(canvas);
+
+
+        // NOTE: rounding the bitmap here when paper background is selected will do nothing
+        // since the paper background is added later via the remote views.
+        final Bitmap bitmap2;
+        if (backgroundPaper) {
+            bitmap2 = bitmap1;
+        } else {
+            bitmap2 = BitmapUtil.roundCornersRGB888(bitmap1, (int) (4 * density + 0.5f));
+        }
+
+        // NOTE: RemoteViews class has an issue with transferring large bitmaps. As a workaround, we
+        // transfer the bitmap using a file URI. We could transfer small widgets directly
+        // as bitmap but use file based transfer for all sizes for the sake of simplicity.
+        // For more information on this issue see http://tinyurl.com/75jh2yf
+
+        final String fileName = orientationInfo.imageFileName;
+
+        // We make the file world readable so the home launcher can pull it via the file URI.
+        // TODO: if there are security concerns about having this file readable, append to it
+        // a long random suffix and cleanup the old ones.
+        LogUtil.info("Updating widget bitmap: " + fileName);
+        FileUtil.writeBitmapToPngFile(context, bitmap2, fileName, true);
+
+        final Uri uri = Uri.parse("file://" + context.getFilesDir().getAbsolutePath() + "/"
+                + fileName);
+ 
+        for (ListWidgetSize iterListWidgetSize : ListWidgetSize.LIST_WIDGET_SIZES) {
+            final boolean thisSize = (iterListWidgetSize == listWidgetSize);
+            final OrientationInfo iterOrientationInfo = orientation.isPortrait ? iterListWidgetSize.portraitInfo
+                    : iterListWidgetSize.landscapeInfo;
+            final int iterBitmapResource = iterOrientationInfo.imageViewId;
+            if (thisSize) {
+                // NOTE: setting up a temporary dummy image to cause the image view to reload the file.
+                // TODO: can we have a cleaner solution? E.g. appending random dummy args to the URI?
+
+                remoteViews.setInt(iterBitmapResource, "setImageResource", R.drawable.place_holder);
+                remoteViews.setUri(iterBitmapResource, "setImageURI", uri);
+            } else {
+                remoteViews.setInt(iterBitmapResource, "setVisibility", View.GONE);
+            }
+
         }
     }
 

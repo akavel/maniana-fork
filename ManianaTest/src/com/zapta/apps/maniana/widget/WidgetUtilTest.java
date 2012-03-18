@@ -18,8 +18,6 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import android.graphics.Point;
-
 import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.model.ItemColor;
 import com.zapta.apps.maniana.model.ItemModel;
@@ -27,7 +25,6 @@ import com.zapta.apps.maniana.model.ItemModelReadOnly;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.model.PushScope;
 import com.zapta.apps.maniana.util.LogUtil;
-import com.zapta.apps.maniana.util.Orientation;
 
 /**
  * Unit test for WidgetlUtil.
@@ -92,37 +89,7 @@ public class WidgetUtilTest extends TestCase {
             }
         }
     }
-    
-    public void testWidgetGrossPixelSize() {      
-        // Portrait. Density = 1.0
-        assertEquals(new Point(316, 96), WidgetUtil.widgetGrossPixelSize(1.0f, Orientation.PORTRAIT, 4, 1));
-        assertEquals(new Point(316, 196), WidgetUtil.widgetGrossPixelSize(1.0f, Orientation.PORTRAIT, 4, 2));
-        assertEquals(new Point(316, 296), WidgetUtil.widgetGrossPixelSize(1.0f, Orientation.PORTRAIT, 4, 3));
-        assertEquals(new Point(316, 396), WidgetUtil.widgetGrossPixelSize(1.0f, Orientation.PORTRAIT, 4, 4));
-        assertEquals(new Point(156, 196), WidgetUtil.widgetGrossPixelSize(1.0f, Orientation.PORTRAIT, 2, 2));
-
-        // Portrait. Density = 1.5
-        assertEquals(new Point(474, 144), WidgetUtil.widgetGrossPixelSize(1.5f, Orientation.PORTRAIT, 4, 1));
-        assertEquals(new Point(474, 294), WidgetUtil.widgetGrossPixelSize(1.5f, Orientation.PORTRAIT, 4, 2));
-        assertEquals(new Point(474, 444), WidgetUtil.widgetGrossPixelSize(1.5f, Orientation.PORTRAIT, 4, 3));
-        assertEquals(new Point(474, 594), WidgetUtil.widgetGrossPixelSize(1.5f, Orientation.PORTRAIT, 4, 4));
-        assertEquals(new Point(234, 294), WidgetUtil.widgetGrossPixelSize(1.5f, Orientation.PORTRAIT, 2, 2));
-
-        // Landscape. Density = 1.0
-        assertEquals(new Point(420, 70), WidgetUtil.widgetGrossPixelSize(1.0f, Orientation.LANDSCAPE, 4, 1));
-        assertEquals(new Point(420, 144), WidgetUtil.widgetGrossPixelSize(1.0f, Orientation.LANDSCAPE, 4, 2));
-        assertEquals(new Point(420, 218), WidgetUtil.widgetGrossPixelSize(1.0f, Orientation.LANDSCAPE, 4, 3));
-        assertEquals(new Point(420, 292), WidgetUtil.widgetGrossPixelSize(1.0f, Orientation.LANDSCAPE, 4, 4));
-        assertEquals(new Point(208, 144), WidgetUtil.widgetGrossPixelSize(1.0f, Orientation.LANDSCAPE, 2, 2));
-
-        // Landscape. Density = 1.5
-        assertEquals(new Point(630, 105), WidgetUtil.widgetGrossPixelSize(1.5f, Orientation.LANDSCAPE, 4, 1));
-        assertEquals(new Point(630, 216), WidgetUtil.widgetGrossPixelSize(1.5f, Orientation.LANDSCAPE, 4, 2));
-        assertEquals(new Point(630, 327), WidgetUtil.widgetGrossPixelSize(1.5f, Orientation.LANDSCAPE, 4, 3));
-        assertEquals(new Point(630, 438), WidgetUtil.widgetGrossPixelSize(1.5f, Orientation.LANDSCAPE, 4, 4));
-        assertEquals(new Point(312, 216), WidgetUtil.widgetGrossPixelSize(1.5f, Orientation.LANDSCAPE, 2, 2));
-    }
-    
+        
     public void testTitleTextSize() {
         ListWidgetSize W;
         

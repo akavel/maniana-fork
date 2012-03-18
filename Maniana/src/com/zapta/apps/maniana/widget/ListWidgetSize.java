@@ -15,9 +15,6 @@
 package com.zapta.apps.maniana.widget;
 
 import com.zapta.apps.maniana.R;
-import com.zapta.apps.maniana.util.Orientation;
-
-import android.graphics.Point;
 
 /**
  * Descriptor of supproted list widget sizes.
@@ -26,19 +23,70 @@ import android.graphics.Point;
  */
 public class ListWidgetSize {
 
-    protected static final ListWidgetSize LIST_WIDGET_SIZE1 = new ListWidgetSize(
-            ListWidgetProvider1.class, 4, 1, R.drawable.widget_paper_4x1);
-    protected static final ListWidgetSize LIST_WIDGET_SIZE2 = new ListWidgetSize(
-            ListWidgetProvider2.class, 4, 2, R.drawable.widget_paper_4x2);
-    protected static final ListWidgetSize LIST_WIDGET_SIZE3 = new ListWidgetSize(
-            ListWidgetProvider3.class, 4, 3, R.drawable.widget_paper_4x3);
-    protected static final ListWidgetSize LIST_WIDGET_SIZE4 = new ListWidgetSize(
-            ListWidgetProvider4.class, 2, 2, R.drawable.widget_paper_2x2);
-    // NOTE: we reuse the 4x3 paper also for the 4x4 widget. This reduces the APK
-    // size and the stretching does not affect the resolution much.
-    protected static final ListWidgetSize LIST_WIDGET_SIZE5 = new ListWidgetSize(
-            ListWidgetProvider5.class, 4, 4, R.drawable.widget_paper_4x3);
+    static class OrientationInfo {
+        public final int widthDipResourceId;
+        public final int heightDipResourceId;
+        public final int imageViewId;
+        public final String imageFileName;
 
+        private OrientationInfo(int widthDipResourceId, int heightDipResourceId, int imageViewId,
+                String imageFileName) {
+            super();
+            this.widthDipResourceId = widthDipResourceId;
+            this.heightDipResourceId = heightDipResourceId;
+            this.imageViewId = imageViewId;
+            this.imageFileName = imageFileName;
+        }
+    }
+
+    /** Portrait widget width dimensions for [1..4] cells */
+    private static final int PORTRAIT_WIDTHS[] = new int[] {
+        R.dimen.list_widget_width_1x_portrait,
+        R.dimen.list_widget_width_2x_portrait,
+        R.dimen.list_widget_width_3x_portrait,
+        R.dimen.list_widget_width_4x_portrait
+    };
+
+    /** Portrait widget height dimensions for [1..4] cells */
+    private static final int PORTRAIT_HEIGHTS[] = new int[] {
+        R.dimen.list_widget_height_x1_portrait,
+        R.dimen.list_widget_height_x2_portrait,
+        R.dimen.list_widget_height_x3_portrait,
+        R.dimen.list_widget_height_x4_portrait
+    };
+
+    /** Landscape widget width dimensions for [1..4] cells */
+    private static final int LANDSCAPE_WIDTHS[] = new int[] {
+        R.dimen.list_widget_width_1x_landscape,
+        R.dimen.list_widget_width_2x_landscape,
+        R.dimen.list_widget_width_3x_landscape,
+        R.dimen.list_widget_width_4x_landscape
+    };
+
+    /** Landscape widget height dimensions for [1..4] cells */
+    private static final int LANDSCAPE_HEIGHTS[] = new int[] {
+        R.dimen.list_widget_height_x1_landscape,
+        R.dimen.list_widget_height_x2_landscape,
+        R.dimen.list_widget_height_x3_landscape,
+        R.dimen.list_widget_height_x4_landscape
+    };
+
+    static final ListWidgetSize LIST_WIDGET_SIZE1 = new ListWidgetSize(ListWidgetProvider1.class,
+            4, 1, R.id.widget_list_bitmap_4x1_portrait, R.id.widget_list_bitmap_4x1_landscape, R.drawable.widget_paper_4x1);
+
+    static final ListWidgetSize LIST_WIDGET_SIZE2 = new ListWidgetSize(ListWidgetProvider2.class,
+            4, 2, R.id.widget_list_bitmap_4x2_portrait, R.id.widget_list_bitmap_4x2_landscape, R.drawable.widget_paper_4x2);
+
+    static final ListWidgetSize LIST_WIDGET_SIZE3 = new ListWidgetSize(ListWidgetProvider3.class,
+            4, 3, R.id.widget_list_bitmap_4x3_portrait, R.id.widget_list_bitmap_4x3_landscape, R.drawable.widget_paper_4x3);
+
+    static final ListWidgetSize LIST_WIDGET_SIZE4 = new ListWidgetSize(ListWidgetProvider4.class,
+            2, 2, R.id.widget_list_bitmap_2x2_portrait, R.id.widget_list_bitmap_2x2_landscape, R.drawable.widget_paper_2x2);
+
+    static final ListWidgetSize LIST_WIDGET_SIZE5 = new ListWidgetSize(ListWidgetProvider5.class,
+            4, 4, R.id.widget_list_bitmap_4x4_portrait, R.id.widget_list_bitmap_4x4_landscape, R.drawable.widget_paper_4x3);
+
+ 
     /** List of all list widget sizes. */
     static final ListWidgetSize[] LIST_WIDGET_SIZES = new ListWidgetSize[] {
         LIST_WIDGET_SIZE1,
@@ -63,16 +111,25 @@ public class ListWidgetSize {
      */
     final int paperResourceId;
 
+    /** Size info for portrait mode */
+    final OrientationInfo portraitInfo;
+
+    /** Size info for landscape mode. */
+    final OrientationInfo landscapeInfo;
+
     ListWidgetSize(Class<? extends ListWidgetProvider> widgetProviderClass, int widthCells,
-            int heightCells, int paperResourceId) {
+            int heightCells, int portraitImageViewId, int landscapeImageViewId, int paperResourceId) {
         this.widgetProviderClass = widgetProviderClass;
         this.widthCells = widthCells;
         this.heightCells = heightCells;
         this.paperResourceId = paperResourceId;
-    }
 
-    /** Compute widget gross area size in pixels based on current orientation */
-    Point grossPixelSizeForOrientation(float density, Orientation orientation) {
-        return WidgetUtil.widgetGrossPixelSize(density, orientation, widthCells, heightCells);
+        this.portraitInfo = new OrientationInfo(PORTRAIT_WIDTHS[widthCells - 1],
+                PORTRAIT_HEIGHTS[heightCells - 1], portraitImageViewId, String.format(
+                        "list_widget_image_%dx%d_portrait.png", widthCells, heightCells));
+
+        this.landscapeInfo = new OrientationInfo(LANDSCAPE_WIDTHS[widthCells - 1],
+                LANDSCAPE_HEIGHTS[heightCells - 1], landscapeImageViewId, String.format(
+                        "list_widget_image_%dx%d_landscape.png", widthCells, heightCells));
     }
 }

@@ -17,7 +17,6 @@ package com.zapta.apps.maniana.widget;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.graphics.Point;
 import android.text.format.Time;
 
 import com.zapta.apps.maniana.model.AppModel;
@@ -26,7 +25,6 @@ import com.zapta.apps.maniana.model.ModelUtil;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.model.PushScope;
 import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
-import com.zapta.apps.maniana.util.Orientation;
 
 /**
  * Common widget related utilities.
@@ -83,29 +81,6 @@ public abstract class WidgetUtil {
         }
 
         return result;
-    }
-
-    /**
-     * Compute the widget size in pixels.
-     * 
-     * Based on http://osdir.com/ml/Android-Developers/2011-01/msg02879.html
-     * 
-     * See also (2 dip inset)
-     * http://blog.doityourselfandroid.com/2011/05/24/developing-android-home-screenwidgets/
-     * 
-     */
-    public static Point widgetGrossPixelSize(float density, Orientation orientation,
-            int widthCells, int heightCells) {
-        final int widthPixels;
-        final int heightPixels;
-        if (orientation.isPortrait) {
-            widthPixels = (int) ((80 * widthCells - 4) * density + .5f);
-            heightPixels = (int) ((100 * heightCells - 4) * density + .5f);
-        } else {
-            widthPixels = (int) ((106 * widthCells - 4) * density + .5f);
-            heightPixels = (int) ((74 * heightCells - 4) * density + .5f);
-        }
-        return new Point(widthPixels, heightPixels);
     }
 
     /** Compute the list widget TODAY title text size. */

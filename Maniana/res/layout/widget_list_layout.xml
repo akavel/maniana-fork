@@ -13,20 +13,80 @@
         android:background="#00000000"
         android:padding="0dip" >
 
-        <ImageView
-            android:id="@+id/widget_list_bitmap"
+        <LinearLayout
+            android:id="@+id/widget_list_bitmaps"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#00000000"
-             android:padding="0dip"
-            android:scaleType="center" >
-        </ImageView>
+            android:orientation="vertical"
+            android:padding="0dip" >
+
+            <ImageView
+                android:id="@+id/widget_list_bitmap_4x1_portrait"
+                style="@style/ListWidgetPortraitBitmap"
+                android:layout_width="@dimen/list_widget_width_4x_portrait"
+                android:layout_height="@dimen/list_widget_height_x1_portrait" />
+
+            <ImageView
+                android:id="@+id/widget_list_bitmap_4x1_landscape"
+                style="@style/ListWidgetLandscapeBitmap"
+                android:layout_width="@dimen/list_widget_width_4x_landscape"
+                android:layout_height="@dimen/list_widget_height_x1_landscape" />
+
+            <ImageView
+                android:id="@+id/widget_list_bitmap_4x2_portrait"
+                style="@style/ListWidgetPortraitBitmap"
+                android:layout_width="@dimen/list_widget_width_4x_portrait"
+                android:layout_height="@dimen/list_widget_height_x2_portrait" />
+
+            <ImageView
+                android:id="@+id/widget_list_bitmap_4x2_landscape"
+                style="@style/ListWidgetLandscapeBitmap"
+                android:layout_width="@dimen/list_widget_width_4x_landscape"
+                android:layout_height="@dimen/list_widget_height_x2_landscape" />
+
+            <ImageView
+                android:id="@+id/widget_list_bitmap_4x3_portrait"
+                style="@style/ListWidgetPortraitBitmap"
+                android:layout_width="@dimen/list_widget_width_4x_portrait"
+                android:layout_height="@dimen/list_widget_height_x3_portrait" />
+
+            <ImageView
+                android:id="@+id/widget_list_bitmap_4x3_landscape"
+                style="@style/ListWidgetLandscapeBitmap"
+                android:layout_width="@dimen/list_widget_width_4x_landscape"
+                android:layout_height="@dimen/list_widget_height_x3_landscape" />
+
+            <ImageView
+                android:id="@+id/widget_list_bitmap_2x2_portrait"
+                style="@style/ListWidgetPortraitBitmap"
+                android:layout_width="@dimen/list_widget_width_2x_portrait"
+                android:layout_height="@dimen/list_widget_height_x2_portrait" />
+
+            <ImageView
+                android:id="@+id/widget_list_bitmap_2x2_landscape"
+                style="@style/ListWidgetLandscapeBitmap"
+                android:layout_width="@dimen/list_widget_width_2x_landscape"
+                android:layout_height="@dimen/list_widget_height_x2_landscape" />
+
+            <ImageView
+                android:id="@+id/widget_list_bitmap_4x4_portrait"
+                style="@style/ListWidgetPortraitBitmap"
+                android:layout_width="@dimen/list_widget_width_4x_portrait"
+                android:layout_height="@dimen/list_widget_height_x4_portrait" />
+
+            <ImageView
+                android:id="@+id/widget_list_bitmap_4x4_landscape"
+                style="@style/ListWidgetLandscapeBitmap"
+                android:layout_width="@dimen/list_widget_width_4x_landscape"
+                android:layout_height="@dimen/list_widget_height_x4_landscape" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="35dip"
-            android:layout_alignRight="@id/widget_list_bitmap"
-            android:layout_alignTop="@id/widget_list_bitmap"
+            android:layout_alignRight="@id/widget_list_bitmaps"
+            android:layout_alignTop="@id/widget_list_bitmaps"
             android:orientation="horizontal" >
 
             <FrameLayout
