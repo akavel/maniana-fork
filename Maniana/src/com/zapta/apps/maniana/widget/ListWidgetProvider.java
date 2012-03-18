@@ -84,7 +84,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             return;
         }
 
-         final SharedPreferences sharedPreferences = PreferenceManager
+        final SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
 
         // Create the template view. We will later render it to a bitmap.
@@ -133,18 +133,9 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
         setRemoteViewsToolbar(context, remoteViews, toolbarEanbled);
 
-        // Set paper or transparent background layer. This will be shown up below the
-        // ImageView view with the rendered template bitmap.
-        if (backgroundPaper) {
-            remoteViews.setInt(R.id.widget_list_paper, "setBackgroundResource",
-                    listWidgetSize.paperResourceId);
-        } else {
-            remoteViews.setInt(R.id.widget_list_paper, "setBackgroundColor", 0x00000000);
-        }
-
-        renderAndSet(context, remoteViews, template, listWidgetSize, Orientation.PORTRAIT,
+        renderOrientation(context, remoteViews, template, listWidgetSize, Orientation.PORTRAIT,
                 backgroundPaper);
-        renderAndSet(context, remoteViews, template, listWidgetSize, Orientation.LANDSCAPE,
+        renderOrientation(context, remoteViews, template, listWidgetSize, Orientation.LANDSCAPE,
                 backgroundPaper);
 
         // Flush the remote view
@@ -152,7 +143,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
     }
 
     /** Set the image of a single orientation. */
-    private static final void renderAndSet(Context context, RemoteViews remoteViews, View template,
+    private static final void renderOrientation(Context context, RemoteViews remoteViews, View template,
             ListWidgetSize listWidgetSize, Orientation orientation, boolean backgroundPaper) {
 
         // Template view is now fully populated. Render it as a bitmap. First we render it
@@ -168,7 +159,6 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final int heightPixels = (int) context.getResources().getDimensionPixelSize(
                 orientationInfo.heightDipResourceId);
 
-
         // NTOE: ARGB_4444 results in a smaller file than ARGB_8888 (e.g. 50K vs 150k)
         // but does not look as good.
         final Bitmap bitmap1 = Bitmap.createBitmap(widthPixels, heightPixels,
@@ -182,7 +172,6 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         template.layout(0, 0, widthPixels, heightPixels);
 
         template.draw(canvas);
-
 
         // NOTE: rounding the bitmap here when paper background is selected will do nothing
         // since the paper background is added later via the remote views.
@@ -208,21 +197,35 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
         final Uri uri = Uri.parse("file://" + context.getFilesDir().getAbsolutePath() + "/"
                 + fileName);
- 
+
+        // Set the bitmap images of given orientation. The bitmap of the size we currently
+        // process is set and the other are made GONE. Only bitmaps of the given orientation
+        // are touched here
         for (ListWidgetSize iterListWidgetSize : ListWidgetSize.LIST_WIDGET_SIZES) {
             final boolean thisSize = (iterListWidgetSize == listWidgetSize);
             final OrientationInfo iterOrientationInfo = orientation.isPortrait ? iterListWidgetSize.portraitInfo
                     : iterListWidgetSize.landscapeInfo;
             final int iterBitmapResource = iterOrientationInfo.imageViewId;
             if (thisSize) {
-                // NOTE: setting up a temporary dummy image to cause the image view to reload the file.
-                // TODO: can we have a cleaner solution? E.g. appending random dummy args to the URI?
+                // NOTE: setting up a temporary dummy image to cause the image view to reload the
+                // file URI in case it changed.
                 remoteViews.setInt(iterBitmapResource, "setImageResource", R.drawable.place_holder);
                 remoteViews.setUri(iterBitmapResource, "setImageURI", uri);
+                // Set paper background if used or transparent otherwise.
+                // TODO: will using the background solid color here rather than the template bitmap
+                // reduce the file size? If so, make this change.
+                if (backgroundPaper) {
+                    final PaperBackground paperBackground = PaperBackground.getBestSize(
+                            widthPixels, heightPixels);
+                    remoteViews.setInt(iterBitmapResource, "setBackgroundResource",
+                            paperBackground.drawableResourceId);
+                } else {
+                    remoteViews.setInt(iterBitmapResource, "setBackgroundColor", 0x00000000);
+                }
             } else {
+                // A different size. Disable it, regardless of orientation.
                 remoteViews.setInt(iterBitmapResource, "setVisibility", View.GONE);
             }
-
         }
     }
 

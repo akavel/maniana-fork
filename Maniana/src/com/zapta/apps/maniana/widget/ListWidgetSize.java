@@ -17,7 +17,7 @@ package com.zapta.apps.maniana.widget;
 import com.zapta.apps.maniana.R;
 
 /**
- * Descriptor of supproted list widget sizes.
+ * Descriptor of supported list widget sizes.
  * 
  * @author Tal Dayan
  */
@@ -72,19 +72,19 @@ public class ListWidgetSize {
     };
 
     static final ListWidgetSize LIST_WIDGET_SIZE1 = new ListWidgetSize(ListWidgetProvider1.class,
-            4, 1, R.id.widget_list_bitmap_4x1_portrait, R.id.widget_list_bitmap_4x1_landscape, R.drawable.widget_paper_4x1);
+            4, 1, R.id.widget_list_bitmap_4x1_portrait, R.id.widget_list_bitmap_4x1_landscape);
 
     static final ListWidgetSize LIST_WIDGET_SIZE2 = new ListWidgetSize(ListWidgetProvider2.class,
-            4, 2, R.id.widget_list_bitmap_4x2_portrait, R.id.widget_list_bitmap_4x2_landscape, R.drawable.widget_paper_4x2);
+            4, 2, R.id.widget_list_bitmap_4x2_portrait, R.id.widget_list_bitmap_4x2_landscape);
 
     static final ListWidgetSize LIST_WIDGET_SIZE3 = new ListWidgetSize(ListWidgetProvider3.class,
-            4, 3, R.id.widget_list_bitmap_4x3_portrait, R.id.widget_list_bitmap_4x3_landscape, R.drawable.widget_paper_4x3);
+            4, 3, R.id.widget_list_bitmap_4x3_portrait, R.id.widget_list_bitmap_4x3_landscape);
 
     static final ListWidgetSize LIST_WIDGET_SIZE4 = new ListWidgetSize(ListWidgetProvider4.class,
-            2, 2, R.id.widget_list_bitmap_2x2_portrait, R.id.widget_list_bitmap_2x2_landscape, R.drawable.widget_paper_2x2);
+            2, 2, R.id.widget_list_bitmap_2x2_portrait, R.id.widget_list_bitmap_2x2_landscape);
 
     static final ListWidgetSize LIST_WIDGET_SIZE5 = new ListWidgetSize(ListWidgetProvider5.class,
-            4, 4, R.id.widget_list_bitmap_4x4_portrait, R.id.widget_list_bitmap_4x4_landscape, R.drawable.widget_paper_4x3);
+            4, 4, R.id.widget_list_bitmap_4x4_portrait, R.id.widget_list_bitmap_4x4_landscape);
 
  
     /** List of all list widget sizes. */
@@ -105,24 +105,17 @@ public class ListWidgetSize {
     /** Widget height in home launcher cells. */
     final int heightCells;
 
-    /**
-     * Resource ID of paper drawable to use. We want to use the largest that does not overflow the
-     * widget.
-     */
-    final int paperResourceId;
-
     /** Size info for portrait mode */
     final OrientationInfo portraitInfo;
 
     /** Size info for landscape mode. */
     final OrientationInfo landscapeInfo;
 
-    ListWidgetSize(Class<? extends ListWidgetProvider> widgetProviderClass, int widthCells,
-            int heightCells, int portraitImageViewId, int landscapeImageViewId, int paperResourceId) {
+    private ListWidgetSize(Class<? extends ListWidgetProvider> widgetProviderClass, int widthCells,
+            int heightCells, int portraitImageViewId, int landscapeImageViewId) {
         this.widgetProviderClass = widgetProviderClass;
         this.widthCells = widthCells;
         this.heightCells = heightCells;
-        this.paperResourceId = paperResourceId;
 
         this.portraitInfo = new OrientationInfo(PORTRAIT_WIDTHS[widthCells - 1],
                 PORTRAIT_HEIGHTS[heightCells - 1], portraitImageViewId, String.format(
