@@ -198,31 +198,6 @@ public class PreferencesTracker implements PreferenceConstants {
                 DEFAULT_WIDGET_SHOW_TOOLBAR);
     }
 
-    /** Read widget portrait width adjust percents. Used by the list widget only. */
-    public static final int readWidgetPortraitWidthAdjustPreference(
-            SharedPreferences sharedPreferences) {
-        return sharedPreferences.getInt(PreferenceKind.WIDGET_PORTRAIT_WIDTH_ADJUST.getKey(), 100);
-    }
-
-    /** Read widget portrait height adjust percents. Used by the list widget only. */
-    public static final int readWidgetPortraitHeightAdjustPreference(
-            SharedPreferences sharedPreferences) {
-        return sharedPreferences.getInt(PreferenceKind.WIDGET_PORTRAIT_HEIGHT_ADJUST.getKey(), 100);
-    }
-
-    /** Read widget landscape width adjust percents. Used by the list widget only. */
-    public static final int readWidgetLandscapeWidthAdjustPreference(
-            SharedPreferences sharedPreferences) {
-        return sharedPreferences.getInt(PreferenceKind.WIDGET_LANDSCAPE_WIDTH_ADJUST.getKey(), 100);
-    }
-
-    /** Read widget landscape height adjust percents. Used by the list widget only. */
-    public static final int readWidgetLandscapeHeightAdjustPreference(
-            SharedPreferences sharedPreferences) {
-        return sharedPreferences
-                .getInt(PreferenceKind.WIDGET_LANDSCAPE_HEIGHT_ADJUST.getKey(), 100);
-    }
-
     private final void updateCachedApplauseLevelPreference() {
         final String key = mSharedPreferences.getString(PreferenceKind.APPLAUSE_LEVEL.getKey(),
                 DEFAULT_APPPLAUSE_LEVEL.getKey());
@@ -371,10 +346,6 @@ public class PreferencesTracker implements PreferenceConstants {
             case WIDGET_ITEM_FONT_SIZE:
             case WIDGET_SINGLE_LINE:
             case WIDGET_SHOW_TOOLBAR:
-            case WIDGET_PORTRAIT_WIDTH_ADJUST:
-            case WIDGET_PORTRAIT_HEIGHT_ADJUST:
-            case WIDGET_LANDSCAPE_WIDTH_ADJUST:
-            case WIDGET_LANDSCAPE_HEIGHT_ADJUST:
                 // These ones are not cached or used here. Just reported to controller to
                 // trigger the widget update and backup service.
                 break;

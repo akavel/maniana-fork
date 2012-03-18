@@ -50,7 +50,6 @@ import com.zapta.apps.maniana.preferences.PreferenceKind;
 import com.zapta.apps.maniana.preferences.PreferencesActivity;
 import com.zapta.apps.maniana.quick_action.QuickActionItem;
 import com.zapta.apps.maniana.util.LogUtil;
-import com.zapta.apps.maniana.util.Orientation;
 import com.zapta.apps.maniana.view.AppView;
 import com.zapta.apps.maniana.view.AppView.ItemAnimationType;
 import com.zapta.apps.maniana.widget.BaseWidgetProvider;
@@ -694,10 +693,6 @@ public class Controller {
             case WIDGET_ITEM_FONT_SIZE:
             case WIDGET_SINGLE_LINE:
             case WIDGET_SHOW_TOOLBAR:
-            case WIDGET_PORTRAIT_WIDTH_ADJUST:
-            case WIDGET_PORTRAIT_HEIGHT_ADJUST:
-            case WIDGET_LANDSCAPE_WIDTH_ADJUST:
-            case WIDGET_LANDSCAPE_HEIGHT_ADJUST:
                 // NOTE: This covers the case where the user changes widget settings and presses the
                 // Home button immediately, going back to the widgets. The widget update at
                 // onAppPause() is not triggered in this case because the main activity is already
