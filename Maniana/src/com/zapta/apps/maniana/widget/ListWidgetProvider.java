@@ -47,7 +47,6 @@ import com.zapta.apps.maniana.preferences.PreferencesTracker;
 import com.zapta.apps.maniana.preferences.WidgetItemFontVariation;
 import com.zapta.apps.maniana.services.AppServices;
 import com.zapta.apps.maniana.util.BitmapUtil;
-import com.zapta.apps.maniana.util.DebugTimer;
 import com.zapta.apps.maniana.util.DisplayUtil;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.LogUtil;
@@ -85,11 +84,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             return;
         }
 
-        // For debugging only. Reports timing.
-        final boolean DEBUG_TRACE_TIME = false;
-        final DebugTimer debugTimer = DEBUG_TRACE_TIME ? new DebugTimer() : null;
-
-        final SharedPreferences sharedPreferences = PreferenceManager
+         final SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
 
         // Create the template view. We will later render it to a bitmap.
@@ -130,10 +125,6 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         populateTemplateItemList(context, itemListView, model, fontVariation, sharedPreferences,
                 layoutInflater);
 
-        if (DEBUG_TRACE_TIME) {
-            debugTimer.report("Template populated");
-        }
-
         // Create the widget remote view
         final RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
                 R.layout.widget_list_layout);
@@ -158,10 +149,6 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
         // Flush the remote view
         appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
-
-        if (DEBUG_TRACE_TIME) {
-            debugTimer.report("Remote views flushed.");
-        }
     }
 
     /** Set the image of a single orientation. */
@@ -175,9 +162,6 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final OrientationInfo orientationInfo = orientation.isPortrait ? listWidgetSize.portraitInfo
                 : listWidgetSize.landscapeInfo;
 
-        LogUtil.debug("processing orientation info: %s", orientationInfo.imageFileName);
-        LogUtil.debug("width_dimen: 0x%x,  height_dimen: 0x%x", orientationInfo.widthDipResourceId,
-                orientationInfo.heightDipResourceId);
         final int widthPixels = (int) context.getResources().getDimensionPixelSize(
                 orientationInfo.widthDipResourceId);
 
@@ -233,7 +217,6 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             if (thisSize) {
                 // NOTE: setting up a temporary dummy image to cause the image view to reload the file.
                 // TODO: can we have a cleaner solution? E.g. appending random dummy args to the URI?
-
                 remoteViews.setInt(iterBitmapResource, "setImageResource", R.drawable.place_holder);
                 remoteViews.setUri(iterBitmapResource, "setImageURI", uri);
             } else {
