@@ -34,7 +34,6 @@ import android.preference.PreferenceActivity;
 import android.text.format.Time;
 import android.widget.Toast;
 
-import com.hlidskialf.android.preference.SeekBarPreference;
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
 import com.zapta.apps.maniana.help.PopupMessageActivity.MessageKind;

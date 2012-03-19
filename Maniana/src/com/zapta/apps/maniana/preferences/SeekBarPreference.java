@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.hlidskialf.android.preference;
+package com.zapta.apps.maniana.preferences;
 
 import com.zapta.apps.maniana.util.Orientation;
 
@@ -37,6 +37,9 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     private static final String androidns = "http://schemas.android.com/apk/res/android";
 
     private final Context mContext;
+
+    /** Cached device density. */
+    private float mDensity;
 
     /** Format string for running label in dialog. Should contain %d. Attribute: text */
     private final String mLabelFormat;
@@ -68,6 +71,7 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     public SeekBarPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
+        mDensity = context.getResources().getDisplayMetrics().density;
         mLabelFormat = attrs.getAttributeValue(androidns, "text");
         mDefaultValue = attrs.getAttributeIntValue(androidns, "defaultValue", 50);
         mMinValue = attrs.getAttributeIntValue(androidns, "minLevel", 0);
@@ -85,11 +89,13 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
         final boolean isPortrait = Orientation.currentDeviceOrientation(mContext).isPortrait;
         final LinearLayout layout = new LinearLayout(mContext);
         layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setPadding(10, 0, 10, 0);
+        final int layoutHorisontalPaddingPx = px(7);
+        layout.setPadding(layoutHorisontalPaddingPx, 0, layoutHorisontalPaddingPx, 0);
 
         mValueTextView = new TextView(mContext);
         mValueTextView.setGravity(Gravity.CENTER_HORIZONTAL);
-        mValueTextView.setPadding(0, isPortrait ? 15 : 5, 0, 0);
+        mValueTextView.setPadding(0, isPortrait ? px(10) : px(3), 0, 0);
+        // NOTE: text size is in scaled pixels (sp), no need to scale.
         mValueTextView.setTextSize(isPortrait ? 64 : 50);
         final LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -97,7 +103,10 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 
         mSeekBar = new SeekBar(mContext);
         mSeekBar.setOnSeekBarChangeListener(this);
-        mSeekBar.setPadding(0, isPortrait ? 40 : 10, 0, isPortrait ? 40 : 10);
+        final int seekBarVerticalPaddingPx = isPortrait ? px(26) : px(7);
+        final int seekBarHorisontalPaddingPx = px(20);
+        mSeekBar.setPadding(seekBarHorisontalPaddingPx, seekBarVerticalPaddingPx,
+                seekBarHorisontalPaddingPx, seekBarVerticalPaddingPx);
         layout.addView(mSeekBar, new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
@@ -184,5 +193,10 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     public void setSummary(int summaryResId) {
         // TODO: read resource into a string and append current value.
         super.setSummary(summaryResId);
+    }
+
+    /** Dip to pixel converter. */
+    private final int px(int dip) {
+        return (int) (dip * mDensity + 0.5f);
     }
 }
