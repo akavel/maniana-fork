@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#5000ff00"
+    android:background="#00000000"
     android:padding="0dip" >
 
     <RelativeLayout
@@ -97,20 +97,21 @@
             android:layout_height="35dip"
             android:layout_alignRight="@id/widget_list_bitmaps"
             android:layout_alignTop="@id/widget_list_bitmaps"
+            android:paddingRight="3dip"
             android:orientation="horizontal" >
 
             <FrameLayout
                 android:id="@+id/widget_list_toolbar_add_by_text_overlay"
                 android:layout_width="35dip"
                 android:layout_height="fill_parent"
-                android:background="#50ff0000" >
+                android:background="#00000000" >
             </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/widget_list_toolbar_add_by_voice_overlay"
                 android:layout_width="35dip"
                 android:layout_height="fill_parent"
-                android:background="#500000ff" >
+                android:background="#00000000" >
             </FrameLayout>
         </LinearLayout>
     </RelativeLayout>

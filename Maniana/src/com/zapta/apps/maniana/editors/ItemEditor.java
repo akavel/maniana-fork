@@ -106,6 +106,7 @@ public class ItemEditor extends Dialog implements TrackablePopup {
         // Position cursor at the end of the text
         mEditText.setSelection(initialText.length());
 
+        // TODO: this does not open automatically the keyaobrd when in landscape mode.
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
     }
 
