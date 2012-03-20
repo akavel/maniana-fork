@@ -56,6 +56,56 @@ import com.zapta.apps.maniana.widget.ListWidgetSize.OrientationInfo;
 
 /**
  * Base class for the task list widgets.
+ * <p>
+ * The code below went though several iterations to make it functional, efficient and to
+ * overcome the limitations of RemoteViews (e.g. non support of custom fonts like Vavont).
+ * I will try to outline here the overall design as well as non obvious considerations. If
+ * you change this code or adpat it to other applications make sure to thorughly test it
+ * with differnt Android versions screen sizes and orientations.
+ * <p>
+ * Main features:
+ * 1. Supports custom fonts (not supported directly by Remote Views).
+ * 2. Single code and layout supports multiple widget sizes and both orientation.
+ * 3. Automatic and smooth orientation change when home launcher changes orientation.
+ * 4. Uses efficiently a static bitmap background (paper).
+ * 5. Multiple 'hot areas' on the widget that dispatch intents.
+ * <p>
+ * The main layout of this widget is widget_list_layout.xml. It is used for all supported
+ * widget sizes (currently 5 of them) and both orientation. The layout contains these 
+ * parts
+ * 1. A place to set the static background image (paper). Note: this bitmap could be included in 
+ * the image bitmap (part 2 below) but this increased the size of the dynamic bitmap files
+ * and slow the widget update. 
+ * 2. A place to show two bitmap images, from local file URI, for portrait and landscape 
+ * views of each of the 5 widget size (total of 2 x 5 images). The visibility of the images
+ * in each pair are controlled automatically by a style that enables one in portrait mode
+ * and the other in landscape mode.  Further, the widget code, when it set a widget
+ * RemoteViews for a widget of a certain size, make sure to disable (visibility = GONE) 
+ * all the images of the other sizes.
+ * 3. Hot areas that can be set to trigger intents. These areas overlay the buttons 
+ * of the widget which are part of the bitmap images (part 2 above).
+ * <p>
+ * Once the remote views is setup for a given widget instance, the orientation change in the
+ * home launcher result in smooth widget orientation change as the widget contain
+ * recreate a new widget layout with the current landscape/portrait style and applies
+ * to it the commands recorded in the RemoteViews.
+ * <p> 
+ * When a widget of a given size is updated, the update method below creates two
+ * bitmap .png files whose name encode the widget size and the orientation. Then the 
+ * RemoteViews is set such that the respective two ImageViews in the main layout are 
+ * set with URI to the respective files.
+ * <p>
+ * The two files are rendered from a template layout that includes the widget toolbar
+ * and text. The layout is populated and then rendered into two bitmaps with size
+ * for landscape and portrait orientation respectively. These bitmaps are then save
+ * to local files, overwriting previous files for this widget size. Note that the template
+ * layout is inflated locally and not via a RemoteViews.
+ * <p>
+ * What did not work?
+ * 1. Passing the bitmap to the remote views via setImageViewBitmap(). For large widget
+ * the bitmap was too big and once in a while Android just dropped it.
+ * 2. Passing the bitmap to the remote views via multiple 'slices' of setImageViewBitmap and
+ * ImageView. Same problem as above.
  * 
  * @author Tal Dayan
  */
@@ -77,6 +127,13 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
     /**
      * Internal widget update method that accepts the model as a parameter. Updates one or more
      * widgets of the same size.
+     * 
+     * @param context the widget context
+     * @param appWidgetManager appWidgetManager to use. 
+     * @param listWidgetSize the size of the updated widget instance
+     * @param appWidgetIds a list of widget instance ids to update.
+     * @param model the Maniana app model instance with the data to render. If null, the widget
+     * will display an error message.
      */
     private static final void update(Context context, AppWidgetManager appWidgetManager,
             ListWidgetSize listWidgetSize, int[] appWidgetIds, @Nullable AppModel model) {
@@ -134,9 +191,9 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
         setRemoteViewsToolbar(context, remoteViews, toolbarEanbled);
 
-        renderOrientation(context, remoteViews, template, listWidgetSize, Orientation.PORTRAIT,
+        renderOneOrientation(context, remoteViews, template, listWidgetSize, Orientation.PORTRAIT,
                 backgroundPaper);
-        renderOrientation(context, remoteViews, template, listWidgetSize, Orientation.LANDSCAPE,
+        renderOneOrientation(context, remoteViews, template, listWidgetSize, Orientation.LANDSCAPE,
                 backgroundPaper);
 
         // Flush the remote view
@@ -144,7 +201,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
     }
 
     /** Set the image of a single orientation. */
-    private static final void renderOrientation(Context context, RemoteViews remoteViews,
+    private static final void renderOneOrientation(Context context, RemoteViews remoteViews,
             View template, ListWidgetSize listWidgetSize, Orientation orientation,
             boolean backgroundPaper) {
 
@@ -230,8 +287,17 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         }
     }
 
+    /**
+     * Populate the given template layout with task data and/or informative messages.
+     * @param context the app context.
+     * @param itemListView the inflated template layout to fill.
+     * @param model the app data. If null, will be populated with a error message.
+     * @param fontVariation widget font variation to use.
+     * @param sharedPreferences shared preference to fetch widget settings.
+     * @param layoutInflater an inflater to use to inflate layouts of individual tasks.
+     */
     private static final void populateTemplateItemList(Context context, LinearLayout itemListView,
-            AppModel model, WidgetItemFontVariation fontVariation,
+            @Nullable AppModel model, WidgetItemFontVariation fontVariation,
             SharedPreferences sharedPreferences, LayoutInflater layoutInflater) {
         // For debugging
         final boolean debugTimestamp = false;
@@ -395,15 +461,22 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         remoteViews.setOnClickPendingIntent(viewId, pendingIntent);
     }
 
-    // TODO: decide what we want to do with this.
-    // An attempt to update all list widgtes by a direct call.
+    /** 
+     * Update all list widgets using a given model. 
+     * 
+     * This method is called from the main activity when model changes need to be flushed
+     * to the widgets. 
+     * 
+     * @param context app context.
+     * @param model app model with task data. If null, widgets will show a warning message.
+     */
     public static void updateAllListWidgetsFromModel(Context context, @Nullable AppModel model) {
         final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
         for (ListWidgetSize listWidgetSize : ListWidgetSize.LIST_WIDGET_SIZES) {
             final int widgetIds[] = appWidgetManager.getAppWidgetIds(new ComponentName(context,
                     listWidgetSize.widgetProviderClass));
-            // Update
+            // Update all widgets of this size, if any.
             if (widgetIds != null) {
                 update(context, appWidgetManager, listWidgetSize, widgetIds, model);
             }
