@@ -24,7 +24,7 @@
     <dimen name="list_widget_width_4x_landscape">400dp</dimen>
 
     <!-- Landscape Height -->
-    <dimen name="list_widget_height_x1_landscape">72dp</dimen>
+    <dimen name="list_widget_height_x1_landscape">68dp</dimen>
     <dimen name="list_widget_height_x2_landscape">132dp</dimen>
     <dimen name="list_widget_height_x3_landscape">204dp</dimen>
     <dimen name="list_widget_height_x4_landscape">278dp</dimen>
