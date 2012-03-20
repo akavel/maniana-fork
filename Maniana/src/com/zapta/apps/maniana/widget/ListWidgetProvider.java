@@ -14,6 +14,7 @@
 
 package com.zapta.apps.maniana.widget;
 
+import java.io.File;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -143,8 +144,9 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
     }
 
     /** Set the image of a single orientation. */
-    private static final void renderOrientation(Context context, RemoteViews remoteViews, View template,
-            ListWidgetSize listWidgetSize, Orientation orientation, boolean backgroundPaper) {
+    private static final void renderOrientation(Context context, RemoteViews remoteViews,
+            View template, ListWidgetSize listWidgetSize, Orientation orientation,
+            boolean backgroundPaper) {
 
         // Template view is now fully populated. Render it as a bitmap. First we render it
         // using screen native resolution.
@@ -195,8 +197,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         LogUtil.info("Updating widget bitmap: " + fileName);
         FileUtil.writeBitmapToPngFile(context, bitmap2, fileName, true);
 
-        final Uri uri = Uri.parse("file://" + context.getFilesDir().getAbsolutePath() + "/"
-                + fileName);
+        final Uri uri = Uri.fromFile(new File(context.getFilesDir(), fileName));
 
         // Set the bitmap images of given orientation. The bitmap of the size we currently
         // process is set and the other are made GONE. Only bitmaps of the given orientation
