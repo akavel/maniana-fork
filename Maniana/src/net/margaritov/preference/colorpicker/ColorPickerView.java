@@ -119,7 +119,7 @@ public class ColorPickerView extends View {
 	 * TODO: expose to external setting. Currently fixed to Maniana widget paper
 	 * requirements.
 	 */
-	private float mMaxSat = 0.4f;
+	private float mMaxSat = 1.f;
 
 	/*
 	 * To remember which panel that has the "focus" when
@@ -978,6 +978,8 @@ public class ColorPickerView extends View {
 
 	public void setJustHsNoV(boolean enable) {
 	    mJustHSNoV = enable;
+	    // 0.4f is Maniana specific. Allow to control externally.
+	    mMaxSat = enable ? 0.4f : 1.f;
 	    if (enable) {
 	        // Position the marker at a convenient location near the top.
 	        mVal = 0.8f;
