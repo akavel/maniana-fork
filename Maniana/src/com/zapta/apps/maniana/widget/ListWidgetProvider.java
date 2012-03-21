@@ -106,6 +106,12 @@ import com.zapta.apps.maniana.widget.ListWidgetSize.OrientationInfo;
  * the bitmap was too big and once in a while Android just dropped it.
  * 2. Passing the bitmap to the remote views via multiple 'slices' of setImageViewBitmap and
  * ImageView. Same problem as above.
+ * 3. Using only a pair of ImageView and setting their size dynamically to the current
+ * widget size. Could not find a way to do it with RemoteViews.
+ * 4. Letting the dynamic template bitmap file to set the size of the containing ImageView.
+ * By default, the ImageView scaled the fetched bitmap file by density(). Pre scaling
+ * the bitmap by this factor to compensate for the downscaling works but introduces
+ * font artifcats due to the two scaling operations.
  * 
  * @author Tal Dayan
  */
