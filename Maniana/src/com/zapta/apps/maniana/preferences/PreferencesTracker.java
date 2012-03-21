@@ -156,13 +156,16 @@ public class PreferencesTracker implements PreferenceConstants {
         return sharedPreferences.getBoolean(PreferenceKind.WIDGET_BACKGROUND_PAPER.getKey(),
                 DEFAULT_WIDGET_BACKGROUND_PAPER);
     }
-
-    /** Read widget item text size preference. */
-    public static final int readWidgetItemFontSizePreference(SharedPreferences sharedPreferences) {
-        return sharedPreferences.getInt(PreferenceKind.WIDGET_ITEM_FONT_SIZE.getKey(),
-                DEFAULT_WIDGET_ITEM_FONT_SIZE);
+    
+    /**
+     * Read widget background color preference. Used by the list widget only. Should be used only of
+     * background type is SOLID
+     */
+    public static final int readWidgetPaperColorPreference(SharedPreferences sharedPreferences) {
+        return sharedPreferences.getInt(PreferenceKind.WIDGET_PAPER_COLOR.getKey(),
+                DEFAULT_WIDGET_PAPER_COLOR);
     }
-
+    
     /**
      * Read widget background color preference. Used by the list widget only. Should be used only of
      * background type is SOLID
@@ -170,6 +173,12 @@ public class PreferencesTracker implements PreferenceConstants {
     public static final int readWidgetBackgroundColorPreference(SharedPreferences sharedPreferences) {
         return sharedPreferences.getInt(PreferenceKind.WIDGET_BACKGROUND_COLOR.getKey(),
                 DEFAULT_WIDGET_BACKGROUND_COLOR);
+    }
+
+    /** Read widget item text size preference. */
+    public static final int readWidgetItemFontSizePreference(SharedPreferences sharedPreferences) {
+        return sharedPreferences.getInt(PreferenceKind.WIDGET_ITEM_FONT_SIZE.getKey(),
+                DEFAULT_WIDGET_ITEM_FONT_SIZE);
     }
 
     /** Read widget font type preference. Used by the list widget only. */
@@ -340,6 +349,7 @@ public class PreferencesTracker implements PreferenceConstants {
                 updateCachedStartupAnimationPreference();
                 break;
             case WIDGET_BACKGROUND_PAPER:
+            case WIDGET_PAPER_COLOR:
             case WIDGET_BACKGROUND_COLOR:
             case WIDGET_ITEM_FONT_TYPE:
             case WIDGET_ITEM_TEXT_COLOR:

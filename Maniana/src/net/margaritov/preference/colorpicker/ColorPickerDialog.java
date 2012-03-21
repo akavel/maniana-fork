@@ -118,6 +118,10 @@ public class ColorPickerDialog
 	public int getColor() {
 		return mColorPicker.getColor();
 	}
+	
+	public void setJustHsNoV(boolean enable) {
+	    mColorPicker.setJustHsNoV(enable);
+	}
 
 	@Override
 	public void onClick(View v) {

@@ -95,7 +95,7 @@
             android:summary="Color of lines between tasks"
             android:title="Task Divider Color" />
     </PreferenceScreen>
-    <PreferenceScreen android:title="List Widget">
+    <PreferenceScreen android:title="List Widget" android:key="prefWidgetScreenKey">
         <Preference
             android:key="prefWidgetSelectThemeKey"
             android:summary="Click to select a predefined widget setting"
@@ -104,9 +104,14 @@
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="prefWidgetBackgroundPaperKey"
-            android:summaryOff="Paper background disabled"
+            android:summaryOff="Using solid background color"
             android:summaryOn="Using paper background"
             android:title="Paper" />
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
+            android:defaultValue="#ffffffff"
+            android:key="prefWidgetPaperColorKey"
+            android:summary="List widget paper color"
+            android:title="Paper Color" />
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#44000000"
             android:key="prefWidgetBackgroundColorKey"

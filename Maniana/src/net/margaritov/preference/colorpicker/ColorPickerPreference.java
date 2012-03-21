@@ -47,6 +47,7 @@ public class ColorPickerPreference
 	private int mValue = Color.BLACK;
 	private float mDensity = 0;
 	private boolean mAlphaSliderEnabled = false;
+	private boolean mJustHsNoV = false;
 
 	private static final String androidns = "http://schemas.android.com/apk/res/android";
 
@@ -89,7 +90,9 @@ public class ColorPickerPreference
 					mDefaultValue = context.getResources().getInteger(resourceId);
 				}
 			}
+			// TODO: make the XML attribute to work and use them instead of the setting methods below.
 			mAlphaSliderEnabled = attrs.getAttributeBooleanValue(null, "alphaSlider", false);
+			mJustHsNoV = attrs.getAttributeBooleanValue(null, "justHsNoV", false);
 		}
 		mValue = mDefaultValue;
 	}
@@ -197,6 +200,7 @@ public class ColorPickerPreference
 		}
 	}
 
+	@Override
 	public boolean onPreferenceClick(Preference preference) {
 		ColorPickerDialog picker = new ColorPickerDialog(getContext(), getValue());
 		// TAL: added propagation of title to dialog
@@ -205,6 +209,9 @@ public class ColorPickerPreference
 		picker.setOnColorChangedListener(this);
 		if (mAlphaSliderEnabled) {
 			picker.setAlphaSliderVisible(true);
+		}
+		if (mJustHsNoV) {
+		    picker.setJustHsNoV(true);
 		}
 		picker.show();
 
@@ -218,6 +225,10 @@ public class ColorPickerPreference
 	public void setAlphaSliderEnabled(boolean enable) {
 		mAlphaSliderEnabled = enable;
 	}
+	
+    public void setJustHsNoV(boolean enable) {
+        mJustHsNoV = enable;
+    }
 
 	/**
 	 * For custom purposes. Not used by ColorPickerPreferrence

@@ -687,6 +687,7 @@ public class Controller {
                 break;
 
             case WIDGET_BACKGROUND_PAPER:
+            case WIDGET_PAPER_COLOR:
             case WIDGET_BACKGROUND_COLOR:
             case WIDGET_ITEM_FONT_TYPE:
             case WIDGET_ITEM_TEXT_COLOR:

@@ -30,20 +30,34 @@ import com.zapta.apps.maniana.util.LogUtil;
 public class PaperBackground {
 
     private static final PaperBackground PAPER_BACKGROUNDS[] = new PaperBackground[] {
-        new PaperBackground(R.drawable.widget_paper_104x114, 104, 114),
-        new PaperBackground(R.drawable.widget_paper_304x094, 304, 94),
-        new PaperBackground(R.drawable.widget_paper_304x194, 304, 194),
-        new PaperBackground(R.drawable.widget_paper_304x282, 304, 382)
+        new PaperBackground(R.drawable.widget_paper_104x114, 104, 114, 4),
+        new PaperBackground(R.drawable.widget_paper_304x094, 304, 94, 4),
+        new PaperBackground(R.drawable.widget_paper_304x194, 304, 194, 4),
+        new PaperBackground(R.drawable.widget_paper_304x282, 304, 382, 4)
     };
 
     public final int drawableResourceId;
     public final int widthPixels;
     public final int heightPixels;
+    
+    /** The width of the drop shadow on right and bottom margins. */
+    public final int shadowPixels;
 
-    private PaperBackground(int drawableResourceId, int widthPixels, int heightPixels) {
+    private PaperBackground(int drawableResourceId, int widthPixels, int heightPixels, int shadowPixels) {
         this.drawableResourceId = drawableResourceId;
         this.widthPixels = widthPixels;
         this.heightPixels = heightPixels;
+        this.shadowPixels = shadowPixels;
+    }
+    
+    public final int shadowRightPixels(int strechedWidthPixels) {
+        // TODO: round the result?
+        return (shadowPixels * strechedWidthPixels) / widthPixels;
+    }
+    
+    public final int shadowBottomPixels(int strechedHeightPixels) {
+        // TODO: round the result?
+        return (shadowPixels * strechedHeightPixels) / heightPixels;
     }
 
     /**
@@ -88,9 +102,6 @@ public class PaperBackground {
             LogUtil.error("Paper background does not fit: %d x %s -> %d x %d", widthPixels,
                     heightPixels, bestResult.widthPixels, bestResult.heightPixels);
         }
-
-        // LogUtil.debug("*** %d x %s -> paper %d x %d", widthPixels, heightPixels,
-        //         bestResult.widthPixels, bestResult.heightPixels);
 
         return bestResult;
     }

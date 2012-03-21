@@ -107,6 +107,19 @@ public class ColorPickerView extends View {
 	private int 		mSliderTrackerColor = 0xff1c1c1c;
 	private int 		mBorderColor = 0xff6E6E6E;
 	private boolean		mShowAlphaPanel = false;
+	
+	/** 
+	 * Suppress setting of V, allow to change only H, S and possibly A. 
+	 * V is fixed to max.
+	 */
+	private boolean  mJustHSNoV = false;
+	
+	/**
+	 * Limits the sat range to [0..mMaxSat].
+	 * TODO: expose to external setting. Currently fixed to Maniana widget paper
+	 * requirements.
+	 */
+	private float mMaxSat = 0.4f;
 
 	/*
 	 * To remember which panel that has the "focus" when
@@ -239,16 +252,20 @@ public class ColorPickerView extends View {
 			canvas.drawRect(mDrawingRect.left, mDrawingRect.top, rect.right + BORDER_WIDTH_PX, rect.bottom + BORDER_WIDTH_PX, mBorderPaint);
 		}
 
-		if (mValShader == null) {
+		if (mValShader == null && !mJustHSNoV) {
 			mValShader = new LinearGradient(rect.left, rect.top, rect.left, rect.bottom,
 					0xffffffff, 0xff000000, TileMode.CLAMP);
 		}
 
-		int rgb = Color.HSVToColor(new float[]{mHue,1f,1f});
+		// TODO: for Maniana paper color purposes, consider to reduce max sat from 1f to let's
+		// say 0.3f. This can be done by exposing one more attribute to the Maniana settings.
+		int rgb = Color.HSVToColor(new float[]{mHue,mMaxSat,1f});
 
 		mSatShader = new LinearGradient(rect.left, rect.top, rect.right, rect.top,
 				0xffffffff, rgb, TileMode.CLAMP);
-		ComposeShader mShader = new ComposeShader(mValShader, mSatShader, PorterDuff.Mode.MULTIPLY);
+		Shader mShader = mJustHSNoV 
+		        ? mSatShader
+		        : new ComposeShader(mValShader, mSatShader, PorterDuff.Mode.MULTIPLY);
 		mSatValPaint.setShader(mShader);
 
 		canvas.drawRect(rect, mSatValPaint);
@@ -368,7 +385,7 @@ public class ColorPickerView extends View {
 
 		Point p = new Point();
 
-		p.x = (int) (sat * width + rect.left);
+		p.x = (int) (sat * width / mMaxSat + rect.left);
 		p.y = (int) ((1f - val) * height + rect.top);
 
 		return p;
@@ -417,7 +434,7 @@ public class ColorPickerView extends View {
 		}
 
 
-		result[0] = 1.f / width * x;
+		result[0] = mMaxSat / width * x;
 		result[1] = 1.f - (1.f / height * y);
 
 		return result;
@@ -461,7 +478,8 @@ public class ColorPickerView extends View {
 
 	}
 
-
+	
+	// TODO: test or disable
 	@Override
 	public boolean onTrackballEvent(MotionEvent event) {
 
@@ -496,7 +514,7 @@ public class ColorPickerView extends View {
 					val = 1f;
 				}
 
-				mSat = sat;
+				mSat = sat * mMaxSat;
 				mVal = val;
 
 				update = true;
@@ -552,7 +570,7 @@ public class ColorPickerView extends View {
 		if(update){
 
 			if(mListener != null){
-				mListener.onColorChanged(Color.HSVToColor(mAlpha, new float[]{mHue, mSat, mVal}));
+				mListener.onColorChanged(Color.HSVToColor(mAlpha, new float[]{mHue, mSat, externalVal()}));
 			}
 
 			invalidate();
@@ -597,7 +615,7 @@ public class ColorPickerView extends View {
 		if(update){
 
 			if(mListener != null){
-				mListener.onColorChanged(Color.HSVToColor(mAlpha, new float[]{mHue, mSat, mVal}));
+				mListener.onColorChanged(Color.HSVToColor(mAlpha, new float[]{mHue, mSat, externalVal()}));
 			}
 
 			invalidate();
@@ -833,7 +851,7 @@ public class ColorPickerView extends View {
 	 * @return the current color.
 	 */
 	public int getColor(){
-		return Color.HSVToColor(mAlpha, new float[]{mHue,mSat,mVal});
+		return Color.HSVToColor(mAlpha, new float[]{mHue,mSat, externalVal()});
 	}
 
 	/**
@@ -863,11 +881,12 @@ public class ColorPickerView extends View {
 
 		mAlpha = alpha;
 		mHue = hsv[0];
-		mSat = hsv[1];
+		mSat = Math.min(mMaxSat, hsv[1]);
+		// If Val setting is disabled, we arbitrarily set it to the vertical center of the panel.
 		mVal = hsv[2];
 
 		if(callback && mListener != null){
-			mListener.onColorChanged(Color.HSVToColor(mAlpha, new float[]{mHue, mSat, mVal}));
+			mListener.onColorChanged(Color.HSVToColor(mAlpha, new float[]{mHue, mSat, externalVal()}));
 		}
 
 		invalidate();
@@ -950,5 +969,19 @@ public class ColorPickerView extends View {
 	 */
 	public String getAlphaSliderText(){
 		return mAlphaSliderText;
+	}
+	
+	/** The actual V we expose externally. */
+	private float externalVal() {
+	   return mJustHSNoV ? 1.f : mVal;   
+	}
+
+	public void setJustHsNoV(boolean enable) {
+	    mJustHSNoV = enable;
+	    if (enable) {
+	        // Position the marker at a convenient location near the top.
+	        mVal = 0.8f;
+	    }
+	    invalidate();
 	}
 }

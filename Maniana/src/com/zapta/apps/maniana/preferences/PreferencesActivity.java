@@ -31,6 +31,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceScreen;
 import android.text.format.Time;
 import android.widget.Toast;
 
@@ -72,6 +73,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     // Widget
     private CheckBoxPreference mWidgetBackgroundPaperPreference;
+    private ColorPickerPreference mWidgetPaperColorPickPreference;
     private ColorPickerPreference mWidgetSolidColorPickPreference;
     private ListPreference mWidgetFontTypeListPreference;
     private SeekBarPreference mWidgetFontSizePreference;
@@ -117,6 +119,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 
         // Widget
         mWidgetBackgroundPaperPreference = (CheckBoxPreference) findPreference(PreferenceKind.WIDGET_BACKGROUND_PAPER);
+        mWidgetPaperColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_PAPER_COLOR);
         mWidgetSolidColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_BACKGROUND_COLOR);
         mWidgetFontTypeListPreference = (ListPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_TYPE);
         mWidgetFontSizePreference = (SeekBarPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_SIZE);
@@ -135,6 +138,9 @@ public class PreferencesActivity extends PreferenceActivity implements
         // Enabled alpha channel in colors pickers that need it.
         mPageItemDividerColorPickPreference.setAlphaSliderEnabled(true);
         mWidgetSolidColorPickPreference.setAlphaSliderEnabled(true);
+        
+        // Disable color V setting
+        mWidgetPaperColorPickPreference.setJustHsNoV(true);
 
         // We lookup also the preferences we don't use here to assert that the code and the xml
         // key strings match.
@@ -222,6 +228,7 @@ public class PreferencesActivity extends PreferenceActivity implements
     /** Called when a widget theme is selected from the widget theme dialog. */
     private final void handleWidgetThemeSelection(WidgetTheme theme) {
         mWidgetBackgroundPaperPreference.setChecked(theme.backgroundPaper);
+        mWidgetPaperColorPickPreference.onColorChanged(theme.paperColor);
         mWidgetSolidColorPickPreference.onColorChanged(theme.backgroundColor);
         mWidgetFontTypeListPreference.setValue(theme.fontType.getKey());
         mWidgetFontSizePreference.setValue(theme.fontSize);
@@ -374,13 +381,15 @@ public class PreferencesActivity extends PreferenceActivity implements
             mPageSolidColorPickPreference.setSummary("Using solid background color");
         }
 
+        PreferenceScreen widgetScreen = (PreferenceScreen) findPreference("prefWidgetScreenKey");
+        
         // Disable widget solid background color picker if widget background type is stained paper
         if (mWidgetBackgroundPaperPreference.isChecked()) {
-            mWidgetSolidColorPickPreference.setEnabled(false);
-            mWidgetSolidColorPickPreference.setSummary("Using paper background, color disabled");
+                widgetScreen.addPreference(mWidgetPaperColorPickPreference);
+                widgetScreen.removePreference(mWidgetSolidColorPickPreference);
         } else {
-            mWidgetSolidColorPickPreference.setEnabled(true);
-            mWidgetSolidColorPickPreference.setSummary("Using background color");
+            widgetScreen.removePreference(mWidgetPaperColorPickPreference);
+            widgetScreen.addPreference(mWidgetSolidColorPickPreference);
         }
 
         // For lock expiration preference, also show the time until next expiration. This require

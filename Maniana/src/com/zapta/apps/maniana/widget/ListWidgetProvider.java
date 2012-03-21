@@ -27,6 +27,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -57,70 +58,60 @@ import com.zapta.apps.maniana.widget.ListWidgetSize.OrientationInfo;
 /**
  * Base class for the task list widgets.
  * <p>
- * The code below went though several iterations to make it functional, efficient and to
- * overcome the limitations of RemoteViews (e.g. non support of custom fonts like Vavont).
- * I will try to outline here the overall design as well as non obvious considerations. If
- * you change this code or adpat it to other applications make sure to thorughly test it
- * with differnt Android versions screen sizes and orientations.
+ * The code below went though several iterations to make it functional, efficient and to overcome
+ * the limitations of RemoteViews (e.g. non support of custom fonts like Vavont). I will try to
+ * outline here the overall design as well as non obvious considerations. If you change this code or
+ * adapt it to other applications make sure to throughly test it with different Android versions
+ * screen sizes and orientations.
  * <p>
- * Main features:
- * 1. Supports custom fonts (not supported directly by Remote Views).
- * 2. Single code and layout supports multiple widget sizes and both orientation.
- * 3. Automatic and smooth orientation change when home launcher changes orientation.
- * 4. Uses efficiently a static bitmap background (paper).
- * 5. Multiple 'hot areas' on the widget that dispatch intents.
+ * Main features: 1. Supports custom fonts (not supported directly by Remote Views). 2. Single code
+ * and layout supports multiple widget sizes and both orientation. 3. Automatic and smooth
+ * orientation change when home launcher changes orientation. 4. Uses efficiently a static bitmap
+ * background (paper). 5. Multiple 'hot areas' on the widget that dispatch intents.
  * <p>
- * The main layout of this widget is widget_list_layout.xml. It is used for all supported
- * widget sizes (currently 5 of them) and both orientation. The layout contains these 
- * parts
- * 1. A place to set the static background image (paper). Note: this bitmap could be included in 
- * the image bitmap (part 2 below) but this increased the size of the dynamic bitmap files
- * and slow the widget update. 
- * 2. A place to show two bitmap images, from local file URI, for portrait and landscape 
- * views of each of the 5 widget size (total of 2 x 5 images). The visibility of the images
- * in each pair are controlled automatically by a style that enables one in portrait mode
- * and the other in landscape mode.  Further, the widget code, when it set a widget
- * RemoteViews for a widget of a certain size, make sure to disable (visibility = GONE) 
- * all the images of the other sizes.
- * 3. Hot areas that can be set to trigger intents. These areas overlay the buttons 
- * of the widget which are part of the bitmap images (part 2 above).
+ * The main layout of this widget is widget_list_layout.xml. It is used for all supported widget
+ * sizes (currently 5 of them) and both orientation. The layout contains these parts 1. A place to
+ * set the static background image (paper). Note: this bitmap could be included in the image bitmap
+ * (part 2 below) but this increased the size of the dynamic bitmap files and slow the widget
+ * update. 2. A place to show two bitmap images, from local file URI, for portrait and landscape
+ * views of each of the 5 widget size (total of 2 x 5 images). The visibility of the images in each
+ * pair are controlled automatically by a style that enables one in portrait mode and the other in
+ * landscape mode. Further, the widget code, when it set a widget RemoteViews for a widget of a
+ * certain size, make sure to disable (visibility = GONE) all the images of the other sizes. 3. Hot
+ * areas that can be set to trigger intents. These areas overlay the buttons of the widget which are
+ * part of the bitmap images (part 2 above).
  * <p>
- * Once the remote views is setup for a given widget instance, the orientation change in the
- * home launcher result in smooth widget orientation change as the widget contain
- * recreate a new widget layout with the current landscape/portrait style and applies
- * to it the commands recorded in the RemoteViews.
- * <p> 
- * When a widget of a given size is updated, the update method below creates two
- * bitmap .png files whose name encode the widget size and the orientation. Then the 
- * RemoteViews is set such that the respective two ImageViews in the main layout are 
- * set with URI to the respective files.
+ * Once the remote views is setup for a given widget instance, the orientation change in the home
+ * launcher result in smooth widget orientation change as the widget contain recreate a new widget
+ * layout with the current landscape/portrait style and applies to it the commands recorded in the
+ * RemoteViews.
  * <p>
- * The two files are rendered from a template layout that includes the widget toolbar
- * and text. The layout is populated and then rendered into two bitmaps with size
- * for landscape and portrait orientation respectively. These bitmaps are then save
- * to local files, overwriting previous files for this widget size. Note that the template
- * layout is inflated locally and not via a RemoteViews.
+ * When a widget of a given size is updated, the update method below creates two bitmap .png files
+ * whose name encode the widget size and the orientation. Then the RemoteViews is set such that the
+ * respective two ImageViews in the main layout are set with URI to the respective files.
  * <p>
- * What did not work?
- * 1. Passing the bitmap to the remote views via setImageViewBitmap(). For large widget
- * the bitmap was too big and once in a while Android just dropped it.
- * 2. Passing the bitmap to the remote views via multiple 'slices' of setImageViewBitmap and
- * ImageView. Same problem as above.
- * 3. Using only a pair of ImageView and setting their size dynamically to the current
- * widget size. Could not find a way to do it with RemoteViews.
- * 4. Letting the dynamic template bitmap file to set the size of the containing ImageView.
- * By default, the ImageView scaled the fetched bitmap file by density(). Pre scaling
- * the bitmap by this factor to compensate for the downscaling works but introduces
- * font artifcats due to the two scaling operations.
- * 5. Using a single paper background resource. When applying a background bitmap resource
- * to a view, Android can stretch it to fit the view size but does not shrink it, instead
- * it stretch the view to match the background image. As a result, background image
- * must be LE the view size. Using a single background bitmap that is smaller than
- * the smallers widget size will result in poor quality when used with larger
- * widgets due to the low resolution. For this reason, we select dynamically one out
- * of 4 or so background image resources of different size. This way we can have the
- * best match. Note that sizes are are measures in actual pixels, not DIP, so a 4x3
- * widget for example can have different sizes based on each device's density.
+ * The two files are rendered from a template layout that includes the widget toolbar and text. The
+ * layout is populated and then rendered into two bitmaps with size for landscape and portrait
+ * orientation respectively. These bitmaps are then save to local files, overwriting previous files
+ * for this widget size. Note that the template layout is inflated locally and not via a
+ * RemoteViews.
+ * <p>
+ * What did not work? 1. Passing the bitmap to the remote views via setImageViewBitmap(). For large
+ * widget the bitmap was too big and once in a while Android just dropped it. 2. Passing the bitmap
+ * to the remote views via multiple 'slices' of setImageViewBitmap and ImageView. Same problem as
+ * above. 3. Using only a pair of ImageView and setting their size dynamically to the current widget
+ * size. Could not find a way to do it with RemoteViews. 4. Letting the dynamic template bitmap file
+ * to set the size of the containing ImageView. By default, the ImageView scaled the fetched bitmap
+ * file by density(). Pre scaling the bitmap by this factor to compensate for the down scaling works
+ * but introduces font artifcats due to the two scaling operations. 5. Using a single paper
+ * background resource. When applying a background bitmap resource to a view, Android can stretch it
+ * to fit the view size but does not shrink it, instead it stretch the view to match the background
+ * image. As a result, background image must be LE the view size. Using a single background bitmap
+ * that is smaller than the smaller widget size will result in poor quality when used with larger
+ * widgets due to the low resolution. For this reason, we select dynamically one out of 4 or so
+ * background image resources of different size. This way we can have the best match. Note that
+ * sizes are are measures in actual pixels, not DIP, so a 4x3 widget for example can have different
+ * sizes based on each device's density.
  * 
  * @author Tal Dayan
  */
@@ -144,11 +135,11 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
      * widgets of the same size.
      * 
      * @param context the widget context
-     * @param appWidgetManager appWidgetManager to use. 
+     * @param appWidgetManager appWidgetManager to use.
      * @param listWidgetSize the size of the updated widget instance
      * @param appWidgetIds a list of widget instance ids to update.
-     * @param model the Maniana app model instance with the data to render. If null, the widget
-     * will display an error message.
+     * @param model the Maniana app model instance with the data to render. If null, the widget will
+     *        display an error message.
      */
     private static final void update(Context context, AppWidgetManager appWidgetManager,
             ListWidgetSize listWidgetSize, int[] appWidgetIds, @Nullable AppModel model) {
@@ -172,14 +163,13 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final LinearLayout template = (LinearLayout) layoutInflater.inflate(
                 R.layout.widget_list_template_layout, null);
 
-        // Set template background. If paper backend is enable the template rendered with
-        // a transparent background and the paper layer is placed at the back at the
-        // remote views level (reduces template bitmap size and speeds up rendering).
+        // Set template background. This can be the background solid color or the paper color.
         final boolean backgroundPaper = PreferencesTracker
                 .readWidgetBackgroundPaperPreference(sharedPreferences);
-        final int templateBackgroundColor = backgroundPaper ? 0x00000000 : PreferencesTracker
-                .readWidgetBackgroundColorPreference(sharedPreferences);
-        template.setBackgroundColor(templateBackgroundColor);
+        final int templateBackgroundColor = templateBackgroundColor(sharedPreferences,
+                backgroundPaper);
+        final View backgroundColorView = template.findViewById(R.id.widget_list_background_color);
+        backgroundColorView.setBackgroundColor(templateBackgroundColor);
 
         // TODO: cache variation or at least custom typefaces
         final WidgetItemFontVariation fontVariation = WidgetItemFontVariation
@@ -215,6 +205,28 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
     }
 
+    /** Compute the template background color. */
+    private static int templateBackgroundColor(final SharedPreferences sharedPreferences,
+            final boolean backgroundPaper) {
+        if (!backgroundPaper) {
+            return PreferencesTracker.readWidgetBackgroundColorPreference(sharedPreferences);
+        }
+
+        // Using paper background. Compute the template semi transparent background color to achieve
+        // the desire paper color.
+        final int paperColorPreference = PreferencesTracker
+                .readWidgetPaperColorPreference(sharedPreferences);
+        final float hsv[] = new float[3];
+        Color.colorToHSV(paperColorPreference, hsv);
+        // Map saturation to alpha. The paper bitmap below the template will provide
+        // the white background.
+        final int alpha = (int) (hsv[1] * 255);
+        // Saturation and value are set to max.
+        hsv[1] = 1.f;
+        hsv[2] = 1.f;
+        return Color.HSVToColor(alpha, hsv);
+    }
+
     /** Set the image of a single orientation. */
     private static final void renderOneOrientation(Context context, RemoteViews remoteViews,
             View template, ListWidgetSize listWidgetSize, Orientation orientation,
@@ -232,7 +244,17 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
         final int heightPixels = (int) context.getResources().getDimensionPixelSize(
                 orientationInfo.heightDipResourceId);
+        
+        final PaperBackground paperBackground = PaperBackground.getBestSize(
+                widthPixels, heightPixels);
+        
+        final int shadowRightPixels = backgroundPaper ? paperBackground.shadowRightPixels(widthPixels) : 0;
+        final int shadowBottomPixels = backgroundPaper ? paperBackground.shadowBottomPixels(heightPixels) : 0;
 
+        LogUtil.debug("shadow pixels: %d, %d", shadowRightPixels, shadowBottomPixels);
+        // Set padding to match the drop shadow portion of paper background, if used.
+        template.setPadding(0,  0, shadowRightPixels, shadowBottomPixels);
+        
         // NTOE: ARGB_4444 results in a smaller file than ARGB_8888 (e.g. 50K vs 150k)
         // but does not look as good.
         final Bitmap bitmap1 = Bitmap.createBitmap(widthPixels, heightPixels,
@@ -242,7 +264,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
         template.measure(MeasureSpec.makeMeasureSpec(widthPixels, MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(heightPixels, MeasureSpec.EXACTLY));
-        // TODO: substract '1' from ends?
+        // TODO: subtract '1' from ends?
         template.layout(0, 0, widthPixels, heightPixels);
 
         template.draw(canvas);
@@ -288,8 +310,6 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                 // TODO: will using the background solid color here rather than the template bitmap
                 // reduce the file size? If so, make this change.
                 if (backgroundPaper) {
-                    final PaperBackground paperBackground = PaperBackground.getBestSize(
-                            widthPixels, heightPixels);
                     remoteViews.setInt(iterBitmapResource, "setBackgroundResource",
                             paperBackground.drawableResourceId);
                 } else {
@@ -304,6 +324,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
     /**
      * Populate the given template layout with task data and/or informative messages.
+     * 
      * @param context the app context.
      * @param itemListView the inflated template layout to fill.
      * @param model the app data. If null, will be populated with a error message.
@@ -476,11 +497,11 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         remoteViews.setOnClickPendingIntent(viewId, pendingIntent);
     }
 
-    /** 
-     * Update all list widgets using a given model. 
+    /**
+     * Update all list widgets using a given model.
      * 
-     * This method is called from the main activity when model changes need to be flushed
-     * to the widgets. 
+     * This method is called from the main activity when model changes need to be flushed to the
+     * widgets.
      * 
      * @param context app context.
      * @param model app model with task data. If null, widgets will show a warning message.

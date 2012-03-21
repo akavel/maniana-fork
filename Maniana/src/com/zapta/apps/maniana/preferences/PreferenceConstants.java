@@ -42,6 +42,7 @@ public interface PreferenceConstants {
 
     // Widget
     public static final boolean DEFAULT_WIDGET_BACKGROUND_PAPER = true;
+    public static final int DEFAULT_WIDGET_PAPER_COLOR = 0xffffffff;
     public static final int DEFAULT_WIDGET_BACKGROUND_COLOR = 0x44000000;
     public static final ItemFontType DEFAULT_WIDGET_FONT_TYPE = ItemFontType.CURSIVE;
     public static final int DEFAULT_WIDGET_ITEM_FONT_SIZE = 14;
