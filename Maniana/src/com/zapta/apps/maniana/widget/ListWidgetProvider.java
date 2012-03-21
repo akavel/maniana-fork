@@ -112,6 +112,15 @@ import com.zapta.apps.maniana.widget.ListWidgetSize.OrientationInfo;
  * By default, the ImageView scaled the fetched bitmap file by density(). Pre scaling
  * the bitmap by this factor to compensate for the downscaling works but introduces
  * font artifcats due to the two scaling operations.
+ * 5. Using a single paper background resource. When applying a background bitmap resource
+ * to a view, Android can stretch it to fit the view size but does not shrink it, instead
+ * it stretch the view to match the background image. As a result, background image
+ * must be LE the view size. Using a single background bitmap that is smaller than
+ * the smallers widget size will result in poor quality when used with larger
+ * widgets due to the low resolution. For this reason, we select dynamically one out
+ * of 4 or so background image resources of different size. This way we can have the
+ * best match. Note that sizes are are measures in actual pixels, not DIP, so a 4x3
+ * widget for example can have different sizes based on each device's density.
  * 
  * @author Tal Dayan
  */
