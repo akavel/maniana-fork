@@ -227,6 +227,7 @@ public class PreferencesActivity extends PreferenceActivity implements
     /** Called when a page theme is selected from the widget theme dialog. */
     private final void handlePageThemeSelection(PageTheme theme) {
         mPageBackgroundPaperPreference.setChecked(theme.backgroundPaper);
+        mPagePaperColorPickPreference.onColorChanged(theme.paperColor);
         mPageSolidColorPickPreference.onColorChanged(theme.backgroundSolidColor);
         mPageFontTypeListPreference.setValue(theme.fontType.getKey());
         mPageFontSizePreference.setValue(theme.fontSize);
@@ -282,6 +283,8 @@ public class PreferencesActivity extends PreferenceActivity implements
                 PreferenceConstants.DEFAULT_ITEM_TEXT_COLOR);
         editor.putInt(PreferenceKind.PAGE_ITEM_COMPLETED_TEXT_COLOR.getKey(),
                 PreferenceConstants.DEFAULT_COMPLETED_ITEM_TEXT_COLOR);
+        editor.putInt(PreferenceKind.PAGE_PAPER_COLOR.getKey(),
+                PreferenceConstants.DEFAULT_PAGE_PAPER_COLOR);
         editor.putInt(PreferenceKind.PAGE_BACKGROUND_SOLID_COLOR.getKey(),
                 PreferenceConstants.DEFAULT_PAGE_BACKGROUND_SOLID_COLOR);
         editor.putInt(PreferenceKind.PAGE_ITEM_DIVIDER_COLOR.getKey(),
