@@ -34,7 +34,6 @@ import android.widget.TextView;
  * @author Tal Dayan
  */
 public class SeekBarPreference extends DialogPreference implements SeekBar.OnSeekBarChangeListener {
-    private static final String androidns = "http://schemas.android.com/apk/res/android";
 
     private final Context mContext;
 
@@ -72,12 +71,15 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
         super(context, attrs);
         mContext = context;
         mDensity = context.getResources().getDisplayMetrics().density;
-        mLabelFormat = attrs.getAttributeValue(androidns, "text");
-        mDefaultValue = attrs.getAttributeIntValue(androidns, "defaultValue", 50);
-        mMinValue = attrs.getAttributeIntValue(androidns, "minLevel", 0);
-        mMaxValue = attrs.getAttributeIntValue(androidns, "maxLevel", 100);
+        mLabelFormat = attrs.getAttributeValue(PreferenceConstants.ANDROID_NAME_SPACE, "text");
+        mDefaultValue = attrs.getAttributeIntValue(PreferenceConstants.ANDROID_NAME_SPACE,
+                "defaultValue", 50);
+        mMinValue = attrs.getAttributeIntValue(PreferenceConstants.ANDROID_NAME_SPACE, "minLevel",
+                0);
+        mMaxValue = attrs.getAttributeIntValue(PreferenceConstants.ANDROID_NAME_SPACE, "maxLevel",
+                100);
         mValue = shouldPersist() ? getPersistedInt(mDefaultValue) : mDefaultValue;
-        mSummaryFormat = attrs.getAttributeValue(androidns, "summary");
+        mSummaryFormat = attrs.getAttributeValue(PreferenceConstants.ANDROID_NAME_SPACE, "summary");
         updateSummaryWithCurrentValue();
     }
 
@@ -181,18 +183,6 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
 
     private final void updateSummaryWithCurrentValue() {
         super.setSummary(String.format(mSummaryFormat, mValue));
-    }
-
-    @Override
-    public void setSummary(CharSequence summary) {
-        // TODO(tal): capture base summary and expand with current value.
-        super.setSummary(summary + " (TBD)");
-    }
-
-    @Override
-    public void setSummary(int summaryResId) {
-        // TODO: read resource into a string and append current value.
-        super.setSummary(summaryResId);
     }
 
     /** Dip to pixel converter. */

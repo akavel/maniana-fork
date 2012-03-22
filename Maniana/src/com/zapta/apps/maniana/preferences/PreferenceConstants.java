@@ -50,4 +50,8 @@ public interface PreferenceConstants {
     public static final int DEFAULT_WIDGET_TEXT_COLOR = 0xff444444;
     public static final boolean DEFAULT_WIDGET_SHOW_TOOLBAR = true;
     public static final boolean DEFAULT_WIDGET_SINGLE_LINE = false;
+    
+    /** Android name sapce used in XML docs. */
+    public static final String ANDROID_NAME_SPACE = "http://schemas.android.com/apk/res/android";
+
 }

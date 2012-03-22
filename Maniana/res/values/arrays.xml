@@ -1,24 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string-array name="itemFontNames">
-        <item>Cursive</item>
-        <item>Elegant</item>
-        <item>San Serif</item>
-        <item>Serif</item>
-    </string-array>
-    <string-array name="itemFontValues">
-        <item>cursive</item>
-        <item>elegant</item>
-        <item>sans</item>
-        <item>serif</item>
-    </string-array>
-    <string-array name="itemFontSummaries">
-        <item>Using Cursive font</item>
-        <item>Using Elegant font</item>
-        <item>Using San Serif font</item>
-        <item>Using Serif font</item>
-    </string-array>
     <string-array name="lockPeriodNames">
         <item>Once a Week</item>
         <item>Once a Month</item>

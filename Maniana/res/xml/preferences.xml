@@ -73,11 +73,10 @@
             android:key="prefPageBackgroundSolidColorKey"
             android:summary="Page background color"
             android:title="Background Color" />
-        <ListPreference
+        <com.zapta.apps.maniana.preferences.FontPreference
             android:defaultValue="cursive"
-            android:entries="@array/itemFontNames"
-            android:entryValues="@array/itemFontValues"
             android:key="prefItemFontKey"
+            android:summary="Using %s font"
             android:title="Font" />
         <com.zapta.apps.maniana.preferences.SeekBarPreference
             android:key="prefPageItemFontSizePtKey"
@@ -127,11 +126,10 @@
             android:key="prefWidgetBackgroundColorKey"
             android:summary="List widget background color"
             android:title="Background Color" />
-        <ListPreference
+        <com.zapta.apps.maniana.preferences.FontPreference
             android:defaultValue="cursive"
-            android:entries="@array/itemFontNames"
-            android:entryValues="@array/itemFontValues"
             android:key="prefWidgetItemFontKey"
+            android:summary="Using %s font"
             android:title="Font" />
         <com.zapta.apps.maniana.preferences.SeekBarPreference
             android:key="prefWidgetItemFontSizePtKey"

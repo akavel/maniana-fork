@@ -14,7 +14,12 @@
 
 package com.zapta.apps.maniana.preferences;
 
+import static com.zapta.apps.maniana.util.Assertions.check;
+
 import javax.annotation.Nullable;
+
+import android.content.Context;
+import android.graphics.Typeface;
 
 import com.zapta.apps.maniana.util.EnumUtil;
 import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
@@ -25,20 +30,41 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
  * @author Tal Dayan
  */
 public enum ItemFontType implements KeyedEnum {
-    CURSIVE("cursive", 1.4f),
-    ELEGANT("elegant", 1.6f),
-    SAN_SERIF("sans", 1.2f),
-    SERIF("serif", 1.2f);
+    CURSIVE("Cursive", "cursive", 1.4f, null, "fonts/Vavont/Vavont-modified.ttf"),
+    ELEGANT("Elegant", "elegant", 1.6f, null, "fonts/Pompiere/Pompiere-Regular-modified.ttf"),
+    SAN_SERIF("San Serif", "sans", 1.2f, Typeface.SANS_SERIF, null),
+    SERIF("Serif", "serif", 1.2f, Typeface.SERIF, null);
 
-    /** Preference value key. Should match the values in preference xml. */
+    /** User visible name. */
+    public final String name;
+
+    /**
+     * Preference value key. Should match the values in preference xml. Persisted in user's
+     * settings.
+     */
     private final String mKey;
 
     /** Relative scale to normalize size among font types. */
     public final float scale;
 
-    private ItemFontType(String key, float scale) {
+    /** The standard typeface of null if this is an custom font. */
+    @Nullable
+    private final Typeface mSysTypeface;
+
+    /** Asset font file path or null if this is standard font. */
+    @Nullable
+    final String mAssetFilePath;
+
+    private ItemFontType(String name, String key, float scale, @Nullable Typeface sysTypeface,
+            @Nullable String assertFilePath) {
+        this.name = name;
         this.mKey = key;
         this.scale = scale;
+        this.mSysTypeface = sysTypeface;
+        this.mAssetFilePath = assertFilePath;
+
+        // Exactly one of the two should be non null.
+        check((mSysTypeface == null) != (mAssetFilePath == null));
     }
 
     @Override
@@ -50,5 +76,12 @@ public enum ItemFontType implements KeyedEnum {
     @Nullable
     public final static ItemFontType fromKey(String key, @Nullable ItemFontType fallBack) {
         return EnumUtil.fromKey(key, ItemFontType.values(), fallBack);
+    }
+
+    public final Typeface getTypeface(Context context) {
+        if (mSysTypeface != null) {
+            return mSysTypeface;
+        }
+        return Typeface.createFromAsset(context.getAssets(), mAssetFilePath);
     }
 }
