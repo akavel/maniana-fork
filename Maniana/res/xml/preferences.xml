@@ -49,7 +49,9 @@
             android:summary="Locks expiration period"
             android:title="Locks Expiration" />
     </PreferenceScreen>
-    <PreferenceScreen android:title="Pages">
+    <PreferenceScreen
+        android:title="Pages"
+        android:key="prefPagesScreenKey">
         <Preference
             android:key="prefPageSelectThemeKey"
             android:summary="Click to select a predefined page setting"
@@ -62,8 +64,14 @@
             android:summaryOn="Using paper background"
             android:title="Paper" />
         <net.margaritov.preference.colorpicker.ColorPickerPreference
+            android:defaultValue="#ffffffff"
+            android:key="prefPagePaperColorKey"
+            android:summary="Page paper color"
+            android:title="Paper Color" />
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#ffffffc0"
             android:key="prefPageBackgroundSolidColorKey"
+            android:summary="Page background color"
             android:title="Background Color" />
         <ListPreference
             android:defaultValue="cursive"
@@ -95,7 +103,9 @@
             android:summary="Color of lines between tasks"
             android:title="Task Divider Color" />
     </PreferenceScreen>
-    <PreferenceScreen android:title="List Widget" android:key="prefWidgetScreenKey">
+    <PreferenceScreen
+        android:title="List Widget"
+        android:key="prefWidgetScreenKey">
         <Preference
             android:key="prefWidgetSelectThemeKey"
             android:summary="Click to select a predefined widget setting"

@@ -48,6 +48,7 @@ public class ColorPickerPreference
 	private float mDensity = 0;
 	private boolean mAlphaSliderEnabled = false;
 	private boolean mJustHsNoV = false;
+	private float mMaxSaturation = 1.0f;
 
 	private static final String androidns = "http://schemas.android.com/apk/res/android";
 
@@ -91,8 +92,8 @@ public class ColorPickerPreference
 				}
 			}
 			// TODO: make the XML attribute to work and use them instead of the setting methods below.
-			mAlphaSliderEnabled = attrs.getAttributeBooleanValue(null, "alphaSlider", false);
-			mJustHsNoV = attrs.getAttributeBooleanValue(null, "justHsNoV", false);
+			// mAlphaSliderEnabled = attrs.getAttributeBooleanValue(null, "alphaSlider", false);
+			// mJustHsNoV = attrs.getAttributeBooleanValue(null, "justHsNoV", false);
 		}
 		mValue = mDefaultValue;
 	}
@@ -211,7 +212,7 @@ public class ColorPickerPreference
 			picker.setAlphaSliderVisible(true);
 		}
 		if (mJustHsNoV) {
-		    picker.setJustHsNoV(true);
+		    picker.setJustHsNoV(mMaxSaturation);
 		}
 		picker.show();
 
@@ -226,8 +227,9 @@ public class ColorPickerPreference
 		mAlphaSliderEnabled = enable;
 	}
 	
-    public void setJustHsNoV(boolean enable) {
-        mJustHsNoV = enable;
+    public void setJustHsNoV(float maxSaturation) {
+        mJustHsNoV = true;
+        mMaxSaturation = maxSaturation;
     }
 
 	/**

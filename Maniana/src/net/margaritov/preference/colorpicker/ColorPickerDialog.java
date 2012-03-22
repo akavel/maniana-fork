@@ -119,8 +119,8 @@ public class ColorPickerDialog
 		return mColorPicker.getColor();
 	}
 	
-	public void setJustHsNoV(boolean enable) {
-	    mColorPicker.setJustHsNoV(enable);
+	public void setJustHsNoV(float maxSaturation) {
+	    mColorPicker.setJustHsNoV(maxSaturation);
 	}
 
 	@Override

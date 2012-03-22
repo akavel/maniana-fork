@@ -109,6 +109,8 @@ public class PageView extends FrameLayout {
     private final TextView mDateTextView;
 
     private final TextView mPageTitleTextView;
+    
+    private final View mPaperColorView;
 
     public PageView(AppContext app, PageKind pageKind) {
         super(checkNotNull(app.context()));
@@ -116,6 +118,9 @@ public class PageView extends FrameLayout {
         mPageKind = pageKind;
 
         mApp.services().layoutInflater().inflate(R.layout.page_layout, this);
+        
+        mPaperColorView = findViewById(R.id.page_paper_color);
+        
 
         mPageTitleDivider = (FrameLayout) findViewById(R.id.page_title_divider);
         mUndoButtonView = (ImageButton) findViewById(R.id.page_undo_button);
@@ -267,11 +272,13 @@ public class PageView extends FrameLayout {
             final int backgroundImageId = (mPageKind.isToday()) ? R.drawable.page_bg_left
                     : R.drawable.page_bg_right;
             setBackgroundResource(backgroundImageId);
-            // Consider paper to be white for color distance purposes.
-            baseBackgroundColor = 0xffffffff;
+            final int paperColor = mApp.pref().getPagePaperColorPreference();
+            mPaperColorView.setBackgroundColor(ColorUtil.mapPaperColorPrefernce(paperColor));
+            baseBackgroundColor = paperColor;
         } else {
             final int backgroundColor = mApp.pref().getPageBackgroundSolidColorPreference();
             setBackgroundColor(backgroundColor);
+            mPaperColorView.setBackgroundColor(0x00000000);
             baseBackgroundColor = backgroundColor;
         }
 

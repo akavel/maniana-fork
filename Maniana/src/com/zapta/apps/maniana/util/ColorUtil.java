@@ -117,4 +117,17 @@ public final class ColorUtil {
         final int b = compositeColorComponent(Color.blue(argb1), a1, Color.blue(argb2), a2, a);
         return Color.argb(a, r, g, b);
     }
+    
+    /** Map background color preference to paper overlay color. */
+    public static int mapPaperColorPrefernce(int paperColorPreference) {
+        final float hsv[] = new float[3];
+        Color.colorToHSV(paperColorPreference, hsv);
+        // Map saturation to alpha. The paper bitmap below the template will provide
+        // the white background.
+        final int alpha = (int) (hsv[1] * 255);
+        // Saturation and value are set to max.
+        hsv[1] = 1.f;
+        hsv[2] = 1.f;
+        return Color.HSVToColor(alpha, hsv);
+    }
 }

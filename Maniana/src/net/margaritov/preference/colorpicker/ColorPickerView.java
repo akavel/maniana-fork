@@ -976,14 +976,12 @@ public class ColorPickerView extends View {
 	   return mJustHSNoV ? 1.f : mVal;   
 	}
 
-	public void setJustHsNoV(boolean enable) {
-	    mJustHSNoV = enable;
-	    // 0.4f is Maniana specific. Allow to control externally.
-	    mMaxSat = enable ? 0.4f : 1.f;
-	    if (enable) {
-	        // Position the marker at a convenient location near the top.
-	        mVal = 0.8f;
-	    }
+	public void setJustHsNoV(float maxSaturation) {
+	    mJustHSNoV = true;
+	    mMaxSat = maxSaturation;
+	    // Since the vertical position does not affect the value, position the 
+	    // marker at a convenient location near the top.
+	    mVal = 0.8f;
 	    invalidate();
 	}
 }

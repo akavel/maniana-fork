@@ -31,7 +31,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceScreen;
+import android.preference.PreferenceGroup;
 import android.text.format.Time;
 import android.widget.Toast;
 
@@ -63,6 +63,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     // Page
     private CheckBoxPreference mPageBackgroundPaperPreference;
+    private ColorPickerPreference mPagePaperColorPickPreference;
     private ColorPickerPreference mPageSolidColorPickPreference;
     private ListPreference mPageFontTypeListPreference;
     private SeekBarPreference mPageFontSizePreference;
@@ -94,6 +95,9 @@ public class PreferencesActivity extends PreferenceActivity implements
     /** The open dialog tracker. */
     private final PopupsTracker mPopupsTracker = new PopupsTracker();
 
+    private PreferenceSelector mPageColorPreferenceSelector;
+    private PreferenceSelector mWidgetColorPreferenceSelector;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +113,10 @@ public class PreferencesActivity extends PreferenceActivity implements
 
         // Pages
         mPageBackgroundPaperPreference = (CheckBoxPreference) findPreference(PreferenceKind.PAGE_BACKGROUND_PAPER);
+        mPagePaperColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_PAPER_COLOR);
         mPageSolidColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_BACKGROUND_SOLID_COLOR);
+        mPageColorPreferenceSelector = new PreferenceSelector((PreferenceGroup) findPreference("prefPagesScreenKey"), 
+                mPageBackgroundPaperPreference, mPagePaperColorPickPreference, mPageSolidColorPickPreference);
         mPageFontTypeListPreference = (ListPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_TYPE);
         mPageFontSizePreference = (SeekBarPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_SIZE);
         mPageTextActiveColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_ITEM_ACTIVE_TEXT_COLOR);
@@ -121,6 +128,8 @@ public class PreferencesActivity extends PreferenceActivity implements
         mWidgetBackgroundPaperPreference = (CheckBoxPreference) findPreference(PreferenceKind.WIDGET_BACKGROUND_PAPER);
         mWidgetPaperColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_PAPER_COLOR);
         mWidgetSolidColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_BACKGROUND_COLOR);
+        mWidgetColorPreferenceSelector = new PreferenceSelector((PreferenceGroup) findPreference("prefWidgetScreenKey"), 
+                mWidgetBackgroundPaperPreference, mWidgetPaperColorPickPreference, mWidgetSolidColorPickPreference);
         mWidgetFontTypeListPreference = (ListPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_TYPE);
         mWidgetFontSizePreference = (SeekBarPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_SIZE);
 
@@ -138,9 +147,10 @@ public class PreferencesActivity extends PreferenceActivity implements
         // Enabled alpha channel in colors pickers that need it.
         mPageItemDividerColorPickPreference.setAlphaSliderEnabled(true);
         mWidgetSolidColorPickPreference.setAlphaSliderEnabled(true);
-        
+
         // Disable color V setting
-        mWidgetPaperColorPickPreference.setJustHsNoV(true);
+        mPagePaperColorPickPreference.setJustHsNoV(0.3f);
+        mWidgetPaperColorPickPreference.setJustHsNoV(0.3f);
 
         // We lookup also the preferences we don't use here to assert that the code and the xml
         // key strings match.
@@ -283,7 +293,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 
         // NOTE: for checkbox whose default value is false, need to set them
         // here to false. Currently there is none.
- 
+
         // TODO: do we need to set the seekbar preferences or can we make them
         // to broadcast the reset event?
         editor.putInt(PreferenceKind.PAGE_ITEM_FONT_SIZE.getKey(),
@@ -371,26 +381,9 @@ public class PreferencesActivity extends PreferenceActivity implements
         } else {
             mApplauseLevelListPreference.setSummary("(sound is off)");
         }
-
-        // Disable page solid background color picker if page background type is stained paper
-        if (mPageBackgroundPaperPreference.isChecked()) {
-            mPageSolidColorPickPreference.setEnabled(false);
-            mPageSolidColorPickPreference.setSummary("Using paper background, color disabled");
-        } else {
-            mPageSolidColorPickPreference.setEnabled(true);
-            mPageSolidColorPickPreference.setSummary("Using solid background color");
-        }
-
-        PreferenceScreen widgetScreen = (PreferenceScreen) findPreference("prefWidgetScreenKey");
         
-        // Disable widget solid background color picker if widget background type is stained paper
-        if (mWidgetBackgroundPaperPreference.isChecked()) {
-                widgetScreen.addPreference(mWidgetPaperColorPickPreference);
-                widgetScreen.removePreference(mWidgetSolidColorPickPreference);
-        } else {
-            widgetScreen.removePreference(mWidgetPaperColorPickPreference);
-            widgetScreen.addPreference(mWidgetSolidColorPickPreference);
-        }
+        mPageColorPreferenceSelector.update();
+        mWidgetColorPreferenceSelector.update();
 
         // For lock expiration preference, also show the time until next expiration. This require
         // some computation.

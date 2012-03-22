@@ -665,6 +665,7 @@ public class Controller {
                 break;
 
             case PAGE_BACKGROUND_PAPER:
+            case PAGE_PAPER_COLOR:
             case PAGE_BACKGROUND_SOLID_COLOR:
                 mApp.view().onPageBackgroundPreferenceChange();
                 break;

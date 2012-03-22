@@ -47,6 +47,7 @@ public class PreferencesTracker implements PreferenceConstants {
 
     // Page
     private boolean mCachedPageBackgroundPaperPreference;
+    private int mCachedPagePaperColorPreference;
     private int mCachedPageBackgroundSolidColorPreference;
     private ItemFontType mCachedPageFontTypePreference;
     private int mCachedPageFontSizePreference;
@@ -74,6 +75,7 @@ public class PreferencesTracker implements PreferenceConstants {
         updateCachedPageItemActiveTextColorPreference();
         updateCachedPageItemCompletedTextColorPreference();
         updateCachedPageBackgroundPaperPreference();
+        updateCachedPagePaperColorPreference();
         updateCachedPageBackgroundSolidColorPreference();
         updateCachedPageItemDividerColorPreference();
         updateCachedLockExpierationPeriodPreference();
@@ -111,6 +113,12 @@ public class PreferencesTracker implements PreferenceConstants {
     private final void updateCachedPageBackgroundPaperPreference() {
         mCachedPageBackgroundPaperPreference = mSharedPreferences.getBoolean(
                 PreferenceKind.PAGE_BACKGROUND_PAPER.getKey(), DEFAULT_PAGE_BACKGROUND_PAPER);
+    }
+    
+    private final void updateCachedPagePaperColorPreference() {
+        mCachedPagePaperColorPreference = mSharedPreferences.getInt(
+                PreferenceKind.PAGE_PAPER_COLOR.getKey(),
+                DEFAULT_PAGE_PAPER_COLOR);
     }
 
     private final void updateCachedPageBackgroundSolidColorPreference() {
@@ -261,6 +269,10 @@ public class PreferencesTracker implements PreferenceConstants {
     public final boolean getBackgroundPaperPreference() {
         return mCachedPageBackgroundPaperPreference;
     }
+    
+    public final int getPagePaperColorPreference() {
+        return mCachedPagePaperColorPreference;
+    }
 
     public final int getPageBackgroundSolidColorPreference() {
         return mCachedPageBackgroundSolidColorPreference;
@@ -332,6 +344,9 @@ public class PreferencesTracker implements PreferenceConstants {
                 break;
             case PAGE_BACKGROUND_PAPER:
                 updateCachedPageBackgroundPaperPreference();
+                break;
+            case PAGE_PAPER_COLOR:
+                updateCachedPagePaperColorPreference();
                 break;
             case PAGE_BACKGROUND_SOLID_COLOR:
                 updateCachedPageBackgroundSolidColorPreference();

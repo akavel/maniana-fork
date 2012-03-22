@@ -27,7 +27,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -49,6 +48,7 @@ import com.zapta.apps.maniana.preferences.PreferencesTracker;
 import com.zapta.apps.maniana.preferences.WidgetItemFontVariation;
 import com.zapta.apps.maniana.services.AppServices;
 import com.zapta.apps.maniana.util.BitmapUtil;
+import com.zapta.apps.maniana.util.ColorUtil;
 import com.zapta.apps.maniana.util.DisplayUtil;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.LogUtil;
@@ -212,19 +212,9 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             return PreferencesTracker.readWidgetBackgroundColorPreference(sharedPreferences);
         }
 
-        // Using paper background. Compute the template semi transparent background color to achieve
-        // the desire paper color.
-        final int paperColorPreference = PreferencesTracker
-                .readWidgetPaperColorPreference(sharedPreferences);
-        final float hsv[] = new float[3];
-        Color.colorToHSV(paperColorPreference, hsv);
-        // Map saturation to alpha. The paper bitmap below the template will provide
-        // the white background.
-        final int alpha = (int) (hsv[1] * 255);
-        // Saturation and value are set to max.
-        hsv[1] = 1.f;
-        hsv[2] = 1.f;
-        return Color.HSVToColor(alpha, hsv);
+        // Using paper background. 
+        return ColorUtil.mapPaperColorPrefernce(PreferencesTracker
+                .readWidgetPaperColorPreference(sharedPreferences));
     }
 
     /** Set the image of a single orientation. */
@@ -251,7 +241,6 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final int shadowRightPixels = backgroundPaper ? paperBackground.shadowRightPixels(widthPixels) : 0;
         final int shadowBottomPixels = backgroundPaper ? paperBackground.shadowBottomPixels(heightPixels) : 0;
 
-        LogUtil.debug("shadow pixels: %d, %d", shadowRightPixels, shadowBottomPixels);
         // Set padding to match the drop shadow portion of paper background, if used.
         template.setPadding(0,  0, shadowRightPixels, shadowBottomPixels);
         
