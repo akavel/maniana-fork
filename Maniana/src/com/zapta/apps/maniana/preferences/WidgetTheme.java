@@ -22,9 +22,16 @@ import com.zapta.apps.maniana.R;
  * @author Tal Dayan
  */
 public class WidgetTheme extends Thumbnail {
-    // NOTE: preview images are taken on CM7 Nexus S with 4x2 widget
-    // with 80% width and 90% height on a solid #c7d4ff wallpaper and then
-    // captured with DDMS and cropped with GIMP.
+    // NOTE: preview images capture parameters:
+    // * Taken on CM7 Nexus S 
+    // * 4x3 widget 
+    // * res/values/dimen changed temporarily:
+    //   list_widget_width_4x_portrait = 370px
+    //   list_widget_height_x3_portrait = 250px
+    // * Solid #c7d4ff wallpapper 
+    // * Task list set to items shown
+    // * captured with DDMS
+    // * cropped with GIMP to 360x250.
     public static final WidgetTheme[] WIDGET_THEMES = {
         // Default theme
         new WidgetTheme("Paper Trail", R.drawable.widget_theme1_preview,
@@ -40,9 +47,9 @@ public class WidgetTheme extends Thumbnail {
                 0x44000000, ItemFontType.SAN_SERIF, 14, 0xffffff00, true, false),
         new WidgetTheme("Think Big", R.drawable.widget_theme3_preview, false, 0xffffffff,
                 0xff000000, ItemFontType.SAN_SERIF, 18, 0xff00ff00, true, true),
-        new WidgetTheme("Legally Blonde", R.drawable.widget_theme5_preview, true, 0xffffccff,
+        new WidgetTheme("Legally Blonde", R.drawable.widget_theme4_preview, true, 0xffffccff,
                 0xffff88ff, ItemFontType.CURSIVE, 18, 0xff404040, true, false),
-        new WidgetTheme("Fine Print", R.drawable.widget_theme4_preview, false, 0xffffffff,
+        new WidgetTheme("Fine Print", R.drawable.widget_theme5_preview, false, 0xffffffff,
                 0x600000ff, ItemFontType.SAN_SERIF, 12, 0xffffff00, false, true)
     };
 
