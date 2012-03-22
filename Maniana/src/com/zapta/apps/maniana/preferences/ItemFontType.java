@@ -30,6 +30,7 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
  * @author Tal Dayan
  */
 public enum ItemFontType implements KeyedEnum {
+    // NOTE: keys are persisted in preferences. Do not modify.
     CURSIVE("Cursive", "cursive", 1.4f, 0.9f, null, "fonts/Vavont/Vavont-modified.ttf"),
     ELEGANT("Elegant", "elegant", 1.6f, 1.0f, null, "fonts/Pompiere/Pompiere-Regular-modified.ttf"),
     SAN_SERIF("San Serif", "sans", 1.2f, 1.1f, Typeface.SANS_SERIF, null),

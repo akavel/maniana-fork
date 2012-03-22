@@ -73,7 +73,7 @@ public class WidgetItemFontVariation {
         final int fontSize = (int) (rawFontSize * fontType.scale);
 
         return new WidgetItemFontVariation(fontType.getTypeface(context), color, fontSize,
-                fontType.scale);
+                fontType.lineSpacingMultipler);
     }
 
     public int getTextSize() {
