@@ -28,13 +28,6 @@ import android.widget.TextView;
  * @author Tal Dayan
  */
 public class WidgetItemFontVariation {
-    // TODO: share code with PageItemFontVariation. E.g. using a common base class.
-
-    /** Path to page title fonts relative to assets directory. */
-    private static final String CURSIVE_ITEM_FONT_ASSET_PATH = "fonts/Vavont/Vavont-modified.ttf";
-
-    private static final String ELEGANT_ITEM_FONT_ASSET_PATH = "fonts/Pompiere/Pompiere-Regular-modified.ttf";
-
     private final Typeface mTypeFace;
     private final int mColor;
     private final int mTextSize;
@@ -45,18 +38,14 @@ public class WidgetItemFontVariation {
      * 
      * @param typeFace the typeface t use
      * @param color the text color for non completed items.
-     * @param colorCompleted the text color for completed items.
      * @param textSize the text size.
      * @param lineSpacingMultiplier The line spacing multiplier to use.
-     * @param topBottomPadding padding (in dip) at top and bottom of text.
      */
     private WidgetItemFontVariation(Typeface typeFace, int color, int textSize,
             float lineSpacingMultiplier) {
         this.mTypeFace = typeFace;
         this.mColor = color;
-        // this.mColorCompleted = colorCompleted;
         this.mTextSize = textSize;
-        // this.mTopBottomPadding = topBottomPadding;
         this.mLineSpacingMultiplier = lineSpacingMultiplier;
     }
 
@@ -83,20 +72,8 @@ public class WidgetItemFontVariation {
                 .readWidgetItemFontSizePreference(sharedPreferences);
         final int fontSize = (int) (rawFontSize * fontType.scale);
 
-        switch (fontType) {
-            case CURSIVE:
-                return new WidgetItemFontVariation(Typeface.createFromAsset(context.getAssets(),
-                        CURSIVE_ITEM_FONT_ASSET_PATH), color, fontSize, 0.9f);
-            case ELEGANT:
-                return new WidgetItemFontVariation(Typeface.createFromAsset(context.getAssets(),
-                        ELEGANT_ITEM_FONT_ASSET_PATH), color, fontSize, 0.9f);
-            case SAN_SERIF:
-                return new WidgetItemFontVariation(Typeface.SANS_SERIF, color, fontSize, 1.1f);
-            case SERIF:
-                return new WidgetItemFontVariation(Typeface.SERIF, color, fontSize, 1.1f);
-            default:
-                throw new RuntimeException("Unknown widget font type: " + fontType);
-        }
+        return new WidgetItemFontVariation(fontType.getTypeface(context), color, fontSize,
+                fontType.scale);
     }
 
     public int getTextSize() {

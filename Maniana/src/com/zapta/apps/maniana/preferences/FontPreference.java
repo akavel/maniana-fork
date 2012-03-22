@@ -34,7 +34,9 @@ import android.widget.CheckedTextView;
  */
 public class FontPreference extends DialogPreference implements DialogInterface.OnClickListener {
 
-    private final ItemFontType mDefaultFont;
+    private final ItemFontType mDefaultValue;
+    
+    private ItemFontType mValue;
 
     /**
      * Format string for preference summary string (when dialog is closed). Can contain a single %s
@@ -91,22 +93,20 @@ public class FontPreference extends DialogPreference implements DialogInterface.
         super(context, attrs);
 
         final String defaultFontkey = attrs.getAttributeValue(PreferenceConstants.ANDROID_NAME_SPACE, "defaultValue");
-        mDefaultFont = ItemFontType.fromKey(defaultFontkey, null);
-        checkNotNull(mDefaultFont, "Key: [%s]", defaultFontkey);
+        mDefaultValue = ItemFontType.fromKey(defaultFontkey, null);
+        checkNotNull(mDefaultValue, "Key: [%s]", defaultFontkey);
+        
+        mValue = mDefaultValue;
 
         mSummaryFormat = attrs.getAttributeValue(PreferenceConstants.ANDROID_NAME_SPACE, "summary");
         updateSummaryWithCurrentValue();
-    }
-
-    private final void updateSummaryWithCurrentValue() {
-        super.setSummary(String.format(mSummaryFormat, getCurrentValue().name));
     }
 
     @Override
     protected void onPrepareDialogBuilder(Builder builder) {
         super.onPrepareDialogBuilder(builder);
         final FontAdapter adapter = new FontAdapter();
-        builder.setSingleChoiceItems(adapter, getCurrentValue().ordinal(), this);
+        builder.setSingleChoiceItems(adapter, mValue.ordinal(), this);
         builder.setPositiveButton(null, null);
     }
 
@@ -122,24 +122,33 @@ public class FontPreference extends DialogPreference implements DialogInterface.
     @Override
     protected void onSetInitialValue(boolean restore, Object defaultValue) {
         super.onSetInitialValue(restore, defaultValue);
+        if (restore) {
+            mValue = shouldPersist() ? readValue() : mDefaultValue;
+        } else {
+            mValue = ItemFontType.fromKey((String)defaultValue, mDefaultValue);
+        }
         updateSummaryWithCurrentValue();
     }
 
     public final void setValue(ItemFontType font) {
+        mValue = font;
         Editor editor = getSharedPreferences().edit();
         editor.putString(getKey(), font.getKey());
         editor.commit();
         updateSummaryWithCurrentValue();
     }
 
-    private final ItemFontType getCurrentValue() {
+    private final ItemFontType readValue() {
         final SharedPreferences sharedPreferences = getSharedPreferences();
         if (sharedPreferences == null) {
             // Shared preferences not bound yet
-            return mDefaultFont;
+            return mDefaultValue;
         }
-
-        final String selectedFontKey = sharedPreferences.getString(getKey(), mDefaultFont.getKey());
-        return ItemFontType.fromKey(selectedFontKey, mDefaultFont);
+        final String selectedFontKey = sharedPreferences.getString(getKey(), mDefaultValue.getKey());
+        return ItemFontType.fromKey(selectedFontKey, mDefaultValue);
+    }
+    
+    private final void updateSummaryWithCurrentValue() {
+        super.setSummary(String.format(mSummaryFormat, mValue.name));
     }
 }

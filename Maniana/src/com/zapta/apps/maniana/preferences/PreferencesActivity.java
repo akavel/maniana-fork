@@ -149,8 +149,8 @@ public class PreferencesActivity extends PreferenceActivity implements
         mWidgetSolidColorPickPreference.setAlphaSliderEnabled(true);
 
         // Disable color V setting
-        mPagePaperColorPickPreference.setJustHsNoV(0.3f);
-        mWidgetPaperColorPickPreference.setJustHsNoV(0.3f);
+        mPagePaperColorPickPreference.setJustHsNoV(0.2f);
+        mWidgetPaperColorPickPreference.setJustHsNoV(0.2f);
 
         // We lookup also the preferences we don't use here to assert that the code and the xml
         // key strings match.
@@ -296,9 +296,14 @@ public class PreferencesActivity extends PreferenceActivity implements
 
         // NOTE: for checkbox whose default value is false, need to set them
         // here to false. Currently there is none.
+        
+        // Set font preferences to broadcast the change enve.
+        editor.putString(PreferenceKind.PAGE_ITEM_FONT_TYPE.getKey(),
+                PreferenceConstants.DEFAULT_PAGE_FONT_TYPE.getKey());
+        editor.putString(PreferenceKind.WIDGET_ITEM_FONT_TYPE.getKey(),
+                PreferenceConstants.DEFAULT_WIDGET_FONT_TYPE.getKey());
 
-        // TODO: do we need to set the seekbar preferences or can we make them
-        // to broadcast the reset event?
+        // Set the seekbar preferences to broadcast the change event
         editor.putInt(PreferenceKind.PAGE_ITEM_FONT_SIZE.getKey(),
                 PreferenceConstants.DEFAULT_PAGE_FONT_SIZE);
         editor.putInt(PreferenceKind.WIDGET_ITEM_FONT_SIZE.getKey(),

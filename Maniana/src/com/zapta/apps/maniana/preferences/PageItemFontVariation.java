@@ -25,14 +25,12 @@ import android.widget.TextView;
  * Instances of this class cache the various parameters needed to set the currently selected item
  * font. This class is immutable.
  * 
+ * TODO: can we merge WidgetItemFontVariant and PageItemFontVariant into the same class?
+ * 
  * @author Tal Dayan
  */
 public class PageItemFontVariation {
-    /** Path to page title fonts relative to assets directory. */
-    private static final String CURSIVE_ITEM_FONT_ASSET_PATH = "fonts/Vavont/Vavont-modified.ttf";
-
-    private static final String ELEGANT_ITEM_FONT_ASSET_PATH = "fonts/Pompiere/Pompiere-Regular-modified.ttf";
-
+    
     private final Typeface mTypeFace;
     private final int mColor;
     private final int mColorCompleted;
@@ -92,21 +90,7 @@ public class PageItemFontVariation {
         final int rawFontSize = prefTracker.getItemFontSizePreference();
         final int fontSize = (int) (rawFontSize * fontType.scale);
 
-        switch (fontType) {
-            case CURSIVE:
-                return new PageItemFontVariation(Typeface.createFromAsset(context.getAssets(),
-                        CURSIVE_ITEM_FONT_ASSET_PATH), color, completedColor, fontSize, 0.9f, 10);
-            case ELEGANT:
-                return new PageItemFontVariation(Typeface.createFromAsset(context.getAssets(),
-                        ELEGANT_ITEM_FONT_ASSET_PATH), color, completedColor, fontSize, 1.0f, 10);
-            case SAN_SERIF:
-                return new PageItemFontVariation(Typeface.SANS_SERIF, color, completedColor,
-                        fontSize, 1.1f, 10);
-            case SERIF:
-                return new PageItemFontVariation(Typeface.SERIF, color, completedColor, fontSize,
-                        1.1f, 10);
-            default:
-                throw new RuntimeException("Unknown font type: " + fontType);
-        }
+        return new PageItemFontVariation(fontType.getTypeface(context), color, completedColor,
+                fontSize, fontType.lineSpacingMultipler, 10);
     }
 }

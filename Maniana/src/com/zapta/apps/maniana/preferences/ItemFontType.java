@@ -30,10 +30,10 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
  * @author Tal Dayan
  */
 public enum ItemFontType implements KeyedEnum {
-    CURSIVE("Cursive", "cursive", 1.4f, null, "fonts/Vavont/Vavont-modified.ttf"),
-    ELEGANT("Elegant", "elegant", 1.6f, null, "fonts/Pompiere/Pompiere-Regular-modified.ttf"),
-    SAN_SERIF("San Serif", "sans", 1.2f, Typeface.SANS_SERIF, null),
-    SERIF("Serif", "serif", 1.2f, Typeface.SERIF, null);
+    CURSIVE("Cursive", "cursive", 1.4f, 0.9f, null, "fonts/Vavont/Vavont-modified.ttf"),
+    ELEGANT("Elegant", "elegant", 1.6f, 1.0f, null, "fonts/Pompiere/Pompiere-Regular-modified.ttf"),
+    SAN_SERIF("San Serif", "sans", 1.2f, 1.1f, Typeface.SANS_SERIF, null),
+    SERIF("Serif", "serif", 1.2f, 1.1f, Typeface.SERIF, null);
 
     /** User visible name. */
     public final String name;
@@ -46,6 +46,8 @@ public enum ItemFontType implements KeyedEnum {
 
     /** Relative scale to normalize size among font types. */
     public final float scale;
+    
+    public final float lineSpacingMultipler;
 
     /** The standard typeface of null if this is an custom font. */
     @Nullable
@@ -55,11 +57,12 @@ public enum ItemFontType implements KeyedEnum {
     @Nullable
     final String mAssetFilePath;
 
-    private ItemFontType(String name, String key, float scale, @Nullable Typeface sysTypeface,
+    private ItemFontType(String name, String key, float scale, float lineSpacingMultipler, @Nullable Typeface sysTypeface,
             @Nullable String assertFilePath) {
         this.name = name;
         this.mKey = key;
         this.scale = scale;
+        this.lineSpacingMultipler = lineSpacingMultipler;
         this.mSysTypeface = sysTypeface;
         this.mAssetFilePath = assertFilePath;
 
