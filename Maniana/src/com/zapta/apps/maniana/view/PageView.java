@@ -253,8 +253,8 @@ public class PageView extends FrameLayout {
         mDateTextView.setText(mApp.dateTracker().getUserMonthDayString());
     }
 
-    public final void onItemFontVariationPreferenceChange() {
-        mItemListView.onItemFontVariationPreferenceChange();
+    public final void onPageItemFontVariationPreferenceChange() {
+        mItemListView.onPageItemFontVariationPreferenceChange();
     }
 
     /**

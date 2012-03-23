@@ -55,7 +55,7 @@ public class PreferencesTracker implements PreferenceConstants {
     private int mCachedPageItemCompletedTextColorPreference;
     private int mCachedPageItemDividerColorPreference;
 
-    private PageItemFontVariation mCachedItemFontVariation;
+    private ItemFontVariation mCachedPageItemFontVariation;
 
     // This is a hack to keep the listener from being garbage collected per
     // http://tinyurl.com/blkycrk. Should be unregistered explicitly when main activity is
@@ -91,7 +91,7 @@ public class PreferencesTracker implements PreferenceConstants {
 
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this.mListener);
 
-        onItemFontVariationPreferenceChange();
+        onPageItemFontVariationPreferenceChange();
     }
 
     private final void updateCachedAllowSoundsPreference() {
@@ -413,17 +413,17 @@ public class PreferencesTracker implements PreferenceConstants {
      * Update cached item font variation using current preferences. Should be called whenever the
      * item font preference changes
      */
-    public final void onItemFontVariationPreferenceChange() {
-        mCachedItemFontVariation = PageItemFontVariation.newFromCurrentPreferences(mApp.context(),
+    public final void onPageItemFontVariationPreferenceChange() {
+        mCachedPageItemFontVariation = ItemFontVariation.newFromPagePreferences(mApp.context(),
                 this);
     }
 
     /** Get current item font variation */
-    public final PageItemFontVariation getItemFontVariation() {
-        return mCachedItemFontVariation;
+    public final ItemFontVariation getPageItemFontVariation() {
+        return mCachedPageItemFontVariation;
     }
 
-    /** Relase resources. This is the last call to this instance. */
+    /** Release resources. This is the last call to this instance. */
     public void release() {
         // Per http://tinyurl.com/blkycrk
         mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this.mListener);

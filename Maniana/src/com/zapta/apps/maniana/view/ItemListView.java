@@ -882,7 +882,7 @@ public class ItemListView extends ListView {
     }
 
     /** Update all views to reflect change in item font preferences. */
-    public final void onItemFontVariationPreferenceChange() {
+    public final void onPageItemFontVariationPreferenceChange() {
         // This causes this list view to call the adapter.getView() for each of
         // its child item views. This will cause the item fonts to be updated to
         // the latest font preference.

@@ -45,7 +45,7 @@ import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.model.ItemModelReadOnly;
 import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
 import com.zapta.apps.maniana.preferences.PreferencesTracker;
-import com.zapta.apps.maniana.preferences.WidgetItemFontVariation;
+import com.zapta.apps.maniana.preferences.ItemFontVariation;
 import com.zapta.apps.maniana.services.AppServices;
 import com.zapta.apps.maniana.util.BitmapUtil;
 import com.zapta.apps.maniana.util.ColorUtil;
@@ -172,8 +172,8 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         backgroundColorView.setBackgroundColor(templateBackgroundColor);
 
         // TODO: cache variation or at least custom typefaces
-        final WidgetItemFontVariation fontVariation = WidgetItemFontVariation
-                .newFromCurrentPreferences(context, sharedPreferences);
+        final ItemFontVariation fontVariation = ItemFontVariation
+                .newFromWidgetPreferences(context, sharedPreferences);
 
         // Set template view toolbar
         final boolean toolbarEanbled = PreferencesTracker
@@ -322,7 +322,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
      * @param layoutInflater an inflater to use to inflate layouts of individual tasks.
      */
     private static final void populateTemplateItemList(Context context, LinearLayout itemListView,
-            @Nullable AppModel model, WidgetItemFontVariation fontVariation,
+            @Nullable AppModel model, ItemFontVariation fontVariation,
             SharedPreferences sharedPreferences, LayoutInflater layoutInflater) {
         // For debugging
         final boolean debugTimestamp = false;
@@ -384,7 +384,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             }
 
             textView.setText(item.getText());
-            fontVariation.apply(textView, item.isCompleted());
+            fontVariation.apply(textView, item.isCompleted(), true);
 
             // If color is NONE show a gray solid color to help visually
             // grouping item text lines.
@@ -400,7 +400,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
      * actual tasks.
      */
     private static final void addTemplateMessageItem(Context context, LinearLayout itemListView,
-            String message, WidgetItemFontVariation fontVariation, LayoutInflater layoutInflater) {
+            String message, ItemFontVariation fontVariation, LayoutInflater layoutInflater) {
 
         final LinearLayout itemView = (LinearLayout) layoutInflater.inflate(
                 R.layout.widget_list_template_item_layout, null);
@@ -410,7 +410,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         // TODO: setup message text using widget font size preference?
         textView.setSingleLine(false);
         textView.setText(message);
-        fontVariation.apply(textView, false);
+        fontVariation.apply(textView, false, true);
         colorView.setVisibility(View.GONE);
 
         itemListView.addView(itemView);

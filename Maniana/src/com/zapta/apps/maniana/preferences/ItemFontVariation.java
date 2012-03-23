@@ -15,6 +15,7 @@
 package com.zapta.apps.maniana.preferences;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.widget.TextView;
@@ -25,11 +26,9 @@ import android.widget.TextView;
  * Instances of this class cache the various parameters needed to set the currently selected item
  * font. This class is immutable.
  * 
- * TODO: can we merge WidgetItemFontVariant and PageItemFontVariant into the same class?
- * 
  * @author Tal Dayan
  */
-public class PageItemFontVariation {
+public class ItemFontVariation {
     
     private final Typeface mTypeFace;
     private final int mColor;
@@ -48,7 +47,7 @@ public class PageItemFontVariation {
      * @param lineSpacingMultiplier The line spacing multiplier to use.
      * @param topBottomPadding padding (in dip) at top and bottom of text.
      */
-    private PageItemFontVariation(Typeface typeFace, int color, int colorCompleted, int textSize,
+    private ItemFontVariation(Typeface typeFace, int color, int colorCompleted, int textSize,
             float lineSpacingMultiplier, int topBottomPadding) {
         this.mTypeFace = typeFace;
         this.mColor = color;
@@ -81,7 +80,7 @@ public class PageItemFontVariation {
         }
     }
 
-    public static final PageItemFontVariation newFromCurrentPreferences(Context context,
+    public static final ItemFontVariation newFromPagePreferences(Context context,
             PreferencesTracker prefTracker) {
         final ItemFontType fontType = prefTracker.getItemFontTypePreference();
         final int color = prefTracker.getPageItemActiveTextColorPreference();
@@ -90,7 +89,27 @@ public class PageItemFontVariation {
         final int rawFontSize = prefTracker.getItemFontSizePreference();
         final int fontSize = (int) (rawFontSize * fontType.scale);
 
-        return new PageItemFontVariation(fontType.getTypeface(context), color, completedColor,
+        // TODO: normalize '10' by device density?
+        return new ItemFontVariation(fontType.getTypeface(context), color, completedColor,
                 fontSize, fontType.lineSpacingMultipler, 10);
+    }
+    
+    public static final ItemFontVariation newFromWidgetPreferences(Context context,
+            SharedPreferences sharedPreferences) {
+        final ItemFontType fontType = PreferencesTracker
+                .readWidgetFontTypeFontTypePreference(sharedPreferences);
+        final int color = PreferencesTracker.readWidgetTextColorPreference(sharedPreferences);
+        final int completedColor = PreferencesTracker.readWidgetCompletedTextColorPreference(sharedPreferences);
+
+        final int rawFontSize = PreferencesTracker
+                .readWidgetItemFontSizePreference(sharedPreferences);
+        final int fontSize = (int) (rawFontSize * fontType.scale);
+
+        return new ItemFontVariation(fontType.getTypeface(context), color, completedColor, fontSize,
+                fontType.lineSpacingMultipler, 0);
+    }
+    
+    public final int getTextSize() {
+        return mTextSize;
     }
 }

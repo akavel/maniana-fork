@@ -145,9 +145,9 @@ public class AppView {
         mTodayPageView.onDateChange();
     }
 
-    public final void onItemFontVariationPreferenceChange() {
-        mTodayPageView.onItemFontVariationPreferenceChange();
-        mTomorowPageView.onItemFontVariationPreferenceChange();
+    public final void onPageItemFontVariationPreferenceChange() {
+        mTodayPageView.onPageItemFontVariationPreferenceChange();
+        mTomorowPageView.onPageItemFontVariationPreferenceChange();
     }
 
     public final void onPageBackgroundPreferenceChange() {

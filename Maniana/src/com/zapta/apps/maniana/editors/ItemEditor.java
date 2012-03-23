@@ -89,7 +89,7 @@ public class ItemEditor extends Dialog implements TrackablePopup {
         mEditText.setText(initialText);
 
         // Always using non completed variation, even if the item is completed.
-        app.pref().getItemFontVariation().apply(mEditText, false, false);
+        app.pref().getPageItemFontVariation().apply(mEditText, false, false);
 
         EventAdapter eventAdapter = new EventAdapter();
         setOnDismissListener(eventAdapter);
