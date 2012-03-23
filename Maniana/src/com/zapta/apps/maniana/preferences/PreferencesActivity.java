@@ -80,7 +80,6 @@ public class PreferencesActivity extends PreferenceActivity implements
     private SeekBarPreference mWidgetFontSizePreference;
     private ColorPickerPreference mWidgetTextColorPickPreference;
     private CheckBoxPreference mWidgetShowToolbarPreference;
-    private CheckBoxPreference mWidgetSingleLinePreference;
     private Preference mWidgetSelectThemePreference;
 
     // Miscellaneous
@@ -135,7 +134,6 @@ public class PreferencesActivity extends PreferenceActivity implements
 
         mWidgetTextColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_ITEM_TEXT_COLOR);
         mWidgetShowToolbarPreference = (CheckBoxPreference) findPreference(PreferenceKind.WIDGET_SHOW_TOOLBAR);
-        mWidgetSingleLinePreference = (CheckBoxPreference) findPreference(PreferenceKind.WIDGET_SINGLE_LINE);
         mWidgetSelectThemePreference = findPreference(PreferenceKind.WIDGET_SELECT_THEME);
 
         // Miscellaneous
@@ -157,6 +155,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         findPreference(PreferenceKind.AUTO_SORT);
         findPreference(PreferenceKind.AUTO_DAILY_CLEANUP);
         findPreference(PreferenceKind.WIDGET_SHOW_COMPLETED_ITEMS);
+        findPreference(PreferenceKind.WIDGET_SINGLE_LINE);
 
         mPageSelectThemePreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
@@ -246,10 +245,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         mWidgetFontSizePreference.setValue(theme.fontSize);
         mWidgetTextColorPickPreference.onColorChanged(theme.textColor);
         mWidgetShowToolbarPreference.setChecked(theme.showToolbar);
-        // Show completed items preferences is NOT modified by the them.
-        // TODO: make singleLine theme independent
-        mWidgetSingleLinePreference.setChecked(theme.singleLine);
-
+        // Show completed items preferences and show single line are NOT modified by the theme.
     }
 
     /** Handle user selecting reset settings in the settings activity */
