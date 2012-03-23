@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--  NOTE: version code is incremented once per official Market release -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zapta.apps.maniana"
-    android:versionCode="19"
-    android:versionName="1.01.19" >
+    android:versionCode="20"
+    android:versionName="1.01.20.d01" >
 
     <uses-sdk
         android:minSdkVersion="8"
