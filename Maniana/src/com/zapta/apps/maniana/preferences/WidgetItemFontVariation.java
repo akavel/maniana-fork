@@ -16,6 +16,7 @@ package com.zapta.apps.maniana.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.widget.TextView;
 
@@ -55,11 +56,19 @@ public class WidgetItemFontVariation {
      * @param textView the item's text view.
      * @param isCompleted true if the item is completed.
      */
-    public void apply(TextView textView) {
+    public void apply(TextView textView, boolean isCompleted) {
         textView.setTypeface(mTypeFace);
-        textView.setTextColor(mColor);
+      
         textView.setTextSize(mTextSize);
         textView.setLineSpacing(0.0f, mLineSpacingMultiplier);
+        if (isCompleted) { 
+            // TODO: setup user selectable color for completed items.
+            textView.setTextColor(mColor);
+            textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            textView.setTextColor(mColor);
+            textView.setPaintFlags(textView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
+        }
     }
 
     public static final WidgetItemFontVariation newFromCurrentPreferences(Context context,

@@ -22,5 +22,9 @@ package com.zapta.apps.maniana.model;
 public enum PushScope {
     NONE,
     UNLOCKED_ONLY,
-    ALL
+    ALL;
+    
+  public final boolean isActive() {
+      return this != NONE;
+  }
 }

@@ -152,6 +152,12 @@
             android:title="Show Toolbar" />
         <CheckBoxPreference
             android:defaultValue="false"
+            android:key="prefWidgetShowCompletedKey"
+            android:summaryOff="Showing active tasks only"
+            android:summaryOn="Showing also completed tasks"
+            android:title="Show Completed Tasks" />
+        <CheckBoxPreference
+            android:defaultValue="false"
             android:key="prefWidgetSingleLineKey"
             android:summaryOff="Wrapping longer tasks onto a second line"
             android:summaryOn="Limiting tasks to a single line"

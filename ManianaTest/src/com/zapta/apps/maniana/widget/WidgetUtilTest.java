@@ -44,7 +44,7 @@ public class WidgetUtilTest extends TestCase {
         new ItemModel("item4", false, true, ItemColor.NONE),
         new ItemModel("item5", true, true, ItemColor.NONE) };
 
-    public void testComputePushScope() {
+    public void testSelectTodaysActiveItemsByPushScope() {
         AppModel model = new AppModel();
 
         for (int i = 0; i < ITEMS.length; i++) {
@@ -75,8 +75,9 @@ public class WidgetUtilTest extends TestCase {
                     throw new RuntimeException("Unknown push scope kind: " + pushScope);
             }
 
+            // TODO: test also the cases where completed items are included with and without sort.
             List<ItemModelReadOnly> actualItems = WidgetUtil.selectTodaysActiveItemsByPushScope(
-                            model, pushScope);
+                            model, pushScope, false, false);
 
             assertEquals(expectedItemIndexes.length, actualItems.size());
             for (int i = 0; i < actualItems.size(); i++) {

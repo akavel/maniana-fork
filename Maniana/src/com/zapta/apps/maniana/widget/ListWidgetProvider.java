@@ -337,17 +337,24 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             return;
         }
 
+        // Read relevant preferences
         final LockExpirationPeriod lockExpirationPeriod = PreferencesTracker
-                .readLockExpierationPeriodPreference(sharedPreferences);
+                .readLockExpierationPeriodPreference(sharedPreferences);        
+        final boolean removeCompletedOnPush = PreferencesTracker.readAutoDailyCleanupPreference(sharedPreferences);       
+        final boolean includeCompletedItems = PreferencesTracker.readWidgetShowCompletedItemsPreference(sharedPreferences);       
+        final boolean sortItems = includeCompletedItems ? PreferencesTracker.readAutoSortPreference(sharedPreferences) : false;
+        
         // TODO: reorganize the code. No need to read lock preference if date now is same as the
         // model
         Time now = new Time();
         now.setToNow();
 
         final List<ItemModelReadOnly> items = WidgetUtil.selectTodaysActiveItemsByTime(model, now,
-                lockExpirationPeriod);
+                lockExpirationPeriod, removeCompletedOnPush, includeCompletedItems, sortItems);
+        
         if (items.isEmpty()) {
-            addTemplateMessageItem(context, itemListView, "(no active tasks)", fontVariation,
+            final String emptyMessage = includeCompletedItems ? "(no tasks)" : "(no active tasks)";
+            addTemplateMessageItem(context, itemListView, emptyMessage, fontVariation,
                     layoutInflater);
             return;
         }
@@ -356,7 +363,6 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                 .readWidgetSingleLinePreference(sharedPreferences);
 
         for (ItemModelReadOnly item : items) {
-
             final LinearLayout itemView = (LinearLayout) layoutInflater.inflate(
                     R.layout.widget_list_template_item_layout, null);
             final TextView textView = (TextView) itemView.findViewById(R.id.widget_item_text_view);
@@ -378,7 +384,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             }
 
             textView.setText(item.getText());
-            fontVariation.apply(textView);
+            fontVariation.apply(textView, item.isCompleted());
 
             // If color is NONE show a gray solid color to help visually
             // grouping item text lines.
@@ -404,7 +410,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         // TODO: setup message text using widget font size preference?
         textView.setSingleLine(false);
         textView.setText(message);
-        fontVariation.apply(textView);
+        fontVariation.apply(textView, false);
         colorView.setVisibility(View.GONE);
 
         itemListView.addView(itemView);

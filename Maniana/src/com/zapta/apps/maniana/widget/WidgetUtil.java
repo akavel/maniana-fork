@@ -25,6 +25,8 @@ import com.zapta.apps.maniana.model.ModelUtil;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.model.PushScope;
 import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
+import com.zapta.apps.maniana.util.LogUtil;
+import com.zapta.apps.maniana.util.VisibleForTesting;
 
 /**
  * Common widget related utilities.
@@ -39,31 +41,44 @@ public abstract class WidgetUtil {
 
     /** Return a list of TODAY's active items subject to time based push. */
     public static final List<ItemModelReadOnly> selectTodaysActiveItemsByTime(AppModel model,
-            Time timeNow, LockExpirationPeriod lockExpirationPeriod) {
+            Time timeNow, LockExpirationPeriod lockExpirationPeriod,
+            boolean cleanCompletedTasksOnPush, boolean includeCompletedItems, boolean sortItems) {
         final PushScope pushScope = ModelUtil.computePushScope(model.getLastPushDateStamp(),
                 timeNow, lockExpirationPeriod);
-        return selectTodaysActiveItemsByPushScope(model, pushScope);
+        final boolean activeCleanup = pushScope.isActive() && cleanCompletedTasksOnPush;
+        final boolean completedItemsIncluded = includeCompletedItems && !activeCleanup;
+        final boolean needToSort = completedItemsIncluded && sortItems;
+        return selectTodaysActiveItemsByPushScope(model, pushScope, completedItemsIncluded,
+                needToSort);
     }
 
     /** Return a list of active TODAY's items subject given push scope */
-    public static final List<ItemModelReadOnly> selectTodaysActiveItemsByPushScope(AppModel model,
-            PushScope pushScope) {
-        final List<ItemModelReadOnly> result = new ArrayList<ItemModelReadOnly>(
+    @VisibleForTesting
+    static final List<ItemModelReadOnly> selectTodaysActiveItemsByPushScope(AppModel model,
+            PushScope pushScope, boolean completedItemsIncluded, boolean sortItems) {
+        LogUtil.debug("select: %s, %s, %s", pushScope, completedItemsIncluded, sortItems);
+        // If sorting, we collect the active and completed items in seperate list and contact
+        // them at the end. Otherwise, we collect them in a single list.
+        final List<ItemModelReadOnly> mainList = new ArrayList<ItemModelReadOnly>(
                 model.getItemCount());
+        final List<ItemModelReadOnly> secondaryList = sortItems ? new ArrayList<ItemModelReadOnly>(
+                model.getItemCount()) : mainList;
 
-        // If needed, collect items from Tomorow
+        // If needed, collect items from Tomorrow
         if (pushScope != PushScope.NONE) {
             final boolean pushAlsoLocked = (pushScope == PushScope.ALL);
             final int n = model.getPageItemCount(PageKind.TOMOROW);
             for (int i = 0; i < n; i++) {
                 final ItemModelReadOnly item = model.getItemReadOnly(PageKind.TOMOROW, i);
-                // We ignore completed items since the widget does not show them anyway
-                if (!item.isCompleted()) {
-                    if (!item.isLocked() || pushAlsoLocked) {
-                        // NOTE: we don't change the item to unlocked. The widget ignore that
-                        // state. The unlock will happen at the main activity when the user
-                        // will open it the next time.
-                        result.add(item);
+                if ((!item.isLocked() || pushAlsoLocked)
+                        && (!item.isCompleted() || completedItemsIncluded)) {
+                    // NOTE: we don't change the item to unlocked. The widget ignore that
+                    // state. The unlock will happen at the main activity when the user
+                    // will open it the next time.
+                    if (item.isCompleted()) {
+                        secondaryList.add(item);
+                    } else {
+                        mainList.add(item);
                     }
                 }
             }
@@ -74,13 +89,21 @@ public abstract class WidgetUtil {
             final int n = model.getPageItemCount(PageKind.TODAY);
             for (int i = 0; i < n; i++) {
                 final ItemModelReadOnly item = model.getItemReadOnly(PageKind.TODAY, i);
-                if (!item.isCompleted()) {
-                    result.add(item);
+                if (!item.isCompleted() || completedItemsIncluded) {
+                    if (item.isCompleted()) {
+                        secondaryList.add(item);
+                    } else {
+                        mainList.add(item);
+                    }
                 }
             }
         }
 
-        return result;
+        if (sortItems) {
+            mainList.addAll(secondaryList);
+        }
+
+        return mainList;
     }
 
     /** Compute the list widget TODAY title text size. */

@@ -214,6 +214,12 @@ public class PreferencesTracker implements PreferenceConstants {
         return sharedPreferences.getBoolean(PreferenceKind.WIDGET_SHOW_TOOLBAR.getKey(),
                 DEFAULT_WIDGET_SHOW_TOOLBAR);
     }
+    
+    /** Read widget show completed items preference. Used by the list widget only. */
+    public static final boolean readWidgetShowCompletedItemsPreference(SharedPreferences sharedPreferences) {
+        return sharedPreferences.getBoolean(PreferenceKind.WIDGET_SHOW_COMPLETED_ITEMS.getKey(),
+                DEFAULT_WIDGET_SHOW_COMPLETED_ITEMS);
+    }
 
     private final void updateCachedApplauseLevelPreference() {
         final String key = mSharedPreferences.getString(PreferenceKind.APPLAUSE_LEVEL.getKey(),
@@ -232,12 +238,22 @@ public class PreferencesTracker implements PreferenceConstants {
     }
 
     private final void updateCachedAutoSortPreference() {
-        mCachedAutoSortPreference = mSharedPreferences.getBoolean(
+        mCachedAutoSortPreference = readAutoSortPreference(mSharedPreferences);
+    }
+    
+    /** Exported for widget use. */
+    public static final boolean readAutoSortPreference(SharedPreferences sharedPreferences) {
+        return sharedPreferences.getBoolean(
                 PreferenceKind.AUTO_SORT.getKey(), DEFAULT_AUTO_SORT);
     }
 
     private final void updateCachedAutoDailyCleanupPreference() {
-        mCachedAutoDailyCleanupPreference = mSharedPreferences.getBoolean(
+        mCachedAutoDailyCleanupPreference = readAutoDailyCleanupPreference(mSharedPreferences);
+    }
+    
+    /** Exported for widget use. */
+    public static final boolean readAutoDailyCleanupPreference(SharedPreferences sharedPreferences) {
+        return sharedPreferences.getBoolean(
                 PreferenceKind.AUTO_DAILY_CLEANUP.getKey(), DEFAULT_AUTO_DAILY_CLEANUP);
     }
 
@@ -369,8 +385,9 @@ public class PreferencesTracker implements PreferenceConstants {
             case WIDGET_ITEM_FONT_TYPE:
             case WIDGET_ITEM_TEXT_COLOR:
             case WIDGET_ITEM_FONT_SIZE:
-            case WIDGET_SINGLE_LINE:
             case WIDGET_SHOW_TOOLBAR:
+            case WIDGET_SHOW_COMPLETED_ITEMS:
+            case WIDGET_SINGLE_LINE:      
                 // These ones are not cached or used here. Just reported to controller to
                 // trigger the widget update and backup service.
                 break;

@@ -676,15 +676,21 @@ public class Controller {
 
             case AUTO_SORT:
                 maybeAutoSortPages(true, true);
+                // This setting change may affect the list widgets.
+                updateAllWidgets();
                 break;
 
             case SOUND_ENABLED:
             case APPLAUSE_LEVEL:
             case LOCK_PERIOD:
             case VERBOSE_MESSAGES:
-            case STARTUP_ANIMATION:
-            case AUTO_DAILY_CLEANUP:
+            case STARTUP_ANIMATION:          
                 // Nothing to do here. We query these preferences on the fly.
+                break;
+                
+            case AUTO_DAILY_CLEANUP:
+                // This setting may affect the widget on next update but by itself, its
+                // change event does require widget update (?).
                 break;
 
             case WIDGET_BACKGROUND_PAPER:
@@ -692,9 +698,10 @@ public class Controller {
             case WIDGET_BACKGROUND_COLOR:
             case WIDGET_ITEM_FONT_TYPE:
             case WIDGET_ITEM_TEXT_COLOR:
-            case WIDGET_ITEM_FONT_SIZE:
-            case WIDGET_SINGLE_LINE:
+            case WIDGET_ITEM_FONT_SIZE:         
             case WIDGET_SHOW_TOOLBAR:
+            case WIDGET_SHOW_COMPLETED_ITEMS:
+            case WIDGET_SINGLE_LINE:
                 // NOTE: This covers the case where the user changes widget settings and presses the
                 // Home button immediately, going back to the widgets. The widget update at
                 // onAppPause() is not triggered in this case because the main activity is already

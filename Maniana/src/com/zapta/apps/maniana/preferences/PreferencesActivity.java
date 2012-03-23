@@ -156,6 +156,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         // key strings match.
         findPreference(PreferenceKind.AUTO_SORT);
         findPreference(PreferenceKind.AUTO_DAILY_CLEANUP);
+        findPreference(PreferenceKind.WIDGET_SHOW_COMPLETED_ITEMS);
 
         mPageSelectThemePreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
@@ -245,6 +246,8 @@ public class PreferencesActivity extends PreferenceActivity implements
         mWidgetFontSizePreference.setValue(theme.fontSize);
         mWidgetTextColorPickPreference.onColorChanged(theme.textColor);
         mWidgetShowToolbarPreference.setChecked(theme.showToolbar);
+        // Show completed items preferences is NOT modified by the them.
+        // TODO: make singleLine theme independent
         mWidgetSingleLinePreference.setChecked(theme.singleLine);
 
     }
@@ -295,7 +298,11 @@ public class PreferencesActivity extends PreferenceActivity implements
                 PreferenceConstants.DEFAULT_WIDGET_TEXT_COLOR);
 
         // NOTE: for checkbox whose default value is false, need to set them
-        // here to false. Currently there is none.
+        // here to false. 
+        editor.putBoolean(PreferenceKind.WIDGET_SHOW_COMPLETED_ITEMS.getKey(), 
+                PreferenceConstants.DEFAULT_WIDGET_SHOW_COMPLETED_ITEMS);
+        editor.putBoolean(PreferenceKind.WIDGET_SINGLE_LINE.getKey(), 
+                PreferenceConstants.DEFAULT_WIDGET_SINGLE_LINE);
         
         // Set font preferences to broadcast the change enve.
         editor.putString(PreferenceKind.PAGE_ITEM_FONT_TYPE.getKey(),

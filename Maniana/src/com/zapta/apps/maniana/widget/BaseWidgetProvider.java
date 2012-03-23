@@ -42,7 +42,7 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
 
     /** Load model. Return null if error. */
     @Nullable
-    public static AppModel loadModel(Context context) {
+    protected static AppModel loadModel(Context context) {
         // Load model
         final AppModel model = new AppModel();
         final ModelLoadingResult modelLoadingResult = ModelPersistence.loadModelDataFile(context,

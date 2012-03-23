@@ -69,8 +69,9 @@ public class IconWidgetProvider extends BaseWidgetProvider {
                     .readLockExpierationPeriodPreference(sharedPreferences);
             final Time now = new Time();
             now.setToNow();
+            // NOTE: we always include completed items from the count.
             List<ItemModelReadOnly> items = WidgetUtil.selectTodaysActiveItemsByTime(model, now,
-                    lockExpirationPeriod);
+                    lockExpirationPeriod, false, false, false);
             label = Integer.toString(items.size());
         }
 
