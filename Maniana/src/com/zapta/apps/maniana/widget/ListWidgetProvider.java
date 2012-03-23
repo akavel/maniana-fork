@@ -117,6 +117,9 @@ import com.zapta.apps.maniana.widget.ListWidgetSize.OrientationInfo;
  */
 public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
+    /** Used to avoid too frequent file garbage collection. */
+    private static long gLastGarbageCollectionTimeMillis = 0;
+
     public ListWidgetProvider() {
     }
 
@@ -172,8 +175,8 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         backgroundColorView.setBackgroundColor(templateBackgroundColor);
 
         // TODO: cache variation or at least custom typefaces
-        final ItemFontVariation fontVariation = ItemFontVariation
-                .newFromWidgetPreferences(context, sharedPreferences);
+        final ItemFontVariation fontVariation = ItemFontVariation.newFromWidgetPreferences(context,
+                sharedPreferences);
 
         // Set template view toolbar
         final boolean toolbarEanbled = PreferencesTracker
@@ -212,7 +215,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             return PreferencesTracker.readWidgetBackgroundColorPreference(sharedPreferences);
         }
 
-        // Using paper background. 
+        // Using paper background.
         return ColorUtil.mapPaperColorPrefernce(PreferencesTracker
                 .readWidgetPaperColorPreference(sharedPreferences));
     }
@@ -234,16 +237,18 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
         final int heightPixels = (int) context.getResources().getDimensionPixelSize(
                 orientationInfo.heightDipResourceId);
-        
-        final PaperBackground paperBackground = PaperBackground.getBestSize(
-                widthPixels, heightPixels);
-        
-        final int shadowRightPixels = backgroundPaper ? paperBackground.shadowRightPixels(widthPixels) : 0;
-        final int shadowBottomPixels = backgroundPaper ? paperBackground.shadowBottomPixels(heightPixels) : 0;
+
+        final PaperBackground paperBackground = PaperBackground.getBestSize(widthPixels,
+                heightPixels);
+
+        final int shadowRightPixels = backgroundPaper ? paperBackground
+                .shadowRightPixels(widthPixels) : 0;
+        final int shadowBottomPixels = backgroundPaper ? paperBackground
+                .shadowBottomPixels(heightPixels) : 0;
 
         // Set padding to match the drop shadow portion of paper background, if used.
-        template.setPadding(0,  0, shadowRightPixels, shadowBottomPixels);
-        
+        template.setPadding(0, 0, shadowRightPixels, shadowBottomPixels);
+
         // NTOE: ARGB_4444 results in a smaller file than ARGB_8888 (e.g. 50K vs 150k)
         // but does not look as good.
         final Bitmap bitmap1 = Bitmap.createBitmap(widthPixels, heightPixels,
@@ -277,7 +282,6 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         // We make the file world readable so the home launcher can pull it via the file URI.
         // TODO: if there are security concerns about having this file readable, append to it
         // a long random suffix and cleanup the old ones.
-        LogUtil.info("Updating widget bitmap: " + fileName);
         FileUtil.writeBitmapToPngFile(context, bitmap2, fileName, true);
 
         final Uri uri = Uri.fromFile(new File(context.getFilesDir(), fileName));
@@ -339,11 +343,14 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
         // Read relevant preferences
         final LockExpirationPeriod lockExpirationPeriod = PreferencesTracker
-                .readLockExpierationPeriodPreference(sharedPreferences);        
-        final boolean removeCompletedOnPush = PreferencesTracker.readAutoDailyCleanupPreference(sharedPreferences);       
-        final boolean includeCompletedItems = PreferencesTracker.readWidgetShowCompletedItemsPreference(sharedPreferences);       
-        final boolean sortItems = includeCompletedItems ? PreferencesTracker.readAutoSortPreference(sharedPreferences) : false;
-        
+                .readLockExpierationPeriodPreference(sharedPreferences);
+        final boolean removeCompletedOnPush = PreferencesTracker
+                .readAutoDailyCleanupPreference(sharedPreferences);
+        final boolean includeCompletedItems = PreferencesTracker
+                .readWidgetShowCompletedItemsPreference(sharedPreferences);
+        final boolean sortItems = includeCompletedItems ? PreferencesTracker
+                .readAutoSortPreference(sharedPreferences) : false;
+
         // TODO: reorganize the code. No need to read lock preference if date now is same as the
         // model
         Time now = new Time();
@@ -351,7 +358,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
         final List<ItemModelReadOnly> items = WidgetUtil.selectTodaysActiveItemsByTime(model, now,
                 lockExpirationPeriod, removeCompletedOnPush, includeCompletedItems, sortItems);
-        
+
         if (items.isEmpty()) {
             final String emptyMessage = includeCompletedItems ? "(no tasks)" : "(no active tasks)";
             addTemplateMessageItem(context, itemListView, emptyMessage, fontVariation,
@@ -512,5 +519,62 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                 update(context, appWidgetManager, listWidgetSize, widgetIds, model);
             }
         }
+
+        // Since we updated above all active widget files, it is safe to delete old ones.
+        garbageCollectOlderFiles(context);
+    }
+
+    /**
+     * Garbage collect old widget image files. This should be called only after all active widget
+     * files as been updated to make sure it does not deleted active widget files.
+     */
+    private static void garbageCollectOlderFiles(Context context) {
+        final long timeNowMillis = System.currentTimeMillis();
+
+        // If we performed a garbage collection in the last hour, do nothing. We don't
+        // want to incure garbage collection delay on each update. If the app got destroyed
+        // and recreated, no big deal, we will just do one more garbage collection.
+        final long dtMillis = (timeNowMillis - gLastGarbageCollectionTimeMillis);
+        if (dtMillis >= 0 && dtMillis <= 60 * 60 * 1000) {
+            return;
+        }
+        // We don't bother to protect with a lock.
+        gLastGarbageCollectionTimeMillis = timeNowMillis;
+
+        // Track stats
+        int deletedFileCount = 0;
+        int nonRelatedFiles = 0;
+        int keptFileCount = 0;
+
+        final File dir = context.getFilesDir();
+        final String fileNames[] = dir.list();
+        for (String fileName : fileNames) {
+            // TODO: share file name const with ListWidgetSize
+            if (!fileName.startsWith("list_widget_image_")) {
+                nonRelatedFiles++;
+                continue;
+            }
+
+            final File file = new File(dir, fileName);
+            final long lastModifiedMillis = file.lastModified();
+            final long fileAgeMillis = timeNowMillis - lastModifiedMillis;
+            final long fileAgeMinutes = 10 * 60 * 1000;
+            // We use an arbitrary age threshold of 10 minutes. Since the active widget files
+            // were just been updated, we could use a much shorter threshold.
+            if (fileAgeMillis > fileAgeMinutes) {
+                final boolean deletedOk = file.delete();
+                if (deletedOk) {
+                    LogUtil.info("Garbage collected %s, %d minutes old", fileName, fileAgeMinutes);
+                    deletedFileCount++;
+                } else {
+                    LogUtil.error("Failed to delete: %s", file.getAbsoluteFile());
+                }
+            } else {
+                keptFileCount++;
+            }
+        }
+        LogUtil.debug("Garbage collected %d widget files in %dms, kept %d + %d files.",
+                deletedFileCount, System.currentTimeMillis() - timeNowMillis, keptFileCount,
+                nonRelatedFiles);
     }
 }

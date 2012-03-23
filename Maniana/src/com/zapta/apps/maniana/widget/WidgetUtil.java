@@ -56,7 +56,6 @@ public abstract class WidgetUtil {
     @VisibleForTesting
     static final List<ItemModelReadOnly> selectTodaysActiveItemsByPushScope(AppModel model,
             PushScope pushScope, boolean completedItemsIncluded, boolean sortItems) {
-        LogUtil.debug("select: %s, %s, %s", pushScope, completedItemsIncluded, sortItems);
         // If sorting, we collect the active and completed items in seperate list and contact
         // them at the end. Otherwise, we collect them in a single list.
         final List<ItemModelReadOnly> mainList = new ArrayList<ItemModelReadOnly>(
