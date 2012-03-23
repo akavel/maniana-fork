@@ -79,6 +79,7 @@ public class PreferencesActivity extends PreferenceActivity implements
     private FontPreference mWidgetFontTypeFontPreference;
     private SeekBarPreference mWidgetFontSizePreference;
     private ColorPickerPreference mWidgetTextColorPickPreference;
+    private ColorPickerPreference mWidgetTextCompletedColorPickPreference;
     private CheckBoxPreference mWidgetShowToolbarPreference;
     private Preference mWidgetSelectThemePreference;
 
@@ -114,8 +115,10 @@ public class PreferencesActivity extends PreferenceActivity implements
         mPageBackgroundPaperPreference = (CheckBoxPreference) findPreference(PreferenceKind.PAGE_BACKGROUND_PAPER);
         mPagePaperColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_PAPER_COLOR);
         mPageSolidColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_BACKGROUND_SOLID_COLOR);
-        mPageColorPreferenceSelector = new PreferenceSelector((PreferenceGroup) findPreference("prefPagesScreenKey"), 
-                mPageBackgroundPaperPreference, mPagePaperColorPickPreference, mPageSolidColorPickPreference);
+        mPageColorPreferenceSelector = new PreferenceSelector(
+                (PreferenceGroup) findPreference("prefPagesScreenKey"),
+                mPageBackgroundPaperPreference, mPagePaperColorPickPreference,
+                mPageSolidColorPickPreference);
         mPageFontTypeFontPreference = (FontPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_TYPE);
         mPageFontSizePreference = (SeekBarPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_SIZE);
         mPageTextActiveColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_ITEM_ACTIVE_TEXT_COLOR);
@@ -127,12 +130,15 @@ public class PreferencesActivity extends PreferenceActivity implements
         mWidgetBackgroundPaperPreference = (CheckBoxPreference) findPreference(PreferenceKind.WIDGET_BACKGROUND_PAPER);
         mWidgetPaperColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_PAPER_COLOR);
         mWidgetSolidColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_BACKGROUND_COLOR);
-        mWidgetColorPreferenceSelector = new PreferenceSelector((PreferenceGroup) findPreference("prefWidgetScreenKey"), 
-                mWidgetBackgroundPaperPreference, mWidgetPaperColorPickPreference, mWidgetSolidColorPickPreference);
+        mWidgetColorPreferenceSelector = new PreferenceSelector(
+                (PreferenceGroup) findPreference("prefWidgetScreenKey"),
+                mWidgetBackgroundPaperPreference, mWidgetPaperColorPickPreference,
+                mWidgetSolidColorPickPreference);
         mWidgetFontTypeFontPreference = (FontPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_TYPE);
         mWidgetFontSizePreference = (SeekBarPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_SIZE);
 
         mWidgetTextColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_ITEM_TEXT_COLOR);
+        mWidgetTextCompletedColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_ITEM_COMPLETED_TEXT_COLOR);
         mWidgetShowToolbarPreference = (CheckBoxPreference) findPreference(PreferenceKind.WIDGET_SHOW_TOOLBAR);
         mWidgetSelectThemePreference = findPreference(PreferenceKind.WIDGET_SELECT_THEME);
 
@@ -155,6 +161,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         findPreference(PreferenceKind.AUTO_SORT);
         findPreference(PreferenceKind.AUTO_DAILY_CLEANUP);
         findPreference(PreferenceKind.WIDGET_SHOW_COMPLETED_ITEMS);
+        
         findPreference(PreferenceKind.WIDGET_SINGLE_LINE);
 
         mPageSelectThemePreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -244,6 +251,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         mWidgetFontTypeFontPreference.setValue(theme.fontType);
         mWidgetFontSizePreference.setValue(theme.fontSize);
         mWidgetTextColorPickPreference.onColorChanged(theme.textColor);
+        mWidgetTextCompletedColorPickPreference.onColorChanged(theme.completedTextColor);
         mWidgetShowToolbarPreference.setChecked(theme.showToolbar);
         // Show completed items preferences and show single line are NOT modified by the theme.
     }
@@ -292,14 +300,17 @@ public class PreferencesActivity extends PreferenceActivity implements
                 PreferenceConstants.DEFAULT_WIDGET_BACKGROUND_COLOR);
         editor.putInt(PreferenceKind.WIDGET_ITEM_TEXT_COLOR.getKey(),
                 PreferenceConstants.DEFAULT_WIDGET_TEXT_COLOR);
+        editor.putInt(PreferenceKind.WIDGET_ITEM_COMPLETED_TEXT_COLOR.getKey(),
+                PreferenceConstants.DEFAULT_WIDGET_ITEM_COMPLETED_TEXT_COLOR);
+
 
         // NOTE: for checkbox whose default value is false, need to set them
-        // here to false. 
-        editor.putBoolean(PreferenceKind.WIDGET_SHOW_COMPLETED_ITEMS.getKey(), 
+        // here to false.
+        editor.putBoolean(PreferenceKind.WIDGET_SHOW_COMPLETED_ITEMS.getKey(),
                 PreferenceConstants.DEFAULT_WIDGET_SHOW_COMPLETED_ITEMS);
-        editor.putBoolean(PreferenceKind.WIDGET_SINGLE_LINE.getKey(), 
+        editor.putBoolean(PreferenceKind.WIDGET_SINGLE_LINE.getKey(),
                 PreferenceConstants.DEFAULT_WIDGET_SINGLE_LINE);
-        
+
         // Set font preferences to broadcast the change enve.
         editor.putString(PreferenceKind.PAGE_ITEM_FONT_TYPE.getKey(),
                 PreferenceConstants.DEFAULT_PAGE_FONT_TYPE.getKey());
@@ -383,9 +394,6 @@ public class PreferencesActivity extends PreferenceActivity implements
     }
 
     private void updateSummaries() {
-        //updateListSummary(mPageFontTypeFontPreference, R.array.itemFontSummaries, null);
-        //updateListSummary(mWidgetFontTypeListPreference, R.array.itemFontSummaries, null);
-
         // Disable applause if voice is disabled
         if (mSoundEnablePreference.isChecked()) {
             updateListSummary(mApplauseLevelListPreference, R.array.applauseLevelSummaries, null);
@@ -393,6 +401,7 @@ public class PreferencesActivity extends PreferenceActivity implements
             mApplauseLevelListPreference.setSummary("(sound is off)");
         }
         
+        // Update selectors
         mPageColorPreferenceSelector.update();
         mWidgetColorPreferenceSelector.update();
 

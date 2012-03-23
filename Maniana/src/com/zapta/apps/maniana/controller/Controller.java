@@ -698,9 +698,10 @@ public class Controller {
             case WIDGET_BACKGROUND_COLOR:
             case WIDGET_ITEM_FONT_TYPE:
             case WIDGET_ITEM_TEXT_COLOR:
-            case WIDGET_ITEM_FONT_SIZE:         
-            case WIDGET_SHOW_TOOLBAR:
+            case WIDGET_ITEM_FONT_SIZE:  
             case WIDGET_SHOW_COMPLETED_ITEMS:
+            case WIDGET_ITEM_COMPLETED_TEXT_COLOR:
+            case WIDGET_SHOW_TOOLBAR:
             case WIDGET_SINGLE_LINE:
                 // NOTE: This covers the case where the user changes widget settings and presses the
                 // Home button immediately, going back to the widgets. The widget update at

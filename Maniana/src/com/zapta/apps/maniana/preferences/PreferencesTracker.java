@@ -202,6 +202,12 @@ public class PreferencesTracker implements PreferenceConstants {
         return sharedPreferences.getInt(PreferenceKind.WIDGET_ITEM_TEXT_COLOR.getKey(),
                 DEFAULT_WIDGET_TEXT_COLOR);
     }
+    
+    /** Read widget completed item text color preference. Used by the list widget only. */
+    public static final int readWidgetCompletedTextColorPreference(SharedPreferences sharedPreferences) {
+        return sharedPreferences.getInt(PreferenceKind.WIDGET_ITEM_COMPLETED_TEXT_COLOR.getKey(),
+                DEFAULT_WIDGET_ITEM_COMPLETED_TEXT_COLOR);
+    }
 
     /** Read widget line wrapping preference. Used by the list widget only. */
     public static final boolean readWidgetSingleLinePreference(SharedPreferences sharedPreferences) {
@@ -385,8 +391,9 @@ public class PreferencesTracker implements PreferenceConstants {
             case WIDGET_ITEM_FONT_TYPE:
             case WIDGET_ITEM_TEXT_COLOR:
             case WIDGET_ITEM_FONT_SIZE:
-            case WIDGET_SHOW_TOOLBAR:
             case WIDGET_SHOW_COMPLETED_ITEMS:
+            case WIDGET_ITEM_COMPLETED_TEXT_COLOR:
+            case WIDGET_SHOW_TOOLBAR:
             case WIDGET_SINGLE_LINE:      
                 // These ones are not cached or used here. Just reported to controller to
                 // trigger the widget update and backup service.

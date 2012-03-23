@@ -15,6 +15,9 @@
 package com.zapta.apps.maniana.preferences;
 
 import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
+
+import javax.annotation.Nullable;
+
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceGroup;
@@ -28,40 +31,57 @@ import android.preference.PreferenceGroup;
 public class PreferenceSelector {
     private final PreferenceGroup mGroup;
     private final CheckBoxPreference mCheckbox;
+
+    @Nullable
     private final Preference mPref1;
+
+    @Nullable
     private final Preference mPref2;
 
-    private boolean lastUpdatedStatel;
+    private boolean lastUpdatedState;
 
     /** On construction, group contains both preferences. */
     public PreferenceSelector(PreferenceGroup group, CheckBoxPreference checkboxPrefernce,
-            Preference prefernece1, Preference preference2) {
+            @Nullable Preference pref1, @Nullable Preference pref2) {
         checkNotNull(group);
         this.mGroup = group;
         this.mCheckbox = checkboxPrefernce;
-        this.mPref1 = prefernece1;
-        this.mPref2 = preference2;
+        this.mPref1 = pref1;
+        this.mPref2 = pref2;
 
-        this.lastUpdatedStatel = checkboxPrefernce.isChecked();
-        if (lastUpdatedStatel) {
-            mGroup.removePreference(preference2);
+        this.lastUpdatedState = checkboxPrefernce.isChecked();
+        if (lastUpdatedState) {
+            remove(mPref2);
         } else {
-            mGroup.removePreference(prefernece1);
+            remove(mPref1);
         }
     }
 
-    public void update() {
+    public final void update() {
         final boolean newState = mCheckbox.isChecked();
-        if (newState == lastUpdatedStatel) {
+        if (newState == lastUpdatedState) {
             return;
         }
-        lastUpdatedStatel = newState;
-        if (lastUpdatedStatel) {
-            mGroup.addPreference(mPref1);
-            mGroup.removePreference(mPref2);
+        lastUpdatedState = newState;
+        if (lastUpdatedState) {
+            add(mPref1);
+            remove(mPref2);
         } else {
-            mGroup.removePreference(mPref1);
-            mGroup.addPreference(mPref2);
+            remove(mPref1);
+            add(mPref2);
         }
     }
+    
+    private final void add(@Nullable Preference pref) {
+       if (pref != null) {
+           mGroup.addPreference(pref);
+       }
+    }
+    
+    private final void remove(@Nullable Preference pref) {
+        if (pref != null) {
+            mGroup.removePreference(pref);
+        }
+     }
+    
 }

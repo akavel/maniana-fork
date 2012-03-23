@@ -31,6 +31,7 @@ import android.widget.TextView;
 public class WidgetItemFontVariation {
     private final Typeface mTypeFace;
     private final int mColor;
+    private final int mCompletedColor;
     private final int mTextSize;
     private final float mLineSpacingMultiplier;
 
@@ -42,10 +43,11 @@ public class WidgetItemFontVariation {
      * @param textSize the text size.
      * @param lineSpacingMultiplier The line spacing multiplier to use.
      */
-    private WidgetItemFontVariation(Typeface typeFace, int color, int textSize,
+    private WidgetItemFontVariation(Typeface typeFace, int color, int completedColor, int textSize,
             float lineSpacingMultiplier) {
         this.mTypeFace = typeFace;
         this.mColor = color;
+        this.mCompletedColor = completedColor;
         this.mTextSize = textSize;
         this.mLineSpacingMultiplier = lineSpacingMultiplier;
     }
@@ -62,8 +64,7 @@ public class WidgetItemFontVariation {
         textView.setTextSize(mTextSize);
         textView.setLineSpacing(0.0f, mLineSpacingMultiplier);
         if (isCompleted) { 
-            // TODO: setup user selectable color for completed items.
-            textView.setTextColor(mColor);
+            textView.setTextColor(mCompletedColor);
             textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
         } else {
             textView.setTextColor(mColor);
@@ -76,12 +77,13 @@ public class WidgetItemFontVariation {
         final ItemFontType fontType = PreferencesTracker
                 .readWidgetFontTypeFontTypePreference(sharedPreferences);
         final int color = PreferencesTracker.readWidgetTextColorPreference(sharedPreferences);
+        final int completedColor = PreferencesTracker.readWidgetCompletedTextColorPreference(sharedPreferences);
 
         final int rawFontSize = PreferencesTracker
                 .readWidgetItemFontSizePreference(sharedPreferences);
         final int fontSize = (int) (rawFontSize * fontType.scale);
 
-        return new WidgetItemFontVariation(fontType.getTypeface(context), color, fontSize,
+        return new WidgetItemFontVariation(fontType.getTypeface(context), color, completedColor, fontSize,
                 fontType.lineSpacingMultipler);
     }
 

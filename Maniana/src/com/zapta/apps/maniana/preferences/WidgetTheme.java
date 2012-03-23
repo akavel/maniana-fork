@@ -41,15 +41,16 @@ public class WidgetTheme extends Thumbnail {
                 PreferenceConstants.DEFAULT_WIDGET_FONT_TYPE,
                 PreferenceConstants.DEFAULT_WIDGET_ITEM_FONT_SIZE,
                 PreferenceConstants.DEFAULT_WIDGET_TEXT_COLOR,
+                PreferenceConstants.DEFAULT_COMPLETED_ITEM_TEXT_COLOR,
                 PreferenceConstants.DEFAULT_WIDGET_SHOW_TOOLBAR),
         new WidgetTheme("Crystal Clear", R.drawable.widget_theme2_preview, false, 0xffffffff,
-                0x44000000, ItemFontType.SAN_SERIF, 14, 0xffffff00, true),
+                0x44000000, ItemFontType.SAN_SERIF, 14, 0xffffff00, 0xffabffa2, true),
         new WidgetTheme("Think Big", R.drawable.widget_theme3_preview, false, 0xffffffff,
-                0xff000000, ItemFontType.SAN_SERIF, 18, 0xff00ff00, true),
+                0xff000000, ItemFontType.SAN_SERIF, 18, 0xff00ff00, 0xffaaaaaa, true),
         new WidgetTheme("Legally Blonde", R.drawable.widget_theme4_preview, true, 0xffffccff,
-                0xffff88ff, ItemFontType.CURSIVE, 18, 0xff404040, true),
+                0xffff88ff, ItemFontType.CURSIVE, 18, 0xff404040, 0xff668866, true),
         new WidgetTheme("Fine Print", R.drawable.widget_theme5_preview, false, 0xffffffff,
-                0x600000ff, ItemFontType.SAN_SERIF, 12, 0xffffff00, false)
+                0x600000ff, ItemFontType.SAN_SERIF, 12, 0xffffff00, 0xffabffa2, false)
     };
 
     public final boolean backgroundPaper;
@@ -58,10 +59,11 @@ public class WidgetTheme extends Thumbnail {
     public final ItemFontType fontType;
     public final int fontSize;
     public final int textColor;
+    public final int completedTextColor;
     public final boolean showToolbar;
 
     public WidgetTheme(String name, int drawableId, boolean backgroundPaper, int paperColor,
-            int backgroundColor, ItemFontType fontType, int fontSize, int textColor,
+            int backgroundColor, ItemFontType fontType, int fontSize, int textColor, int completedTextColor,
             boolean showToolbar) {
         super(name, drawableId);
         this.backgroundPaper = backgroundPaper;
@@ -70,6 +72,7 @@ public class WidgetTheme extends Thumbnail {
         this.fontType = fontType;
         this.fontSize = fontSize;
         this.textColor = textColor;
+        this.completedTextColor = completedTextColor;
         this.showToolbar = showToolbar;
     }
 }

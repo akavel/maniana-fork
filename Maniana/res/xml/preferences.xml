@@ -145,17 +145,23 @@
             android:summary="List widget text color"
             android:title="Text Color" />
         <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="prefWidgetShowCompletedKey"
+            android:summaryOff="Showing only active tasks"
+            android:summaryOn="Showing also completed tasks"
+            android:title="Show Completed Tasks" />
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
+            android:defaultValue="#ff888888"
+            android:dependency="prefWidgetShowCompletedKey"
+            android:key="prefWidgetCompletedTextColorKey"
+            android:summary="Text color of completed tasks"
+            android:title="Completed Text Color" />
+        <CheckBoxPreference
             android:defaultValue="true"
             android:key="prefWidgetShowToolbarKey"
             android:summaryOff="Hiding widget toolbar"
             android:summaryOn="Showing widget toolbar"
             android:title="Show Toolbar" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="prefWidgetShowCompletedKey"
-            android:summaryOff="Showing active tasks only"
-            android:summaryOn="Showing also completed tasks"
-            android:title="Show Completed Tasks" />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="prefWidgetSingleLineKey"

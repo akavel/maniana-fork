@@ -48,8 +48,9 @@ public interface PreferenceConstants {
     public static final ItemFontType DEFAULT_WIDGET_FONT_TYPE = ItemFontType.CURSIVE;
     public static final int DEFAULT_WIDGET_ITEM_FONT_SIZE = 14;
     public static final int DEFAULT_WIDGET_TEXT_COLOR = 0xff444444;
-    public static final boolean DEFAULT_WIDGET_SHOW_TOOLBAR = true;
     public static final boolean DEFAULT_WIDGET_SHOW_COMPLETED_ITEMS = false;
+    public static final int DEFAULT_WIDGET_ITEM_COMPLETED_TEXT_COLOR = 0xff888888;
+    public static final boolean DEFAULT_WIDGET_SHOW_TOOLBAR = true;
     public static final boolean DEFAULT_WIDGET_SINGLE_LINE = false;
     
     /** Android name sapce used in XML docs. */
