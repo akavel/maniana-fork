@@ -558,10 +558,12 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             final File file = new File(dir, fileName);
             final long lastModifiedMillis = file.lastModified();
             final long fileAgeMillis = timeNowMillis - lastModifiedMillis;
-            final long fileAgeMinutes = 10 * 60 * 1000;
+            final long fileAgeMinutes = fileAgeMillis / (1000 * 60);
             // We use an arbitrary age threshold of 10 minutes. Since the active widget files
-            // were just been updated, we could use a much shorter threshold.
-            if (fileAgeMillis > fileAgeMinutes) {
+            // were just been updated, we could use a much shorter threshold. We are also 
+            // deleting files that are too much in the future, in case a file happen to 
+            // have time far in the future.
+            if (Math.abs(fileAgeMinutes) > 10){
                 final boolean deletedOk = file.delete();
                 if (deletedOk) {
                     LogUtil.info("Garbage collected %s, %d minutes old", fileName, fileAgeMinutes);
