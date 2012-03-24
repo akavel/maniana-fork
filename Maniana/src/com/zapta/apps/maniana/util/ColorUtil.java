@@ -27,21 +27,13 @@ public final class ColorUtil {
     }
 
     /**
-     * Compute the distance between two colors. The alpha channel is ignored. Returned distance is
-     * always >= 0.
-     */
-    public static final int distance(int r, int g, int b, int color) {
-        return Math.abs(r - Color.red(color)) + Math.abs(g - Color.green(color))
-                + Math.abs(b - Color.blue(color));
-    }
-
-    /**
      * Returns candidate color furtherest from given reference color. In case of a tie, prefer
      * candidates with lower indices. Candidates array must contain at least one member. Alpha
      * channel is ignored.
      */
-    public static final int selectFurthestColor(int referenceColor, int candidates[]) {
-        final int index = selectFurthestColorIndex(referenceColor, candidates);
+    public static final int selectFurthestColor(int referenceColor, int candidates[],
+            float defaultPreference) {
+        final int index = selectFurthestColorIndex(referenceColor, candidates, defaultPreference);
         return candidates[index];
     }
 
@@ -49,8 +41,12 @@ public final class ColorUtil {
      * Returns index of candidate color furtherest from given reference color. In case of a tie,
      * prefer candidates with lower indices. Candidates array must contain at least one member.
      * Alpha channel is ignored.
+     * 
+     * @param defaultPreference a float in the range [0,1] indicating the left of preference to give
+     *        to first candidate.
      */
-    public static final int selectFurthestColorIndex(int referenceColor, int candidates[]) {
+    public static final int selectFurthestColorIndex(int referenceColor, int candidates[],
+            float defaultPreference) {
         check(candidates.length > 0);
 
         final int r = Color.red(referenceColor);
@@ -62,8 +58,12 @@ public final class ColorUtil {
 
         for (int i = 0; i < candidates.length; i++) {
             final int nextColor = candidates[i];
-            final int nextDistance = distance(r, g, b, nextColor);
+            int nextDistance = distance(r, g, b, nextColor);
             check(nextDistance >= 0);
+            // If default candidate, skew the distance by preference.:w
+            if (i == 0) {
+                nextDistance += (int) (255 * 3 * defaultPreference);
+            }
             if (nextDistance > bestDistance) {
                 bestCandidateIndex = i;
                 bestDistance = nextDistance;
@@ -72,6 +72,15 @@ public final class ColorUtil {
 
         check(bestCandidateIndex >= 0);
         return bestCandidateIndex;
+    }
+    
+    /**
+     * Compute the distance between two colors. The alpha channel is ignored. Returned distance is
+     * always >= 0.
+     */
+    public static final int distance(int r, int g, int b, int color) {
+        return Math.abs(r - Color.red(color)) + Math.abs(g - Color.green(color))
+                + Math.abs(b - Color.blue(color));
     }
 
     /**
@@ -117,7 +126,7 @@ public final class ColorUtil {
         final int b = compositeColorComponent(Color.blue(argb1), a1, Color.blue(argb2), a2, a);
         return Color.argb(a, r, g, b);
     }
-    
+
     /** Map background color preference to paper overlay color. */
     public static int mapPaperColorPrefernce(int paperColorPreference) {
         final float hsv[] = new float[3];

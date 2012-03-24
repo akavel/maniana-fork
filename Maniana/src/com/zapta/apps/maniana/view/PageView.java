@@ -43,19 +43,28 @@ public class PageView extends FrameLayout {
     /** For testing only. */
     private static final boolean FORCE_OVERFLOW_MENU_ON_ALL_DEVICES = false;
 
-    /** Candidates for TODAY page title color. Selected by distance from background color. */
+    /** 
+     * Candidates for TODAY page title color. 
+     * Selected by distance from background color with a slight preference for the first one.
+     */
     private static final int[] TODAY_TITLE_CANDIDATE_COLORS = new int[] {
         0xff0077ff,
         0xff88aaff
     };
 
-    /** Candidates for TOMOROW page title color. Selected by distance from background color. */
+    /** 
+     * Candidates for TOMOROW page title color. 
+     * Selected by distance from background color with a slight preference for the first one.
+     */
     private static final int[] TOMOROW_TITLE_CANDIDATE_COLORS = new int[] {
         0xffcc0000,
         0xffff8888
     };
 
-    /** Candidates for day/date color. Selected by distance from background color. */
+    /** 
+     * Candidates for day/date color. 
+     * Selected by distance from background color with a slight preference for the first one.
+     */
     private static final int[] DATE_CANDIDATE_COLORS = new int[] {
         0xff222222,
         0xff2222ee,
@@ -287,14 +296,14 @@ public class PageView extends FrameLayout {
             final int[] titleCandidateColors = mPageKind.isToday() ? TODAY_TITLE_CANDIDATE_COLORS
                     : TOMOROW_TITLE_CANDIDATE_COLORS;
             final int titleColor = ColorUtil.selectFurthestColor(baseBackgroundColor,
-                    titleCandidateColors);
+                    titleCandidateColors, 0.05f);
             mPageTitleTextView.setTextColor(titleColor);
         }
 
         // Update date text to have max contrast from the background
         if (mPageKind.isToday()) {
             final int dayAndDateColor = ColorUtil.selectFurthestColor(baseBackgroundColor,
-                    DATE_CANDIDATE_COLORS);
+                    DATE_CANDIDATE_COLORS, 0.05f);
             mDayTextView.setTextColor(dayAndDateColor);
             mDateTextView.setTextColor(dayAndDateColor);
         }
@@ -302,7 +311,7 @@ public class PageView extends FrameLayout {
         // Update ICS menu overflow icon to have max contrast from the background
         if (mUsesIcsMenuOverflowButton) {
             final int colorIndex = ColorUtil.selectFurthestColorIndex(baseBackgroundColor,
-                    OVERFLOW_DRAWABLE_CANDIDATE_COLORS);
+                    OVERFLOW_DRAWABLE_CANDIDATE_COLORS, 0.05f);
             final int resourceId = OVERFLOW_RESOURCES_CANDIDATE_IDS[colorIndex];
             mIcsMenuOverflowButtonView.setImageResource(resourceId);
         }
@@ -310,7 +319,7 @@ public class PageView extends FrameLayout {
         // Update item list view highlight drawable to max contrast from page background
         {
             final int colorIndex = ColorUtil.selectFurthestColorIndex(baseBackgroundColor,
-                    ITEM_HIGHLIGHT_CANDIDATE_COLORS);
+                    ITEM_HIGHLIGHT_CANDIDATE_COLORS, 0.05f);
             final int resourceId = ITEM_HIGHLIGHT_RESOURCES_CANDIDATE_IDS[colorIndex];
             mItemListView.setItemHighlightDrawableResourceId(resourceId);
         }

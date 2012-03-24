@@ -538,6 +538,8 @@ public class Controller {
 
         ArrayList<String> matches = intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
+        // TODO: make this dialog trackable ?.
+        // TODO: refactor out to editors package.
         final Dialog dialog = new Dialog(mApp.context());
         dialog.setContentView(R.layout.voice_list_dialog_layout);
         dialog.setTitle("Select best match");
