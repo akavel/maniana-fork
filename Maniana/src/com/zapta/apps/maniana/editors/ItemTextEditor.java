@@ -34,7 +34,7 @@ import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
  * 
  * @author Tal Dayan
  */
-public class ItemEditor extends Dialog implements TrackablePopup {
+public class ItemTextEditor extends Dialog implements TrackablePopup {
 
     public interface ItemEditorListener {
         void onTextChange(String newText);
@@ -75,7 +75,7 @@ public class ItemEditor extends Dialog implements TrackablePopup {
     private boolean dismissAlreadyReported = false;
 
     /** Private constructor. Use startEditor() to create and launch an editor. */
-    private ItemEditor(final AppContext app, String title, String initialText,
+    private ItemTextEditor(final AppContext app, String title, String initialText,
             ItemEditorListener listener) {
         // TODO: reorder and organize the statements below for better reliability.
         super(app.context());
@@ -157,7 +157,7 @@ public class ItemEditor extends Dialog implements TrackablePopup {
      */
     public static void startEditor(final AppContext app, String title, String initialText,
             final ItemEditorListener listener) {
-        final ItemEditor dialog = new ItemEditor(app, title, initialText, listener);
+        final ItemTextEditor dialog = new ItemTextEditor(app, title, initialText, listener);
         app.popupsTracker().track(dialog);
         dialog.show();
     }

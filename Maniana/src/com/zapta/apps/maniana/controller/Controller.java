@@ -16,24 +16,18 @@ package com.zapta.apps.maniana.controller;
 
 import static com.zapta.apps.maniana.util.Assertions.check;
 
-import java.util.ArrayList;
-
 import javax.annotation.Nullable;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.media.AudioManager;
-import android.speech.RecognizerIntent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.zapta.apps.maniana.R;
-import com.zapta.apps.maniana.editors.ItemEditor;
+import com.zapta.apps.maniana.editors.ItemTextEditor;
+import com.zapta.apps.maniana.editors.ItemVoiceEditor;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
 import com.zapta.apps.maniana.help.PopupMessageActivity.MessageKind;
 import com.zapta.apps.maniana.main.AppContext;
@@ -366,8 +360,8 @@ public class Controller {
             case QuickActionsCache.EDIT_ACTION_ID: {
                 mApp.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
                 final ItemModel item = mApp.model().getItemForMutation(pageKind, itemIndex);
-                ItemEditor.startEditor(mApp, "Edit Task", item.getText(),
-                        new ItemEditor.ItemEditorListener() {
+                ItemTextEditor.startEditor(mApp, "Edit Task", item.getText(),
+                        new ItemTextEditor.ItemEditorListener() {
                             @Override
                             public void onTextChange(String newText) {
                                 // This updates the model on each key, as the user types.
@@ -464,7 +458,7 @@ public class Controller {
     public final void onAddItemByTextButton(final PageKind pageKind) {
         clearPageUndo(pageKind);
         mApp.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
-        ItemEditor.startEditor(mApp, "New Task", "", new ItemEditor.ItemEditorListener() {
+        ItemTextEditor.startEditor(mApp, "New Task", "", new ItemTextEditor.ItemEditorListener() {
             @Override
             public void onTextChange(String newText) {
             }
@@ -478,13 +472,8 @@ public class Controller {
 
     public final void onAddItemByVoiceButton(final PageKind pageKind) {
         mApp.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
-
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Dictate a new task");
         mInSubActivity = true;
-        mApp.mainActivity().startActivityForResult(intent, VOICE_RECOGNITION_REQUEST_CODE);
+        ItemVoiceEditor.startVoiceEditor(mApp.mainActivity(), VOICE_RECOGNITION_REQUEST_CODE);
     }
 
     /** Add a new task from text editor or voice recognition. */
@@ -518,7 +507,7 @@ public class Controller {
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         switch (requestCode) {
             case VOICE_RECOGNITION_REQUEST_CODE: {
-                onVoiceActivityResult(requestCode, resultCode, intent);
+                onVoiceActivityResult(resultCode, intent);
                 break;
             }
             default:
@@ -527,7 +516,7 @@ public class Controller {
     }
 
     /** Handle the result of add-new-item by voice recongition. */
-    private final void onVoiceActivityResult(int requestCode, int resultCode, Intent intent) {
+    private final void onVoiceActivityResult(int resultCode, Intent intent) {
         // Prevents the main activity from scrolling to top of pages as we do when resuming from
         // an external activity.
         mInSubActivity = true;
@@ -536,31 +525,14 @@ public class Controller {
             return;
         }
 
-        ArrayList<String> matches = intent.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-
-        // TODO: make this dialog trackable ?.
-        // TODO: refactor out to editors package.
-        final Dialog dialog = new Dialog(mApp.context());
-        dialog.setContentView(R.layout.voice_list_dialog_layout);
-        dialog.setTitle("Select best match");
-
-        ListView listView = (ListView) dialog.findViewById(R.id.voice_selection_list);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(mApp.context(),
-                android.R.layout.simple_list_item_1, matches);
-
-        listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new OnItemClickListener() {
+        ItemVoiceEditor.startSelectionDialog(mApp.context(), intent, new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                dialog.dismiss();
                 final TextView itemTextView = (TextView) arg1;
                 maybeAddNewItem(itemTextView.getText().toString(), mApp.view().getCurrentPage(),
                         true);
             }
         });
-
-        dialog.show();
     }
 
     /** Called by the app view when the user click or long press the clean page button. */
