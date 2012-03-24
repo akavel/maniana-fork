@@ -23,17 +23,12 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.text.format.Time;
 import android.widget.RemoteViews;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.main.MainActivity;
 import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.model.ItemModelReadOnly;
-import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
-import com.zapta.apps.maniana.preferences.PreferencesTracker;
 
 /**
  * Implemnets the Maniana icon widgets.
@@ -48,7 +43,7 @@ public class IconWidgetProvider extends BaseWidgetProvider {
     /** Called by the widget host. */
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        update(context, appWidgetManager, appWidgetIds, loadModel(context));
+        update(context, appWidgetManager, appWidgetIds, loadModelForWidgets(context));
     }
 
     /** Internal widget update method. */
@@ -58,20 +53,12 @@ public class IconWidgetProvider extends BaseWidgetProvider {
             return;
         }
 
-        final SharedPreferences sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(context);
-
         final String label;
         if (model == null) {
             label = "??";
         } else {
-            final LockExpirationPeriod lockExpirationPeriod = PreferencesTracker
-                    .readLockExpierationPeriodPreference(sharedPreferences);
-            final Time now = new Time();
-            now.setToNow();
-            // NOTE: we always include completed items from the count.
-            List<ItemModelReadOnly> items = WidgetUtil.selectTodaysActiveItemsByTime(model, now,
-                    lockExpirationPeriod, false, false, false);
+            // NOTE: we always exclude completed items from the count.
+            List<ItemModelReadOnly> items = WidgetUtil.selectTodaysItems(model, false);
             label = Integer.toString(items.size());
         }
 

@@ -43,9 +43,8 @@ import com.zapta.apps.maniana.main.MainActivity;
 import com.zapta.apps.maniana.main.ResumeAction;
 import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.model.ItemModelReadOnly;
-import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
-import com.zapta.apps.maniana.preferences.PreferencesTracker;
 import com.zapta.apps.maniana.preferences.ItemFontVariation;
+import com.zapta.apps.maniana.preferences.PreferencesTracker;
 import com.zapta.apps.maniana.services.AppServices;
 import com.zapta.apps.maniana.util.BitmapUtil;
 import com.zapta.apps.maniana.util.ColorUtil;
@@ -130,7 +129,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
      */
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        update(context, appWidgetManager, listWidgetSize(), appWidgetIds, loadModel(context));
+        update(context, appWidgetManager, listWidgetSize(), appWidgetIds, loadModelForWidgets(context));
     }
 
     /**
@@ -341,23 +340,16 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             return;
         }
 
-        // Read relevant preferences
-        final LockExpirationPeriod lockExpirationPeriod = PreferencesTracker
-                .readLockExpierationPeriodPreference(sharedPreferences);
-        final boolean removeCompletedOnPush = PreferencesTracker
-                .readAutoDailyCleanupPreference(sharedPreferences);
+        // Read preference
         final boolean includeCompletedItems = PreferencesTracker
                 .readWidgetShowCompletedItemsPreference(sharedPreferences);
-        final boolean sortItems = includeCompletedItems ? PreferencesTracker
-                .readAutoSortPreference(sharedPreferences) : false;
 
         // TODO: reorganize the code. No need to read lock preference if date now is same as the
         // model
         Time now = new Time();
         now.setToNow();
 
-        final List<ItemModelReadOnly> items = WidgetUtil.selectTodaysActiveItemsByTime(model, now,
-                lockExpirationPeriod, removeCompletedOnPush, includeCompletedItems, sortItems);
+        final List<ItemModelReadOnly> items = WidgetUtil.selectTodaysItems(model, includeCompletedItems);
 
         if (items.isEmpty()) {
             final String emptyMessage = includeCompletedItems ? "(no tasks)" : "(no active tasks)";
@@ -503,7 +495,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
      * Update all list widgets using a given model.
      * 
      * This method is called from the main activity when model changes need to be flushed to the
-     * widgets.
+     * widgets. The model is already pushed and sorted according to the currnet setting.
      * 
      * @param context app context.
      * @param model app model with task data. If null, widgets will show a warning message.

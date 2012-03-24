@@ -168,20 +168,24 @@ public class Controller {
         // Close any leftover dialogs. This provides a more intuitive user experience.
         mApp.popupsTracker().closeAllLeftOvers();
 
-        flushModelChanges();
+        flushModelChanges(false);
     }
 
     /** If model is dirty then persist and update widgets. */
-    private final void flushModelChanges() {
+    private final void flushModelChanges(boolean alwaysUpdateAllWidgets) {
         // If state is dirty persist data so we don't lose it if the app will not resumed.
-        if (mApp.model().isDirty()) {
+        final boolean modelWasDirty = mApp.model().isDirty();
+        if (modelWasDirty) {
             final PersistenceMetadata metadata = new PersistenceMetadata(mApp.services()
                     .getAppVersionCode(), mApp.services().getAppVersionName());
             // NOTE(tal): this clears the dirty bit.
             ModelPersistence.saveData(mApp, mApp.model(), metadata);
             check(!mApp.model().isDirty());
-            onBackupDataChange();
-            updateAllWidgets();
+            onBackupDataChange();        
+        }
+        
+        if (modelWasDirty || alwaysUpdateAllWidgets) {
+          updateAllWidgets();
         }
     }
 
@@ -676,8 +680,9 @@ public class Controller {
 
             case AUTO_SORT:
                 maybeAutoSortPages(true, true);
-                // This setting change may affect the list widgets.
-                updateAllWidgets();
+                // If auto sort got enabled, this may affect the list widgets and thus
+                // we force widget updated. In the other direction it's not required.
+                flushModelChanges(mApp.pref().getAutoSortPreference());
                 break;
 
             case SOUND_ENABLED:
@@ -707,7 +712,7 @@ public class Controller {
                 // Home button immediately, going back to the widgets. The widget update at
                 // onAppPause() is not triggered in this case because the main activity is already
                 // paused.
-                updateAllWidgets();
+                flushModelChanges(true);
                 break;
 
             default:
