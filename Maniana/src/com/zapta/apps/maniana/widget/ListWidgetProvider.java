@@ -387,9 +387,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
             // If color is NONE show a gray solid color to help visually
             // grouping item text lines.
-            final int itemColor = item.getColor().isNone() ? 0xff808080 : item.getColor()
-                    .getColor();
-            colorView.setBackgroundColor(itemColor);
+            colorView.setBackgroundColor(item.getColor().getColor(0xff808080));
             itemListView.addView(itemView);
         }
     }

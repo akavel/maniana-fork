@@ -60,8 +60,8 @@ public enum ItemColor implements KeyedEnum {
         return mKey;
     }
 
-    public final int getColor() {
-        return mColor;
+    public final int getColor(int defaultColor) {
+        return isNone() ? defaultColor : mColor;
     }
 
     public final boolean isNone() {

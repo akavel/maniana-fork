@@ -360,20 +360,13 @@ public class Controller {
             case QuickActionsCache.EDIT_ACTION_ID: {
                 mApp.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
                 final ItemModel item = mApp.model().getItemForMutation(pageKind, itemIndex);
-                ItemTextEditor.startEditor(mApp, "Edit Task", item.getText(),
+                ItemTextEditor.startEditor(mApp, "Edit Task", item.getText(), item.getColor(),
                         new ItemTextEditor.ItemEditorListener() {
-                            @Override
-                            public void onTextChange(String newText) {
-                                // This updates the model on each key, as the user types.
-                                // Closing the editor will still leave the new content
-                                // stored in the model.
-                                item.setText(newText);
-                                mApp.model().setDirty();
-                            }
 
                             @Override
-                            public void onDismiss(String finalString) {
+                            public void onDismiss(String finalString, ItemColor finalColor) {
                                 item.setText(finalString);
+                                item.setColor(finalColor);
                                 mApp.model().setDirty();
                                 mApp.view().updateSingleItemView(pageKind, itemIndex);
                                 // Highlight the modified item for a short time, to provide
@@ -458,15 +451,13 @@ public class Controller {
     public final void onAddItemByTextButton(final PageKind pageKind) {
         clearPageUndo(pageKind);
         mApp.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
-        ItemTextEditor.startEditor(mApp, "New Task", "", new ItemTextEditor.ItemEditorListener() {
-            @Override
-            public void onTextChange(String newText) {
-            }
+        ItemTextEditor.startEditor(mApp, "New Task", "", ItemColor.NONE, new ItemTextEditor.ItemEditorListener() {
 
             @Override
-            public void onDismiss(String finalString) {
-                maybeAddNewItem(finalString, pageKind, false);
+            public void onDismiss(String finalString, ItemColor finalColor) {
+                maybeAddNewItem(finalString, finalColor, pageKind, true);
             }
+
         });
     }
 
@@ -477,7 +468,7 @@ public class Controller {
     }
 
     /** Add a new task from text editor or voice recognition. */
-    private final void maybeAddNewItem(final String text, final PageKind pageKind,
+    private final void maybeAddNewItem(final String text, ItemColor color, final PageKind pageKind,
             boolean upperCaseIt) {
         String cleanedValue = text.trim();
         if (cleanedValue.length() == 0) {
@@ -488,7 +479,7 @@ public class Controller {
             cleanedValue = cleanedValue.substring(0, 1).toUpperCase() + cleanedValue.substring(1);
         }
 
-        ItemModel item = new ItemModel(cleanedValue, false, false, ItemColor.NONE);
+        ItemModel item = new ItemModel(cleanedValue, false, false, color);
 
         mApp.model().insertItem(pageKind, 0, item);
         mApp.view().upadatePage(pageKind);
@@ -529,7 +520,7 @@ public class Controller {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 final TextView itemTextView = (TextView) arg1;
-                maybeAddNewItem(itemTextView.getText().toString(), mApp.view().getCurrentPage(),
+                maybeAddNewItem(itemTextView.getText().toString(), ItemColor.NONE, mApp.view().getCurrentPage(),
                         true);
             }
         });

@@ -16,15 +16,20 @@ package com.zapta.apps.maniana.editors;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.media.AudioManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.main.AppContext;
+import com.zapta.apps.maniana.model.ItemColor;
 import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
+
+//import android.content.DialogInterface.OnDismissListener;
 
 /**
  * Item text editor dialog. Used to create new itmes and to edit existing ones.
@@ -37,31 +42,7 @@ import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
 public class ItemTextEditor extends Dialog implements TrackablePopup {
 
     public interface ItemEditorListener {
-        void onTextChange(String newText);
-
-        void onDismiss(String finalText);
-    }
-
-    private class EventAdapter implements DialogInterface.OnDismissListener, TextWatcher {
-        @Override
-        public void onDismiss(DialogInterface dialog) {
-            handleOnDismiss();
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            handleTextChanged();
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            // Nothing to do here
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            // Nothing to do here
-        }
+        void onDismiss(String finalText, ItemColor finalColor);
     }
 
     private final AppContext mApp;
@@ -69,42 +50,80 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
     private final ItemEditorListener mListener;
 
     /** The text edit field of the dialog. */
-    private final EditText mEditText;
+    private final EditText mEditTextView;
+
+    /** The view whose background is used to display the color */
+    private final View mColorView;
 
     /** Used to avoid double reporting of dismissal. */
     private boolean dismissAlreadyReported = false;
 
+    private ItemColor mItemColor;
+
     /** Private constructor. Use startEditor() to create and launch an editor. */
     private ItemTextEditor(final AppContext app, String title, String initialText,
-            ItemEditorListener listener) {
+            ItemColor initialItemColor, ItemEditorListener listener) {
         // TODO: reorder and organize the statements below for better reliability.
         super(app.context());
         mApp = app;
         mListener = listener;
+        mItemColor = initialItemColor;
         setContentView(R.layout.editor_layout);
         setTitle(title);
         setOwnerActivity(app.mainActivity());
 
-        mEditText = (EditText) findViewById(R.id.editor_text);
-        mEditText.setText(initialText);
+        // Get sub views
+        mEditTextView = (EditText) findViewById(R.id.editor_text);
+        mColorView = findViewById(R.id.editor_color);
 
-        // Always using non completed variation, even if the item is completed.
-        app.pref().getPageItemFontVariation().apply(mEditText, false, false);
+        // Set text and style. Always using non completed variation, even if the
+        // item is completed.
+        mEditTextView.setText(initialText);
+        app.pref().getPageItemFontVariation().apply(mEditTextView, false, false);
 
-        EventAdapter eventAdapter = new EventAdapter();
-        setOnDismissListener(eventAdapter);
-        mEditText.addTextChangedListener(eventAdapter);
+        // EditorEventAdapter eventAdapter = new EditorEventAdapter();
+        setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface arg0) {
+                handleOnDismiss();
+            }
+        });
+
+        mEditTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                handleTextChanged();
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+            }
+        });
 
         getWindow().setGravity(Gravity.TOP);
 
+        final View colorClickView = findViewById(R.id.editor_color_click);
+        colorClickView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleColorClicked();
+            }
+        });
+        
+        updateColorView();
+
         // TODO: why this setting does not work when done in the layout XML?
-        mEditText.setHorizontallyScrolling(false);
-        mEditText.setSingleLine(false);
-        mEditText.setMinLines(3);
-        mEditText.setMaxLines(5);
+        mEditTextView.setHorizontallyScrolling(false);
+        mEditTextView.setSingleLine(false);
+        mEditTextView.setMinLines(3);
+        mEditTextView.setMaxLines(5);
 
         // Position cursor at the end of the text
-        mEditText.setSelection(initialText.length());
+        mEditTextView.setSelection(initialText.length());
 
         // TODO: this does not open automatically the keyaobrd when in landscape mode.
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -115,23 +134,31 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
         mApp.popupsTracker().untrack(this);
         // If not already reported during the close leftover.
         if (!dismissAlreadyReported) {
-            mListener.onDismiss(mEditText.getText().toString());
+            mListener.onDismiss(mEditTextView.getText().toString(), mItemColor);
         }
     }
 
     /** Called when text field value changes. */
     private final void handleTextChanged() {
-        final String value = mEditText.getText().toString();
+        final String value = mEditTextView.getText().toString();
         // We detect the Enter key by the '\n' char it inserts.
         if (value.contains("\n")) {
             final String cleanedValue = value.replace("\n", "").trim();
-            mEditText.setText(cleanedValue);
+            mEditTextView.setText(cleanedValue);
             // This will trigger the handleOnDismiss above that will call the listener of this
             // editor.
             dismiss();
-        } else {
-            mListener.onTextChange(value.trim());
         }
+    }
+
+    private final void handleColorClicked() {
+        mItemColor = mItemColor.nextCyclicColor();
+        updateColorView();
+        mApp.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_SPACEBAR, false);
+    }
+
+    private final void updateColorView() {
+        mColorView.setBackgroundColor(mItemColor.getColor(0xffaaaaaa));
     }
 
     /** Called when the dialog was left open and the main activity pauses. */
@@ -142,7 +169,7 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
             // UI thread will get to handle the queued event. The controller rely on the fact that
             // the editor was dismissed and any pending new item text was submitted to the model.
             dismissAlreadyReported = true;
-            mListener.onDismiss(mEditText.getText().toString());
+            mListener.onDismiss(mEditTextView.getText().toString(), mItemColor);
             dismiss();
         }
     }
@@ -156,8 +183,9 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
      * @param listener listener to callback on changes and on end.
      */
     public static void startEditor(final AppContext app, String title, String initialText,
-            final ItemEditorListener listener) {
-        final ItemTextEditor dialog = new ItemTextEditor(app, title, initialText, listener);
+            ItemColor initialItemColor, final ItemEditorListener listener) {
+        final ItemTextEditor dialog = new ItemTextEditor(app, title, initialText, initialItemColor,
+                listener);
         app.popupsTracker().track(dialog);
         dialog.show();
     }

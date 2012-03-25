@@ -140,7 +140,7 @@ public class ItemView extends FrameLayout {
     public final void updateFromItem(ItemModelReadOnly item) {
         updateItemButton(item.isLocked());
         mTextView.setText(item.getText());
-        mColorView.setBackgroundColor(item.getColor().getColor());
+        mColorView.setBackgroundColor(item.getColor().getColor(0x00000000));
         updateFont(item.isCompleted());
     }
 
