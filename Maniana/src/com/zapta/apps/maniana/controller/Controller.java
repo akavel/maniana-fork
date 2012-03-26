@@ -175,11 +175,10 @@ public class Controller {
             // NOTE(tal): this clears the dirty bit.
             ModelPersistence.saveData(mApp, mApp.model(), metadata);
             check(!mApp.model().isDirty());
-            onBackupDataChange();        
+            onBackupDataChange();
         }
-        
         if (modelWasDirty || alwaysUpdateAllWidgets) {
-          updateAllWidgets();
+            updateAllWidgets();
         }
     }
 
@@ -362,17 +361,24 @@ public class Controller {
                 final ItemModel item = mApp.model().getItemForMutation(pageKind, itemIndex);
                 ItemTextEditor.startEditor(mApp, "Edit Task", item.getText(), item.getColor(),
                         new ItemTextEditor.ItemEditorListener() {
-
                             @Override
                             public void onDismiss(String finalString, ItemColor finalColor) {
-                                item.setText(finalString);
-                                item.setColor(finalColor);
-                                mApp.model().setDirty();
-                                mApp.view().updateSingleItemView(pageKind, itemIndex);
-                                // Highlight the modified item for a short time, to provide
-                                // the user with
-                                // an indication of the modified item.
-                                briefItemHighlight(pageKind, itemIndex, 700);
+                                // NOTE: at this point, finalString is also cleaned of leading or
+                                // trailing
+                                if (finalString.length() == 0) {
+                                    startItemDeletionWithAnination(pageKind, itemIndex);
+                                    if (mApp.pref().getVerboseMessagesEnabledPreference()) {
+                                        mApp.services().toast("Empty task deleted");
+                                    }
+                                } else {
+                                    item.setText(finalString);
+                                    item.setColor(finalColor);
+                                    mApp.model().setDirty();
+                                    mApp.view().updateSingleItemView(pageKind, itemIndex);
+                                    // Highlight the modified item for a short time, to provide
+                                    // the user with an indication of the modified item.
+                                    briefItemHighlight(pageKind, itemIndex, 700);
+                                }
                             }
                         });
                 return;
@@ -406,20 +412,29 @@ public class Controller {
 
             case QuickActionsCache.DELETE_ACTION_ID: {
                 mApp.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_DELETE, false);
-                mApp.view().startItemAnimation(pageKind, itemIndex,
-                        AppView.ItemAnimationType.DELETING_ITEM, 0, new Runnable() {
-                            @Override
-                            public void run() {
-                                // This runs at the end of the animation.
-                                mApp.model().removeItemWithUndo(pageKind, itemIndex);
-                                mApp.view().upadatePage(pageKind);
-                            }
-                        });
+                startItemDeletionWithAnination(pageKind, itemIndex);
                 return;
             }
         }
 
         throw new RuntimeException("Unknown menu action: " + actionId);
+    }
+
+    /** 
+     * Start item deletion from the current page. 
+     * The item is deleted after a short animation and
+     * the page view is then updated.
+     */
+    private final void startItemDeletionWithAnination(final PageKind pageKind, final int itemIndex) {
+        mApp.view().startItemAnimation(pageKind, itemIndex,
+                AppView.ItemAnimationType.DELETING_ITEM, 0, new Runnable() {
+                    @Override
+                    public void run() {
+                        // This runs at the end of the animation.
+                        mApp.model().removeItemWithUndo(pageKind, itemIndex);
+                        mApp.view().upadatePage(pageKind);
+                    }
+                });
     }
 
     /** Highlight the given item for a brief time. The item is assumed to already be visible. */
@@ -451,14 +466,13 @@ public class Controller {
     public final void onAddItemByTextButton(final PageKind pageKind) {
         clearPageUndo(pageKind);
         mApp.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
-        ItemTextEditor.startEditor(mApp, "New Task", "", ItemColor.NONE, new ItemTextEditor.ItemEditorListener() {
-
-            @Override
-            public void onDismiss(String finalString, ItemColor finalColor) {
-                maybeAddNewItem(finalString, finalColor, pageKind, true);
-            }
-
-        });
+        ItemTextEditor.startEditor(mApp, "New Task", "", ItemColor.NONE,
+                new ItemTextEditor.ItemEditorListener() {
+                    @Override
+                    public void onDismiss(String finalString, ItemColor finalColor) {
+                        maybeAddNewItem(finalString, finalColor, pageKind, true);
+                    }
+                });
     }
 
     public final void onAddItemByVoiceButton(final PageKind pageKind) {
@@ -520,8 +534,8 @@ public class Controller {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                 final TextView itemTextView = (TextView) arg1;
-                maybeAddNewItem(itemTextView.getText().toString(), ItemColor.NONE, mApp.view().getCurrentPage(),
-                        true);
+                maybeAddNewItem(itemTextView.getText().toString(), ItemColor.NONE, mApp.view()
+                        .getCurrentPage(), true);
             }
         });
     }
@@ -654,10 +668,10 @@ public class Controller {
             case APPLAUSE_LEVEL:
             case LOCK_PERIOD:
             case VERBOSE_MESSAGES:
-            case STARTUP_ANIMATION:          
+            case STARTUP_ANIMATION:
                 // Nothing to do here. We query these preferences on the fly.
                 break;
-                
+
             case AUTO_DAILY_CLEANUP:
                 // This setting may affect the widget on next update but by itself, its
                 // change event does require widget update (?).
@@ -668,7 +682,7 @@ public class Controller {
             case WIDGET_BACKGROUND_COLOR:
             case WIDGET_ITEM_FONT_TYPE:
             case WIDGET_ITEM_TEXT_COLOR:
-            case WIDGET_ITEM_FONT_SIZE:  
+            case WIDGET_ITEM_FONT_SIZE:
             case WIDGET_SHOW_COMPLETED_ITEMS:
             case WIDGET_ITEM_COMPLETED_TEXT_COLOR:
             case WIDGET_SHOW_TOOLBAR:

@@ -2,7 +2,6 @@
 <resources>
     <string name="app_name">Maniana</string>
 	<string name="place_holder">(tbd)</string>
-	<string name="task_hint">Enter task&#8230;</string>
 	<string name="arrow_right">→</string>
 	<string name="arrow_down">↓</string>
 	<string name="color_picker_message">Press on a color below to apply it</string>

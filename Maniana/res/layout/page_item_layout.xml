@@ -27,7 +27,6 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/page_item_arrow"
             android:background="@android:color/transparent"
-            android:hint="@string/task_hint"
             android:paddingLeft="7dip"
             android:paddingRight="5dip"
             android:scrollHorizontally="false" >
