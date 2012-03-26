@@ -45,7 +45,7 @@ public class PageTheme extends Thumbnail {
                 ItemFontType.SERIF, 14, 0xff000000, 0xff000000, 0x00000000),
 
         new PageTheme("Kermit", R.drawable.page_theme5_preview, true, 0xfff0fff0, 0xffaaffff,
-                ItemFontType.CURSIVE, 16, 0xff111111, 0xff555555, 0x40000000),
+                ItemFontType.CASUAL, 16, 0xff111111, 0xff555555, 0x30000000),
     };
 
     public final boolean backgroundPaper;

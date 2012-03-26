@@ -10,7 +10,7 @@ Binary assets and resource files are licensed under Apache 2.0 except for the on
 Fonts
 -----
 Damion font
-asserts/fonts/Damion/*
+assets/fonts/Damion/*
 SIL OPEN FONT LICENSE Version 1.1
 
 Pompiere font
@@ -20,10 +20,15 @@ Font file modified (using FontForge) to fix the U+FEFF problem described in answ
 http://tinyurl.com/7x9qbxt
 
 Vavont font
-asserts/fonts/Vavont/*
+assets/fonts/Vavont/*
 GPL
 Font file modified (using FontForge) to fix the U+FEFF problem described in answer 2 here:
 http://tinyurl.com/7x9qbxt
+
+Daniel font
+assets/fonts/Daniel/*
+'Free'
+http://goodreasonblog.blogspot.com/p/fontery.html
  
 Icons
 ----- 
