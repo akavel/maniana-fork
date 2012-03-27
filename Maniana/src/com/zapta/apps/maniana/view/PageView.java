@@ -358,8 +358,15 @@ public class PageView extends FrameLayout {
      * page.
      */
     public final void upadateAllItemViews() {
+        // NOTE: originally we used notifyDataSetChanged(). Changed to invalidateViews() 
+        // in an attempt to fix the ghost task issue:
+        // http://code.google.com/p/maniana/issues/detail?id=63
+        // Need to follow up and see if it was fixed.
+        //
         // We simply force the model to send an updated notifcation.
-        mItemListView.getAdapter().notifyDataSetChanged();
+        // mItemListView.getAdapter().notifyDataSetChanged();
+        //
+        mItemListView.invalidateViews();
     }
 
     /**
