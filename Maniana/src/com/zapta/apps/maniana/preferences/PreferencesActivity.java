@@ -33,7 +33,6 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceGroup;
 import android.text.format.Time;
-import android.widget.Toast;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
@@ -42,6 +41,7 @@ import com.zapta.apps.maniana.util.DateUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.PopupsTracker;
 import com.zapta.apps.maniana.util.VisibleForTesting;
+import com.zapta.apps.maniana.util.WorkingDialog;
 
 /**
  * Activity that shows the settings page.
@@ -97,6 +97,9 @@ public class PreferencesActivity extends PreferenceActivity implements
 
     private PreferenceSelector mPageColorPreferenceSelector;
     private PreferenceSelector mWidgetColorPreferenceSelector;
+
+    @Nullable
+    private WorkingDialog mWorkingDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,7 +164,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         findPreference(PreferenceKind.AUTO_SORT);
         findPreference(PreferenceKind.AUTO_DAILY_CLEANUP);
         findPreference(PreferenceKind.WIDGET_SHOW_COMPLETED_ITEMS);
-        
+
         findPreference(PreferenceKind.WIDGET_SINGLE_LINE);
 
         mPageSelectThemePreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -263,7 +266,22 @@ public class PreferencesActivity extends PreferenceActivity implements
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        onResetSettingsConfirmed();
+                        dialog.dismiss();
+                        mWorkingDialog = new WorkingDialog(PreferencesActivity.this,
+                                "Restoring defaults...");
+                        mWorkingDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                            @Override
+                            public void onShow(DialogInterface arg0) {
+                                getListView().post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        onResetSettingsConfirmed();
+                                    }
+                                });
+                            }
+                        });
+
+                        mWorkingDialog.show();
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
@@ -280,6 +298,7 @@ public class PreferencesActivity extends PreferenceActivity implements
     }
 
     private final void onResetSettingsConfirmed() {
+
         Editor editor = getPreferenceScreen().getEditor();
         editor.clear();
 
@@ -303,7 +322,6 @@ public class PreferencesActivity extends PreferenceActivity implements
         editor.putInt(PreferenceKind.WIDGET_ITEM_COMPLETED_TEXT_COLOR.getKey(),
                 PreferenceConstants.DEFAULT_WIDGET_ITEM_COMPLETED_TEXT_COLOR);
 
-
         // NOTE: for checkbox whose default value is false, need to set them
         // here to false.
         editor.putBoolean(PreferenceKind.WIDGET_SHOW_COMPLETED_ITEMS.getKey(),
@@ -326,12 +344,13 @@ public class PreferencesActivity extends PreferenceActivity implements
         editor.commit();
 
         // Hack per http://tinyurl.com/c44gl4r We close this activity and restart
-        // it using the same intent that created it. This causes it to reload
-        // the preferences.
+        // Using the same intent that created this preferences activity.
+        // This causes it to reload the preferences.
         finish();
         startActivity(getIntent());
-        Toast.makeText(PreferencesActivity.this, "All settings restored to defaut",
-                Toast.LENGTH_SHORT).show();
+
+        mWorkingDialog.dismiss();
+        mWorkingDialog = null;
     }
 
     private final void onVersionInfoSettingsClick() {
@@ -400,7 +419,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         } else {
             mApplauseLevelListPreference.setSummary("(sound is off)");
         }
-        
+
         // Update selectors
         mPageColorPreferenceSelector.update();
         mWidgetColorPreferenceSelector.update();

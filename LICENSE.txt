@@ -29,6 +29,8 @@ Daniel font
 assets/fonts/Daniel/*
 'Free'
 http://goodreasonblog.blogspot.com/p/fontery.html
+Font file modified (using FontForge) to fix the U+FEFF problem described in answer 2 here:
+http://tinyurl.com/7x9qbxt
  
 Icons
 ----- 
