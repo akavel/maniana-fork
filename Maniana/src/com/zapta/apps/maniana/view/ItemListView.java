@@ -556,6 +556,9 @@ public class ItemListView extends ListView {
 
         itemView.setDrawingCacheEnabled(true);
         mDragBitmap = Bitmap.createBitmap(itemView.getDrawingCache());
+ 
+        // NOTE: not sure why we need this here but it seems to solve bug 63 (Ghost view).
+        itemView.invalidate();
 
         mDragedItemImageViewWindowParams = new WindowManager.LayoutParams();
         mDragedItemImageViewWindowParams.gravity = Gravity.TOP | Gravity.LEFT;
