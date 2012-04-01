@@ -216,7 +216,7 @@ public class PreferencesActivity extends PreferenceActivity implements
                 mPopupsTracker, new ThumbnailSelector.ThumbnailSelectorListener<PageTheme>() {
                     @Override
                     public void onThumbnailSelection(PageTheme theme) {
-                        handlePageThemeSelection(theme);
+                        onPageThemeSelection(theme);
                     }
                 });
         dialog.show();
@@ -228,14 +228,14 @@ public class PreferencesActivity extends PreferenceActivity implements
                 mPopupsTracker, new ThumbnailSelector.ThumbnailSelectorListener<WidgetTheme>() {
                     @Override
                     public void onThumbnailSelection(WidgetTheme theme) {
-                        handleWidgetThemeSelection(theme);
+                        onWidgetThemeSelection(theme);
                     }
                 });
         dialog.show();
     }
 
     /** Called when a page theme is selected from the widget theme dialog. */
-    private final void handlePageThemeSelection(PageTheme theme) {
+    private final void onPageThemeSelection(PageTheme theme) {
         mPageBackgroundPaperPreference.setChecked(theme.backgroundPaper);
         mPagePaperColorPickPreference.onColorChanged(theme.paperColor);
         mPageSolidColorPickPreference.onColorChanged(theme.backgroundSolidColor);
@@ -247,7 +247,7 @@ public class PreferencesActivity extends PreferenceActivity implements
     }
 
     /** Called when a widget theme is selected from the widget theme dialog. */
-    private final void handleWidgetThemeSelection(WidgetTheme theme) {
+    private final void onWidgetThemeSelection(WidgetTheme theme) {
         mWidgetBackgroundPaperPreference.setChecked(theme.backgroundPaper);
         mWidgetPaperColorPickPreference.onColorChanged(theme.paperColor);
         mWidgetSolidColorPickPreference.onColorChanged(theme.backgroundColor);
