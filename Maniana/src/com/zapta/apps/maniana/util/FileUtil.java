@@ -107,10 +107,10 @@ public final class FileUtil {
     }
 
     /** Write a string to a file */
-    public static void writeStringToFile(Context context, String content, String fileName) {
+    public static void writeStringToFile(Context context, String content, String fileName, int contextMode) {
         FileOutputStream out = null;
         try {
-            out = context.openFileOutput(fileName, Context.MODE_PRIVATE);
+            out = context.openFileOutput(fileName, contextMode);
             out.write(content.getBytes());
         } catch (Exception e) {
             // TODO: more graceful error handling?

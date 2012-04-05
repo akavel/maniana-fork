@@ -106,7 +106,7 @@ public class ModelPersistence {
         LogUtil.info("Saving model to file: " + DATA_FILE_NAME);
         final String json = ModelSerialization.serializeModel(model, metadata);
         synchronized (sDataFileLock) {
-            FileUtil.writeStringToFile(app.context(), json, DATA_FILE_NAME);
+            FileUtil.writeStringToFile(app.context(), json, DATA_FILE_NAME, Context.MODE_PRIVATE);
         }
         // Model reflects persisted state.
         model.setClean();

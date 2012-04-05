@@ -43,6 +43,7 @@ import com.zapta.apps.maniana.persistence.PersistenceMetadata;
 import com.zapta.apps.maniana.preferences.PreferenceKind;
 import com.zapta.apps.maniana.preferences.PreferencesActivity;
 import com.zapta.apps.maniana.quick_action.QuickActionItem;
+import com.zapta.apps.maniana.util.AttachmentUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.view.AppView;
 import com.zapta.apps.maniana.view.AppView.ItemAnimationType;
@@ -176,6 +177,9 @@ public class Controller {
             ModelPersistence.saveData(mApp, mApp.model(), metadata);
             check(!mApp.model().isDirty());
             onBackupDataChange();
+            
+            // Use this opportunity also to garbage collect old attachment files.
+            AttachmentUtil.garbageCollectAttachmentFile(mApp.context());
         }
         if (modelWasDirty || alwaysUpdateAllWidgets) {
             updateAllWidgets();
@@ -692,6 +696,10 @@ public class Controller {
                 // onAppPause() is not triggered in this case because the main activity is already
                 // paused.
                 flushModelChanges(true);
+                break;
+                
+            case BACKUP_EMAIL:
+                // Nothing to do here.
                 break;
 
             default:

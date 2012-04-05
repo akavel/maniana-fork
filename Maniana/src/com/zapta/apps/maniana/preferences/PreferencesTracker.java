@@ -54,7 +54,6 @@ public class PreferencesTracker implements PreferenceConstants {
     private int mCachedPageItemActiveTextColorPreference;
     private int mCachedPageItemCompletedTextColorPreference;
     private int mCachedPageItemDividerColorPreference;
-
     private ItemFontVariation mCachedPageItemFontVariation;
 
     // This is a hack to keep the listener from being garbage collected per
@@ -394,7 +393,8 @@ public class PreferencesTracker implements PreferenceConstants {
             case WIDGET_SHOW_COMPLETED_ITEMS:
             case WIDGET_ITEM_COMPLETED_TEXT_COLOR:
             case WIDGET_SHOW_TOOLBAR:
-            case WIDGET_SINGLE_LINE:      
+            case WIDGET_SINGLE_LINE:    
+            case BACKUP_EMAIL:
                 // These ones are not cached or used here. Just reported to controller to
                 // trigger the widget update and backup service.
                 break;

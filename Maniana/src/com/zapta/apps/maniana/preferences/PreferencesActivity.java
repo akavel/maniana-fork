@@ -14,6 +14,10 @@
 
 package com.zapta.apps.maniana.preferences;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.annotation.Nullable;
 
 import net.margaritov.preference.colorpicker.ColorPickerPreference;
@@ -27,16 +31,19 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceGroup;
 import android.text.format.Time;
+import android.widget.Toast;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
 import com.zapta.apps.maniana.help.PopupMessageActivity.MessageKind;
+import com.zapta.apps.maniana.util.AttachmentUtil;
 import com.zapta.apps.maniana.util.DateUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.PopupsTracker;
@@ -88,6 +95,11 @@ public class PreferencesActivity extends PreferenceActivity implements
     private Preference mSharePreference;
     private Preference mFeedbackPreference;
     private Preference mRestoreDefaultsPreference;
+
+    // Backup
+    private EditTextPreference mBackupEmailPreference;
+    private Preference mBackupPreference;
+    private Preference mRestorePreference;
 
     /** For temp time calculations. Avoiding new object creation. */
     private Time tempTime = new Time();
@@ -147,9 +159,15 @@ public class PreferencesActivity extends PreferenceActivity implements
 
         // Miscellaneous
         mVersionInfoPreference = findPreference(PreferenceKind.VERSION_INFO);
+
         mSharePreference = findPreference(PreferenceKind.SHARE);
         mFeedbackPreference = findPreference(PreferenceKind.FEEDBACK);
         mRestoreDefaultsPreference = findPreference(PreferenceKind.RESTORE_DEFAULTS);
+
+        // Backup
+        mBackupEmailPreference = (EditTextPreference) findPreference(PreferenceKind.BACKUP_EMAIL);
+        mBackupPreference = findPreference(PreferenceKind.BACKUP);
+        mRestorePreference = findPreference(PreferenceKind.RESTORE);
 
         // Enabled alpha channel in colors pickers that need it.
         mPageItemDividerColorPickPreference.setAlphaSliderEnabled(true);
@@ -191,6 +209,13 @@ public class PreferencesActivity extends PreferenceActivity implements
         mVersionInfoPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 onVersionInfoSettingsClick();
+                return true;
+            }
+        });
+
+        mBackupPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                onBackupClick();
                 return true;
             }
         });
@@ -358,6 +383,37 @@ public class PreferencesActivity extends PreferenceActivity implements
         startActivity(intent);
     }
 
+    private final void onBackupClick() {
+        
+        AttachmentUtil.createAttachmentFile(this);
+        
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        // sharingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        final String defaultToAddress = getBackupEmailAddress();
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[] {
+            defaultToAddress
+        });
+
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-dd-MM HH:mm:ss");
+        final String timeString = dateFormat.format(new Date());
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Maniana backup " + timeString);
+
+        intent.putExtra(
+                Intent.EXTRA_TEXT,
+                "This email message was sent by Android's Maniana To Do List app.\n\n"
+                        + "It contains an attchment file with a backup copy of the task list.\n\n" 
+                        + "To restore the task list, open this email message in an Android device where" 
+                        + " Maniana is installed and click on the Download button of the attachment.");
+
+        intent.setType("application/json");
+        final Uri fileUri = Uri.fromFile(new File("/mnt/sdcard/../.." + getFilesDir() + "/"
+                + AttachmentUtil.BACKUP_ATTACHMENT_FILE_NAME));
+        intent.putExtra(Intent.EXTRA_STREAM, fileUri);   
+
+        startActivity(intent);
+    }
+
     private final void onShareClick() {
         Intent sharingIntent = new Intent(Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
@@ -420,6 +476,14 @@ public class PreferencesActivity extends PreferenceActivity implements
             mApplauseLevelListPreference.setSummary("(sound is off)");
         }
 
+        {
+            final String baseBackupEmailSummary = "Backup destination email address";
+            final String backupEmailAddress = getBackupEmailAddress();
+            mBackupEmailPreference
+                    .setSummary((backupEmailAddress.length() > 0) ? baseBackupEmailSummary + " ("
+                            + backupEmailAddress + ")" : baseBackupEmailSummary);
+        }
+
         // Update selectors
         mPageColorPreferenceSelector.update();
         mWidgetColorPreferenceSelector.update();
@@ -446,6 +510,10 @@ public class PreferencesActivity extends PreferenceActivity implements
                     : "";
             updateListSummary(mLockPeriodListPreference, R.array.lockPeriodSummaries, suffix);
         }
+    }
+
+    private final String getBackupEmailAddress() {
+        return mBackupEmailPreference.getText().trim();
     }
 
     @VisibleForTesting

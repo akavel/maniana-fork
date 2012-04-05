@@ -52,6 +52,18 @@ public enum ResumeAction {
 
     /** Deserialize a resume action from an intent */
     public static ResumeAction fromIntent(Intent intent) {
+        // TODO: implement file parsing and model replacement
+        LogUtil.debug("*** incoming intent: %s", intent);
+        LogUtil.debug("*** incoming action: %s", intent.getAction());
+        LogUtil.debug("*** incoming data string: %s", intent.getDataString());
+        LogUtil.debug("*** incoming data uri: %s", intent.getData());
+
+        if (intent.getData() != null) {
+            LogUtil.debug("*** incoming data uri path: %s", intent.getData().getPath());
+            LogUtil.debug("*** incoming data uri scheme: %s", intent.getData().getScheme());
+            LogUtil.debug("*** incoming data uri authority: %s", intent.getData());
+        }
+
         @Nullable
         final String strValue = intent.getStringExtra(RESUME_ACTION_KEY);
         if (strValue == null) {

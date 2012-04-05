@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--  NOTE: version code is incremented once per official Market release -->
+<!-- NOTE: version code is incremented once per official Market release -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zapta.apps.maniana"
     android:versionCode="20"
@@ -29,6 +29,16 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:mimeType="application/json" />
+                <data android:pathPattern=".*" />
+                <data android:host="*" />
             </intent-filter>
         </activity>
         <activity
