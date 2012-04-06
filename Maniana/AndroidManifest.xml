@@ -2,8 +2,8 @@
 <!-- NOTE: version code is incremented once per official Market release -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zapta.apps.maniana"
-    android:versionCode="20"
-    android:versionName="1.01.20" >
+    android:versionCode="21"
+    android:versionName="1.01.21.d1" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -36,9 +36,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:mimeType="application/json" />
-                <data android:pathPattern=".*" />
-                <data android:host="*" />
+                <data
+                    android:host="*"
+                    android:mimeType="application/json"
+                    android:pathPattern=".*" />
             </intent-filter>
         </activity>
         <activity

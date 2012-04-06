@@ -138,6 +138,21 @@ public class PageModel {
     public void appendItem(ItemModel item) {
         mItems.add(item);
     }
+    
+    public final void restoreBackup(PageModel newPage) {
+        // Move all existing items to the undo buffer
+        mUndoItems.clear();
+        // TODO: have a smarter undo here. Save only items that are not
+        // in the new model.
+        mUndoItems.addAll(mItems);
+        mItems.clear();
+        
+        // Add copies of the items in the new page
+        for (ItemModel item : newPage.mItems) {
+            final ItemModel newItem = new ItemModel(item);  
+            mItems.add(newItem);
+        }      
+    }   
 
     /**
      * Peform a page organization operation.
@@ -150,7 +165,7 @@ public class PageModel {
      *        deleted.
      * @param summary an object is set with the operation summary.
      */
-    public void organizePageWithUndo(boolean deleteCompletedItems, int itemOfInterestIndex,
+    public final void organizePageWithUndo(boolean deleteCompletedItems, int itemOfInterestIndex,
             OrganizePageSummary summary) {
         summary.clear();
 

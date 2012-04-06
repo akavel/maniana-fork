@@ -38,7 +38,6 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceGroup;
 import android.text.format.Time;
-import android.widget.Toast;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
@@ -99,7 +98,8 @@ public class PreferencesActivity extends PreferenceActivity implements
     // Backup
     private EditTextPreference mBackupEmailPreference;
     private Preference mBackupPreference;
-    private Preference mRestorePreference;
+    // TODO: implement popup help message for do restore
+    private Preference mRestoreBackupPreference;
 
     /** For temp time calculations. Avoiding new object creation. */
     private Time tempTime = new Time();
@@ -167,7 +167,7 @@ public class PreferencesActivity extends PreferenceActivity implements
         // Backup
         mBackupEmailPreference = (EditTextPreference) findPreference(PreferenceKind.BACKUP_EMAIL);
         mBackupPreference = findPreference(PreferenceKind.BACKUP);
-        mRestorePreference = findPreference(PreferenceKind.RESTORE);
+        mRestoreBackupPreference = findPreference(PreferenceKind.RESTORE);
 
         // Enabled alpha channel in colors pickers that need it.
         mPageItemDividerColorPickPreference.setAlphaSliderEnabled(true);
@@ -208,7 +208,14 @@ public class PreferencesActivity extends PreferenceActivity implements
 
         mVersionInfoPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
-                onVersionInfoSettingsClick();
+                onVersionInfoClick();
+                return true;
+            }
+        });
+        
+        mRestoreBackupPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            public boolean onPreferenceClick(Preference preference) {
+                onRestoreBackupClick();
                 return true;
             }
         });
@@ -378,8 +385,13 @@ public class PreferencesActivity extends PreferenceActivity implements
         mWorkingDialog = null;
     }
 
-    private final void onVersionInfoSettingsClick() {
+    private final void onVersionInfoClick() {
         final Intent intent = PopupMessageActivity.intentFor(this, MessageKind.WHATS_NEW);
+        startActivity(intent);
+    }
+    
+    private final void onRestoreBackupClick() {
+        final Intent intent = PopupMessageActivity.intentFor(this, MessageKind.RESTORE_BACKUP);
         startActivity(intent);
     }
 

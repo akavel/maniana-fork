@@ -83,7 +83,7 @@ public class ModelPersistence {
             fileReadResult = FileUtil.readFileToString(context, fileName, isAsset);
         }
 
-        if (fileReadResult.outcoe == FileReadOutcome.NOT_FOUND) {
+        if (fileReadResult.outcome == FileReadOutcome.NOT_FOUND) {
             return new ModelLoadingResult(ModelLoadingOutcome.FILE_NOT_FOUND);
         }
 

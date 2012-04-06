@@ -16,11 +16,16 @@ package com.zapta.apps.maniana.controller;
 
 import static com.zapta.apps.maniana.util.Assertions.check;
 
+import java.io.InputStream;
+
 import javax.annotation.Nullable;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -32,18 +37,22 @@ import com.zapta.apps.maniana.help.PopupMessageActivity;
 import com.zapta.apps.maniana.help.PopupMessageActivity.MessageKind;
 import com.zapta.apps.maniana.main.AppContext;
 import com.zapta.apps.maniana.main.ResumeAction;
+import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.model.ItemColor;
 import com.zapta.apps.maniana.model.ItemModel;
 import com.zapta.apps.maniana.model.ItemModelReadOnly;
 import com.zapta.apps.maniana.model.OrganizePageSummary;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.model.PushScope;
+import com.zapta.apps.maniana.persistence.ModelDeserialization;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.persistence.PersistenceMetadata;
 import com.zapta.apps.maniana.preferences.PreferenceKind;
 import com.zapta.apps.maniana.preferences.PreferencesActivity;
 import com.zapta.apps.maniana.quick_action.QuickActionItem;
 import com.zapta.apps.maniana.util.AttachmentUtil;
+import com.zapta.apps.maniana.util.FileUtil;
+import com.zapta.apps.maniana.util.FileUtil.FileReadResult;
 import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.view.AppView;
 import com.zapta.apps.maniana.view.AppView.ItemAnimationType;
@@ -177,7 +186,7 @@ public class Controller {
             ModelPersistence.saveData(mApp, mApp.model(), metadata);
             check(!mApp.model().isDirty());
             onBackupDataChange();
-            
+
             // Use this opportunity also to garbage collect old attachment files.
             AttachmentUtil.garbageCollectAttachmentFile(mApp.context());
         }
@@ -187,7 +196,7 @@ public class Controller {
     }
 
     /** Called when the main activity is resumed, including after app creation. */
-    public final void onMainActivityResume(ResumeAction resumeAction) {
+    public final void onMainActivityResume(ResumeAction resumeAction, @Nullable Intent resumeIntent) {
         // This may leave undo items in case we cleanup completed tasks.
         maybeHandleDateChange();
 
@@ -244,6 +253,9 @@ public class Controller {
                 break;
             case ADD_NEW_ITEM_BY_VOICE:
                 onAddItemByVoiceButton(PageKind.TODAY);
+                break;
+            case RESTORE_FROM_BABKUP_FILE:
+                onRestoreBackupFromFile(resumeIntent);
                 break;
             case NONE:
             case ONLY_RESET_PAGE:
@@ -424,9 +436,8 @@ public class Controller {
         throw new RuntimeException("Unknown menu action: " + actionId);
     }
 
-    /** 
-     * Start item deletion from the current page. 
-     * The item is deleted after a short animation and
+    /**
+     * Start item deletion from the current page. The item is deleted after a short animation and
      * the page view is then updated.
      */
     private final void startItemDeletionWithAnination(final PageKind pageKind, final int itemIndex) {
@@ -513,7 +524,59 @@ public class Controller {
         });
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    /** Handle the case where the app is responding to a restore from file action. */
+    private final void onRestoreBackupFromFile(Intent resumeIntent) {
+        // NOTE: main activity already qualified this to have the expected content type.
+        final AppModel newModel;
+        try {
+            final Uri uri = resumeIntent.getData();
+            final InputStream in = mApp.context().getContentResolver().openInputStream(uri);
+            FileReadResult readResult = FileUtil.readFileToString(in, uri.toString());
+            if (!readResult.outcome.isOk()) {
+                mApp.services().toast("Failed to read backup file.");
+                return;
+            }
+            // TODO: test that the file size is reasonable
+            // TODO: test that the file looks like maniana file
+            PersistenceMetadata resultMetadata = new PersistenceMetadata();
+            newModel = new AppModel();
+            ModelDeserialization.deserializeModel(newModel, resultMetadata, readResult.content);
+        } catch (Throwable e) {
+            LogUtil.error(e, "Error while trying to restore data");
+            mApp.services().toast("Error processign the backup file");
+            return;
+        }
+
+        mApp.services().toast("Found a model with %d items", newModel.getItemCount());
+
+        final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        onRestoreBackupFromFileConfirmed(newModel);
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        // Nothing to do
+                        break;
+                }
+            }
+        };
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(mApp.context());
+        final String message = String.format("Replace existing %d tasks with %d new tasks?", mApp
+                .model().getItemCount(), newModel.getItemCount());
+        builder.setMessage(message).setPositiveButton("Yes!", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
+    }
+
+    private final void onRestoreBackupFromFileConfirmed(AppModel newModel) {
+        mApp.model().restoreBackup(newModel);
+        mApp.view().updatePages();
+        mApp.services().toast("Tasks list restored from backup");
+    }
+
+    public final void onActivityResult(int requestCode, int resultCode, Intent intent) {
         switch (requestCode) {
             case VOICE_RECOGNITION_REQUEST_CODE: {
                 onVoiceActivityResult(resultCode, intent);
@@ -697,7 +760,7 @@ public class Controller {
                 // paused.
                 flushModelChanges(true);
                 break;
-                
+
             case BACKUP_EMAIL:
                 // Nothing to do here.
                 break;

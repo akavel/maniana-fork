@@ -42,7 +42,7 @@ public final class AttachmentUtil {
     public static boolean createAttachmentFile(Context context) {
         
         final FileReadResult readResult = FileUtil.readFileToString(context, ModelPersistence.DATA_FILE_NAME, false);
-        if (readResult.outcoe != FileReadResult.FileReadOutcome.READ_OK) {
+        if (readResult.outcome != FileReadResult.FileReadOutcome.READ_OK) {
             return false;
         }
         

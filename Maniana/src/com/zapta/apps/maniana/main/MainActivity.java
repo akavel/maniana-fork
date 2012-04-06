@@ -14,6 +14,8 @@
 
 package com.zapta.apps.maniana.main;
 
+import javax.annotation.Nullable;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,6 +43,10 @@ public class MainActivity extends Activity {
 
     /** Used to pass resume action from onNewIntent() to onResume(). */
     private ResumeAction mResumeAction = ResumeAction.NONE;
+    
+    /** Contains the intent that triggered mResumeAction. Null FF action = NONE. */
+    @Nullable
+    private Intent mResumeIntent = null;
 
     /** Called by the Android framework to initialize the activity. */
     @Override
@@ -164,6 +170,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+        mResumeIntent = null;
         mResumeAction = ResumeAction.NONE;
         // Inform the controller.
         mApp.controller().onMainActivityPause();
@@ -175,11 +182,15 @@ public class MainActivity extends Activity {
         super.onResume();
 
         // Get the action for this resume
+        final Intent thisResumeIntent = mResumeIntent;
         final ResumeAction thisResumeAction = mResumeAction;
+        
+        mResumeIntent = null;
         mResumeAction = ResumeAction.NONE;
+        
 
         // Inform the controller
-        mApp.controller().onMainActivityResume(thisResumeAction);
+        mApp.controller().onMainActivityResume(thisResumeAction, thisResumeIntent);
     }
 
     @Override
@@ -209,7 +220,7 @@ public class MainActivity extends Activity {
 
     /** Update the resume action from the given launch intent. */
     private final void trackResumeAction(Intent launchIntent) {
-        // TODO: should we condition test first that the intent is a launcher intent?
+        mResumeIntent = launchIntent;
         mResumeAction = ResumeAction.fromIntent(launchIntent);
     }
 }

@@ -163,6 +163,12 @@ public class AppModel {
         setDirty();
         getPageModel(pageKind).removeItemWithUndo(itemIndex);
     }
+    
+    public final void restoreBackup(AppModel newModel) {
+      setDirty();
+      mTodayPageModel.restoreBackup(newModel.mTodayPageModel);
+      mTomorrowPageMode.restoreBackup(newModel.mTomorrowPageMode);
+    }
 
     /**
      * Organize the given page with undo. See details at

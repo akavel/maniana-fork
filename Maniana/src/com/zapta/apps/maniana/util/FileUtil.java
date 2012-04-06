@@ -43,15 +43,19 @@ public final class FileUtil {
             READ_OK,
             NOT_FOUND,
             READ_ERROR;
+            
+            public final boolean isOk() {
+                return this == READ_OK;
+            }
         }
 
-        public final FileReadOutcome outcoe;
+        public final FileReadOutcome outcome;
 
         @Nullable
         public final String content;
 
         private FileReadResult(FileReadOutcome outcome, @Nullable String content) {
-            this.outcoe = outcome;
+            this.outcome = outcome;
             this.content = content;
         }
     }
@@ -65,49 +69,55 @@ public final class FileUtil {
      */
     @Nullable
     public static FileReadResult readFileToString(Context context, String fileName, boolean isAsset) {
-        InputStream in = null;
+        // Open
+        final InputStream in;
         try {
-            // Open
-            try {
-                in = isAsset ? context.getAssets().open(fileName) : context.openFileInput(fileName);
-            } catch (IOException e) {
-                // This is normal when opening the file after first installation since it
-                // does not exist.
-                LogUtil.warning(e, "Error opening a file");
-                return new FileReadResult(FileReadOutcome.NOT_FOUND, null);
-            }
+            in = isAsset ? context.getAssets().open(fileName) : context.openFileInput(fileName);
+        } catch (IOException e) {
+            // This is normal when opening the file after first installation since it
+            // does not exist.
+            LogUtil.warning(e, "Error opening a file");
+            return new FileReadResult(FileReadOutcome.NOT_FOUND, null);
+        }
 
-            // Read
-            try {
-                final ByteArrayOutputStream builder = new ByteArrayOutputStream();
-                final byte bfr[] = new byte[100];
-                for (;;) {
-                    final int n = in.read(bfr);
-                    if (n < 1) {
-                        break;
-                    }
-                    builder.write(bfr, 0, n);
+        // This always closes in.
+        return readFileToString(in, fileName);
+    }
+
+    /**
+     * Read a file into a string. Upon return, in is guaranteed to be closed.
+     */
+    @Nullable
+    public static FileReadResult readFileToString(InputStream in, String fileDescription) {
+        // Read
+        try {
+            final ByteArrayOutputStream builder = new ByteArrayOutputStream();
+            final byte bfr[] = new byte[100];
+            for (;;) {
+                final int n = in.read(bfr);
+                if (n < 1) {
+                    break;
                 }
-                return new FileReadResult(FileReadOutcome.READ_OK, builder.toString());
-            } catch (IOException e) {
-                LogUtil.error(e, "Error reading %s file %s", isAsset ? "ASSET" : "DATA", fileName);
-                return new FileReadResult(FileReadOutcome.READ_ERROR, null);
+                builder.write(bfr, 0, n);
             }
+            return new FileReadResult(FileReadOutcome.READ_OK, builder.toString());
+        } catch (IOException e) {
+            LogUtil.error(e, "Error reading file %s", fileDescription);
+            return new FileReadResult(FileReadOutcome.READ_ERROR, null);
 
         } finally {
             // Close
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    LogUtil.error("Failed to close file from reading: " + fileName);
-                }
+            try {
+                in.close();
+            } catch (IOException e) {
+                LogUtil.error("Failed to close file from reading: " + fileDescription);
             }
         }
     }
 
     /** Write a string to a file */
-    public static void writeStringToFile(Context context, String content, String fileName, int contextMode) {
+    public static void writeStringToFile(Context context, String content, String fileName,
+            int contextMode) {
         FileOutputStream out = null;
         try {
             out = context.openFileOutput(fileName, contextMode);

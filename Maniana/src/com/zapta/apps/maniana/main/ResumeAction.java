@@ -18,6 +18,7 @@ import javax.annotation.Nullable;
 
 import android.content.Intent;
 
+import com.zapta.apps.maniana.util.IntentUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**
@@ -32,8 +33,10 @@ public enum ResumeAction {
     ONLY_RESET_PAGE,
     /** Make today page visible and open text editor */
     ADD_NEW_ITEM_BY_TEXT,
-    /** Make today page visible and open voice recongition */
-    ADD_NEW_ITEM_BY_VOICE;
+    /** Make today page visible and open voice recognition */
+    ADD_NEW_ITEM_BY_VOICE,
+    /** Restore model from backup file passed by the intent's EXTRA_STREAM */
+    RESTORE_FROM_BABKUP_FILE;
 
     /** Key for serializing resume actions in intents. Not persisted. */
     private static final String RESUME_ACTION_KEY = "maniana_resume_action";
@@ -52,16 +55,16 @@ public enum ResumeAction {
 
     /** Deserialize a resume action from an intent */
     public static ResumeAction fromIntent(Intent intent) {
-        // TODO: implement file parsing and model replacement
-        LogUtil.debug("*** incoming intent: %s", intent);
-        LogUtil.debug("*** incoming action: %s", intent.getAction());
-        LogUtil.debug("*** incoming data string: %s", intent.getDataString());
-        LogUtil.debug("*** incoming data uri: %s", intent.getData());
+        // TODO: remove after stabilizing the restore feature
+        final String REMINDER;
+        IntentUtil.dumpIntent(intent);
 
-        if (intent.getData() != null) {
-            LogUtil.debug("*** incoming data uri path: %s", intent.getData().getPath());
-            LogUtil.debug("*** incoming data uri scheme: %s", intent.getData().getScheme());
-            LogUtil.debug("*** incoming data uri authority: %s", intent.getData());
+        // This is the kind of intent thrown by GMail when clicking on an attachment
+        // Download button.
+        if (Intent.ACTION_VIEW.equals(intent.getAction()) && (intent.getData() != null)
+                && ("file".equals(intent.getData().getScheme()))
+                && ("application/json".equals(intent.getType()))) {
+            return RESTORE_FROM_BABKUP_FILE;
         }
 
         @Nullable
