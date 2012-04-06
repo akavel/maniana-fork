@@ -35,7 +35,6 @@ public class ModelPersistence {
 
     /** Path to asset with sample model in JSON format. */
     private static final String NEW_USER_MODEL_ASSET_NAME = "data/new_user_data.json";
-    // private static final String NEW_USER_MODEL_ASSET_NAME = "data/market_demo_data.json";
 
     /** Path to file where model is persisted. */
     public static final String DATA_FILE_NAME = "maniana_data.json";
