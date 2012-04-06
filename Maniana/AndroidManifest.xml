@@ -49,7 +49,7 @@
             android:theme="@android:style/Theme.Translucent" >
         </activity>
         <activity
-            android:name=".preferences.PreferencesActivity"
+            android:name=".settings.PreferencesActivity"
             android:label="Maniana Settings" >
         </activity>
         <activity

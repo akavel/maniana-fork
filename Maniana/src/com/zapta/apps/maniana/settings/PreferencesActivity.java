@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.zapta.apps.maniana.preferences;
+package com.zapta.apps.maniana.settings;
 
 import java.io.File;
 import java.text.SimpleDateFormat;

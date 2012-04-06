@@ -18,7 +18,7 @@ import android.text.format.Time;
 
 import com.zapta.apps.maniana.model.ModelUtil;
 import com.zapta.apps.maniana.model.PushScope;
-import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
+import com.zapta.apps.maniana.settings.LockExpirationPeriod;
 import com.zapta.apps.maniana.util.DateUtil;
 
 /**

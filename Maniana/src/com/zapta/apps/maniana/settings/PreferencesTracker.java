@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.zapta.apps.maniana.preferences;
+package com.zapta.apps.maniana.settings;
 
 import javax.annotation.Nullable;
 

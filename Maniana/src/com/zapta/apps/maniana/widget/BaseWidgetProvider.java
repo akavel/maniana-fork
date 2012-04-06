@@ -30,8 +30,8 @@ import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.model.PushScope;
 import com.zapta.apps.maniana.persistence.ModelLoadingResult;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
-import com.zapta.apps.maniana.preferences.LockExpirationPeriod;
-import com.zapta.apps.maniana.preferences.PreferencesTracker;
+import com.zapta.apps.maniana.settings.LockExpirationPeriod;
+import com.zapta.apps.maniana.settings.PreferencesTracker;
 
 /**
  * Base class widget providers.

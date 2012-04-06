@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.zapta.apps.maniana.preferences;
+package com.zapta.apps.maniana.settings;
 
 /**
  * Default preference values. All values should match the default values in Preferences.xml

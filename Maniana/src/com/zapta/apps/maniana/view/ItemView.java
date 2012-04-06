@@ -30,7 +30,7 @@ import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.main.AppContext;
 import com.zapta.apps.maniana.model.ItemModelReadOnly;
 import com.zapta.apps.maniana.model.PageKind;
-import com.zapta.apps.maniana.preferences.ItemFontVariation;
+import com.zapta.apps.maniana.settings.ItemFontVariation;
 
 /**
  * View of a single item.

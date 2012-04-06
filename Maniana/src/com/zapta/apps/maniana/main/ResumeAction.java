@@ -18,7 +18,6 @@ import javax.annotation.Nullable;
 
 import android.content.Intent;
 
-import com.zapta.apps.maniana.util.IntentUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**
@@ -55,9 +54,7 @@ public enum ResumeAction {
 
     /** Deserialize a resume action from an intent */
     public static ResumeAction fromIntent(Intent intent) {
-        // TODO: remove after stabilizing the restore feature
-        final String REMINDER;
-        IntentUtil.dumpIntent(intent);
+        // IntentUtil.dumpIntent(intent);
 
         // This is the kind of intent thrown by GMail when clicking on an attachment
         // Download button.

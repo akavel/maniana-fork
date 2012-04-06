@@ -12,10 +12,11 @@
  * the License.
  */
 
-package com.zapta.apps.maniana.preferences;
+package com.zapta.apps.maniana.settings;
 
 import junit.framework.TestCase;
 
+import com.zapta.apps.maniana.settings.PreferencesActivity;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**
