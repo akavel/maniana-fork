@@ -49,7 +49,7 @@ import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.persistence.PersistenceMetadata;
 import com.zapta.apps.maniana.quick_action.QuickActionItem;
 import com.zapta.apps.maniana.settings.PreferenceKind;
-import com.zapta.apps.maniana.settings.PreferencesActivity;
+import com.zapta.apps.maniana.settings.SettingsActivity;
 import com.zapta.apps.maniana.util.AttachmentUtil;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult;
@@ -672,7 +672,7 @@ public class Controller {
                 break;
             }
             case SETTINGS: {
-                startSubActivity(PreferencesActivity.class);
+                startSubActivity(SettingsActivity.class);
                 break;
             }
             case ABOUT: {

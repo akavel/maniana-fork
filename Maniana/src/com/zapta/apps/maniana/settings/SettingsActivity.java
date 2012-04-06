@@ -57,7 +57,7 @@ import com.zapta.apps.maniana.util.WorkingDialog;
  * 
  * @author Tal Dayan
  */
-public class PreferencesActivity extends PreferenceActivity implements
+public class SettingsActivity extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
 
     // Sound
@@ -299,7 +299,7 @@ public class PreferencesActivity extends PreferenceActivity implements
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         dialog.dismiss();
-                        mWorkingDialog = new WorkingDialog(PreferencesActivity.this,
+                        mWorkingDialog = new WorkingDialog(SettingsActivity.this,
                                 "Restoring defaults...");
                         mWorkingDialog.setOnShowListener(new DialogInterface.OnShowListener() {
                             @Override

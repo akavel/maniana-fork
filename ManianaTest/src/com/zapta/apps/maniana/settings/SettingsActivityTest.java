@@ -16,7 +16,7 @@ package com.zapta.apps.maniana.settings;
 
 import junit.framework.TestCase;
 
-import com.zapta.apps.maniana.settings.PreferencesActivity;
+import com.zapta.apps.maniana.settings.SettingsActivity;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**
@@ -50,7 +50,7 @@ public class SettingsActivityTest extends TestCase {
         for (intStringTestCase testCase : testCases) {
             LogUtil.debug("--- Time left message test case: in: %s, expected: %s", testCase.input,
                             testCase.expectedResult);
-            assertEquals(testCase.expectedResult, PreferencesActivity
+            assertEquals(testCase.expectedResult, SettingsActivity
                             .construtLockTimeLeftMessageSuffix(testCase.input));
         }
     }
