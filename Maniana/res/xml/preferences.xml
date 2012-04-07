@@ -197,11 +197,11 @@
             android:key="prefBackupEmailKey"
             android:title="GMail Address"
             android:hint="e.g. johndow@gmail.com"
-            android:summary="Destination gmail address for Maniana backups"
-            android:dialogTitle="Destination GMail account" />
+            android:summary="GMail address destination for Maniana backups"
+            android:dialogTitle="Your GMail address" />
         <Preference
             android:key="prefBackupKey"
-            android:summary="Click to email maniana backup data"
+            android:summary="Click to email maniana backup data to your GMail account"
             android:title="Do Backup" />
         <Preference
             android:key="prefRestoreKey"

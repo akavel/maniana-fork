@@ -28,6 +28,8 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
  */
 public enum ItemColor implements KeyedEnum {
     // Item order determines the color sequence the user gets when tapping the screen.
+    // It also defines an decreasing order of importance between the non NONE colors
+    // for item merging purposes.
     NONE("none", Color.TRANSPARENT),
     RED("red", 0xffff0000),
     BLUE("blue", 0xff0077ff),
@@ -66,5 +68,20 @@ public enum ItemColor implements KeyedEnum {
 
     public final boolean isNone() {
         return (this == NONE);
+    }
+    
+    // Return the color with max importance.
+    public final ItemColor max(ItemColor other) {
+        // If one of the colors is NONE, return the other.
+      if (this == NONE) {
+          return other;
+      }
+      if (other == NONE) {
+          return this;
+      }
+      
+      // Here when nither is NONE. Return the one with min ordinal.
+      final int index = Math.max(this.ordinal(), other.ordinal());
+      return ItemColor.values()[index];
     }
 }

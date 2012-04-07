@@ -547,6 +547,11 @@ public class Controller {
             return;
         }
 
+        // Create a temp merged model so we can show the stats to the user
+        final AppModel tempModel = new AppModel();
+        tempModel.copyItemsFrom(mApp.model());
+        tempModel.mergeFrom(newModel);
+
         final RestoreBackupDialogListener listener = new RestoreBackupDialogListener() {
             @Override
             public void onSelection(Action action) {
@@ -558,21 +563,30 @@ public class Controller {
                 mApp.model().getPageItemCount(PageKind.TODAY),
                 mApp.model().getPageItemCount(PageKind.TOMOROW),
                 newModel.getPageItemCount(PageKind.TODAY),
-                newModel.getPageItemCount(PageKind.TOMOROW));
+                newModel.getPageItemCount(PageKind.TOMOROW),
+                tempModel.getPageItemCount(PageKind.TODAY),
+                tempModel.getPageItemCount(PageKind.TOMOROW));
     }
 
     private final void onRestoreBackupFromFileConfirm(Action action, AppModel newModel) {
         switch (action) {
             case REPLACE:
-                mApp.model().restoreBackup(newModel);
-                mApp.view().updatePages();
+                mApp.model().restoreBackup(newModel);              
                 mApp.services().toast("Task list replaced.");
                 break;
+            case MERGE:                
+                mApp.model().mergeFrom(newModel);
+                mApp.services().toast("Task list merged.");
+                break;            
             case CANCEL:
+            default:
                 mApp.services().toast("Task list not changed.");
                 // Do nothing
-                break;
+                return;
         }
+        
+        maybeAutoSortPages(false, false);
+        mApp.view().updatePages();
     }
 
     public final void onActivityResult(int requestCode, int resultCode, Intent intent) {

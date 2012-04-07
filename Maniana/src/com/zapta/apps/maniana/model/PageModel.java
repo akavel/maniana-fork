@@ -102,6 +102,16 @@ public class PageModel {
     }
 
     /**
+     * Copy cloned items from other page. Undo buffer is not changed.
+     */
+    public final void copyItemsFrom(PageModel otherModel) {
+        mItems.clear();
+        for (ItemModel otherItem : otherModel.mItems) {
+            mItems.add(new ItemModel(otherItem));
+        }
+    }
+
+    /**
      * Perform and clear the active undo operation. The method asserts that an undo operation is
      * active.
      * 
@@ -138,7 +148,7 @@ public class PageModel {
     public void appendItem(ItemModel item) {
         mItems.add(item);
     }
-    
+
     public final void restoreBackup(PageModel newPage) {
         // Move all existing items to the undo buffer
         mUndoItems.clear();
@@ -146,13 +156,13 @@ public class PageModel {
         // in the new model.
         mUndoItems.addAll(mItems);
         mItems.clear();
-        
+
         // Add copies of the items in the new page
         for (ItemModel item : newPage.mItems) {
-            final ItemModel newItem = new ItemModel(item);  
+            final ItemModel newItem = new ItemModel(item);
             mItems.add(newItem);
-        }      
-    }   
+        }
+    }
 
     /**
      * Peform a page organization operation.

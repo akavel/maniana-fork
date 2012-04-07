@@ -14,7 +14,9 @@
 
 package com.zapta.apps.maniana.model;
 
+import java.util.HashMap;
 import java.util.ListIterator;
+import java.util.Map;
 
 import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.VisibleForTesting;
@@ -163,11 +165,11 @@ public class AppModel {
         setDirty();
         getPageModel(pageKind).removeItemWithUndo(itemIndex);
     }
-    
+
     public final void restoreBackup(AppModel newModel) {
-      setDirty();
-      mTodayPageModel.restoreBackup(newModel.mTodayPageModel);
-      mTomorrowPageMode.restoreBackup(newModel.mTomorrowPageMode);
+        setDirty();
+        mTodayPageModel.restoreBackup(newModel.mTodayPageModel);
+        mTomorrowPageMode.restoreBackup(newModel.mTomorrowPageMode);
     }
 
     /**
@@ -193,6 +195,16 @@ public class AppModel {
         final int result = getPageModel(pageKind).performUndo();
         setDirty();
         return result;
+    }
+    
+    /**
+     * Copy cloned items from other model. All existing items are deleted. Dirty is set.
+     * Undo buffer and other model properties are not changed.
+     */
+    public final void copyItemsFrom(AppModel otherModel) {
+        setDirty();
+        mTodayPageModel.copyItemsFrom(otherModel.mTodayPageModel);
+        mTomorrowPageMode.copyItemsFrom(otherModel.mTomorrowPageMode);
     }
 
     /**
@@ -265,5 +277,81 @@ public class AppModel {
     public final void setLastPushDateStamp(String lastPushDateStamp) {
         // TODO: no need to set the dirty bit, right?
         this.mLastPushDateStamp = lastPushDateStamp;
+    }
+
+    public static class ItemReference {
+        PageKind pageKind;
+        int itemIndex;
+        ItemModelReadOnly itemModel;
+
+        public ItemReference(PageKind pageKind, int itemIndex, ItemModelReadOnly itemModel) {
+            this.pageKind = pageKind;
+            this.itemIndex = itemIndex;
+            this.itemModel = itemModel;
+        }
+    }
+
+    /**
+     * Merge the items of the other model into this one. The other model is not modified. This
+     * operation is not symmetric (A.mergeFrom(B) != B.mergeFrom(A).
+     * Does not do item sorting. Caller need to invoke sorting if needed.
+     */
+    public final void mergeFrom(AppModel otherModel) {
+        setDirty();
+        clearAllUndo();
+
+        Map<String, ItemReference> otherItems = new HashMap<String, ItemReference>();
+
+        // Collect 'other' items
+        for (PageKind pageKind : PageKind.values()) {
+            final PageModel pageModel = otherModel.getPageModel(pageKind);
+            for (int i = 0; i < pageModel.itemCount(); i++) {
+                final ItemModelReadOnly otherItem = pageModel.getItem(i);
+                ItemReference existingOtherItemRef = otherItems.get(otherItem.getText());
+                if (existingOtherItemRef != null) {
+                    // Other model has multiple items with this text. Keep merging the 
+                    // properties, keeping only a single copy.
+                    ItemModel replacementItem = new ItemModel();
+                    replacementItem.copyFrom(existingOtherItemRef.itemModel);
+                    replacementItem.mergePropertiesFrom(otherItem);
+                    existingOtherItemRef.itemModel = replacementItem;
+                } else {
+                    otherItems.put(otherItem.getText(), new ItemReference(pageKind, i, otherItem));
+                }
+            }
+        }
+
+        // Strike out 'other' items already in this.
+        for (PageKind pageKind : PageKind.values()) {
+            final PageModel pageModel = getPageModel(pageKind);
+            for (int i = 0; i < pageModel.itemCount(); i++) {
+                final ItemModel item = pageModel.getItem(i);
+                ItemReference otherItemRef = otherItems.get(item.getText());
+                if (otherItemRef != null) {
+                    // This model has the same item as the other, remove the other
+                    // so we don't insert it and merge its properties into this one.
+                    //
+                    // NOTE: of this model has multiple copies of this item, only the first
+                    // one will have its properties merged since we remove the other from
+                    // the map. Alternatively we could keep it there marked as 'do-not-insert'
+                    // and merging the properties with all the copies in this model. It is 
+                    // not clear what will be more intuitive.
+                    //
+                    item.mergePropertiesFrom(otherItemRef.itemModel);
+                    otherItems.remove(item.getText());
+                }
+            }
+        }
+
+        // TODO: sort to preserve other items order
+
+        for (ItemReference otherRef : otherItems.values()) {
+            final ItemModelReadOnly otherItem = otherRef.itemModel;
+            mTodayPageModel.insertItem(
+                    0,
+                    new ItemModel(otherItem.getText(), otherItem.isCompleted(), false, otherItem
+                            .getColor()));
+        }
+
     }
 }

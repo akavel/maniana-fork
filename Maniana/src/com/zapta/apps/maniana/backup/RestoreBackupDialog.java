@@ -44,7 +44,8 @@ public class RestoreBackupDialog extends Dialog implements TrackablePopup {
 
     public static enum Action {
         CANCEL,
-        REPLACE
+        REPLACE,
+        MERGE
     };
 
     // Called on actual selection, not on dismiss.
@@ -78,6 +79,13 @@ public class RestoreBackupDialog extends Dialog implements TrackablePopup {
         check(fileReadResult.outcome == FileReadOutcome.READ_OK,
                 "Error reading asset file: %s, outcome: %s", assetFilePath, fileReadResult.outcome);
 
+        findViewById(R.id.restore_backup_merge).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onButtonClick(Action.MERGE);
+            }
+        });
+        
         findViewById(R.id.restore_backup_replace).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,7 +129,7 @@ public class RestoreBackupDialog extends Dialog implements TrackablePopup {
 
     public static void startDialog(final AppContext app,
             final RestoreBackupDialogListener listener, int existingActive, int existingDone,
-            int newActive, int newDone) {
+            int newActive, int newDone, int mergedActive, int mergedDone) {
 
         // NOTE: macro names matches those in the html asset file.
         final Hashtable<String, Object> macroValues = new Hashtable<String, Object>();
@@ -129,6 +137,8 @@ public class RestoreBackupDialog extends Dialog implements TrackablePopup {
         macroValues.put("existing-done", existingDone);
         macroValues.put("new-active", newActive);
         macroValues.put("new-done", newDone);
+        macroValues.put("merged-active", mergedActive);
+        macroValues.put("merged-done", mergedDone);
 
         final RestoreBackupDialog dialog = new RestoreBackupDialog(app, listener, macroValues);
         app.popupsTracker().track(dialog);

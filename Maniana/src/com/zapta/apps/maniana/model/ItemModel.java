@@ -55,11 +55,11 @@ public class ItemModel implements ItemModelReadOnly {
     }
 
     /** Set to same values as other item. */
-    public final void copyFrom(ItemModel other) {
-        mText = other.mText;
-        mIsCompleted = other.mIsCompleted;
-        mIsLocked = other.mIsLocked;
-        mColor = other.mColor;
+    public final void copyFrom(ItemModelReadOnly other) {
+        mText = other.getText();
+        mIsCompleted = other.isCompleted();
+        mIsLocked = other.isLocked();
+        mColor = other.getColor();
     }
 
     @Override
@@ -100,5 +100,11 @@ public class ItemModel implements ItemModelReadOnly {
 
     public final void setColor(ItemColor color) {
         mColor = color;
+    }
+
+    public final void mergePropertiesFrom(ItemModelReadOnly other) {
+        mColor = mColor.max(other.getColor());
+        mIsCompleted = mIsCompleted && other.isCompleted();
+        mIsLocked = mIsLocked && other.isLocked();
     }
 }

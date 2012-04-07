@@ -26,6 +26,14 @@
         android:paddingTop="5dip" >
 
         <Button
+            android:id="@+id/restore_backup_merge"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dip"
+            android:layout_weight="1"
+            android:text="Merge" />
+
+        <Button
             android:id="@+id/restore_backup_replace"
             android:layout_width="0px"
             android:layout_height="wrap_content"
