@@ -1,0 +1,36 @@
+<html>
+<head>
+<style type="text/css">
+li { margin-left: -1.2em; }
+body { color: black; background: white; font-family: Verdana, sans-serif; }
+.cell-num {  background: #e0e0e0; text-align: center; }
+.cell-top {  background: #ffffaa; text-align: center; }
+.cell-left {  background: #ffffaa; text-align: left; }
+</style>
+</head>
+<body>
+<span style="color:#000099"><b>Import Task List?</b></span>
+<br><br>
+Task summary:<br>
+<br>
+<center>
+<table border="1" cellspacing="0" cellpadding="10" bordercolor="#888888">
+<tr>
+  <td class="cell-top"></td>
+  <td class="cell-top">Active</td>
+  <td class="cell-top">Done</td>
+</tr>
+<tr>
+  <td class="cell-left">Existing</td>
+  <td class="cell-num">${existing-active}</td>
+  <td class="cell-num">${existing-done}</td>
+</tr>
+<tr>
+  <td class="cell-left">New</td>
+  <td class="cell-num">${new-active}</td>
+  <td class="cell-num">${new-done}</td>
+</tr>
+</table>
+</center>
+</body>
+</html>

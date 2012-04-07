@@ -21,8 +21,6 @@ import java.io.InputStream;
 import javax.annotation.Nullable;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -31,6 +29,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
+import com.zapta.apps.maniana.backup.RestoreBackupDialog;
+import com.zapta.apps.maniana.backup.RestoreBackupDialog.Action;
+import com.zapta.apps.maniana.backup.RestoreBackupDialog.RestoreBackupDialogListener;
 import com.zapta.apps.maniana.editors.ItemTextEditor;
 import com.zapta.apps.maniana.editors.ItemVoiceEditor;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
@@ -254,7 +255,7 @@ public class Controller {
                 onAddItemByVoiceButton(PageKind.TODAY);
                 break;
             case RESTORE_FROM_BABKUP_FILE:
-                onRestoreBackupFromFile(resumeIntent);
+                onRestoreBackupFromFileClick(resumeIntent);
                 break;
             case NONE:
             case ONLY_RESET_PAGE:
@@ -524,7 +525,7 @@ public class Controller {
     }
 
     /** Handle the case where the app is responding to a restore from file action. */
-    private final void onRestoreBackupFromFile(Intent resumeIntent) {
+    private final void onRestoreBackupFromFileClick(Intent resumeIntent) {
         // NOTE: main activity already qualified this to have the expected content type.
         final AppModel newModel;
         try {
@@ -546,33 +547,32 @@ public class Controller {
             return;
         }
 
-        mApp.services().toast("Found a model with %d items", newModel.getItemCount());
-
-        final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        final RestoreBackupDialogListener listener = new RestoreBackupDialogListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        onRestoreBackupFromFileConfirmed(newModel);
-                        break;
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        // Nothing to do
-                        break;
-                }
+            public void onSelection(Action action) {
+                onRestoreBackupFromFileConfirm(action, newModel);
             }
         };
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(mApp.context());
-        final String message = String.format("Replace existing %d tasks with %d new tasks?", mApp
-                .model().getItemCount(), newModel.getItemCount());
-        builder.setMessage(message).setPositiveButton("Yes!", dialogClickListener)
-                .setNegativeButton("No", dialogClickListener).show();
+        RestoreBackupDialog.startDialog(mApp, listener,
+                mApp.model().getPageItemCount(PageKind.TODAY),
+                mApp.model().getPageItemCount(PageKind.TOMOROW),
+                newModel.getPageItemCount(PageKind.TODAY),
+                newModel.getPageItemCount(PageKind.TOMOROW));
     }
 
-    private final void onRestoreBackupFromFileConfirmed(AppModel newModel) {
-        mApp.model().restoreBackup(newModel);
-        mApp.view().updatePages();
-        mApp.services().toast("Tasks list restored from backup");
+    private final void onRestoreBackupFromFileConfirm(Action action, AppModel newModel) {
+        switch (action) {
+            case REPLACE:
+                mApp.model().restoreBackup(newModel);
+                mApp.view().updatePages();
+                mApp.services().toast("Task list replaced.");
+                break;
+            case CANCEL:
+                mApp.services().toast("Task list not changed.");
+                // Do nothing
+                break;
+        }
     }
 
     public final void onActivityResult(int requestCode, int resultCode, Intent intent) {

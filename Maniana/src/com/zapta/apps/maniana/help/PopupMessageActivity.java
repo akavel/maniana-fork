@@ -28,7 +28,6 @@ import android.content.pm.PackageInfo;
 import android.graphics.Picture;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.webkit.WebView;

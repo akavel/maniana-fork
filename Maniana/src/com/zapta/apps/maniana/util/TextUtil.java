@@ -14,15 +14,12 @@
 
 package com.zapta.apps.maniana.util;
 
-import static com.zapta.apps.maniana.util.Assertions.check;
 import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
 
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.text.TextUtils;
 
 /**

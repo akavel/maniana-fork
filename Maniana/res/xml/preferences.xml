@@ -195,10 +195,10 @@
         <EditTextPreference
             android:defaultValue=""
             android:key="prefBackupEmailKey"
-            android:title="Backup Address"
+            android:title="GMail Address"
             android:hint="e.g. johndow@gmail.com"
-            android:summary="Destination email address for Maniana backups"
-            android:dialogTitle="Backup Destination Email" />
+            android:summary="Destination gmail address for Maniana backups"
+            android:dialogTitle="Destination GMail account" />
         <Preference
             android:key="prefBackupKey"
             android:summary="Click to email maniana backup data"
