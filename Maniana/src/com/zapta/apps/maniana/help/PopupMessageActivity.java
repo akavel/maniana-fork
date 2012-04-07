@@ -17,6 +17,8 @@ package com.zapta.apps.maniana.help;
 import static com.zapta.apps.maniana.util.Assertions.check;
 import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
 
+import java.util.Hashtable;
+
 import javax.annotation.Nullable;
 
 import android.app.Activity;
@@ -39,6 +41,7 @@ import com.zapta.apps.maniana.util.FileUtil.FileReadResult;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult.FileReadOutcome;
 import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.PackageUtil;
+import com.zapta.apps.maniana.util.TextUtil;
 
 /**
  * Shows a popup message such as startup splash. The message is taken from an HTML asset page.
@@ -69,7 +72,8 @@ public class PopupMessageActivity extends Activity {
         }
     }
 
-    private final static String ASSETS_BASE_URL = "file:///android_asset/";
+    // TODO: move to FileUtil?
+    public final static String ASSETS_BASE_URL = "file:///android_asset/";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -130,25 +134,23 @@ public class PopupMessageActivity extends Activity {
     private final void displayFromAsset(WebView webView, MessageKind messageKind) {
         final FileReadResult fileReadResult = FileUtil.readFileToString(this,
                 messageKind.assetRelativePath, true);
-
         // TODO: handle this more gracefully?
         check(fileReadResult.outcome == FileReadOutcome.READ_OK,
                 "Error reading asset file: %s, outcome: %s", messageKind.assetRelativePath,
                 fileReadResult.outcome);
-
         final String htmlPage = expandMacros(fileReadResult.content);
-
         webView.loadDataWithBaseURL(ASSETS_BASE_URL + messageKind.assetRelativePath, htmlPage,
                 null, "UTF-8", null);
     }
 
     private final String expandMacros(String text) {
-        if (!text.contains("${")) {
+        if (!TextUtil.constainsMacros(text)) {
             return text;
         }
+        final Hashtable<String, Object> macroValues = new Hashtable<String, Object>();        
         final PackageInfo packageInfo = PackageUtil.getPackageInfo(this);
-        final String escapedVersionName = TextUtils.htmlEncode(packageInfo.versionName);
-        return text.replace("${version_name}", escapedVersionName);
+        macroValues.put("version_name", packageInfo.versionName);
+        return TextUtil.expandMacros(text, macroValues, true);
     }
 
     /** Print a log error and return null if not found or an error */
