@@ -490,7 +490,7 @@ public class SettingsActivity extends PreferenceActivity implements
         }
 
         {
-            final String baseBackupEmailSummary = "Backup destination email address";
+            final String baseBackupEmailSummary = "Destination Gmail address for sending backup attachments";
             final String backupEmailAddress = getBackupEmailAddress();
             mBackupEmailPreference
                     .setSummary((backupEmailAddress.length() > 0) ? baseBackupEmailSummary + " ("

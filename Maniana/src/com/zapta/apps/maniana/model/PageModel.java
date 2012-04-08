@@ -152,9 +152,6 @@ public class PageModel {
     public final void restoreBackup(PageModel newPage) {
         // Move all existing items to the undo buffer
         mUndoItems.clear();
-        // TODO: have a smarter undo here. Save only items that are not
-        // in the new model.
-        mUndoItems.addAll(mItems);
         mItems.clear();
 
         // Add copies of the items in the new page

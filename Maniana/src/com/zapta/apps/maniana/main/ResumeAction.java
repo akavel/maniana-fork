@@ -54,17 +54,23 @@ public enum ResumeAction {
     }
 
     /** Deserialize a resume action from an intent */
-    public static ResumeAction fromIntent(Intent intent) {
+    public static ResumeAction fromIntent(AppContext app, Intent intent) {
         // Comment out intent dump
-        final String REMINDER;  
-        IntentUtil.dumpIntent(intent);
+        IntentUtil.dumpIntent(intent, false);
 
-        // This is the kind of intent thrown by GMail when clicking on an attachment
+        // This is the kind of intent thrown by Gmail when clicking on an attachment
         // Download button.
         if (Intent.ACTION_VIEW.equals(intent.getAction()) && (intent.getData() != null)
-                && ("file".equals(intent.getData().getScheme()))
                 && ("application/json".equals(intent.getType()))) {
-            return RESTORE_FROM_BABKUP_FILE;
+            final String scheme = intent.getData().getScheme();
+            if ("file".equals(scheme)) {
+                return RESTORE_FROM_BABKUP_FILE;
+            }
+            // Since we don't have Gmail permissions, trying to access the attachment
+            // from the Gmail providers gives permission error.
+            if ("content".equals(scheme) && intent.getData().toString().contains("gmail")) {
+                app.services().toast("Hint: try using Gmail Download button");
+            }
         }
 
         @Nullable

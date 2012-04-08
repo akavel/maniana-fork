@@ -15,8 +15,10 @@
 package com.zapta.apps.maniana.model;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Set;
 
 import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.VisibleForTesting;
@@ -352,6 +354,81 @@ public class AppModel {
                     new ItemModel(otherItem.getText(), otherItem.isCompleted(), false, otherItem
                             .getColor()));
         }
-
+    }
+    
+    // TODO: move to somewhere else?
+    public static class ProjectedImportStats {
+        public int mergeDelete = 0;
+        public int mergeKeep = 0;
+        public int mergeAdd = 0;
+        public int replaceDelete = 0;
+        public int replaceKeep = 0;
+        public int replaceAdd = 0;  
+        
+        public final void clear() {
+            mergeDelete = 0;
+            mergeKeep = 0;
+            mergeAdd = 0;
+            replaceDelete = 0;
+            replaceKeep = 0;
+            replaceAdd = 0;  
+        }
+    }
+    
+    public final ProjectedImportStats projectedImportStats(AppModel otherModel) {
+       ProjectedImportStats result = new ProjectedImportStats();
+        
+        Map<String, Integer> thisMultiset = itemTextMultiset();
+        Map<String, Integer> otherMultiset = otherModel.itemTextMultiset();
+        
+        // Compute merge stats
+        // NOTE: mergeDelete is always zero for merge oepration.       
+        for (Integer count : thisMultiset.values()) {
+            result.mergeKeep += count;
+        }        
+        for (String text : otherMultiset.keySet()) {
+            if (!thisMultiset.containsKey(text)) {
+                // NOTE: we add excactly one, even if the other model contains
+                // multiple items with this text. The merge operation will collaps them.
+                result.mergeAdd++;
+            }
+        }
+        
+        // Compute replace stats
+        Set<String> textSet = new HashSet<String>();
+        textSet.addAll(thisMultiset.keySet());
+        textSet.addAll(otherMultiset.keySet());        
+        for (String text :  textSet) {   
+            final Integer thisValue = thisMultiset.get(text);
+            final Integer otherValue = otherMultiset.get(text);
+            
+            final int thisCount = (thisValue == null) ? 0 : thisValue;
+            final int otherCount = (otherValue == null) ? 0 : otherValue; 
+            
+            if (thisCount < otherCount) {
+              result.replaceKeep += thisCount;
+              result.replaceAdd += (otherCount - thisCount);
+            } else {
+                result.replaceKeep += otherCount;
+                result.replaceDelete += (thisCount - otherCount);    
+            }
+        }
+        
+        return result;
+    }
+    
+    
+    /** Return a multiset of the text string of all items. */
+    private final Map<String, Integer> itemTextMultiset() {
+        Map<String, Integer> result = new HashMap<String, Integer>();
+        for (PageKind pageKind : PageKind.values()) {
+            final PageModel pageModel = getPageModel(pageKind);
+            for (int i = 0; i < pageModel.itemCount(); i++) {
+                final ItemModelReadOnly item = pageModel.getItem(i);
+                final Integer previousCount = result.get(item.getText());
+                result.put(item.getText(), (previousCount == null) ? 1 : previousCount + 1);
+            }
+        }        
+        return result;
     }
 }

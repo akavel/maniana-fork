@@ -221,6 +221,6 @@ public class MainActivity extends Activity {
     /** Update the resume action from the given launch intent. */
     private final void trackResumeAction(Intent launchIntent) {
         mResumeIntent = launchIntent;
-        mResumeAction = ResumeAction.fromIntent(launchIntent);
+        mResumeAction = ResumeAction.fromIntent(mApp, launchIntent);
     }
 }

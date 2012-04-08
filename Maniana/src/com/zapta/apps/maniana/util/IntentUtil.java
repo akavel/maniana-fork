@@ -25,8 +25,12 @@ public final class IntentUtil {
     private IntentUtil() {
     }
 
-    public static void dumpIntent(Intent intent) {
-        // TODO: beautify the output
+    public static void dumpIntent(Intent intent, boolean detailed) {
+        if (!detailed) {
+            LogUtil.debug("%s", intent);  
+            return;
+        }
+        
         LogUtil.debug("*** Intent dump:");
         LogUtil.debug("*   intent: %s", intent);
         LogUtil.debug("*   action: %s", intent.getAction());

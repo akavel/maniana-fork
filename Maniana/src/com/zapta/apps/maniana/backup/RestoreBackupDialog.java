@@ -29,6 +29,7 @@ import android.webkit.WebView;
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
 import com.zapta.apps.maniana.main.AppContext;
+import com.zapta.apps.maniana.model.AppModel.ProjectedImportStats;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult.FileReadOutcome;
@@ -128,17 +129,18 @@ public class RestoreBackupDialog extends Dialog implements TrackablePopup {
     }
 
     public static void startDialog(final AppContext app,
-            final RestoreBackupDialogListener listener, int existingActive, int existingDone,
-            int newActive, int newDone, int mergedActive, int mergedDone) {
+            final RestoreBackupDialogListener listener, ProjectedImportStats stats) {
 
         // NOTE: macro names matches those in the html asset file.
         final Hashtable<String, Object> macroValues = new Hashtable<String, Object>();
-        macroValues.put("existing-active", existingActive);
-        macroValues.put("existing-done", existingDone);
-        macroValues.put("new-active", newActive);
-        macroValues.put("new-done", newDone);
-        macroValues.put("merged-active", mergedActive);
-        macroValues.put("merged-done", mergedDone);
+        macroValues.put("merge-delete", stats.mergeDelete);
+        macroValues.put("merge-keep", stats.mergeKeep);
+        macroValues.put("merge-add", stats.mergeAdd);
+        macroValues.put("merge-total", stats.mergeKeep + stats.mergeAdd);
+        macroValues.put("replace-delete", stats.replaceDelete);
+        macroValues.put("replace-keep", stats.replaceKeep);
+        macroValues.put("replace-add", stats.replaceAdd);
+        macroValues.put("replace-total", stats.replaceKeep + stats.replaceAdd);
 
         final RestoreBackupDialog dialog = new RestoreBackupDialog(app, listener, macroValues);
         app.popupsTracker().track(dialog);

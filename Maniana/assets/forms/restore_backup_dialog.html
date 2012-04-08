@@ -9,31 +9,36 @@ body { color: black; background: white; font-family: Verdana, sans-serif; }
 </style>
 </head>
 <body>
-<span style="color:#000099"><b>Import Task List?</b></span>
+<span style="color:#000099"><b>Import Tasks Into Maniana?</b></span>
 <br><br>
 Task summary:<br>
 <br>
 <center>
-<table border="1" cellspacing="0" cellpadding="10" bordercolor="#888888">
+<table border="1" cellspacing="0" cellpadding="8" bordercolor="#888888">
 <tr>
   <td class="cell-top"></td>
-  <td class="cell-top">Active</td>
-  <td class="cell-top">Done</td>
+  <td class="cell-top"><b>Merge</b></td>
+  <td class="cell-top"><b>Replace</b></td>
 </tr>
 <tr>
-  <td class="cell-left">Existing</td>
-  <td class="cell-num">${existing-active}</td>
-  <td class="cell-num">${existing-done}</td>
+  <td class="cell-left">Keep</td>
+  <td class="cell-num">${merge-keep}</td>
+  <td class="cell-num">${replace-keep}</td>
 </tr>
 <tr>
-  <td class="cell-left">New</td>
-  <td class="cell-num">${new-active}</td>
-  <td class="cell-num">${new-done}</td>
+  <td class="cell-left">Delete</td>
+  <td class="cell-num">${merge-delete}</td>
+  <td class="cell-num">${replace-delete}</td>
 </tr>
 <tr>
-  <td class="cell-left">Merged</td>
-  <td class="cell-num">${merged-active}</td>
-  <td class="cell-num">${merged-done}</td>
+  <td class="cell-left">Add</td>
+  <td class="cell-num">${merge-add}</td>
+  <td class="cell-num">${replace-add}</td>
+</tr>
+<tr>
+  <td class="cell-left">Total</td>
+  <td class="cell-num">${merge-total}</td>
+  <td class="cell-num">${replace-total}</td>
 </tr>
 </table>
 </center>

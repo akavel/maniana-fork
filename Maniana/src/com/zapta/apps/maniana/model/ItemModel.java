@@ -102,9 +102,10 @@ public class ItemModel implements ItemModelReadOnly {
         mColor = color;
     }
 
-    public final void mergePropertiesFrom(ItemModelReadOnly other) {
-        mColor = mColor.max(other.getColor());
+    public final void mergePropertiesFrom(ItemModelReadOnly other) {      
         mIsCompleted = mIsCompleted && other.isCompleted();
-        mIsLocked = mIsLocked && other.isLocked();
+        mIsLocked = mIsLocked && other.isLocked();        
+        // TODO: should we clear the color if mIsCompleted?
+        mColor = mColor.max(other.getColor());
     }
 }

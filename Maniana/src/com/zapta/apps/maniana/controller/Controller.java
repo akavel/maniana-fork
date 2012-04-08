@@ -547,25 +547,15 @@ public class Controller {
             return;
         }
 
-        // Create a temp merged model so we can show the stats to the user
-        final AppModel tempModel = new AppModel();
-        tempModel.copyItemsFrom(mApp.model());
-        tempModel.mergeFrom(newModel);
-
         final RestoreBackupDialogListener listener = new RestoreBackupDialogListener() {
             @Override
             public void onSelection(Action action) {
                 onRestoreBackupFromFileConfirm(action, newModel);
             }
-        };
+        };       
 
-        RestoreBackupDialog.startDialog(mApp, listener,
-                mApp.model().getPageItemCount(PageKind.TODAY),
-                mApp.model().getPageItemCount(PageKind.TOMOROW),
-                newModel.getPageItemCount(PageKind.TODAY),
-                newModel.getPageItemCount(PageKind.TOMOROW),
-                tempModel.getPageItemCount(PageKind.TODAY),
-                tempModel.getPageItemCount(PageKind.TOMOROW));
+        
+        RestoreBackupDialog.startDialog(mApp, listener, mApp.model().projectedImportStats(newModel));
     }
 
     private final void onRestoreBackupFromFileConfirm(Action action, AppModel newModel) {
