@@ -179,7 +179,7 @@
             android:dialogTitle="Your Gmail address" />
         <Preference
             android:key="prefBackupKey"
-            android:summary="Click to email a Maniana backup attchment to your Gmail account"
+            android:summary="@string/place_holder"
             android:title="Do Backup" />
         <Preference
             android:key="prefRestoreKey"

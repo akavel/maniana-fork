@@ -212,7 +212,7 @@ public class SettingsActivity extends PreferenceActivity implements
                 return true;
             }
         });
-        
+
         mRestoreBackupPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
                 onRestoreBackupClick();
@@ -389,7 +389,7 @@ public class SettingsActivity extends PreferenceActivity implements
         final Intent intent = PopupMessageActivity.intentFor(this, MessageKind.WHATS_NEW);
         startActivity(intent);
     }
-    
+
     private final void onRestoreBackupClick() {
         // Popup a message with restore instructions
         final Intent intent = PopupMessageActivity.intentFor(this, MessageKind.RESTORE_BACKUP);
@@ -397,9 +397,9 @@ public class SettingsActivity extends PreferenceActivity implements
     }
 
     private final void onBackupClick() {
-        
+
         AttachmentUtil.createAttachmentFile(this);
-        
+
         Intent intent = new Intent(Intent.ACTION_SEND);
         // sharingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -415,14 +415,14 @@ public class SettingsActivity extends PreferenceActivity implements
         intent.putExtra(
                 Intent.EXTRA_TEXT,
                 "This email message was sent by Android's Maniana To Do List app.\n\n"
-                        + "It contains an attchment file with a backup copy of the task list.\n\n" 
-                        + "To restore the task list, open this email message in an Android device where" 
+                        + "It contains an attchment file with a backup copy of the task list.\n\n"
+                        + "To restore the task list, open this email message in an Android device where"
                         + " Maniana is installed and click on the Download button of the attachment.");
 
         intent.setType("application/json");
         final Uri fileUri = Uri.fromFile(new File("/mnt/sdcard/../.." + getFilesDir() + "/"
                 + AttachmentUtil.BACKUP_ATTACHMENT_FILE_NAME));
-        intent.putExtra(Intent.EXTRA_STREAM, fileUri);   
+        intent.putExtra(Intent.EXTRA_STREAM, fileUri);
 
         startActivity(intent);
     }
@@ -484,7 +484,8 @@ public class SettingsActivity extends PreferenceActivity implements
     private void updateSummaries() {
         // Disable applause if voice is disabled
         if (mSoundEnablePreference.isChecked()) {
-            updateListSummary(mApplauseLevelListPreference, R.array.applauseLevelSummaries, null);
+            updateListPreferenceSummary(mApplauseLevelListPreference,
+                    R.array.applauseLevelSummaries, null);
         } else {
             mApplauseLevelListPreference.setSummary("(sound is off)");
         }
@@ -495,9 +496,16 @@ public class SettingsActivity extends PreferenceActivity implements
             mBackupEmailPreference
                     .setSummary((backupEmailAddress.length() > 0) ? baseBackupEmailSummary + " ("
                             + backupEmailAddress + ")" : baseBackupEmailSummary);
+
+            final boolean hasBackupEmailAddress = backupEmailAddress.contains("@")
+                    && backupEmailAddress.contains(".");
+            mBackupPreference
+                    .setSummary(hasBackupEmailAddress ? "Click to email a Maniana backup attchment to your Gmail account"
+                            : "Please enter your Gmail address to enable Maniana backups");
+            mBackupPreference.setEnabled(hasBackupEmailAddress);
         }
 
-        // Update selectors
+        // Update color selectors
         mPageColorPreferenceSelector.update();
         mWidgetColorPreferenceSelector.update();
 
@@ -521,7 +529,8 @@ public class SettingsActivity extends PreferenceActivity implements
 
             final String suffix = (wholeHoursLeft >= 0) ? construtLockTimeLeftMessageSuffix(wholeHoursLeft)
                     : "";
-            updateListSummary(mLockPeriodListPreference, R.array.lockPeriodSummaries, suffix);
+            updateListPreferenceSummary(mLockPeriodListPreference, R.array.lockPeriodSummaries,
+                    suffix);
         }
     }
 
@@ -541,7 +550,7 @@ public class SettingsActivity extends PreferenceActivity implements
         return String.format("  (in %d days)", (wholeHoursLeft + 23) / 24);
     }
 
-    private void updateListSummary(ListPreference listPreference, int stringArrayId,
+    private void updateListPreferenceSummary(ListPreference listPreference, int stringArrayId,
             @Nullable String suffix) {
         final String value = listPreference.getValue();
         // -1 if not found.
