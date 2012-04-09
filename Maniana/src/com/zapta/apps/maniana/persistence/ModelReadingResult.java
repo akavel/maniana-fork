@@ -19,7 +19,7 @@ import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
 
 import javax.annotation.Nullable;
 
-public class ModelLoadingResult {
+public class ModelReadingResult {
 
     public static enum ModelLoadingOutcome {
         FILE_READ_OK,
@@ -38,14 +38,14 @@ public class ModelLoadingResult {
     public final PersistenceMetadata metadata;
 
     /** Constructor for OK outcome. */
-    public ModelLoadingResult(ModelLoadingOutcome outcome, PersistenceMetadata metadata) {
+    public ModelReadingResult(ModelLoadingOutcome outcome, PersistenceMetadata metadata) {
         check(outcome.isOk());
         this.outcome = outcome;
         this.metadata = checkNotNull(metadata);
     }
 
     /** Constructor for an error outcome. */
-    public ModelLoadingResult(ModelLoadingOutcome outcome) {
+    public ModelReadingResult(ModelLoadingOutcome outcome) {
         check(!outcome.isOk());
         this.outcome = outcome;
         this.metadata = null;

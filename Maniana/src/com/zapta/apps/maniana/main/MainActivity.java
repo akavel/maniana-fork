@@ -28,7 +28,7 @@ import android.view.Window;
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.controller.MainMenuEntry;
 import com.zapta.apps.maniana.controller.StartupKind;
-import com.zapta.apps.maniana.persistence.ModelLoadingResult;
+import com.zapta.apps.maniana.persistence.ModelReadingResult;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.util.LogUtil;
 
@@ -59,7 +59,7 @@ public class MainActivity extends Activity {
         mApp = new AppContext(this);
 
         // Load model from file
-        final ModelLoadingResult modelLoadResult = ModelPersistence.loadModelDataFile(
+        final ModelReadingResult modelLoadResult = ModelPersistence.readModelFile(
                 mApp.context(), mApp.model());
 
         final StartupKind startupKind;
@@ -75,11 +75,8 @@ public class MainActivity extends Activity {
                 break;
             }
             case FILE_NOT_FOUND: {
-                // If this returnes an error, the model is guaranteed to be cleared.
-                final ModelLoadingResult sampleLoadingResult = ModelPersistence
-                        .loadSampleModelAsset(mApp.context(), mApp.model());
-                startupKind = (sampleLoadingResult.outcome.isOk()) ? StartupKind.NEW_USER
-                        : StartupKind.SAMPLE_DATA_ERROR;
+                // Model should be empty here
+                startupKind = StartupKind.NEW_USER;
                 // Prevent moving item from Tomorow to Today.
                 mApp.model().setLastPushDateStamp(mApp.dateTracker().getDateStampString());
                 break;

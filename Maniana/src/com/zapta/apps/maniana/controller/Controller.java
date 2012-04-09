@@ -47,6 +47,7 @@ import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.model.PushScope;
 import com.zapta.apps.maniana.persistence.ModelDeserialization;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
+import com.zapta.apps.maniana.persistence.ModelReadingResult;
 import com.zapta.apps.maniana.persistence.PersistenceMetadata;
 import com.zapta.apps.maniana.quick_action.QuickActionItem;
 import com.zapta.apps.maniana.settings.PreferenceKind;
@@ -76,6 +77,9 @@ public class Controller {
 
     /** Used to detect first app resume to trigger the startup animation. */
     private int mOnAppResumeCount = 0;
+
+    /** Indicates when the resume operation should populate the model with new user data. */
+    private boolean mPopulateNewUserSampleDataOnResume = false;
 
     /**
      * Used to determine if the resume is from own sub activity (e.g. voice or help) as opposed to
@@ -183,7 +187,7 @@ public class Controller {
             final PersistenceMetadata metadata = new PersistenceMetadata(mApp.services()
                     .getAppVersionCode(), mApp.services().getAppVersionName());
             // NOTE(tal): this clears the dirty bit.
-            ModelPersistence.saveData(mApp, mApp.model(), metadata);
+            ModelPersistence.writeModelFile(mApp, mApp.model(), metadata);
             check(!mApp.model().isDirty());
             onBackupDataChange();
 
@@ -205,6 +209,23 @@ public class Controller {
         clearAllUndo();
 
         ++mOnAppResumeCount;
+
+        // We supress the population if the first resume is with certain actions. It seems 
+        // to be more intuitive this way.
+        if (mPopulateNewUserSampleDataOnResume) {
+            if (resumeAction != ResumeAction.RESTORE_FROM_BABKUP_FILE) {
+                final ModelReadingResult result = ModelPersistence.readSampleModelFile(
+                        mApp.context(), mApp.model());
+                if (result.outcome.isOk()) {
+                    startPopupMessageSubActivity(MessageKind.NEW_USER);
+                } else {
+                    mApp.services().toast("Sample task list not found (%s)", result.outcome);
+                }
+            }
+            mApp.model().setLastPushDateStamp(mApp.dateTracker().getDateStampString());
+            mApp.model().setDirty();
+            mPopulateNewUserSampleDataOnResume = false;
+        }
 
         // Typically we reset the view to default position (both pages are scrolled
         // to the top, Today page is shown) when the app is resume. We preserve it only
@@ -552,29 +573,29 @@ public class Controller {
             public void onSelection(Action action) {
                 onRestoreBackupFromFileConfirm(action, newModel);
             }
-        };       
+        };
 
-        
-        RestoreBackupDialog.startDialog(mApp, listener, mApp.model().projectedImportStats(newModel));
+        RestoreBackupDialog
+                .startDialog(mApp, listener, mApp.model().projectedImportStats(newModel));
     }
 
     private final void onRestoreBackupFromFileConfirm(Action action, AppModel newModel) {
         switch (action) {
             case REPLACE:
-                mApp.model().restoreBackup(newModel);              
+                mApp.model().restoreBackup(newModel);
                 mApp.services().toast("Task list replaced.");
                 break;
-            case MERGE:                
+            case MERGE:
                 mApp.model().mergeFrom(newModel);
                 mApp.services().toast("Task list merged.");
-                break;            
+                break;
             case CANCEL:
             default:
                 mApp.services().toast("Task list not changed.");
                 // Do nothing
                 return;
         }
-        
+
         maybeAutoSortPages(false, false);
         mApp.view().updatePages();
     }
@@ -790,22 +811,24 @@ public class Controller {
         // task move/cleanup due to date change. This is done later in the
         // onMainActivityResume() event.
 
+        mPopulateNewUserSampleDataOnResume = false;
+
         switch (startupKind) {
             case NORMAL:
             case NEW_VERSION_SILENT:
                 // Model is assume to be clean here.
                 break;
             case NEW_USER:
-                // Mark as dirty to persist the sample data so we don't get this message again.
-                mApp.model().setDirty();
-                startPopupMessageSubActivity(MessageKind.NEW_USER);
+                // At this point we don't want to perist the model, we will do it
+                // in the resume method after it will be populated with sample data.
+                mApp.model().setClean();
+                mPopulateNewUserSampleDataOnResume = true;
                 break;
             case NEW_VERSION_ANNOUNCE:
                 // Mark the model for writing to avoid this what's up splash the next time.
                 mApp.model().setDirty();
                 startPopupMessageSubActivity(MessageKind.WHATS_NEW);
                 break;
-            case SAMPLE_DATA_ERROR:
             case MODEL_DATA_ERROR:
                 mApp.model().clear();
                 mApp.services().toast("Error loading data (code %s)", startupKind);

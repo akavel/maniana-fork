@@ -29,7 +29,5 @@ public enum StartupKind {
     /** Same as NEW_VERSION but should suppress new version message. */
     NEW_VERSION_SILENT,
     /** Model data file found but has error reading/parsing. */
-    MODEL_DATA_ERROR,
-    /** Model data file not found. Failed to read/parse sample data file. */
-    SAMPLE_DATA_ERROR;
+    MODEL_DATA_ERROR;
 }

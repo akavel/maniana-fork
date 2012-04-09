@@ -28,7 +28,7 @@ import com.zapta.apps.maniana.model.ModelUtil;
 import com.zapta.apps.maniana.model.OrganizePageSummary;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.model.PushScope;
-import com.zapta.apps.maniana.persistence.ModelLoadingResult;
+import com.zapta.apps.maniana.persistence.ModelReadingResult;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.settings.LockExpirationPeriod;
 import com.zapta.apps.maniana.settings.PreferencesTracker;
@@ -55,7 +55,7 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
     protected static AppModel loadModelForWidgets(Context context) {
         // Load model
         final AppModel model = new AppModel();
-        final ModelLoadingResult modelLoadingResult = ModelPersistence.loadModelDataFile(context,
+        final ModelReadingResult modelLoadingResult = ModelPersistence.readModelFile(context,
                 model);
         if (!modelLoadingResult.outcome.isOk()) {
             return null;

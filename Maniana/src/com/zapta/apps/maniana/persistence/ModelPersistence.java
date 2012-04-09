@@ -20,7 +20,7 @@ import android.content.Context;
 
 import com.zapta.apps.maniana.main.AppContext;
 import com.zapta.apps.maniana.model.AppModel;
-import com.zapta.apps.maniana.persistence.ModelLoadingResult.ModelLoadingOutcome;
+import com.zapta.apps.maniana.persistence.ModelReadingResult.ModelLoadingOutcome;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult.FileReadOutcome;
@@ -42,8 +42,9 @@ public class ModelPersistence {
     /** Static lock protecting the access to the data file. */
     public static final Object sDataFileLock = new Object();
 
-    public static final ModelLoadingResult loadModelDataFile(Context context, AppModel resultModel) {
-        ModelLoadingResult result = internalLoadModelFile(context, resultModel, DATA_FILE_NAME,
+    /** Read the model file from the internal storage. */
+    public static final ModelReadingResult readModelFile(Context context, AppModel resultModel) {
+        ModelReadingResult result = readModelFileInternal(context, resultModel, DATA_FILE_NAME,
                 false);
         if (result.outcome.isOk()) {
             // Model is same as persistence file and no version change.
@@ -55,9 +56,9 @@ public class ModelPersistence {
         return result;
     }
 
-    public static final ModelLoadingResult loadSampleModelAsset(Context context,
-            AppModel resultModel) {
-        ModelLoadingResult result = internalLoadModelFile(context, resultModel,
+    /** Read the new user sample model file from the assert repository. */
+    public static final ModelReadingResult readSampleModelFile(Context context, AppModel resultModel) {
+        ModelReadingResult result = readModelFileInternal(context, resultModel,
                 NEW_USER_MODEL_ASSET_NAME, true);
         // Since we did not load the model from the data file, it is dirty and need to be
         // persisted.
@@ -69,7 +70,7 @@ public class ModelPersistence {
      * Caller is expected to manager the model's dirty bit. In case of an error, the returned model
      * is cleared.
      */
-    private static final ModelLoadingResult internalLoadModelFile(Context context,
+    private static final ModelReadingResult readModelFileInternal(Context context,
             AppModel resultModel, String fileName, boolean isAsset) {
         LogUtil.info("Going to read data from " + (isAsset ? "assert" : "data File") + " "
                 + fileName);
@@ -83,7 +84,7 @@ public class ModelPersistence {
         }
 
         if (fileReadResult.outcome == FileReadOutcome.NOT_FOUND) {
-            return new ModelLoadingResult(ModelLoadingOutcome.FILE_NOT_FOUND);
+            return new ModelReadingResult(ModelLoadingOutcome.FILE_NOT_FOUND);
         }
 
         // Try to parse the json file
@@ -91,17 +92,17 @@ public class ModelPersistence {
             PersistenceMetadata resultMetadata = new PersistenceMetadata();
             ModelDeserialization.deserializeModel(resultModel, resultMetadata,
                     fileReadResult.content);
-            return new ModelLoadingResult(ModelLoadingOutcome.FILE_READ_OK, resultMetadata);
+            return new ModelReadingResult(ModelLoadingOutcome.FILE_READ_OK, resultMetadata);
 
         } catch (JSONException e) {
             LogUtil.error(e, "Error parsing model JSON");
             resultModel.clear();
-            return new ModelLoadingResult(ModelLoadingOutcome.FILE_HAS_ERRORS);
+            return new ModelReadingResult(ModelLoadingOutcome.FILE_HAS_ERRORS);
         }
     }
 
-    /** Save model to file. */
-    public static final void saveData(AppContext app, AppModel model, PersistenceMetadata metadata) {
+    public static final void writeModelFile(AppContext app, AppModel model,
+            PersistenceMetadata metadata) {
         LogUtil.info("Saving model to file: " + DATA_FILE_NAME);
         final String json = ModelSerialization.serializeModel(model, metadata);
         synchronized (sDataFileLock) {
