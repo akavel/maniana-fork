@@ -60,16 +60,19 @@ public enum ResumeAction {
 
         // This is the kind of intent thrown by Gmail when clicking on an attachment
         // Download button.
-        if (Intent.ACTION_VIEW.equals(intent.getAction()) && (intent.getData() != null)
-                && ("application/json".equals(intent.getType()))) {
-            final String scheme = intent.getData().getScheme();
-            if ("file".equals(scheme)) {
-                return RESTORE_FROM_BABKUP_FILE;
-            }
-            // Since we don't have Gmail permissions, trying to access the attachment
-            // from the Gmail providers gives permission error.
-            if ("content".equals(scheme) && intent.getData().toString().contains("gmail")) {
-                app.services().toast("Hint: try using Gmail Download button");
+        if (Intent.ACTION_VIEW.equals(intent.getAction()) && (intent.getData() != null)) {
+            final String uriStringLC = intent.getDataString().toLowerCase();
+            // OI file browser sends type = "*/*" so we try to also match the extension.
+            if ("application/json".equals(intent.getType()) || uriStringLC.contains(".json")) {
+                final String scheme = intent.getData().getScheme();
+                if ("file".equals(scheme)) {
+                    return RESTORE_FROM_BABKUP_FILE;
+                }
+                // Since we don't have Gmail permissions, trying to access the attachment
+                // from the Gmail providers gives permission error.
+                if ("content".equals(scheme) && uriStringLC.contains("gmail")) {
+                    app.services().toast("Hint: try using Gmail Download button");
+                }
             }
         }
 
