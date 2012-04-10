@@ -345,7 +345,7 @@ public class AppModel {
             }
         }
 
-        // TODO: sort to preserve other items order
+        // TODO: sort to preserve other items order and to be deterministic
 
         for (ItemReference otherRef : otherItems.values()) {
             final ItemModelReadOnly otherItem = otherRef.itemModel;

@@ -50,7 +50,7 @@ public class ItemModel implements ItemModelReadOnly {
     }
 
     /** Copy constructor. Create an identical but independent instance */
-    public ItemModel(ItemModel other) {
+    public ItemModel(ItemModelReadOnly other) {
         copyFrom(other);
     }
 

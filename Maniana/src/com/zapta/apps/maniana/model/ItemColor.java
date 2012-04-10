@@ -70,7 +70,8 @@ public enum ItemColor implements KeyedEnum {
         return (this == NONE);
     }
     
-    // Return the color with max importance.
+    // TODO: add unit test
+    /** Return the color with max importance. */
     public final ItemColor max(ItemColor other) {
         // If one of the colors is NONE, return the other.
       if (this == NONE) {
@@ -81,7 +82,7 @@ public enum ItemColor implements KeyedEnum {
       }
       
       // Here when nither is NONE. Return the one with min ordinal.
-      final int index = Math.max(this.ordinal(), other.ordinal());
+      final int index = Math.min(this.ordinal(), other.ordinal());
       return ItemColor.values()[index];
     }
 }
