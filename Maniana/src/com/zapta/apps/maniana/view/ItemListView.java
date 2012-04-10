@@ -557,7 +557,21 @@ public class ItemListView extends ListView {
         itemView.setDrawingCacheEnabled(true);
         mDragBitmap = Bitmap.createBitmap(itemView.getDrawingCache());
  
-        // NOTE: not sure why we need this here but it seems to solve bug 63 (Ghost view).
+        // NOTE: creating the bitmap above may clear view internal 'invalidated' bit
+        // and may cause it to show incorrect content. This takes care of it by
+        // foring it to be invalidated. The problem occurs only once evern 20 or so
+        // times so make sure you know what you are doing if you modify this.
+        //
+        // TODO: deffer the bitmap snapshot to the point when the user actually
+        // starts to drag (long press). No need to do it if just scrolling or
+        // clicking.
+        //
+        // TODO: instead of using the bitmap from the actual item view, create a 
+        // temporary view by calling the adapter. This view will be independent of
+        // of the display. It is safe to pass this ItemListViewer to the adatper
+        // so it creates the temp view with the layout params of this ItemListView.
+        // This is the approach recomanded by A.P.
+        //
         itemView.invalidate();
 
         mDragedItemImageViewWindowParams = new WindowManager.LayoutParams();
