@@ -360,6 +360,8 @@ public class SettingsActivity extends PreferenceActivity implements
                 PreferenceConstants.DEFAULT_WIDGET_SHOW_COMPLETED_ITEMS);
         editor.putBoolean(PreferenceKind.WIDGET_SINGLE_LINE.getKey(),
                 PreferenceConstants.DEFAULT_WIDGET_SINGLE_LINE);
+        editor.putBoolean(PreferenceKind.WIDGET_AUTO_FIT.getKey(),
+                PreferenceConstants.DEFAULT_WIDGET_AUTO_FIT);
 
         // Set font preferences to broadcast the change enve.
         editor.putString(PreferenceKind.PAGE_ITEM_FONT_TYPE.getKey(),

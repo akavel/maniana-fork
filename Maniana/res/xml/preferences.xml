@@ -139,6 +139,12 @@
             android:text="%dpt"
             android:maxLevel="24"
             android:minLevel="10" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="prefWidgetAutoFitKey"
+            android:summaryOff="Will not try to fit content to widget size."
+            android:summaryOn="If needed, will try to fit content to widget size (smaller text, single line, etc)"
+            android:title="Auto Fit" />
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#ff330000"
             android:key="prefWidgetTextColorKey"

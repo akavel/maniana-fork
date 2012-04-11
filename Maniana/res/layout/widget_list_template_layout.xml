@@ -72,7 +72,7 @@
         <LinearLayout
             android:id="@+id/widget_list_template_item_list"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:background="#00000000"
             android:orientation="vertical"
             android:paddingRight="2dip"

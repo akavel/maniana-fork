@@ -187,6 +187,12 @@ public class PreferencesTracker implements PreferenceConstants {
         return sharedPreferences.getInt(PreferenceKind.WIDGET_ITEM_FONT_SIZE.getKey(),
                 DEFAULT_WIDGET_ITEM_FONT_SIZE);
     }
+    
+    /** Read widget auto fit size preference. */
+    public static final boolean readWidgetAutoFitPreference(SharedPreferences sharedPreferences) {
+        return sharedPreferences.getBoolean(PreferenceKind.WIDGET_AUTO_FIT.getKey(),
+                DEFAULT_WIDGET_AUTO_FIT);
+    }
 
     /** Read widget font type preference. Used by the list widget only. */
     public static final ItemFontType readWidgetFontTypeFontTypePreference(
@@ -390,6 +396,7 @@ public class PreferencesTracker implements PreferenceConstants {
             case WIDGET_ITEM_FONT_TYPE:
             case WIDGET_ITEM_TEXT_COLOR:
             case WIDGET_ITEM_FONT_SIZE:
+            case WIDGET_AUTO_FIT:
             case WIDGET_SHOW_COMPLETED_ITEMS:
             case WIDGET_ITEM_COMPLETED_TEXT_COLOR:
             case WIDGET_SHOW_TOOLBAR:

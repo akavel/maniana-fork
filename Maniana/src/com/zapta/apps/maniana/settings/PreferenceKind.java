@@ -64,6 +64,7 @@ public enum PreferenceKind implements KeyedEnum {
     WIDGET_ITEM_FONT_TYPE("prefWidgetItemFontKey"),
     WIDGET_ITEM_TEXT_COLOR("prefWidgetTextColorKey"),
     WIDGET_ITEM_FONT_SIZE("prefWidgetItemFontSizePtKey"),
+    WIDGET_AUTO_FIT("prefWidgetAutoFitKey"),
     WIDGET_SHOW_COMPLETED_ITEMS("prefWidgetShowCompletedKey"),
     WIDGET_ITEM_COMPLETED_TEXT_COLOR("prefWidgetCompletedTextColorKey"),
     WIDGET_SHOW_TOOLBAR("prefWidgetShowToolbarKey"), 

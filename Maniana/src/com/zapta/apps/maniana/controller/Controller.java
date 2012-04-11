@@ -774,6 +774,7 @@ public class Controller {
             case WIDGET_ITEM_FONT_TYPE:
             case WIDGET_ITEM_TEXT_COLOR:
             case WIDGET_ITEM_FONT_SIZE:
+            case WIDGET_AUTO_FIT:
             case WIDGET_SHOW_COMPLETED_ITEMS:
             case WIDGET_ITEM_COMPLETED_TEXT_COLOR:
             case WIDGET_SHOW_TOOLBAR:

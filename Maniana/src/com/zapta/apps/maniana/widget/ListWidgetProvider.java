@@ -15,7 +15,6 @@
 package com.zapta.apps.maniana.widget;
 
 import java.io.File;
-import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -25,31 +24,19 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.net.Uri;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.text.format.Time;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.MeasureSpec;
-import android.widget.LinearLayout;
 import android.widget.RemoteViews;
-import android.widget.TextView;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.main.MainActivity;
 import com.zapta.apps.maniana.main.ResumeAction;
 import com.zapta.apps.maniana.model.AppModel;
-import com.zapta.apps.maniana.model.ItemModelReadOnly;
 import com.zapta.apps.maniana.services.AppServices;
 import com.zapta.apps.maniana.settings.ItemFontVariation;
 import com.zapta.apps.maniana.settings.PreferencesTracker;
-import com.zapta.apps.maniana.util.BitmapUtil;
 import com.zapta.apps.maniana.util.ColorUtil;
-import com.zapta.apps.maniana.util.DisplayUtil;
-import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.Orientation;
 import com.zapta.apps.maniana.widget.ListWidgetSize.OrientationInfo;
@@ -129,7 +116,8 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
      */
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        update(context, appWidgetManager, listWidgetSize(), appWidgetIds, loadModelForWidgets(context));
+        update(context, appWidgetManager, listWidgetSize(), appWidgetIds,
+                loadModelForWidgets(context));
     }
 
     /**
@@ -153,42 +141,33 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(context);
 
-        // Create the template view. We will later render it to a bitmap.
-        //
+        final boolean paper = PreferencesTracker
+                .readWidgetBackgroundPaperPreference(sharedPreferences);
+
+        final int templateBackgroundColor = templateBackgroundColor(sharedPreferences, paper);
+
+        final ItemFontVariation fontVariation = ItemFontVariation.newFromWidgetPreferences(context,
+                sharedPreferences);
+
+        final boolean toolbarEanbled = PreferencesTracker
+                .readWidgetShowToolbarPreference(sharedPreferences);
+
+        final boolean includeCompletedItems = PreferencesTracker
+                .readWidgetShowCompletedItemsPreference(sharedPreferences);
+
+        final boolean singleLine = PreferencesTracker
+                .readWidgetSingleLinePreference(sharedPreferences);
+        
+        final boolean autoFit = PreferencesTracker
+                .readWidgetAutoFitPreference(sharedPreferences);
+
         // NOTE: we use a template layout that is rendered to a bitmap rather rendering directly
         // a remote view. This allows us to use custom fonts which are not supported by
         // remote view. This also increase the complexity and makes the widget more sensitive
         // to resizing.
-        //
-        LayoutInflater layoutInflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final LinearLayout template = (LinearLayout) layoutInflater.inflate(
-                R.layout.widget_list_template_layout, null);
-
-        // Set template background. This can be the background solid color or the paper color.
-        final boolean backgroundPaper = PreferencesTracker
-                .readWidgetBackgroundPaperPreference(sharedPreferences);
-        final int templateBackgroundColor = templateBackgroundColor(sharedPreferences,
-                backgroundPaper);
-        final View backgroundColorView = template.findViewById(R.id.widget_list_background_color);
-        backgroundColorView.setBackgroundColor(templateBackgroundColor);
-
-        // TODO: cache variation or at least custom typefaces
-        final ItemFontVariation fontVariation = ItemFontVariation.newFromWidgetPreferences(context,
-                sharedPreferences);
-
-        // Set template view toolbar
-        final boolean toolbarEanbled = PreferencesTracker
-                .readWidgetShowToolbarPreference(sharedPreferences);
-        final boolean showToolbarBackground = (toolbarEanbled && !backgroundPaper);
-        final int titleSize = WidgetUtil.titleTextSize(listWidgetSize, fontVariation.getTextSize());
-        setTemplateToolbar(context, template, toolbarEanbled, showToolbarBackground, titleSize);
-
-        // Set template view item list
-        final LinearLayout itemListView = (LinearLayout) template
-                .findViewById(R.id.widget_list_template_item_list);
-        populateTemplateItemList(context, itemListView, model, fontVariation, sharedPreferences,
-                layoutInflater);
+        final ListWidgetProviderTemplate template = new ListWidgetProviderTemplate(context, model,
+                paper, templateBackgroundColor, toolbarEanbled, includeCompletedItems, singleLine,
+                fontVariation, autoFit);
 
         // Create the widget remote view
         final RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
@@ -199,9 +178,9 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         setRemoteViewsToolbar(context, remoteViews, toolbarEanbled);
 
         renderOneOrientation(context, remoteViews, template, listWidgetSize, Orientation.PORTRAIT,
-                backgroundPaper);
+                paper);
         renderOneOrientation(context, remoteViews, template, listWidgetSize, Orientation.LANDSCAPE,
-                backgroundPaper);
+                paper);
 
         // Flush the remote view
         appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
@@ -221,13 +200,9 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
     /** Set the image of a single orientation. */
     private static final void renderOneOrientation(Context context, RemoteViews remoteViews,
-            View template, ListWidgetSize listWidgetSize, Orientation orientation,
-            boolean backgroundPaper) {
-
-        // Template view is now fully populated. Render it as a bitmap. First we render it
-        // using screen native resolution.
-        final float density = DisplayUtil.getDensity(context);
-
+            ListWidgetProviderTemplate template, ListWidgetSize listWidgetSize,
+            Orientation orientation, boolean backgroundPaper) {
+        
         final OrientationInfo orientationInfo = orientation.isPortrait ? listWidgetSize.portraitInfo
                 : listWidgetSize.landscapeInfo;
 
@@ -237,53 +212,11 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final int heightPixels = (int) context.getResources().getDimensionPixelSize(
                 orientationInfo.heightDipResourceId);
 
-        final PaperBackground paperBackground = PaperBackground.getBestSize(widthPixels,
-                heightPixels);
+        @Nullable 
+        final PaperBackground paperBackground = backgroundPaper ? PaperBackground.getBestSize(widthPixels,
+                heightPixels) : null;
 
-        final int shadowRightPixels = backgroundPaper ? paperBackground
-                .shadowRightPixels(widthPixels) : 0;
-        final int shadowBottomPixels = backgroundPaper ? paperBackground
-                .shadowBottomPixels(heightPixels) : 0;
-
-        // Set padding to match the drop shadow portion of paper background, if used.
-        template.setPadding(0, 0, shadowRightPixels, shadowBottomPixels);
-
-        // NTOE: ARGB_4444 results in a smaller file than ARGB_8888 (e.g. 50K vs 150k)
-        // but does not look as good.
-        final Bitmap bitmap1 = Bitmap.createBitmap(widthPixels, heightPixels,
-                Bitmap.Config.ARGB_8888);
-
-        final Canvas canvas = new Canvas(bitmap1);
-
-        template.measure(MeasureSpec.makeMeasureSpec(widthPixels, MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(heightPixels, MeasureSpec.EXACTLY));
-        // TODO: subtract '1' from ends?
-        template.layout(0, 0, widthPixels, heightPixels);
-
-        template.draw(canvas);
-
-        // NOTE: rounding the bitmap here when paper background is selected will do nothing
-        // since the paper background is added later via the remote views.
-        final Bitmap bitmap2;
-        if (backgroundPaper) {
-            bitmap2 = bitmap1;
-        } else {
-            bitmap2 = BitmapUtil.roundCornersRGB888(bitmap1, (int) (4 * density + 0.5f));
-        }
-
-        // NOTE: RemoteViews class has an issue with transferring large bitmaps. As a workaround, we
-        // transfer the bitmap using a file URI. We could transfer small widgets directly
-        // as bitmap but use file based transfer for all sizes for the sake of simplicity.
-        // For more information on this issue see http://tinyurl.com/75jh2yf
-
-        final String fileName = orientationInfo.imageFileName;
-
-        // We make the file world readable so the home launcher can pull it via the file URI.
-        // TODO: if there are security concerns about having this file readable, append to it
-        // a long random suffix and cleanup the old ones.
-        FileUtil.writeBitmapToPngFile(context, bitmap2, fileName, true);
-
-        final Uri uri = Uri.fromFile(new File(context.getFilesDir(), fileName));
+        final Uri fileUri = template.renderOrientation(listWidgetSize, orientation, widthPixels, heightPixels, paperBackground);
 
         // Set the bitmap images of given orientation. The bitmap of the size we currently
         // process is set and the other are made GONE. Only bitmaps of the given orientation
@@ -297,7 +230,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                 // NOTE: setting up a temporary dummy image to cause the image view to reload the
                 // file URI in case it changed.
                 remoteViews.setInt(iterBitmapResource, "setImageResource", R.drawable.place_holder);
-                remoteViews.setUri(iterBitmapResource, "setImageURI", uri);
+                remoteViews.setUri(iterBitmapResource, "setImageURI", fileUri);
                 // Set paper background if used or transparent otherwise.
                 // TODO: will using the background solid color here rather than the template bitmap
                 // reduce the file size? If so, make this change.
@@ -311,142 +244,6 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                 // A different size. Disable it, regardless of orientation.
                 remoteViews.setInt(iterBitmapResource, "setVisibility", View.GONE);
             }
-        }
-    }
-
-    /**
-     * Populate the given template layout with task data and/or informative messages.
-     * 
-     * @param context the app context.
-     * @param itemListView the inflated template layout to fill.
-     * @param model the app data. If null, will be populated with a error message.
-     * @param fontVariation widget font variation to use.
-     * @param sharedPreferences shared preference to fetch widget settings.
-     * @param layoutInflater an inflater to use to inflate layouts of individual tasks.
-     */
-    private static final void populateTemplateItemList(Context context, LinearLayout itemListView,
-            @Nullable AppModel model, ItemFontVariation fontVariation,
-            SharedPreferences sharedPreferences, LayoutInflater layoutInflater) {
-        // For debugging
-        final boolean debugTimestamp = false;
-        if (debugTimestamp) {
-            final String message = String.format("[%s]", SystemClock.elapsedRealtime() / 1000);
-            addTemplateMessageItem(context, itemListView, message, fontVariation, layoutInflater);
-        }
-
-        if (model == null) {
-            addTemplateMessageItem(context, itemListView, "(Maniana data not found)",
-                    fontVariation, layoutInflater);
-            return;
-        }
-
-        // Read preference
-        final boolean includeCompletedItems = PreferencesTracker
-                .readWidgetShowCompletedItemsPreference(sharedPreferences);
-
-        // TODO: reorganize the code. No need to read lock preference if date now is same as the
-        // model
-        Time now = new Time();
-        now.setToNow();
-
-        final List<ItemModelReadOnly> items = WidgetUtil.selectTodaysItems(model, includeCompletedItems);
-
-        if (items.isEmpty()) {
-            final String emptyMessage = includeCompletedItems ? "(no tasks)" : "(no active tasks)";
-            addTemplateMessageItem(context, itemListView, emptyMessage, fontVariation,
-                    layoutInflater);
-            return;
-        }
-
-        final boolean singleLine = PreferencesTracker
-                .readWidgetSingleLinePreference(sharedPreferences);
-
-        for (ItemModelReadOnly item : items) {
-            final LinearLayout itemView = (LinearLayout) layoutInflater.inflate(
-                    R.layout.widget_list_template_item_layout, null);
-            final TextView textView = (TextView) itemView.findViewById(R.id.widget_item_text_view);
-            final View colorView = itemView.findViewById(R.id.widget_item_color);
-
-            // NOTE: TextView has a bug that does not allows more than
-            // two lines when using ellipsize. Otherwise we would give the user more
-            // choices about the max number of lines. More details here:
-            // http://code.google.com/p/android/issues/detail?id=2254
-            if (!singleLine) {
-                textView.setSingleLine(false);
-                // NOTE: on ICS (API 14) the text view behaves
-                // differently and does not limit the lines to two when ellipsize. For
-                // consistency, we limit it explicitly to two lines.
-                //
-                // TODO: file an Android bug about the different ICS behavior.
-                //
-                textView.setMaxLines(2);
-            }
-
-            textView.setText(item.getText());
-            fontVariation.apply(textView, item.isCompleted(), true);
-
-            // If color is NONE show a gray solid color to help visually
-            // grouping item text lines.
-            colorView.setBackgroundColor(item.getColor().getColor(0xff808080));
-            itemListView.addView(itemView);
-        }
-    }
-
-    /**
-     * Add an informative message to the item list. These messages are formatted differently than
-     * actual tasks.
-     */
-    private static final void addTemplateMessageItem(Context context, LinearLayout itemListView,
-            String message, ItemFontVariation fontVariation, LayoutInflater layoutInflater) {
-
-        final LinearLayout itemView = (LinearLayout) layoutInflater.inflate(
-                R.layout.widget_list_template_item_layout, null);
-        final TextView textView = (TextView) itemView.findViewById(R.id.widget_item_text_view);
-        final View colorView = itemView.findViewById(R.id.widget_item_color);
-
-        // TODO: setup message text using widget font size preference?
-        textView.setSingleLine(false);
-        textView.setText(message);
-        fontVariation.apply(textView, false, true);
-        colorView.setVisibility(View.GONE);
-
-        itemListView.addView(itemView);
-    }
-
-    /**
-     * Set the toolbar portion of the template view.
-     * 
-     * showToolbarBackground and titleSize are ignored if not toolbarEnabled. titleSize.
-     */
-    private static final void setTemplateToolbar(Context context, View template,
-            boolean toolbarEnabled, boolean showToolbarBackground, int titleSize) {
-        final View templateToolbarView = template.findViewById(R.id.widget_list_template_toolbar);
-        final TextView templateToolbarTitleView = (TextView) templateToolbarView
-                .findViewById(R.id.widget_list_template_toolbar_title);
-        final View templateAddTextByVoiceButton = templateToolbarView
-                .findViewById(R.id.widget_list_template_toolbar_add_by_voice);
-
-        if (!toolbarEnabled) {
-            templateToolbarView.setVisibility(View.GONE);
-            return;
-        }
-
-        // Make toolbar visible
-        templateToolbarView.setVisibility(View.VISIBLE);
-        templateToolbarTitleView.setTextSize(titleSize);
-
-        // Show or hide toolbar background.
-        if (showToolbarBackground) {
-            templateToolbarView.setBackgroundResource(R.drawable.widget_toolbar_background);
-        } else {
-            templateToolbarView.setBackgroundColor(0x00000000);
-        }
-
-        // The voice recognition button is shown only if this device supports voice recognition.
-        if (AppServices.isVoiceRecognitionSupported(context)) {
-            templateAddTextByVoiceButton.setVisibility(View.VISIBLE);
-        } else {
-            templateAddTextByVoiceButton.setVisibility(View.GONE);
         }
     }
 
@@ -550,10 +347,10 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             final long fileAgeMillis = timeNowMillis - lastModifiedMillis;
             final long fileAgeMinutes = fileAgeMillis / (1000 * 60);
             // We use an arbitrary age threshold of 10 minutes. Since the active widget files
-            // were just been updated, we could use a much shorter threshold. We are also 
-            // deleting files that are too much in the future, in case a file happen to 
+            // were just been updated, we could use a much shorter threshold. We are also
+            // deleting files that are too much in the future, in case a file happen to
             // have time far in the future.
-            if (Math.abs(fileAgeMinutes) > 10){
+            if (Math.abs(fileAgeMinutes) > 10) {
                 final boolean deletedOk = file.delete();
                 if (deletedOk) {
                     LogUtil.info("Garbage collected %s, %d minutes old", fileName, fileAgeMinutes);
