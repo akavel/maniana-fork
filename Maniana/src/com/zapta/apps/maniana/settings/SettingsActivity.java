@@ -417,7 +417,7 @@ public class SettingsActivity extends PreferenceActivity implements
         intent.putExtra(
                 Intent.EXTRA_TEXT,
                 "This email message was sent by Android's Maniana To Do List app.\n\n"
-                        + "It contains an attchment file with a backup copy of the task list.\n\n"
+                        + "It contains an attachment file with a backup copy of the task list.\n\n"
                         + "To restore the task list, open this email message in an Android device where"
                         + " Maniana is installed and click on the Download button of the attachment.");
 
@@ -493,16 +493,16 @@ public class SettingsActivity extends PreferenceActivity implements
         }
 
         {
-            final String baseBackupEmailSummary = "Destination Gmail address for sending backup attachments";
+            final String baseBackupEmailSummary = "Destination Gmail address for sending backup attachments.";
             final String backupEmailAddress = getBackupEmailAddress();
             mBackupEmailPreference
-                    .setSummary((backupEmailAddress.length() > 0) ? baseBackupEmailSummary + " ("
-                            + backupEmailAddress + ")" : baseBackupEmailSummary);
+                    .setSummary((backupEmailAddress.length() > 0) ? "("
+                            + backupEmailAddress + ")\n" + baseBackupEmailSummary  : baseBackupEmailSummary);
 
             final boolean hasBackupEmailAddress = backupEmailAddress.contains("@")
                     && backupEmailAddress.contains(".");
             mBackupPreference
-                    .setSummary(hasBackupEmailAddress ? "Click to email a Maniana backup attchment to your Gmail account"
+                    .setSummary(hasBackupEmailAddress ? "Click to email a Maniana backup attachment to your Gmail account"
                             : "Please enter your Gmail address to enable Maniana backups");
             mBackupPreference.setEnabled(hasBackupEmailAddress);
         }
