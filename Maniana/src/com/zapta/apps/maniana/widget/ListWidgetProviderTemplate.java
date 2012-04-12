@@ -52,9 +52,9 @@ import com.zapta.apps.maniana.widget.ListWidgetSize.OrientationInfo;
  * @author Tal Dayan
  */
 public class ListWidgetProviderTemplate {
-    
-    private static final int MIN_NORMALIZED_TEXT_SIZE = 10;
-    
+
+    private static final int MIN_NORMALIZED_TEXT_SIZE = 9;
+
     private static final int AUTO_FIT_BUTTOM_MARGIN_DIPS = 3;
 
     @Nullable
@@ -144,13 +144,16 @@ public class ListWidgetProviderTemplate {
         final Canvas canvas = new Canvas(bitmap1);
         mTopView.draw(canvas);
 
+        final int ROUND_CORNER_RADIUS_DIPS = 4;
+
         // NOTE: rounding the bitmap here when paper background is selected will do nothing
         // since the paper background is added later via the remote views.
         final Bitmap bitmap2;
         if (mPaperPreference) {
             bitmap2 = bitmap1;
         } else {
-            bitmap2 = BitmapUtil.roundCornersRGB888(bitmap1, (int) (4 * mDensity + 0.5f));
+            bitmap2 = BitmapUtil.roundCornersRGB888(bitmap1, (int) (ROUND_CORNER_RADIUS_DIPS
+                    * mDensity + 0.5f));
         }
 
         // NOTE: RemoteViews class has an issue with transferring large bitmaps. As a workaround, we
@@ -201,27 +204,47 @@ public class ListWidgetProviderTemplate {
     private final boolean autoResizeText(int widgetWidthPixels, int widgetHeightPixels,
             int minItemTextSize, int maxItemTextSize, boolean singleLine) {
 
-        int itemTextSize = maxItemTextSize;
-        for (;;) {
+        // Try the max size. Return is fits or min == max
+        final boolean maxSizeFits = resizeText(widgetWidthPixels, widgetHeightPixels,
+                maxItemTextSize, singleLine);
 
-            final int toolbarTitleTextSize = WidgetUtil.titleTextSize(
-                    (int) (widgetHeightPixels * mDensity), itemTextSize);
+        if (maxSizeFits || maxItemTextSize <= minItemTextSize) {
+            return maxSizeFits;
+        }
 
-            final boolean fit = resizeText(widgetWidthPixels, widgetHeightPixels,
-                    toolbarTitleTextSize, itemTextSize, singleLine);
+        // Try the min size. Return if no fit or if no intermediate sizes between min and max.
+        final boolean minSizeFits = resizeText(widgetWidthPixels, widgetHeightPixels,
+                minItemTextSize, singleLine);
+        if (!minSizeFits || minItemTextSize == (maxItemTextSize - 1)) {
+            return minSizeFits;
+        }
 
-            if (fit) {
+        // Probe the range [minItemTextSize+1, maxItemTextSize-1] in large steps until first fit.
+        final int LARGE_STEP_SIZE = 5;
+        int small_steps_start_size = maxItemTextSize - 1;
+        // @formatter:off
+        for (int itemTextSize = maxItemTextSize - LARGE_STEP_SIZE; 
+                itemTextSize > minItemTextSize + 1; itemTextSize -= LARGE_STEP_SIZE) {
+            // @formatter:on
+            final boolean largeStepFits = resizeText(widgetWidthPixels, widgetHeightPixels,
+                    itemTextSize, singleLine);
+            if (largeStepFits) {
+                break;
+            }
+            small_steps_start_size = itemTextSize - 1;
+        }
+
+        // Now search in small steps
+        for (int itemTextSize = small_steps_start_size;; itemTextSize--) {
+            // This should not happen. Providing graceful handling just in case.
+            if (itemTextSize <= minItemTextSize) {
+                LogUtil.error("*** Inconsistent sizing: min=%d, current=%s, max=%s",
+                        minItemTextSize, itemTextSize, maxItemTextSize);
+                return false;
+            }
+            if (resizeText(widgetWidthPixels, widgetHeightPixels, itemTextSize, singleLine)) {
                 return true;
             }
-
-            // Try a smaller text size.
-            // TODO: consider to user steps proportional to current size
-            if (itemTextSize > minItemTextSize) {
-                itemTextSize = Math.max(minItemTextSize, itemTextSize - 1);
-                continue;
-            }
-
-            return false;
         }
     }
 
@@ -230,8 +253,10 @@ public class ListWidgetProviderTemplate {
      * a canvas.
      */
     private final boolean resizeText(int widgetWidthPixels, int widgetHeightPixels,
-            int toolbarTitleTextSize, int itemTextSize, boolean singleLine) {
+            int itemTextSize, boolean singleLine) {
         if (mToolbarEanbledPreference) {
+            final int toolbarTitleTextSize = WidgetUtil.titleTextSize(
+                    (int) (widgetHeightPixels * mDensity), itemTextSize);
             mToolbarTitleTextView.setTextSize(toolbarTitleTextSize);
         }
 
@@ -257,10 +282,6 @@ public class ListWidgetProviderTemplate {
                 MeasureSpec.makeMeasureSpec(widgetHeightPixels, MeasureSpec.EXACTLY));
         // TODO: subtract '1' from ends?
         mTopView.layout(0, 0, widgetWidthPixels, widgetHeightPixels);
-
-        LogUtil.debug("*** %d x %d, textSize: %s, singleLine: %s, bottom: %d, height: %d",
-                widgetWidthPixels, widgetHeightPixels, itemTextSize, singleLine,
-                mItemListView.getBottom(), mBackgroundColorView.getHeight());
 
         // 3 dip margin
         final int minMarginPixels = (int) (AUTO_FIT_BUTTOM_MARGIN_DIPS * mDensity + 0.5f);
