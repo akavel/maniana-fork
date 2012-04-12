@@ -52,11 +52,17 @@ import com.zapta.apps.maniana.widget.ListWidgetSize.OrientationInfo;
  * @author Tal Dayan
  */
 public class ListWidgetProviderTemplate {
+    
+    private static final int MIN_NORMALIZED_TEXT_SIZE = 10;
+    
+    private static final int AUTO_FIT_BUTTOM_MARGIN_DIPS = 3;
 
     @Nullable
     private final AppModel mModel;
     private final Context mContext;
+    private final float mDensity;
     private final LinearLayout mTopView;
+    private final View mBackgroundColorView;
     private final TextView mToolbarTitleTextView;
     private final LinearLayout mItemListView;
     private final List<View> mItemViews;
@@ -78,6 +84,7 @@ public class ListWidgetProviderTemplate {
             boolean singleLinePreference, ItemFontVariation fontVariationPreference,
             boolean autoFitPreference) {
         mContext = context;
+        mDensity = DisplayUtil.getDensity(context);
         mModel = model;
         mPaperPreference = paperPreference;
         mBackgroundColorPreference = backgroundColorPreference;
@@ -92,6 +99,7 @@ public class ListWidgetProviderTemplate {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mTopView = (LinearLayout) mLayoutInflater.inflate(R.layout.widget_list_template_layout,
                 null);
+        mBackgroundColorView = mTopView.findViewById(R.id.widget_list_background_color);
         mToolbarTitleTextView = (TextView) mTopView
                 .findViewById(R.id.widget_list_template_toolbar_title);
         mItemListView = (LinearLayout) mTopView.findViewById(R.id.widget_list_template_item_list);
@@ -100,8 +108,7 @@ public class ListWidgetProviderTemplate {
         mItemTextViews = new ArrayList<TextView>();
 
         // Set template background. This can be the background solid color or the paper color.
-        final View backgroundColorView = mTopView.findViewById(R.id.widget_list_background_color);
-        backgroundColorView.setBackgroundColor(mBackgroundColorPreference);
+        mBackgroundColorView.setBackgroundColor(mBackgroundColorPreference);
 
         // Does not set title size. This is done later.
         setTemplateToolbar();
@@ -110,62 +117,28 @@ public class ListWidgetProviderTemplate {
         populateTemplateItemList();
     }
 
-    /**
-     * Resize text. Used to fit text to the widget area. Returns the widget content height in pixels
-     */
-    private final void resizeText(ListWidgetSize listWidgetSize, int itemTextSize,
-            boolean singleLine) {
-        if (mToolbarEanbledPreference) {
-            final int titleTextSize = WidgetUtil.titleTextSize(listWidgetSize, itemTextSize);
-            mToolbarTitleTextView.setTextSize(titleTextSize);
-        }
-        for (TextView itemTextView : mItemTextViews) {
-            itemTextView.setTextSize(itemTextSize);
-
-            // NOTE: TextView has a bug that does not allows more than
-            // two lines when using ellipsize. Otherwise we would give the user more
-            // choices about the max number of lines. More details here:
-            // http://code.google.com/p/android/issues/detail?id=2254
-            if (singleLine) {
-                itemTextView.setSingleLine(true);
-                itemTextView.setMaxLines(1);
-            } else {
-                itemTextView.setSingleLine(false);
-                // NOTE: on ICS (API 14) the text view behaves
-                // differently and does not limit the lines to two when ellipsize. For
-                // consistency, we limit it explicitly to two lines.
-                //
-                // TODO: file an Android bug about the different ICS behavior.
-                //
-                itemTextView.setMaxLines(2);
-            }
-        }
-    }
-
     /** Set the image of a single orientation. */
     public final Uri renderOrientation(ListWidgetSize listWidgetSize, Orientation orientation,
-            int widthPixels, int heightPixels, @Nullable PaperBackground paperBackground) {
-
-        // Template view is now fully populated. Render it as a bitmap. First we render it
-        // using screen native resolution.
-        final float density = DisplayUtil.getDensity(mContext);
+            int widgetWidthPixels, int widgetHeightPixels, @Nullable PaperBackground paperBackground) {
 
         final OrientationInfo orientationInfo = orientation.isPortrait ? listWidgetSize.portraitInfo
                 : listWidgetSize.landscapeInfo;
 
         final int shadowRightPixels = mPaperPreference ? paperBackground
-                .shadowRightPixels(widthPixels) : 0;
+                .shadowRightPixels(widgetWidthPixels) : 0;
+
         final int shadowBottomPixels = mPaperPreference ? paperBackground
-                .shadowBottomPixels(heightPixels) : 0;
+                .shadowBottomPixels(widgetHeightPixels) : 0;
 
         // Set padding to match the drop shadow portion of paper background, if used.
         mTopView.setPadding(0, 0, shadowRightPixels, shadowBottomPixels);
 
-        resizeToFit(widthPixels, heightPixels, shadowBottomPixels, listWidgetSize, orientation);
+        resizeToFit(widgetWidthPixels, widgetHeightPixels, shadowBottomPixels, listWidgetSize,
+                orientation);
 
         // NTOE: ARGB_4444 results in a smaller file than ARGB_8888 (e.g. 50K vs 150k)
         // but does not look as good.
-        final Bitmap bitmap1 = Bitmap.createBitmap(widthPixels, heightPixels,
+        final Bitmap bitmap1 = Bitmap.createBitmap(widgetWidthPixels, widgetHeightPixels,
                 Bitmap.Config.ARGB_8888);
 
         final Canvas canvas = new Canvas(bitmap1);
@@ -177,7 +150,7 @@ public class ListWidgetProviderTemplate {
         if (mPaperPreference) {
             bitmap2 = bitmap1;
         } else {
-            bitmap2 = BitmapUtil.roundCornersRGB888(bitmap1, (int) (4 * density + 0.5f));
+            bitmap2 = BitmapUtil.roundCornersRGB888(bitmap1, (int) (4 * mDensity + 0.5f));
         }
 
         // NOTE: RemoteViews class has an issue with transferring large bitmaps. As a workaround, we
@@ -198,54 +171,100 @@ public class ListWidgetProviderTemplate {
     }
 
     // Resize the template in preparation for rendering.
-    private final void resizeToFit(int widthPixels, int heightPixels, int shadowBottomPixels,
-            ListWidgetSize listWidgetSize, Orientation orientation) {
+    private final void resizeToFit(int widgetWidthPixels, int widgetHeightPixels,
+            int bottomPadding, ListWidgetSize listWidgetSize, Orientation orientation) {
         DebugTimer timer = new DebugTimer();
 
-        // TODO: normalize min size
-        final int maxHeight = heightPixels - shadowBottomPixels;
-        boolean singleLine = mSingleLinePreference;
-        final int minSize = 13;
-        int textSize = mFontVariationPreference.getTextSize();
-        for (;;) {
-            // TODO: iterate to shrink if needed
-            resizeText(listWidgetSize, textSize, singleLine);
+        final int minItemTextSize = mAutoFitPreference ? (int) (MIN_NORMALIZED_TEXT_SIZE * mDensity + 0.5f)
+                : mFontVariationPreference.getTextSize();
 
-            mTopView.measure(MeasureSpec.makeMeasureSpec(widthPixels, MeasureSpec.EXACTLY),
-                    MeasureSpec.makeMeasureSpec(heightPixels, MeasureSpec.EXACTLY));
-            // TODO: subtract '1' from ends?
-            mTopView.layout(0, 0, widthPixels, heightPixels);
+        boolean fit = autoResizeText(widgetWidthPixels, widgetHeightPixels, minItemTextSize,
+                mFontVariationPreference.getTextSize(), mSingleLinePreference);
 
-            final int bottomPixels = mItemListView.getBottom();
-            LogUtil.debug(
-                    "*** Orientation: %s, textSize: %s, singleLine: %s, bottom: %d, height: %d",
-                    orientation, textSize, singleLine, bottomPixels, heightPixels);
+        if (fit || !mAutoFitPreference) {
+            return;
+        }
 
-            if (!mAutoFitPreference) {
-                break;
-            }
-
-            // TODO: Consider also paper shadow
-            // TODO: normalize the margin from dips to pixels
-            if (bottomPixels < maxHeight - 2) {
-                break;
-            }
-            if (textSize > minSize) {
-                textSize = Math.max(minSize, textSize - 1);
-                continue;
-            }
-            if (!singleLine) {
-                singleLine = true;
-                textSize = mFontVariationPreference.getTextSize();
-                continue;
-            }
-
-            // Failed to fit
-            // TODO: make N last items invisible and enable a '8 more items ...'.
-            break;
+        if (!mSingleLinePreference) {
+            fit = autoResizeText(widgetWidthPixels, widgetHeightPixels, minItemTextSize,
+                    mFontVariationPreference.getTextSize(), true);
         }
 
         timer.report("Fit done");
+    }
+
+    /**
+     * Try to to scale down the text size from given max to min until it fit. Returns true if fit.
+     * 
+     * TODO: consider to use binary search over text size range.
+     */
+    private final boolean autoResizeText(int widgetWidthPixels, int widgetHeightPixels,
+            int minItemTextSize, int maxItemTextSize, boolean singleLine) {
+
+        int itemTextSize = maxItemTextSize;
+        for (;;) {
+
+            final int toolbarTitleTextSize = WidgetUtil.titleTextSize(
+                    (int) (widgetHeightPixels * mDensity), itemTextSize);
+
+            final boolean fit = resizeText(widgetWidthPixels, widgetHeightPixels,
+                    toolbarTitleTextSize, itemTextSize, singleLine);
+
+            if (fit) {
+                return true;
+            }
+
+            // Try a smaller text size.
+            // TODO: consider to user steps proportional to current size
+            if (itemTextSize > minItemTextSize) {
+                itemTextSize = Math.max(minItemTextSize, itemTextSize - 1);
+                continue;
+            }
+
+            return false;
+        }
+    }
+
+    /**
+     * Resize template. Returns true if fit. Upon return, template view is ready to be rendered onto
+     * a canvas.
+     */
+    private final boolean resizeText(int widgetWidthPixels, int widgetHeightPixels,
+            int toolbarTitleTextSize, int itemTextSize, boolean singleLine) {
+        if (mToolbarEanbledPreference) {
+            mToolbarTitleTextView.setTextSize(toolbarTitleTextSize);
+        }
+
+        for (TextView itemTextView : mItemTextViews) {
+            itemTextView.setTextSize(itemTextSize);
+
+            // NOTE: TextView has a bug that does not allows more than two lines when using
+            // ellipsize. Otherwise we would give the user more choices about the max number of
+            // lines. More details here: http://code.google.com/p/android/issues/detail?id=2254
+            if (singleLine) {
+                itemTextView.setSingleLine(true);
+                itemTextView.setMaxLines(1);
+            } else {
+                itemTextView.setSingleLine(false);
+                // NOTE: on ICS (API 14) the text view behaves differently and does not limit the
+                // lines to two when ellipsize. For consistency, we limit it explicitly to two
+                // lines.
+                itemTextView.setMaxLines(2);
+            }
+        }
+
+        mTopView.measure(MeasureSpec.makeMeasureSpec(widgetWidthPixels, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(widgetHeightPixels, MeasureSpec.EXACTLY));
+        // TODO: subtract '1' from ends?
+        mTopView.layout(0, 0, widgetWidthPixels, widgetHeightPixels);
+
+        LogUtil.debug("*** %d x %d, textSize: %s, singleLine: %s, bottom: %d, height: %d",
+                widgetWidthPixels, widgetHeightPixels, itemTextSize, singleLine,
+                mItemListView.getBottom(), mBackgroundColorView.getHeight());
+
+        // 3 dip margin
+        final int minMarginPixels = (int) (AUTO_FIT_BUTTOM_MARGIN_DIPS * mDensity + 0.5f);
+        return mItemListView.getBottom() < (mBackgroundColorView.getHeight() - minMarginPixels);
     }
 
     /**

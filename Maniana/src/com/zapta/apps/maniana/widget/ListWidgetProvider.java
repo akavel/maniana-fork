@@ -157,9 +157,8 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
         final boolean singleLine = PreferencesTracker
                 .readWidgetSingleLinePreference(sharedPreferences);
-        
-        final boolean autoFit = PreferencesTracker
-                .readWidgetAutoFitPreference(sharedPreferences);
+
+        final boolean autoFit = PreferencesTracker.readWidgetAutoFitPreference(sharedPreferences);
 
         // NOTE: we use a template layout that is rendered to a bitmap rather rendering directly
         // a remote view. This allows us to use custom fonts which are not supported by
@@ -202,21 +201,22 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
     private static final void renderOneOrientation(Context context, RemoteViews remoteViews,
             ListWidgetProviderTemplate template, ListWidgetSize listWidgetSize,
             Orientation orientation, boolean backgroundPaper) {
-        
+
         final OrientationInfo orientationInfo = orientation.isPortrait ? listWidgetSize.portraitInfo
                 : listWidgetSize.landscapeInfo;
 
-        final int widthPixels = (int) context.getResources().getDimensionPixelSize(
+        final int widgetWidthPixels = (int) context.getResources().getDimensionPixelSize(
                 orientationInfo.widthDipResourceId);
 
-        final int heightPixels = (int) context.getResources().getDimensionPixelSize(
+        final int widgetHeightPixels = (int) context.getResources().getDimensionPixelSize(
                 orientationInfo.heightDipResourceId);
 
-        @Nullable 
-        final PaperBackground paperBackground = backgroundPaper ? PaperBackground.getBestSize(widthPixels,
-                heightPixels) : null;
+        @Nullable
+        final PaperBackground paperBackground = backgroundPaper ? PaperBackground.getBestSize(
+                widgetWidthPixels, widgetHeightPixels) : null;
 
-        final Uri fileUri = template.renderOrientation(listWidgetSize, orientation, widthPixels, heightPixels, paperBackground);
+        final Uri fileUri = template.renderOrientation(listWidgetSize, orientation,
+                widgetWidthPixels, widgetHeightPixels, paperBackground);
 
         // Set the bitmap images of given orientation. The bitmap of the size we currently
         // process is set and the other are made GONE. Only bitmaps of the given orientation
