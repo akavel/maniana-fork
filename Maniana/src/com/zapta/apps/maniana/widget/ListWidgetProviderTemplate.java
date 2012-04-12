@@ -181,16 +181,19 @@ public class ListWidgetProviderTemplate {
         final int minItemTextSize = mAutoFitPreference ? (int) (MIN_NORMALIZED_TEXT_SIZE * mDensity + 0.5f)
                 : mFontVariationPreference.getTextSize();
 
+        setSingleLine(mSingleLinePreference);
         boolean fit = autoResizeText(widgetWidthPixels, widgetHeightPixels, minItemTextSize,
-                mFontVariationPreference.getTextSize(), mSingleLinePreference);
+                mFontVariationPreference.getTextSize());
 
         if (fit || !mAutoFitPreference) {
+            timer.report("Fit done");
             return;
         }
 
         if (!mSingleLinePreference) {
+            setSingleLine(true);
             fit = autoResizeText(widgetWidthPixels, widgetHeightPixels, minItemTextSize,
-                    mFontVariationPreference.getTextSize(), true);
+                    mFontVariationPreference.getTextSize());
         }
 
         timer.report("Fit done");
@@ -202,11 +205,11 @@ public class ListWidgetProviderTemplate {
      * TODO: consider to use binary search over text size range.
      */
     private final boolean autoResizeText(int widgetWidthPixels, int widgetHeightPixels,
-            int minItemTextSize, int maxItemTextSize, boolean singleLine) {
+            int minItemTextSize, int maxItemTextSize) {
 
         // Try the max size. Return is fits or min == max
         final boolean maxSizeFits = resizeText(widgetWidthPixels, widgetHeightPixels,
-                maxItemTextSize, singleLine);
+                maxItemTextSize);
 
         if (maxSizeFits || maxItemTextSize <= minItemTextSize) {
             return maxSizeFits;
@@ -214,7 +217,7 @@ public class ListWidgetProviderTemplate {
 
         // Try the min size. Return if no fit or if no intermediate sizes between min and max.
         final boolean minSizeFits = resizeText(widgetWidthPixels, widgetHeightPixels,
-                minItemTextSize, singleLine);
+                minItemTextSize);
         if (!minSizeFits) {
             return false;
         }
@@ -226,19 +229,21 @@ public class ListWidgetProviderTemplate {
 
         for (;;) {
             // Test for termination
-            if (highSize == lowSize + 1) {
+            if (highSize == (lowSize + 1)) {
                 if (lowSize != currentSize) {
-                    resizeText(widgetWidthPixels, widgetHeightPixels, lowSize, singleLine);
-                    return true;
+                    resizeText(widgetWidthPixels, widgetHeightPixels, lowSize);
                 }
+                return true;
             }
 
             // Test mid size
             currentSize = (lowSize + highSize) / 2;
             final boolean currentSizeFits = resizeText(widgetWidthPixels, widgetHeightPixels,
-                    currentSize, singleLine);
-            LogUtil.debug("*** [low: %s, high: %s], current: %s, fit: %s", lowSize, highSize,
-                    currentSize, currentSizeFits);
+                    currentSize);
+
+//            LogUtil.debug("*** [low: %s, high: %s], current: %s, fit: %s", lowSize, highSize,
+//                    currentSize, currentSizeFits);
+
             if (currentSizeFits) {
                 lowSize = currentSize;
             } else {
@@ -251,8 +256,7 @@ public class ListWidgetProviderTemplate {
      * Resize template. Returns true if fit. Upon return, template view is ready to be rendered onto
      * a canvas.
      */
-    private final boolean resizeText(int widgetWidthPixels, int widgetHeightPixels,
-            int itemTextSize, boolean singleLine) {
+    private final boolean resizeText(int widgetWidthPixels, int widgetHeightPixels, int itemTextSize) {
         if (mToolbarEanbledPreference) {
             final int toolbarTitleTextSize = WidgetUtil.titleTextSize(
                     (int) (widgetHeightPixels * mDensity), itemTextSize);
@@ -261,7 +265,19 @@ public class ListWidgetProviderTemplate {
 
         for (TextView itemTextView : mItemTextViews) {
             itemTextView.setTextSize(itemTextSize);
+        }
 
+        mTopView.measure(MeasureSpec.makeMeasureSpec(widgetWidthPixels, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(widgetHeightPixels, MeasureSpec.EXACTLY));
+        // TODO: subtract '1' from ends?
+        mTopView.layout(0, 0, widgetWidthPixels, widgetHeightPixels);
+
+        final int minMarginPixels = (int) (AUTO_FIT_BUTTOM_MARGIN_DIPS * mDensity + 0.5f);
+        return mItemListView.getBottom() < (mBackgroundColorView.getHeight() - minMarginPixels);
+    }
+
+    private final void setSingleLine(boolean singleLine) {
+        for (TextView itemTextView : mItemTextViews) {
             // NOTE: TextView has a bug that does not allows more than two lines when using
             // ellipsize. Otherwise we would give the user more choices about the max number of
             // lines. More details here: http://code.google.com/p/android/issues/detail?id=2254
@@ -276,14 +292,6 @@ public class ListWidgetProviderTemplate {
                 itemTextView.setMaxLines(2);
             }
         }
-
-        mTopView.measure(MeasureSpec.makeMeasureSpec(widgetWidthPixels, MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(widgetHeightPixels, MeasureSpec.EXACTLY));
-        // TODO: subtract '1' from ends?
-        mTopView.layout(0, 0, widgetWidthPixels, widgetHeightPixels);
-
-        final int minMarginPixels = (int) (AUTO_FIT_BUTTOM_MARGIN_DIPS * mDensity + 0.5f);
-        return mItemListView.getBottom() < (mBackgroundColorView.getHeight() - minMarginPixels);
     }
 
     /**
