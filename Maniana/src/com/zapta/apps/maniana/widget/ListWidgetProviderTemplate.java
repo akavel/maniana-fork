@@ -215,35 +215,34 @@ public class ListWidgetProviderTemplate {
         // Try the min size. Return if no fit or if no intermediate sizes between min and max.
         final boolean minSizeFits = resizeText(widgetWidthPixels, widgetHeightPixels,
                 minItemTextSize, singleLine);
-        if (!minSizeFits || minItemTextSize == (maxItemTextSize - 1)) {
-            return minSizeFits;
+        if (!minSizeFits) {
+            return false;
         }
 
-        // Probe the range [minItemTextSize+1, maxItemTextSize-1] in large steps until first fit.
-        final int LARGE_STEP_SIZE = 5;
-        int small_steps_start_size = maxItemTextSize - 1;
-        // @formatter:off
-        for (int itemTextSize = maxItemTextSize - LARGE_STEP_SIZE; 
-                itemTextSize > minItemTextSize + 1; itemTextSize -= LARGE_STEP_SIZE) {
-            // @formatter:on
-            final boolean largeStepFits = resizeText(widgetWidthPixels, widgetHeightPixels,
-                    itemTextSize, singleLine);
-            if (largeStepFits) {
-                break;
-            }
-            small_steps_start_size = itemTextSize - 1;
-        }
+        // Use binary search. High is always a fit and low is always a non fit. High > low.
+        int highSize = maxItemTextSize;
+        int lowSize = minItemTextSize;
+        int currentSize = minItemTextSize;
 
-        // Now search in small steps
-        for (int itemTextSize = small_steps_start_size;; itemTextSize--) {
-            // This should not happen. Providing graceful handling just in case.
-            if (itemTextSize <= minItemTextSize) {
-                LogUtil.error("*** Inconsistent sizing: min=%d, current=%s, max=%s",
-                        minItemTextSize, itemTextSize, maxItemTextSize);
-                return false;
+        for (;;) {
+            // Test for termination
+            if (highSize == lowSize + 1) {
+                if (lowSize != currentSize) {
+                    resizeText(widgetWidthPixels, widgetHeightPixels, lowSize, singleLine);
+                    return true;
+                }
             }
-            if (resizeText(widgetWidthPixels, widgetHeightPixels, itemTextSize, singleLine)) {
-                return true;
+
+            // Test mid size
+            currentSize = (lowSize + highSize) / 2;
+            final boolean currentSizeFits = resizeText(widgetWidthPixels, widgetHeightPixels,
+                    currentSize, singleLine);
+            LogUtil.debug("*** [low: %s, high: %s], current: %s, fit: %s", lowSize, highSize,
+                    currentSize, currentSizeFits);
+            if (currentSizeFits) {
+                lowSize = currentSize;
+            } else {
+                highSize = currentSize;
             }
         }
     }
@@ -283,7 +282,6 @@ public class ListWidgetProviderTemplate {
         // TODO: subtract '1' from ends?
         mTopView.layout(0, 0, widgetWidthPixels, widgetHeightPixels);
 
-        // 3 dip margin
         final int minMarginPixels = (int) (AUTO_FIT_BUTTOM_MARGIN_DIPS * mDensity + 0.5f);
         return mItemListView.getBottom() < (mBackgroundColorView.getHeight() - minMarginPixels);
     }
