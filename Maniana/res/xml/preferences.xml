@@ -79,7 +79,7 @@
             android:summary="Using %s icon set"
             android:title="Icon Set" />
         <com.zapta.apps.maniana.settings.FontPreference
-            android:defaultValue="cursive"
+            android:defaultValue="casual"
             android:key="prefItemFontKey"
             android:summary="Using %s font"
             android:title="Font" />
@@ -132,7 +132,7 @@
             android:summary="List widget background color"
             android:title="Background Color" />
         <com.zapta.apps.maniana.settings.FontPreference
-            android:defaultValue="cursive"
+            android:defaultValue="casual"
             android:key="prefWidgetItemFontKey"
             android:summary="Using %s font"
             android:title="Font" />
@@ -140,12 +140,12 @@
             android:key="prefWidgetItemFontSizePtKey"
             android:title="Text Size"
             android:summary="Using %d points text size"
-            android:defaultValue="14"
+            android:defaultValue="18"
             android:text="%dpt"
             android:maxLevel="24"
             android:minLevel="10" />
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="prefWidgetAutoFitKey"
             android:summaryOff="Will not try to fit content to widget size."
             android:summaryOn="If needed, will try to fit content to widget size (smaller text, single line, etc)"
