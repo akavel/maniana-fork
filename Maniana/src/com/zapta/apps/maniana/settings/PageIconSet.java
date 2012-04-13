@@ -41,14 +41,22 @@ public enum PageIconSet implements KeyedEnum {
             R.drawable.button_add_by_text2,
             R.drawable.button_add_by_voice2,
             R.drawable.button_clean2),
-    
+
     SET3(
             "Set3",
             "set3",
             R.drawable.button_undo3,
             R.drawable.button_add_by_text3,
             R.drawable.button_add_by_voice3,
-            R.drawable.button_clean3);
+            R.drawable.button_clean3),
+
+    SET4(
+            "Set4",
+            "set4",
+            R.drawable.button_undo4,
+            R.drawable.button_add_by_text4,
+            R.drawable.button_add_by_voice4,
+            R.drawable.button_clean4);
 
     /** User visible name. */
     public final String name;
@@ -68,7 +76,7 @@ public enum PageIconSet implements KeyedEnum {
             int buttonAddByTextResourceId, int buttonAddByVoiceResourceId, int buttonCleanResourceId) {
         this.name = name;
         this.mKey = key;
-        
+
         this.buttonUndoResourceId = buttonUndoResourceId;
         this.buttonAddByTextResourceId = buttonAddByTextResourceId;
         this.buttonAddByVoiceResourceId = buttonAddByVoiceResourceId;
