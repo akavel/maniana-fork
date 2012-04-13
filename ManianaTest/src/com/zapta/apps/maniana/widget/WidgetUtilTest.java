@@ -24,27 +24,18 @@ import junit.framework.TestCase;
 public class WidgetUtilTest extends TestCase {
         
     public void testTitleTextSize() {
-        ListWidgetSize W;
+
+        assertEquals(9, WidgetUtil.titleTextSize(70, 10));
+        assertEquals(12, WidgetUtil.titleTextSize(70, 16));
+        assertEquals(12, WidgetUtil.titleTextSize(70, 16));
+        assertEquals(16, WidgetUtil.titleTextSize(70, 24));  
         
-        // 1 row widget 
-        W = ListWidgetSize.LIST_WIDGET_SIZE1; 
-        assertEquals(1, W.heightCells);
-        assertEquals(9, WidgetUtil.titleTextSize(W, 10));
-        assertEquals(12, WidgetUtil.titleTextSize(W, 16));
-        assertEquals(16, WidgetUtil.titleTextSize(W, 24));  
+        assertEquals(9, WidgetUtil.titleTextSize(160, 10));
+        assertEquals(12, WidgetUtil.titleTextSize(160, 16));
+        assertEquals(16, WidgetUtil.titleTextSize(160, 24));  
         
-        // 2 rows widget  
-        W = ListWidgetSize.LIST_WIDGET_SIZE2; 
-        assertEquals(2, W.heightCells);
-        assertEquals(9, WidgetUtil.titleTextSize(W, 10));
-        assertEquals(12, WidgetUtil.titleTextSize(W, 16));
-        assertEquals(16, WidgetUtil.titleTextSize(W, 24));  
-        
-        // 4 rows widget 
-        W = ListWidgetSize.LIST_WIDGET_SIZE5; 
-        assertEquals(4, W.heightCells);
-        assertEquals(10, WidgetUtil.titleTextSize(W, 10));
-        assertEquals(13, WidgetUtil.titleTextSize(W, 16));
-        assertEquals(17, WidgetUtil.titleTextSize(W, 24));  
+        assertEquals(10, WidgetUtil.titleTextSize(300, 10));
+        assertEquals(13, WidgetUtil.titleTextSize(300, 16));
+        assertEquals(17, WidgetUtil.titleTextSize(300, 24));  
     }
 }

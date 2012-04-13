@@ -53,9 +53,8 @@ import com.zapta.apps.maniana.widget.ListWidgetSize.OrientationInfo;
  */
 public class ListWidgetProviderTemplate {
 
+    /** Will scale item text size down to this size in SP units. */
     private static final int MIN_NORMALIZED_TEXT_SIZE = 9;
-
-    private static final int AUTO_FIT_BUTTOM_MARGIN_DIPS = 3;
 
     @Nullable
     private final AppModel mModel;
@@ -207,30 +206,28 @@ public class ListWidgetProviderTemplate {
     private final boolean autoResizeText(int widgetWidthPixels, int widgetHeightPixels,
             int minItemTextSize, int maxItemTextSize) {
 
-        // Try the max size. Return is fits or min == max
-        final boolean maxSizeFits = resizeText(widgetWidthPixels, widgetHeightPixels,
-                maxItemTextSize);
-
-        if (maxSizeFits || maxItemTextSize <= minItemTextSize) {
-            return maxSizeFits;
-        }
-
-        // Try the min size. Return if no fit or if no intermediate sizes between min and max.
-        final boolean minSizeFits = resizeText(widgetWidthPixels, widgetHeightPixels,
-                minItemTextSize);
-        if (!minSizeFits) {
+        // Try min, size, return if no fit.
+        if (!resizeText(widgetWidthPixels, widgetHeightPixels, minItemTextSize)) {
             return false;
         }
 
-        // Use binary search. High is always a fit and low is always a non fit. High > low.
-        int highSize = maxItemTextSize;
-        int lowSize = minItemTextSize;
-        int currentSize = minItemTextSize;
+        // Try the max size. Return if fits.
+        if (resizeText(widgetWidthPixels, widgetHeightPixels, maxItemTextSize)) {
+            return true;
+        }
+
+        // Use binary search. high >= current >= min
+        float highSize = maxItemTextSize;
+        float lowSize = minItemTextSize;
+        float currentSize = minItemTextSize;
 
         for (;;) {
-            // Test for termination
-            if (highSize == (lowSize + 1)) {
-                if (lowSize != currentSize) {
+            // Termination condition
+            if ((highSize - lowSize) < 0.5f) {
+                // The size we want to have upon return is lowSize. If this is not
+                // the current size than do one more resizing. We use a safe flaot
+                // comparison.
+                if (Math.abs(lowSize - currentSize) > 0.1f) {
                     resizeText(widgetWidthPixels, widgetHeightPixels, lowSize);
                 }
                 return true;
@@ -241,8 +238,8 @@ public class ListWidgetProviderTemplate {
             final boolean currentSizeFits = resizeText(widgetWidthPixels, widgetHeightPixels,
                     currentSize);
 
-//            LogUtil.debug("*** [low: %s, high: %s], current: %s, fit: %s", lowSize, highSize,
-//                    currentSize, currentSizeFits);
+            LogUtil.debug("*** [low: %s, high: %s], current: %s, fit: %s", lowSize, highSize,
+                    currentSize, currentSizeFits);
 
             if (currentSizeFits) {
                 lowSize = currentSize;
@@ -256,7 +253,8 @@ public class ListWidgetProviderTemplate {
      * Resize template. Returns true if fit. Upon return, template view is ready to be rendered onto
      * a canvas.
      */
-    private final boolean resizeText(int widgetWidthPixels, int widgetHeightPixels, int itemTextSize) {
+    private final boolean resizeText(int widgetWidthPixels, int widgetHeightPixels,
+            float itemTextSize) {
         if (mToolbarEanbledPreference) {
             final int toolbarTitleTextSize = WidgetUtil.titleTextSize(
                     (int) (widgetHeightPixels * mDensity), itemTextSize);
@@ -272,7 +270,10 @@ public class ListWidgetProviderTemplate {
         // TODO: subtract '1' from ends?
         mTopView.layout(0, 0, widgetWidthPixels, widgetHeightPixels);
 
-        final int minMarginPixels = (int) (AUTO_FIT_BUTTOM_MARGIN_DIPS * mDensity + 0.5f);
+        // We use margin height proportional to the text size. This way it is intuitive
+        // to the user that this is the last line and there are no more lines beyond the
+        // wieget bottom.
+        final int minMarginPixels = (int) (itemTextSize * mDensity);
         return mItemListView.getBottom() < (mBackgroundColorView.getHeight() - minMarginPixels);
     }
 
