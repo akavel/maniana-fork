@@ -730,10 +730,16 @@ public class Controller {
         onBackupDataChange();
 
         switch (id) {
+            case PAGE_ICON_SET:
+                mApp.view().onPageIconSetPreferenceChange();
+                break;
+                
             case PAGE_ITEM_FONT_TYPE:
             case PAGE_ITEM_FONT_SIZE:
             case PAGE_ITEM_ACTIVE_TEXT_COLOR:
             case PAGE_ITEM_COMPLETED_TEXT_COLOR:
+                // TODO: perform the call to onPageItemFontVariationPreferenceChange in 
+                // preference tracker before calling this on change method of the controller.
                 mApp.pref().onPageItemFontVariationPreferenceChange();
                 mApp.view().onPageItemFontVariationPreferenceChange();
                 break;

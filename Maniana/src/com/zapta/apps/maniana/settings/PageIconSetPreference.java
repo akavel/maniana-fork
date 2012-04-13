@@ -31,29 +31,31 @@ import android.widget.CheckedTextView;
 /**
  * @author George Yunaev (http://tinyurl.com/7jnoubo)
  * @author Tal Dayan
+ * 
+ * TODO: generalize and combine with FontPreference.
  */
-public class FontPreference extends DialogPreference implements DialogInterface.OnClickListener {
+public class PageIconSetPreference extends DialogPreference implements DialogInterface.OnClickListener {
 
-    private final ItemFontType mDefaultValue;
+    private final PageIconSet mDefaultValue;
 
-    private ItemFontType mValue;
+    private PageIconSet mValue;
 
     /**
      * Format string for preference summary string (when dialog is closed). Can contain a single %s
-     * for currently selected font name.
+     * for currently selected icon set name.
      */
     private String mSummaryFormat;
 
-    // Font adaptor over ItemFontType.values()
-    public class FontAdapter extends BaseAdapter {
+    // Font adaptor over IconSet.values()
+    public class IconSetAdapter extends BaseAdapter {
         @Override
         public int getCount() {
-            return ItemFontType.values().length;
+            return PageIconSet.values().length;
         }
 
         @Override
         public Object getItem(int position) {
-            return ItemFontType.values()[position].name;
+            return PageIconSet.values()[position].name;
         }
 
         @Override
@@ -75,27 +77,26 @@ public class FontPreference extends DialogPreference implements DialogInterface.
 
             final CheckedTextView checkedTextView = (CheckedTextView) view
                     .findViewById(android.R.id.text1);
-            final ItemFontType fontType = ItemFontType.values()[position];
-            checkedTextView.setTypeface(fontType.getTypeface(getContext()));
+            final PageIconSet iconSet = PageIconSet.values()[position];
 
             // If you want to make the selected item having different foreground or background
             // color, be aware of themes. In some of them your foreground color may be the
             // background
             // color. So we don't mess with anything here.
-            checkedTextView.setText(fontType.name);
-            checkedTextView.setTextSize(20 * fontType.scale);
+            checkedTextView.setText(iconSet.name);
+            checkedTextView.setTextSize(20);
 
             return view;
         }
     }
 
-    public FontPreference(Context context, AttributeSet attrs) {
+    public PageIconSetPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        final String defaultFontkey = attrs.getAttributeValue(
+        final String defaultIconSetKey = attrs.getAttributeValue(
                 PreferenceConstants.ANDROID_NAME_SPACE, "defaultValue");
-        mDefaultValue = ItemFontType.fromKey(defaultFontkey, null);
-        checkNotNull(mDefaultValue, "Key: [%s]", defaultFontkey);
+        mDefaultValue = PageIconSet.fromKey(defaultIconSetKey, null);
+        checkNotNull(mDefaultValue, "Key: [%s]", defaultIconSetKey);
 
         mValue = mDefaultValue;
 
@@ -106,7 +107,7 @@ public class FontPreference extends DialogPreference implements DialogInterface.
     @Override
     protected void onPrepareDialogBuilder(Builder builder) {
         super.onPrepareDialogBuilder(builder);
-        final FontAdapter adapter = new FontAdapter();
+        final IconSetAdapter adapter = new IconSetAdapter();
         builder.setSingleChoiceItems(adapter, mValue.ordinal(), this);
         builder.setPositiveButton(null, null);
     }
@@ -114,8 +115,8 @@ public class FontPreference extends DialogPreference implements DialogInterface.
     @Override
     public void onClick(DialogInterface dialog, int which) {
         if (which >= 0 && which < ItemFontType.values().length) {
-            final ItemFontType selectedFont = ItemFontType.values()[which];
-            setValue(selectedFont);
+            final PageIconSet selectedIconSet = PageIconSet.values()[which];
+            setValue(selectedIconSet);
             dialog.dismiss();
         }
     }
@@ -126,28 +127,28 @@ public class FontPreference extends DialogPreference implements DialogInterface.
         if (restore) {
             mValue = shouldPersist() ? readValue() : mDefaultValue;
         } else {
-            mValue = ItemFontType.fromKey((String) defaultValue, mDefaultValue);
+            mValue = PageIconSet.fromKey((String) defaultValue, mDefaultValue);
         }
         updateSummaryWithCurrentValue();
     }
 
-    public final void setValue(ItemFontType font) {
-        mValue = font;
+    public final void setValue(PageIconSet iconSet) {
+        mValue = iconSet;
         Editor editor = getSharedPreferences().edit();
-        editor.putString(getKey(), font.getKey());
+        editor.putString(getKey(), mValue.getKey());
         editor.commit();
         updateSummaryWithCurrentValue();
     }
 
-    private final ItemFontType readValue() {
+    private final PageIconSet readValue() {
         final SharedPreferences sharedPreferences = getSharedPreferences();
         if (sharedPreferences == null) {
             // Shared preferences not bound yet
             return mDefaultValue;
         }
-        final String selectedFontKey = sharedPreferences
-                .getString(getKey(), mDefaultValue.getKey());
-        return ItemFontType.fromKey(selectedFontKey, mDefaultValue);
+        final String selectedIconSetKey = sharedPreferences.getString(getKey(),
+                mDefaultValue.getKey());
+        return PageIconSet.fromKey(selectedIconSetKey, mDefaultValue);
     }
 
     private final void updateSummaryWithCurrentValue() {

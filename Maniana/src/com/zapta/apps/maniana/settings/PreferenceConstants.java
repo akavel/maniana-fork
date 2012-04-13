@@ -35,6 +35,7 @@ public interface PreferenceConstants {
     public static final boolean DEFAULT_PAGE_BACKGROUND_PAPER = true;
     public static final int DEFAULT_PAGE_PAPER_COLOR = 0xffffffff;
     public static final int DEFAULT_PAGE_BACKGROUND_SOLID_COLOR = 0xffffffc0;
+    public static final PageIconSet DEFAULT_PAGE_ICON_SET = PageIconSet.HAND_DRAWN;
     public static final ItemFontType DEFAULT_PAGE_FONT_TYPE = ItemFontType.CURSIVE;
     public static final int DEFAULT_PAGE_FONT_SIZE = 16;
     public static final int DEFAULT_ITEM_TEXT_COLOR = 0xff000000;

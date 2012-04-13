@@ -49,6 +49,7 @@ public class PreferencesTracker implements PreferenceConstants {
     private boolean mCachedPageBackgroundPaperPreference;
     private int mCachedPagePaperColorPreference;
     private int mCachedPageBackgroundSolidColorPreference;
+    private PageIconSet mCachedPageIconSetPreference;
     private ItemFontType mCachedPageFontTypePreference;
     private int mCachedPageFontSizePreference;
     private int mCachedPageItemActiveTextColorPreference;
@@ -65,10 +66,12 @@ public class PreferencesTracker implements PreferenceConstants {
         mApp = app;
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mApp.context());
 
+        // Get initial values
         updateCachedAllowSoundsPreference();
         updateCachedApplauseLevelPreference();
         updateCachedAutoSortPreference();
         updateCachedAutoDailyCleanupPreference();
+        updateCachedPageIconSetPreference();
         updateCachedPageFontTypePreference();
         updateCachedPageFontSizePreference();
         updateCachedPageItemActiveTextColorPreference();
@@ -96,6 +99,12 @@ public class PreferencesTracker implements PreferenceConstants {
     private final void updateCachedAllowSoundsPreference() {
         mCachedAllowSoundsPreference = mSharedPreferences.getBoolean(
                 PreferenceKind.SOUND_ENABLED.getKey(), DEFAULT_ALLOWS_SOUND_EFFECTS);
+    }
+
+    private final void updateCachedPageIconSetPreference() {
+        final String key = mSharedPreferences.getString(
+                PreferenceKind.PAGE_ICON_SET.getKey(), DEFAULT_PAGE_ICON_SET.getKey());
+        mCachedPageIconSetPreference = PageIconSet.fromKey(key, DEFAULT_PAGE_ICON_SET);
     }
 
     private final void updateCachedPageFontTypePreference() {
@@ -276,6 +285,10 @@ public class PreferencesTracker implements PreferenceConstants {
     public final ApplauseLevel getApplauseLevelPreference() {
         return mCachedApplauseLevelPreference;
     }
+    
+    public final PageIconSet getPageIconSetPreference() {
+        return mCachedPageIconSetPreference;
+    }
 
     public final ItemFontType getItemFontTypePreference() {
         return mCachedPageFontTypePreference;
@@ -344,6 +357,7 @@ public class PreferencesTracker implements PreferenceConstants {
             return;
         }
 
+        // TODO: order by definition order of PreferenceKind.
         switch (id) {
             case SOUND_ENABLED:
                 updateCachedAllowSoundsPreference();
@@ -356,6 +370,9 @@ public class PreferencesTracker implements PreferenceConstants {
                 break;
             case AUTO_DAILY_CLEANUP:
                 updateCachedAutoDailyCleanupPreference();
+                break;
+            case PAGE_ICON_SET:
+                updateCachedPageIconSetPreference();
                 break;
             case PAGE_ITEM_FONT_TYPE:
                 updateCachedPageFontTypePreference();

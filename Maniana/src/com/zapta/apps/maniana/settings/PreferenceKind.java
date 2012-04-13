@@ -50,6 +50,7 @@ public enum PreferenceKind implements KeyedEnum {
     PAGE_BACKGROUND_PAPER("prefPageBackgroundPaperKey"),
     PAGE_PAPER_COLOR("prefPagePaperColorKey"),
     PAGE_BACKGROUND_SOLID_COLOR("prefPageBackgroundSolidColorKey"),
+    PAGE_ICON_SET("prefPageIconSetKey"),
     PAGE_ITEM_FONT_TYPE("prefItemFontKey"),
     PAGE_ITEM_FONT_SIZE("prefPageItemFontSizePtKey"),
     PAGE_ITEM_ACTIVE_TEXT_COLOR("prefPageTextColorKey"),

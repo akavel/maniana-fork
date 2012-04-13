@@ -145,6 +145,11 @@ public class AppView {
         mTodayPageView.onDateChange();
     }
 
+    public final void onPageIconSetPreferenceChange() {
+        mTodayPageView.onPageIconSetPreferenceChange();
+        mTomorowPageView.onPageIconSetPreferenceChange();
+    }
+    
     public final void onPageItemFontVariationPreferenceChange() {
         mTodayPageView.onPageItemFontVariationPreferenceChange();
         mTomorowPageView.onPageItemFontVariationPreferenceChange();

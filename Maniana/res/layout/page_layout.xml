@@ -110,7 +110,7 @@
                 android:longClickable="false"
                 android:paddingLeft="5dip"
                 android:paddingRight="30dip"
-                android:src="@drawable/button_undo" >
+                android:src="@drawable/place_holder" >
             </ImageButton>
 
             <ImageButton
@@ -123,7 +123,7 @@
                 android:longClickable="false"
                 android:paddingLeft="15dip"
                 android:paddingRight="10dip"
-                android:src="@drawable/button_add_by_text" >
+                android:src="@drawable/place_holder" >
             </ImageButton>
 
             <ImageButton
@@ -136,7 +136,7 @@
                 android:longClickable="false"
                 android:paddingLeft="15dip"
                 android:paddingRight="10dip"
-                android:src="@drawable/button_add_by_voice" >
+                android:src="@drawable/place_holder" >
             </ImageButton>
 
             <ImageButton
@@ -148,7 +148,7 @@
                 android:longClickable="true"
                 android:paddingLeft="15dip"
                 android:paddingRight="6dip"
-                android:src="@drawable/button_clean" >
+                android:src="@drawable/place_holder" >
             </ImageButton>
         </RelativeLayout>
     </RelativeLayout>

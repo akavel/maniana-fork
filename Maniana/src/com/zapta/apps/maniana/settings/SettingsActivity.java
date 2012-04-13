@@ -71,7 +71,8 @@ public class SettingsActivity extends PreferenceActivity implements
     private CheckBoxPreference mPageBackgroundPaperPreference;
     private ColorPickerPreference mPagePaperColorPickPreference;
     private ColorPickerPreference mPageSolidColorPickPreference;
-    private FontPreference mPageFontTypeFontPreference;
+    private PageIconSetPreference mPageIconSetPreference;
+    private FontPreference mPageFontTypePreference;
     private SeekBarPreference mPageFontSizePreference;
     private ColorPickerPreference mPageTextActiveColorPickPreference;
     private ColorPickerPreference mPageTextCompletedColorPickPreference;
@@ -82,7 +83,7 @@ public class SettingsActivity extends PreferenceActivity implements
     private CheckBoxPreference mWidgetBackgroundPaperPreference;
     private ColorPickerPreference mWidgetPaperColorPickPreference;
     private ColorPickerPreference mWidgetSolidColorPickPreference;
-    private FontPreference mWidgetFontTypeFontPreference;
+    private FontPreference mWidgetFontTypePreference;
     private SeekBarPreference mWidgetFontSizePreference;
     private ColorPickerPreference mWidgetTextColorPickPreference;
     private ColorPickerPreference mWidgetTextCompletedColorPickPreference;
@@ -134,7 +135,8 @@ public class SettingsActivity extends PreferenceActivity implements
                 (PreferenceGroup) findPreference("prefPagesScreenKey"),
                 mPageBackgroundPaperPreference, mPagePaperColorPickPreference,
                 mPageSolidColorPickPreference);
-        mPageFontTypeFontPreference = (FontPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_TYPE);
+        mPageIconSetPreference = (PageIconSetPreference) findPreference(PreferenceKind.PAGE_ICON_SET);
+        mPageFontTypePreference = (FontPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_TYPE);
         mPageFontSizePreference = (SeekBarPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_SIZE);
         mPageTextActiveColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_ITEM_ACTIVE_TEXT_COLOR);
         mPageTextCompletedColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_ITEM_COMPLETED_TEXT_COLOR);
@@ -149,7 +151,7 @@ public class SettingsActivity extends PreferenceActivity implements
                 (PreferenceGroup) findPreference("prefWidgetScreenKey"),
                 mWidgetBackgroundPaperPreference, mWidgetPaperColorPickPreference,
                 mWidgetSolidColorPickPreference);
-        mWidgetFontTypeFontPreference = (FontPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_TYPE);
+        mWidgetFontTypePreference = (FontPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_TYPE);
         mWidgetFontSizePreference = (SeekBarPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_SIZE);
 
         mWidgetTextColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_ITEM_TEXT_COLOR);
@@ -271,7 +273,8 @@ public class SettingsActivity extends PreferenceActivity implements
         mPageBackgroundPaperPreference.setChecked(theme.backgroundPaper);
         mPagePaperColorPickPreference.onColorChanged(theme.paperColor);
         mPageSolidColorPickPreference.onColorChanged(theme.backgroundSolidColor);
-        mPageFontTypeFontPreference.setValue(theme.fontType);
+        mPageIconSetPreference.setValue(theme.iconSet);
+        mPageFontTypePreference.setValue(theme.fontType);
         mPageFontSizePreference.setValue(theme.fontSize);
         mPageTextActiveColorPickPreference.onColorChanged(theme.textColor);
         mPageTextCompletedColorPickPreference.onColorChanged(theme.completedTextColor);
@@ -283,7 +286,7 @@ public class SettingsActivity extends PreferenceActivity implements
         mWidgetBackgroundPaperPreference.setChecked(theme.backgroundPaper);
         mWidgetPaperColorPickPreference.onColorChanged(theme.paperColor);
         mWidgetSolidColorPickPreference.onColorChanged(theme.backgroundColor);
-        mWidgetFontTypeFontPreference.setValue(theme.fontType);
+        mWidgetFontTypePreference.setValue(theme.fontType);
         mWidgetFontSizePreference.setValue(theme.fontSize);
         mWidgetTextColorPickPreference.onColorChanged(theme.textColor);
         mWidgetTextCompletedColorPickPreference.onColorChanged(theme.completedTextColor);
@@ -363,7 +366,11 @@ public class SettingsActivity extends PreferenceActivity implements
         editor.putBoolean(PreferenceKind.WIDGET_AUTO_FIT.getKey(),
                 PreferenceConstants.DEFAULT_WIDGET_AUTO_FIT);
 
-        // Set font preferences to broadcast the change enve.
+        // Set icon set preferences to broadcast the change event.
+        editor.putString(PreferenceKind.PAGE_ICON_SET.getKey(),
+                PreferenceConstants.DEFAULT_PAGE_ICON_SET.getKey());
+        
+        // Set font preferences to broadcast the change event.
         editor.putString(PreferenceKind.PAGE_ITEM_FONT_TYPE.getKey(),
                 PreferenceConstants.DEFAULT_PAGE_FONT_TYPE.getKey());
         editor.putString(PreferenceKind.WIDGET_ITEM_FONT_TYPE.getKey(),

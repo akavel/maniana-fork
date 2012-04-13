@@ -31,6 +31,7 @@ import com.zapta.apps.maniana.main.AppContext;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.quick_action.QuickActionItem;
 import com.zapta.apps.maniana.services.AppServices;
+import com.zapta.apps.maniana.settings.PageIconSet;
 import com.zapta.apps.maniana.util.ColorUtil;
 
 /**
@@ -112,7 +113,10 @@ public class PageView extends FrameLayout {
 
     private final boolean mUsesIcsMenuOverflowButton;
 
-    private final ImageButton mUndoButtonView;
+    private final ImageButton mButtonUndoView;
+    private final ImageButton mButtonAddByTextView;
+    private final ImageButton mButtonAddByVoiceView;
+    private final ImageButton mButtonCleanView;
 
     private final TextView mDayTextView;
     private final TextView mDateTextView;
@@ -132,7 +136,11 @@ public class PageView extends FrameLayout {
         
 
         mPageTitleDivider = (FrameLayout) findViewById(R.id.page_title_divider);
-        mUndoButtonView = (ImageButton) findViewById(R.id.page_undo_button);
+        
+        mButtonUndoView = (ImageButton) findViewById(R.id.page_undo_button);
+        mButtonAddByTextView = (ImageButton) findViewById(R.id.page_add_by_text_button);;
+        mButtonAddByVoiceView = (ImageButton) findViewById(R.id.page_add_by_voice_button);;
+        mButtonCleanView = (ImageButton) findViewById(R.id.page_clean_button);;
 
         mIcsMenuOverflowButtonView = (ImageButton) findViewById(R.id.page_ics_menu_overflow_button);
 
@@ -175,61 +183,45 @@ public class PageView extends FrameLayout {
                     onIcsMenuOverflowButtonClick();
                 }
             });
-
-            // // NOTE: we extend the click area to the adjacent date area to make it
-            // // easier to click.
-            // final LinearLayout dateArea = (LinearLayout)
-            // findViewById(R.id.page_date_time_section);
-            // dateArea.setOnClickListener(new OnClickListener() {
-            // @Override
-            // public void onClick(View v) {
-            // onIcsMenuOverflowButtonClick();
-            // }
-            // });
-
         } else {
             mIcsMenuOverflowButtonView.setVisibility(View.INVISIBLE);
             mIcsMenuOverflowButtonView.setPadding(10, 0, 0, 0);
         }
 
         updateUndoButton();
-        mUndoButtonView.setOnClickListener(new OnClickListener() {
+        mButtonUndoView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 mApp.controller().onUndoButton(mPageKind);
             }
         });
 
-        // onVoiceRecognitionPreferenceChange();
-        final ImageButton addByVoiceButton = (ImageButton) findViewById(R.id.page_add_by_voice_button);
         if (AppServices.isVoiceRecognitionSupported(mApp.context())) {
-            addByVoiceButton.setOnClickListener(new OnClickListener() {
+            mButtonAddByVoiceView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mApp.controller().onAddItemByVoiceButton(mPageKind);
                 }
             });
         } else {
-            addByVoiceButton.setVisibility(View.GONE);
+            mButtonAddByVoiceView.setVisibility(View.GONE);
         }
 
-        final ImageButton addButton = (ImageButton) findViewById(R.id.page_add_by_text_button);
-        addButton.setOnClickListener(new OnClickListener() {
+        mButtonAddByTextView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 mApp.controller().onAddItemByTextButton(mPageKind);
             }
         });
 
-        final ImageButton cleanButton = (ImageButton) findViewById(R.id.page_clean_button);
-        cleanButton.setOnClickListener(new OnClickListener() {
+        mButtonCleanView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 mApp.controller().onCleanPageButton(mPageKind, false);
             }
         });
 
-        cleanButton.setOnLongClickListener(new OnLongClickListener() {
+        mButtonCleanView.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 mApp.controller().onCleanPageButton(mPageKind, true);
@@ -237,9 +229,10 @@ public class PageView extends FrameLayout {
             }
         });
 
+        // Set initial preferences
+        onPageIconSetPreferenceChange();
         onPageBackgroundPreferenceChange();
         onItemDividerColorPreferenceChange();
-
     }
 
     /** Called when the user clicks on the ics overflow menu button. */
@@ -254,11 +247,7 @@ public class PageView extends FrameLayout {
     public final void onDateChange() {
         // Only Today page has date.
         check(mPageKind.isToday());
-        // @@
-        // final TextView dayText = (TextView) findViewById(R.id.page_day_text);
         mDayTextView.setText(mApp.dateTracker().getUserDayOfWeekString());
-
-        // final TextView dateText = (TextView) findViewById(R.id.page_date_text);
         mDateTextView.setText(mApp.dateTracker().getUserMonthDayString());
     }
 
@@ -266,15 +255,21 @@ public class PageView extends FrameLayout {
         mItemListView.onPageItemFontVariationPreferenceChange();
     }
 
+    public final void onPageIconSetPreferenceChange() {
+       final PageIconSet iconSet = mApp.pref().getPageIconSetPreference();   
+       mButtonUndoView.setImageResource(iconSet.buttonUndoResourceId);
+       mButtonAddByTextView.setImageResource(iconSet.buttonAddByTextResourceId);
+       mButtonAddByVoiceView.setImageResource(iconSet.buttonAddByVoiceResourceId);
+       mButtonCleanView.setImageResource(iconSet.buttonCleanResourceId);
+    }
+    
     /**
      * Update page background to current preferences.
      * 
      * This method is called only when preferences change so we don't bother comparing to current
      * state to avoid unnecessary changes.
-     * 
      */
     public final void onPageBackgroundPreferenceChange() {
-
         // Set the background color or image
         final int baseBackgroundColor;
         if (mApp.pref().getBackgroundPaperPreference()) {
@@ -373,7 +368,7 @@ public class PageView extends FrameLayout {
     /** Update undo button bases on the current model state. */
     public final void updateUndoButton() {
         final boolean hasUndo = mApp.model().pageHasUndo(mPageKind);
-        mUndoButtonView.setVisibility(hasUndo ? VISIBLE : INVISIBLE);
+        mButtonUndoView.setVisibility(hasUndo ? VISIBLE : INVISIBLE);
     }
 
     /** Update item divider color on preference change */

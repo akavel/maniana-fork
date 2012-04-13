@@ -73,6 +73,11 @@
             android:key="prefPageBackgroundSolidColorKey"
             android:summary="Page background color"
             android:title="Background Color" />
+        <com.zapta.apps.maniana.settings.PageIconSetPreference
+            android:defaultValue="handdrawn"
+            android:key="prefPageIconSetKey"
+            android:summary="Using %s icon set"
+            android:title="Icon Set" />
         <com.zapta.apps.maniana.settings.FontPreference
             android:defaultValue="cursive"
             android:key="prefItemFontKey"
