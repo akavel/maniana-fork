@@ -39,14 +39,25 @@ app_icon.png
 GNU/GPL
 http://findicons.com/icon/17187/next?id=388709
 
-Page icons (x4, bottom of Maniana page)
-button_add_by_text.png
-button_add_by_voice.png
-button_clean.png
-button_undo.png
+Page Icon Set 1
+button_*1.png
 http://findicons.com/pack/2456/hand_drawn_web_icons
 Hand Drawn Web Icons
-Creative Commons Attribution (by) http://177designs.com/
+
+Page Icon Set 2
+button_*2.png
+http://findicons.com/pack/1671/simplicio
+simplicio
+
+Page Icon Set 3
+button_*3.png
+http://findicons.com/pack/2232/wireframe_mono
+Wireframe Mono
+
+Page Icon Set 4
+button_*4.png
+http://findicons.com/pack/85/kids
+Kids
 
 Move item right/left Arrow icons
 arrow_left.png

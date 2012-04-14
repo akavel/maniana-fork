@@ -33,7 +33,6 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 
 import com.zapta.apps.maniana.R;
-import com.zapta.apps.maniana.util.LogUtil;
 
 /**
  * @author George Yunaev (http://tinyurl.com/7jnoubo)

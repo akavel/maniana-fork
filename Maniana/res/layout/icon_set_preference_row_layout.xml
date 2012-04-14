@@ -3,8 +3,8 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
-    android:orientation="horizontal"
     android:background="@drawable/list_selector_press_background"
+    android:orientation="horizontal"
     android:padding="5dp" >
 
     <ImageView
@@ -12,32 +12,44 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:padding="7dip"
-        android:src="@drawable/button_undo2" />
+        android:paddingBottom="12dip"
+        android:paddingLeft="5dip"
+        android:paddingRight="5dip"
+        android:paddingTop="12dip"
+        android:src="@drawable/place_holder" />
 
     <ImageView
         android:id="@+id/icon_set_preference_icon2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:padding="7dip"
-        android:src="@drawable/button_add_by_text2" />
+        android:paddingBottom="12dip"
+        android:paddingLeft="5dip"
+        android:paddingRight="5dip"
+        android:paddingTop="12dip"
+        android:src="@drawable/place_holder" />
 
     <ImageView
         android:id="@+id/icon_set_preference_icon3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:padding="7dip"
-        android:src="@drawable/button_add_by_voice2" />
+        android:paddingBottom="12dip"
+        android:paddingLeft="5dip"
+        android:paddingRight="5dip"
+        android:paddingTop="12dip"
+        android:src="@drawable/place_holder" />
 
     <ImageView
         android:id="@+id/icon_set_preference_icon4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:padding="7dip"
-        android:src="@drawable/button_clean2" />
+        android:paddingBottom="12dip"
+        android:paddingLeft="5dip"
+        android:paddingRight="5dip"
+        android:paddingTop="12dip"
+        android:src="@drawable/place_holder" />
 
     <FrameLayout
         android:layout_width="wrap_content"
@@ -50,8 +62,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:clickable="false"
-        android:layout_weight="0" >
+        android:layout_weight="0"
+        android:clickable="false" >
     </RadioButton>
 
 </LinearLayout>
