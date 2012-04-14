@@ -15,6 +15,9 @@
 package com.zapta.apps.maniana.settings;
 
 import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
+
+import javax.annotation.Nullable;
+
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,15 +29,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckedTextView;
+import android.widget.ImageView;
+import android.widget.RadioButton;
+
+import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.util.LogUtil;
 
 /**
  * @author George Yunaev (http://tinyurl.com/7jnoubo)
  * @author Tal Dayan
- * 
- * TODO: generalize and combine with FontPreference.
  */
-public class PageIconSetPreference extends DialogPreference implements DialogInterface.OnClickListener {
+public class PageIconSetPreference extends DialogPreference implements
+        DialogInterface.OnClickListener {
 
     private final PageIconSet mDefaultValue;
 
@@ -42,12 +48,23 @@ public class PageIconSetPreference extends DialogPreference implements DialogInt
 
     /**
      * Format string for preference summary string (when dialog is closed). Can contain a single %s
-     * for currently selected icon set name.
+     * place holder for currently selected icon set name.
      */
     private String mSummaryFormat;
 
-    // Font adaptor over IconSet.values()
     public class IconSetAdapter extends BaseAdapter {
+        @Nullable
+        private final PageIconSet mselectedIconSet;
+
+        private final LayoutInflater mInflater;
+
+        public IconSetAdapter(PageIconSet selectedIconSet) {
+            this.mselectedIconSet = selectedIconSet;
+            this.mInflater = (LayoutInflater) getContext().getSystemService(
+                    Context.LAYOUT_INFLATER_SERVICE);
+            ;
+        }
+
         @Override
         public int getCount() {
             return PageIconSet.values().length;
@@ -60,7 +77,6 @@ public class PageIconSetPreference extends DialogPreference implements DialogInt
 
         @Override
         public long getItemId(int position) {
-            // We use the position as ID
             return position;
         }
 
@@ -68,24 +84,32 @@ public class PageIconSetPreference extends DialogPreference implements DialogInt
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = convertView;
 
-            // Handle the case when we need a new view rather than recycling an old one.
             if (view == null) {
-                final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(
-                        Context.LAYOUT_INFLATER_SERVICE);
-                view = inflater.inflate(android.R.layout.select_dialog_singlechoice, parent, false);
+                view = mInflater.inflate(R.layout.icon_set_preference_row_layout, parent, false);
             }
 
-            final CheckedTextView checkedTextView = (CheckedTextView) view
-                    .findViewById(android.R.id.text1);
             final PageIconSet iconSet = PageIconSet.values()[position];
 
-            // If you want to make the selected item having different foreground or background
-            // color, be aware of themes. In some of them your foreground color may be the
-            // background
-            // color. So we don't mess with anything here.
-            checkedTextView.setText(iconSet.name);
-            checkedTextView.setTextSize(20);
+            // NOTE: we don't bother to keep the internal view refernces in an holder, this
+            // list is small and is not used too often.
+            ((RadioButton) view.findViewById(R.id.icon_set_preference_radio_button))
+                    .setChecked(iconSet == mselectedIconSet);
+            
+            ((ImageView) view.findViewById(R.id.icon_set_preference_icon1))
+                    .setImageResource(iconSet.buttonUndoResourceId);
+            ((ImageView) view.findViewById(R.id.icon_set_preference_icon2))
+                    .setImageResource(iconSet.buttonAddByTextResourceId);
+            ((ImageView) view.findViewById(R.id.icon_set_preference_icon3))
+                    .setImageResource(iconSet.buttonAddByVoiceResourceId);
+            ((ImageView) view.findViewById(R.id.icon_set_preference_icon4))
+                    .setImageResource(iconSet.buttonCleanResourceId);
 
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onIconSetClicked(iconSet);
+                }
+            });
             return view;
         }
     }
@@ -96,8 +120,7 @@ public class PageIconSetPreference extends DialogPreference implements DialogInt
         final String defaultIconSetKey = attrs.getAttributeValue(
                 PreferenceConstants.ANDROID_NAME_SPACE, "defaultValue");
         mDefaultValue = PageIconSet.fromKey(defaultIconSetKey, null);
-        checkNotNull(mDefaultValue, "Key: [%s]", defaultIconSetKey);
-
+        checkNotNull(mDefaultValue, "Unknown default icon pref key: [%s]", defaultIconSetKey);
         mValue = mDefaultValue;
 
         mSummaryFormat = attrs.getAttributeValue(PreferenceConstants.ANDROID_NAME_SPACE, "summary");
@@ -107,18 +130,15 @@ public class PageIconSetPreference extends DialogPreference implements DialogInt
     @Override
     protected void onPrepareDialogBuilder(Builder builder) {
         super.onPrepareDialogBuilder(builder);
-        final IconSetAdapter adapter = new IconSetAdapter();
-        builder.setSingleChoiceItems(adapter, mValue.ordinal(), this);
+        final IconSetAdapter adapter = new IconSetAdapter(readValue());
+        builder.setAdapter(adapter, this);
         builder.setPositiveButton(null, null);
     }
 
-    @Override
-    public void onClick(DialogInterface dialog, int which) {
-        if (which >= 0 && which < ItemFontType.values().length) {
-            final PageIconSet selectedIconSet = PageIconSet.values()[which];
-            setValue(selectedIconSet);
-            dialog.dismiss();
-        }
+    /** Called when an icon set is clicked in the list. */
+    private void onIconSetClicked(PageIconSet selectedIconSet) {
+        setValue(selectedIconSet);
+        getDialog().dismiss();
     }
 
     @Override

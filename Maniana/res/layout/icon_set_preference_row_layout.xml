@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:orientation="horizontal"
+    android:background="@drawable/list_selector_press_background"
+    android:padding="5dp" >
+
+    <ImageView
+        android:id="@+id/icon_set_preference_icon1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:padding="7dip"
+        android:src="@drawable/button_undo2" />
+
+    <ImageView
+        android:id="@+id/icon_set_preference_icon2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:padding="7dip"
+        android:src="@drawable/button_add_by_text2" />
+
+    <ImageView
+        android:id="@+id/icon_set_preference_icon3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:padding="7dip"
+        android:src="@drawable/button_add_by_voice2" />
+
+    <ImageView
+        android:id="@+id/icon_set_preference_icon4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:padding="7dip"
+        android:src="@drawable/button_clean2" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" >
+    </FrameLayout>
+
+    <RadioButton
+        android:id="@+id/icon_set_preference_radio_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:clickable="false"
+        android:layout_weight="0" >
+    </RadioButton>
+
+</LinearLayout>
