@@ -78,34 +78,38 @@
             android:key="prefPageIconSetKey"
             android:summary="Using %s icon set"
             android:title="Icon Set" />
-        <com.zapta.apps.maniana.settings.FontPreference
-            android:defaultValue="casual"
-            android:key="prefItemFontKey"
-            android:summary="Using %s font"
-            android:title="Font" />
-        <com.zapta.apps.maniana.settings.SeekBarPreference
-            android:key="prefPageItemFontSizePtKey"
-            android:title="Text Size"
-            android:summary="Using %d points text size"
-            android:defaultValue="16"
-            android:text="%dpt"
-            android:maxLevel="26"
-            android:minLevel="12" />
-        <net.margaritov.preference.colorpicker.ColorPickerPreference
-            android:defaultValue="#ff000000"
-            android:key="prefPageTextColorKey"
-            android:summary="Text color of pending tasks"
-            android:title="Text Color" />
-        <net.margaritov.preference.colorpicker.ColorPickerPreference
-            android:defaultValue="#ff888888"
-            android:key="prefPageCompletedTextColorKey"
-            android:summary="Text color of completed tasks"
-            android:title="Completed Text Color" />
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#ffffddaa"
             android:key="prefPageItemDividerColorKey"
             android:summary="Color of lines between tasks"
             android:title="Task Divider Color" />
+        <PreferenceScreen
+            android:title="Task Text"
+            android:summary="Click to set task text properties">
+            <com.zapta.apps.maniana.settings.FontPreference
+                android:defaultValue="casual"
+                android:key="prefItemFontKey"
+                android:summary="Using %s font"
+                android:title="Font" />
+            <com.zapta.apps.maniana.settings.SeekBarPreference
+                android:key="prefPageItemFontSizePtKey"
+                android:title="Size"
+                android:summary="Using %d points text size"
+                android:defaultValue="16"
+                android:text="%dpt"
+                android:maxLevel="26"
+                android:minLevel="12" />
+            <net.margaritov.preference.colorpicker.ColorPickerPreference
+                android:defaultValue="#ff000000"
+                android:key="prefPageTextColorKey"
+                android:summary="Text color of pending tasks"
+                android:title="Color" />
+            <net.margaritov.preference.colorpicker.ColorPickerPreference
+                android:defaultValue="#ff888888"
+                android:key="prefPageCompletedTextColorKey"
+                android:summary="Text color of completed tasks"
+                android:title="Completed Color" />
+        </PreferenceScreen>
     </PreferenceScreen>
     <PreferenceScreen
         android:title="List Widget"
@@ -131,42 +135,6 @@
             android:key="prefWidgetBackgroundColorKey"
             android:summary="List widget background color"
             android:title="Background Color" />
-        <com.zapta.apps.maniana.settings.FontPreference
-            android:defaultValue="casual"
-            android:key="prefWidgetItemFontKey"
-            android:summary="Using %s font"
-            android:title="Font" />
-        <com.zapta.apps.maniana.settings.SeekBarPreference
-            android:key="prefWidgetItemFontSizePtKey"
-            android:title="Text Size"
-            android:summary="Using %d points text size"
-            android:defaultValue="18"
-            android:text="%dpt"
-            android:maxLevel="24"
-            android:minLevel="10" />
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="prefWidgetAutoFitKey"
-            android:summaryOff="Will not try to fit content to widget size."
-            android:summaryOn="If needed, will try to fit content to widget size (smaller text, single line, etc)"
-            android:title="Auto Fit" />
-        <net.margaritov.preference.colorpicker.ColorPickerPreference
-            android:defaultValue="#ff330000"
-            android:key="prefWidgetTextColorKey"
-            android:summary="List widget text color"
-            android:title="Text Color" />
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="prefWidgetShowCompletedKey"
-            android:summaryOff="Showing only active tasks"
-            android:summaryOn="Showing also completed tasks"
-            android:title="Show Completed Tasks" />
-        <net.margaritov.preference.colorpicker.ColorPickerPreference
-            android:defaultValue="#ff888888"
-            android:dependency="prefWidgetShowCompletedKey"
-            android:key="prefWidgetCompletedTextColorKey"
-            android:summary="Text color of completed tasks"
-            android:title="Completed Text Color" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="prefWidgetShowToolbarKey"
@@ -174,11 +142,51 @@
             android:summaryOn="Showing widget toolbar"
             android:title="Show Toolbar" />
         <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="prefWidgetSingleLineKey"
-            android:summaryOff="Wrapping longer tasks onto a second line"
-            android:summaryOn="Limiting tasks to a single line"
-            android:title="Single Line" />
+            android:defaultValue="true"
+            android:key="prefWidgetAutoFitKey"
+            android:summaryOff="Will not try to fit content to widget size."
+            android:summaryOn="If needed, will try to fit content to widget size (smaller text, single line, etc)"
+            android:title="Auto Fit" />
+        <PreferenceScreen
+            android:title="Task Text"
+            android:summary="Click to set task text properties">
+            <com.zapta.apps.maniana.settings.FontPreference
+                android:defaultValue="casual"
+                android:key="prefWidgetItemFontKey"
+                android:summary="Using %s font"
+                android:title="Font" />
+            <com.zapta.apps.maniana.settings.SeekBarPreference
+                android:key="prefWidgetItemFontSizePtKey"
+                android:title="Text Size"
+                android:summary="Using %d points text size"
+                android:defaultValue="18"
+                android:text="%dpt"
+                android:maxLevel="24"
+                android:minLevel="10" />
+            <net.margaritov.preference.colorpicker.ColorPickerPreference
+                android:defaultValue="#ff330000"
+                android:key="prefWidgetTextColorKey"
+                android:summary="List widget text color"
+                android:title="Text Color" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="prefWidgetSingleLineKey"
+                android:summaryOff="Wrapping longer tasks onto a second line"
+                android:summaryOn="Limiting tasks to a single line"
+                android:title="Single Line" />
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="prefWidgetShowCompletedKey"
+                android:summaryOff="Showing only active tasks"
+                android:summaryOn="Showing also completed tasks"
+                android:title="Show Completed Tasks" />
+            <net.margaritov.preference.colorpicker.ColorPickerPreference
+                android:defaultValue="#ff888888"
+                android:dependency="prefWidgetShowCompletedKey"
+                android:key="prefWidgetCompletedTextColorKey"
+                android:summary="Text color of completed tasks"
+                android:title="Completed Text Color" />
+        </PreferenceScreen>
     </PreferenceScreen>
     <PreferenceScreen android:title="Backup (Experimental)">
         <EditTextPreference
