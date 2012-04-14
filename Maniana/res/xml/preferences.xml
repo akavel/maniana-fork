@@ -157,7 +157,7 @@
                 android:title="Font" />
             <com.zapta.apps.maniana.settings.SeekBarPreference
                 android:key="prefWidgetItemFontSizePtKey"
-                android:title="Text Size"
+                android:title="Size"
                 android:summary="Using %d points text size"
                 android:defaultValue="18"
                 android:text="%dpt"
@@ -167,7 +167,7 @@
                 android:defaultValue="#ff330000"
                 android:key="prefWidgetTextColorKey"
                 android:summary="List widget text color"
-                android:title="Text Color" />
+                android:title="Color" />
             <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="prefWidgetSingleLineKey"
