@@ -108,7 +108,7 @@
                 android:defaultValue="#ff888888"
                 android:key="prefPageCompletedTextColorKey"
                 android:summary="Text color of completed tasks"
-                android:title="Completed Color" />
+                android:title="Completed Tasks Color" />
         </PreferenceScreen>
     </PreferenceScreen>
     <PreferenceScreen
@@ -149,6 +149,7 @@
             android:title="Auto Fit" />
         <PreferenceScreen
             android:title="Task Text"
+            android:key="prefWidgetTaskTextScreenKey"
             android:summary="Click to set task text properties">
             <com.zapta.apps.maniana.settings.FontPreference
                 android:defaultValue="casual"
@@ -182,7 +183,6 @@
                 android:title="Show Completed Tasks" />
             <net.margaritov.preference.colorpicker.ColorPickerPreference
                 android:defaultValue="#ff888888"
-                android:dependency="prefWidgetShowCompletedKey"
                 android:key="prefWidgetCompletedTextColorKey"
                 android:summary="Text color of completed tasks"
                 android:title="Completed Text Color" />

@@ -86,6 +86,7 @@ public class SettingsActivity extends PreferenceActivity implements
     private FontPreference mWidgetFontTypePreference;
     private SeekBarPreference mWidgetFontSizePreference;
     private ColorPickerPreference mWidgetTextColorPickPreference;
+    private CheckBoxPreference mWidgetShowCompletedTasksPreference;
     private ColorPickerPreference mWidgetTextCompletedColorPickPreference;
     private CheckBoxPreference mWidgetShowToolbarPreference;
     private Preference mWidgetSelectThemePreference;
@@ -110,6 +111,7 @@ public class SettingsActivity extends PreferenceActivity implements
 
     private PreferenceSelector mPageColorPreferenceSelector;
     private PreferenceSelector mWidgetColorPreferenceSelector;
+    private PreferenceSelector mWidgetCompletedTasksColorSelector;
 
     @Nullable
     private WorkingDialog mWorkingDialog = null;
@@ -144,6 +146,7 @@ public class SettingsActivity extends PreferenceActivity implements
         mPageSelectThemePreference = findPreference(PreferenceKind.PAGE_SELECT_THEME);
 
         // Widget
+        mWidgetSelectThemePreference = findPreference(PreferenceKind.WIDGET_SELECT_THEME);
         mWidgetBackgroundPaperPreference = (CheckBoxPreference) findPreference(PreferenceKind.WIDGET_BACKGROUND_PAPER);
         mWidgetPaperColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_PAPER_COLOR);
         mWidgetSolidColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_BACKGROUND_COLOR);
@@ -153,11 +156,13 @@ public class SettingsActivity extends PreferenceActivity implements
                 mWidgetSolidColorPickPreference);
         mWidgetFontTypePreference = (FontPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_TYPE);
         mWidgetFontSizePreference = (SeekBarPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_SIZE);
-
         mWidgetTextColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_ITEM_TEXT_COLOR);
         mWidgetTextCompletedColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_ITEM_COMPLETED_TEXT_COLOR);
         mWidgetShowToolbarPreference = (CheckBoxPreference) findPreference(PreferenceKind.WIDGET_SHOW_TOOLBAR);
-        mWidgetSelectThemePreference = findPreference(PreferenceKind.WIDGET_SELECT_THEME);
+        mWidgetShowCompletedTasksPreference = (CheckBoxPreference) findPreference(PreferenceKind.WIDGET_SHOW_COMPLETED_ITEMS);
+        mWidgetCompletedTasksColorSelector = new PreferenceSelector(
+                (PreferenceGroup) findPreference("prefWidgetTaskTextScreenKey"),
+                mWidgetShowCompletedTasksPreference, mWidgetTextCompletedColorPickPreference, null);
 
         // Miscellaneous
         mVersionInfoPreference = findPreference(PreferenceKind.VERSION_INFO);
@@ -183,7 +188,6 @@ public class SettingsActivity extends PreferenceActivity implements
         // key strings match.
         findPreference(PreferenceKind.AUTO_SORT);
         findPreference(PreferenceKind.AUTO_DAILY_CLEANUP);
-        findPreference(PreferenceKind.WIDGET_SHOW_COMPLETED_ITEMS);
 
         findPreference(PreferenceKind.WIDGET_SINGLE_LINE);
 
@@ -369,7 +373,7 @@ public class SettingsActivity extends PreferenceActivity implements
         // Set icon set preferences to broadcast the change event.
         editor.putString(PreferenceKind.PAGE_ICON_SET.getKey(),
                 PreferenceConstants.DEFAULT_PAGE_ICON_SET.getKey());
-        
+
         // Set font preferences to broadcast the change event.
         editor.putString(PreferenceKind.PAGE_ITEM_FONT_TYPE.getKey(),
                 PreferenceConstants.DEFAULT_PAGE_FONT_TYPE.getKey());
@@ -502,9 +506,8 @@ public class SettingsActivity extends PreferenceActivity implements
         {
             final String baseBackupEmailSummary = "Destination Gmail address for sending backup attachments.";
             final String backupEmailAddress = getBackupEmailAddress();
-            mBackupEmailPreference
-                    .setSummary((backupEmailAddress.length() > 0) ? "("
-                            + backupEmailAddress + ")\n" + baseBackupEmailSummary  : baseBackupEmailSummary);
+            mBackupEmailPreference.setSummary((backupEmailAddress.length() > 0) ? "("
+                    + backupEmailAddress + ")\n" + baseBackupEmailSummary : baseBackupEmailSummary);
 
             final boolean hasBackupEmailAddress = backupEmailAddress.contains("@")
                     && backupEmailAddress.contains(".");
@@ -517,6 +520,7 @@ public class SettingsActivity extends PreferenceActivity implements
         // Update color selectors
         mPageColorPreferenceSelector.update();
         mWidgetColorPreferenceSelector.update();
+        mWidgetCompletedTasksColorSelector.update();
 
         // For lock expiration preference, also show the time until next expiration. This require
         // some computation.
