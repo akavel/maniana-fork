@@ -31,6 +31,7 @@ import com.zapta.apps.maniana.main.AppContext;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.quick_action.QuickActionItem;
 import com.zapta.apps.maniana.services.AppServices;
+import com.zapta.apps.maniana.settings.Font;
 import com.zapta.apps.maniana.settings.PageIconSet;
 import com.zapta.apps.maniana.util.ColorUtil;
 
@@ -44,27 +45,9 @@ public class PageView extends FrameLayout {
     /** For testing only. */
     private static final boolean FORCE_OVERFLOW_MENU_ON_ALL_DEVICES = false;
 
-    /** 
-     * Candidates for TODAY page title color. 
-     * Selected by distance from background color with a slight preference for the first one.
-     */
-    private static final int[] TODAY_TITLE_CANDIDATE_COLORS = new int[] {
-        0xff0077ff,
-        0xff88aaff
-    };
-
-    /** 
-     * Candidates for TOMOROW page title color. 
-     * Selected by distance from background color with a slight preference for the first one.
-     */
-    private static final int[] TOMOROW_TITLE_CANDIDATE_COLORS = new int[] {
-        0xffcc0000,
-        0xffff8888
-    };
-
-    /** 
-     * Candidates for day/date color. 
-     * Selected by distance from background color with a slight preference for the first one.
+    /**
+     * Candidates for day/date color. Selected by distance from background color with a slight
+     * preference for the first one.
      */
     private static final int[] DATE_CANDIDATE_COLORS = new int[] {
         0xff222222,
@@ -122,7 +105,7 @@ public class PageView extends FrameLayout {
     private final TextView mDateTextView;
 
     private final TextView mPageTitleTextView;
-    
+
     private final View mPaperColorView;
 
     public PageView(AppContext app, PageKind pageKind) {
@@ -131,16 +114,18 @@ public class PageView extends FrameLayout {
         mPageKind = pageKind;
 
         mApp.services().layoutInflater().inflate(R.layout.page_layout, this);
-        
+
         mPaperColorView = findViewById(R.id.page_paper_color);
-        
 
         mPageTitleDivider = (FrameLayout) findViewById(R.id.page_title_divider);
-        
+
         mButtonUndoView = (ImageButton) findViewById(R.id.page_undo_button);
-        mButtonAddByTextView = (ImageButton) findViewById(R.id.page_add_by_text_button);;
-        mButtonAddByVoiceView = (ImageButton) findViewById(R.id.page_add_by_voice_button);;
-        mButtonCleanView = (ImageButton) findViewById(R.id.page_clean_button);;
+        mButtonAddByTextView = (ImageButton) findViewById(R.id.page_add_by_text_button);
+
+        mButtonAddByVoiceView = (ImageButton) findViewById(R.id.page_add_by_voice_button);
+
+        mButtonCleanView = (ImageButton) findViewById(R.id.page_clean_button);
+
 
         mIcsMenuOverflowButtonView = (ImageButton) findViewById(R.id.page_ics_menu_overflow_button);
 
@@ -154,18 +139,10 @@ public class PageView extends FrameLayout {
         mItemListView = (ItemListView) findViewById(R.id.page_item_list);
         mPageTitleTextView = (TextView) findViewById(R.id.page_title_text);
 
-        switch (mPageKind) {
-            case TODAY:
-                mPageTitleTextView.setText("Today");
-                break;
-            case TOMOROW:
-                mPageTitleTextView.setText("Maniana");
-                break;
-            default:
-                throw new RuntimeException("Unknown kind");
-        }
+        mPageTitleTextView.setText(mPageKind.isToday() ? "Today" : "Maniana");
 
-        mPageTitleTextView.setTypeface(mApp.resources().getTitleTypeFace());
+        // @@@ set font from preferences
+        // mPageTitleTextView.setTypeface(mApp.resources().getTitleTypeFace());
 
         // Tomorrow page does not display date
         if (mPageKind.isTomorrow()) {
@@ -232,6 +209,7 @@ public class PageView extends FrameLayout {
         // Set initial preferences
         onPageIconSetPreferenceChange();
         onPageBackgroundPreferenceChange();
+        onPageTitlePreferenceChange();
         onItemDividerColorPreferenceChange();
     }
 
@@ -256,13 +234,13 @@ public class PageView extends FrameLayout {
     }
 
     public final void onPageIconSetPreferenceChange() {
-       final PageIconSet iconSet = mApp.pref().getPageIconSetPreference();   
-       mButtonUndoView.setImageResource(iconSet.buttonUndoResourceId);
-       mButtonAddByTextView.setImageResource(iconSet.buttonAddByTextResourceId);
-       mButtonAddByVoiceView.setImageResource(iconSet.buttonAddByVoiceResourceId);
-       mButtonCleanView.setImageResource(iconSet.buttonCleanResourceId);
+        final PageIconSet iconSet = mApp.pref().getPageIconSetPreference();
+        mButtonUndoView.setImageResource(iconSet.buttonUndoResourceId);
+        mButtonAddByTextView.setImageResource(iconSet.buttonAddByTextResourceId);
+        mButtonAddByVoiceView.setImageResource(iconSet.buttonAddByVoiceResourceId);
+        mButtonCleanView.setImageResource(iconSet.buttonCleanResourceId);
     }
-    
+
     /**
      * Update page background to current preferences.
      * 
@@ -284,15 +262,6 @@ public class PageView extends FrameLayout {
             setBackgroundColor(backgroundColor);
             mPaperColorView.setBackgroundColor(0x00000000);
             baseBackgroundColor = backgroundColor;
-        }
-
-        // Update page title text color based on background color
-        {
-            final int[] titleCandidateColors = mPageKind.isToday() ? TODAY_TITLE_CANDIDATE_COLORS
-                    : TOMOROW_TITLE_CANDIDATE_COLORS;
-            final int titleColor = ColorUtil.selectFurthestColor(baseBackgroundColor,
-                    titleCandidateColors, 0.05f);
-            mPageTitleTextView.setTextColor(titleColor);
         }
 
         // Update date text to have max contrast from the background
@@ -318,7 +287,14 @@ public class PageView extends FrameLayout {
             final int resourceId = ITEM_HIGHLIGHT_RESOURCES_CANDIDATE_IDS[colorIndex];
             mItemListView.setItemHighlightDrawableResourceId(resourceId);
         }
+    }
 
+    public final void onPageTitlePreferenceChange() {
+        mPageTitleTextView.setTextColor(mPageKind.isToday() ? mApp.pref().getPageTitleTodayColor()
+                : mApp.pref().getPageTitleTomorowColor());
+        final Font font = mApp.pref().getPageTitleFontPreference();
+        mPageTitleTextView.setTypeface(font.getTypeface(mApp.context()));
+        mPageTitleTextView.setTextSize(mApp.pref().getPageTitleFontSizePreference() * font.scale);
     }
 
     /** Make the first item visible. */

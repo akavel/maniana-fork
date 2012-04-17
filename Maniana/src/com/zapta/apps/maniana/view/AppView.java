@@ -159,6 +159,11 @@ public class AppView {
         mTodayPageView.onPageBackgroundPreferenceChange();
         mTomorowPageView.onPageBackgroundPreferenceChange();
     }
+    
+    public final void onPageTitlePreferenceChange() {
+        mTodayPageView.onPageTitlePreferenceChange();
+        mTomorowPageView.onPageTitlePreferenceChange();
+    }
 
     /** Scroll period in millis. Ignored in < 0. */
     public final void setCurrentPage(PageKind pageKind, int scrollPeriodMillis) {

@@ -49,9 +49,13 @@ public class PreferencesTracker implements PreferenceConstants {
     private boolean mCachedPageBackgroundPaperPreference;
     private int mCachedPagePaperColorPreference;
     private int mCachedPageBackgroundSolidColorPreference;
-    private PageIconSet mCachedPageIconSetPreference;
+    private PageIconSet mCachedPageIconSetPreference;   
+    private Font mCachedPageTitleFontPreference;
+    private int mCachedPageTitleFontSizePreference;
+    private int mCachedPageTitleTodayColorPreference;
+    private int mCachedPageTitleTomorrowColorPreference;    
     private Font mCachedPageItemFontPreference;
-    private int mCachedPageFontSizePreference;
+    private int mCachedPageItemFontSizePreference;
     private int mCachedPageItemActiveTextColorPreference;
     private int mCachedPageItemCompletedTextColorPreference;
     private int mCachedPageItemDividerColorPreference;
@@ -72,7 +76,11 @@ public class PreferencesTracker implements PreferenceConstants {
         updateCachedAutoSortPreference();
         updateCachedAutoDailyCleanupPreference();
         updateCachedPageIconSetPreference();
-        updateCachedPageItemFontPreference();
+        updateCachedPageItemFontPreference();        
+        updateCachedPageTitleFontPreference();
+        updateCachedPageTitleFontSizePreference();
+        updateCachedPageTitleTodayTextColorPreference();
+        updateCachedPageTitleTomorrowTextColorPreference();
         updateCachedPageFontSizePreference();
         updateCachedPageItemActiveTextColorPreference();
         updateCachedPageItemCompletedTextColorPreference();
@@ -101,23 +109,6 @@ public class PreferencesTracker implements PreferenceConstants {
                 PreferenceKind.SOUND_ENABLED.getKey(), DEFAULT_ALLOWS_SOUND_EFFECTS);
     }
 
-    private final void updateCachedPageIconSetPreference() {
-        final String key = mSharedPreferences.getString(
-                PreferenceKind.PAGE_ICON_SET.getKey(), DEFAULT_PAGE_ICON_SET.getKey());
-        mCachedPageIconSetPreference = PageIconSet.fromKey(key, DEFAULT_PAGE_ICON_SET);
-    }
-
-    private final void updateCachedPageItemFontPreference() {
-        final String key = mSharedPreferences.getString(
-                PreferenceKind.PAGE_ITEM_FONT_TYPE.getKey(), DEFAULT_PAGE_FONT_TYPE.getKey());
-        mCachedPageItemFontPreference = Font.fromKey(key, DEFAULT_PAGE_FONT_TYPE);
-    }
-
-    private final void updateCachedPageFontSizePreference() {
-        mCachedPageFontSizePreference = mSharedPreferences.getInt(
-                PreferenceKind.PAGE_ITEM_FONT_SIZE.getKey(), DEFAULT_PAGE_FONT_SIZE);
-    }
-
     private final void updateCachedPageBackgroundPaperPreference() {
         mCachedPageBackgroundPaperPreference = mSharedPreferences.getBoolean(
                 PreferenceKind.PAGE_BACKGROUND_PAPER.getKey(), DEFAULT_PAGE_BACKGROUND_PAPER);
@@ -140,6 +131,47 @@ public class PreferencesTracker implements PreferenceConstants {
                 PreferenceKind.PAGE_ITEM_DIVIDER_COLOR.getKey(), DEFAULT_PAGE_ITEM_DIVIDER_COLOR);
     }
 
+    private final void updateCachedPageIconSetPreference() {
+        final String key = mSharedPreferences.getString(
+                PreferenceKind.PAGE_ICON_SET.getKey(), DEFAULT_PAGE_ICON_SET.getKey());
+        mCachedPageIconSetPreference = PageIconSet.fromKey(key, DEFAULT_PAGE_ICON_SET);
+    }
+    
+    
+    private final void updateCachedPageTitleFontPreference() {
+        final String key = mSharedPreferences.getString(
+                PreferenceKind.PAGE_TITLE_FONT.getKey(), DEFAULT_PAGE_TITLE_FONT.getKey());
+        mCachedPageTitleFontPreference = Font.fromKey(key, DEFAULT_PAGE_TITLE_FONT);
+    } 
+    
+    private final void updateCachedPageTitleFontSizePreference() {
+        mCachedPageTitleFontSizePreference = mSharedPreferences.getInt(
+                PreferenceKind.PAGE_TITLE_FONT_SIZE.getKey(), DEFAULT_PAGE_TITLE_SIZE);
+    }
+       
+    private final void updateCachedPageTitleTodayTextColorPreference() {
+        mCachedPageTitleTodayColorPreference = mSharedPreferences.getInt(
+                PreferenceKind.PAGE_TITLE_TODAY_COLOR.getKey(),
+                DEFAULT_PAGE_TITLE_TODAY_COLOR);
+    }
+    
+    private final void updateCachedPageTitleTomorrowTextColorPreference() {
+        mCachedPageTitleTomorrowColorPreference = mSharedPreferences.getInt(
+                PreferenceKind.PAGE_TITLE_TOMORROW_COLOR.getKey(),
+                DEFAULT_PAGE_TITLE_TOMORROW_COLOR);
+    }
+
+    private final void updateCachedPageItemFontPreference() {
+        final String key = mSharedPreferences.getString(
+                PreferenceKind.PAGE_ITEM_FONT.getKey(), DEFAULT_PAGE_ITEM_FONT.getKey());
+        mCachedPageItemFontPreference = Font.fromKey(key, DEFAULT_PAGE_ITEM_FONT);
+    }
+
+    private final void updateCachedPageFontSizePreference() {
+        mCachedPageItemFontSizePreference = mSharedPreferences.getInt(
+                PreferenceKind.PAGE_ITEM_FONT_SIZE.getKey(), DEFAULT_PAGE_ITEM_FONT_SIZE);
+    }
+
     private final void updateCachedPageItemActiveTextColorPreference() {
         mCachedPageItemActiveTextColorPreference = mSharedPreferences.getInt(
                 PreferenceKind.PAGE_ITEM_ACTIVE_TEXT_COLOR.getKey(), DEFAULT_ITEM_TEXT_COLOR);
@@ -150,7 +182,7 @@ public class PreferencesTracker implements PreferenceConstants {
                 PreferenceKind.PAGE_ITEM_COMPLETED_TEXT_COLOR.getKey(),
                 DEFAULT_COMPLETED_ITEM_TEXT_COLOR);
     }
-
+    
     private final void updateCachedLockExpierationPeriodPreference() {
         mCachedLockExpirationPeriodPrefernece = readLockExpierationPeriodPreference(mSharedPreferences);
     }
@@ -207,7 +239,7 @@ public class PreferencesTracker implements PreferenceConstants {
     public static final Font readWidgetFontPreference(
             SharedPreferences sharedPreferences) {
         final String key = sharedPreferences.getString(
-                PreferenceKind.WIDGET_ITEM_FONT_TYPE.getKey(), DEFAULT_WIDGET_FONT_TYPE.getKey());
+                PreferenceKind.WIDGET_ITEM_FONT.getKey(), DEFAULT_WIDGET_FONT_TYPE.getKey());
         return Font.fromKey(key, DEFAULT_WIDGET_FONT_TYPE);
     }
 
@@ -288,14 +320,30 @@ public class PreferencesTracker implements PreferenceConstants {
     
     public final PageIconSet getPageIconSetPreference() {
         return mCachedPageIconSetPreference;
+    }   
+    
+    public final Font getPageTitleFontPreference() {
+        return mCachedPageTitleFontPreference;
     }
-
+    
+    public final int getPageTitleFontSizePreference() {
+        return mCachedPageTitleFontSizePreference;
+    }
+    
+    public final int getPageTitleTodayColor() {
+        return mCachedPageTitleTodayColorPreference;
+    }
+    
+    public final int getPageTitleTomorowColor() {
+        return mCachedPageTitleTomorrowColorPreference;
+    }
+    
     public final Font getItemFontPreference() {
         return mCachedPageItemFontPreference;
     }
 
     public final int getItemFontSizePreference() {
-        return mCachedPageFontSizePreference;
+        return mCachedPageItemFontSizePreference;
     }
 
     public int getPageItemActiveTextColorPreference() {
@@ -373,8 +421,20 @@ public class PreferencesTracker implements PreferenceConstants {
                 break;
             case PAGE_ICON_SET:
                 updateCachedPageIconSetPreference();
+                break;               
+            case PAGE_TITLE_FONT:
+                updateCachedPageTitleFontPreference();
                 break;
-            case PAGE_ITEM_FONT_TYPE:
+            case PAGE_TITLE_FONT_SIZE:
+                updateCachedPageTitleFontSizePreference();
+                break;
+            case PAGE_TITLE_TODAY_COLOR:
+                updateCachedPageTitleTodayTextColorPreference();
+                break;     
+            case PAGE_TITLE_TOMORROW_COLOR:
+                updateCachedPageTitleTomorrowTextColorPreference();
+                break;              
+            case PAGE_ITEM_FONT:
                 updateCachedPageItemFontPreference();
                 break;
             case PAGE_ITEM_FONT_SIZE:
@@ -410,7 +470,7 @@ public class PreferencesTracker implements PreferenceConstants {
             case WIDGET_BACKGROUND_PAPER:
             case WIDGET_PAPER_COLOR:
             case WIDGET_BACKGROUND_COLOR:
-            case WIDGET_ITEM_FONT_TYPE:
+            case WIDGET_ITEM_FONT:
             case WIDGET_ITEM_TEXT_COLOR:
             case WIDGET_ITEM_FONT_SIZE:
             case WIDGET_AUTO_FIT:

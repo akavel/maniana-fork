@@ -734,7 +734,7 @@ public class Controller {
                 mApp.view().onPageIconSetPreferenceChange();
                 break;
                 
-            case PAGE_ITEM_FONT_TYPE:
+            case PAGE_ITEM_FONT:
             case PAGE_ITEM_FONT_SIZE:
             case PAGE_ITEM_ACTIVE_TEXT_COLOR:
             case PAGE_ITEM_COMPLETED_TEXT_COLOR:
@@ -748,6 +748,13 @@ public class Controller {
             case PAGE_PAPER_COLOR:
             case PAGE_BACKGROUND_SOLID_COLOR:
                 mApp.view().onPageBackgroundPreferenceChange();
+                break;
+                
+            case PAGE_TITLE_FONT:
+            case PAGE_TITLE_FONT_SIZE:
+            case PAGE_TITLE_TODAY_COLOR:
+            case PAGE_TITLE_TOMORROW_COLOR:
+                mApp.view().onPageTitlePreferenceChange();
                 break;
 
             case PAGE_ITEM_DIVIDER_COLOR:
@@ -777,7 +784,7 @@ public class Controller {
             case WIDGET_BACKGROUND_PAPER:
             case WIDGET_PAPER_COLOR:
             case WIDGET_BACKGROUND_COLOR:
-            case WIDGET_ITEM_FONT_TYPE:
+            case WIDGET_ITEM_FONT:
             case WIDGET_ITEM_TEXT_COLOR:
             case WIDGET_ITEM_FONT_SIZE:
             case WIDGET_AUTO_FIT:

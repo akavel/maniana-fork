@@ -36,8 +36,12 @@ public interface PreferenceConstants {
     public static final int DEFAULT_PAGE_PAPER_COLOR = 0xffffffff;
     public static final int DEFAULT_PAGE_BACKGROUND_SOLID_COLOR = 0xffffffc0;
     public static final PageIconSet DEFAULT_PAGE_ICON_SET = PageIconSet.HAND_DRAWN;
-    public static final Font DEFAULT_PAGE_FONT_TYPE = Font.CASUAL;
-    public static final int DEFAULT_PAGE_FONT_SIZE = 16;
+    public static final Font DEFAULT_PAGE_TITLE_FONT = Font.IMPACT;
+    public static final int DEFAULT_PAGE_TITLE_SIZE = 20;
+    public static final int DEFAULT_PAGE_TITLE_TODAY_COLOR = 0xff0077ff;
+    public static final int DEFAULT_PAGE_TITLE_TOMORROW_COLOR = 0xff88aaff;
+    public static final Font DEFAULT_PAGE_ITEM_FONT = Font.CASUAL;
+    public static final int DEFAULT_PAGE_ITEM_FONT_SIZE = 16;
     public static final int DEFAULT_ITEM_TEXT_COLOR = 0xff000000;
     public static final int DEFAULT_COMPLETED_ITEM_TEXT_COLOR = 0xff888888;
     public static final int DEFAULT_PAGE_ITEM_DIVIDER_COLOR = 0xffffddaa;
@@ -54,7 +58,7 @@ public interface PreferenceConstants {
     public static final int DEFAULT_WIDGET_ITEM_COMPLETED_TEXT_COLOR = 0xff888888;
     public static final boolean DEFAULT_WIDGET_SHOW_TOOLBAR = true;
     public static final boolean DEFAULT_WIDGET_SINGLE_LINE = false;
-    
+
     /** Android name sapce used in XML docs. */
     public static final String ANDROID_NAME_SPACE = "http://schemas.android.com/apk/res/android";
 

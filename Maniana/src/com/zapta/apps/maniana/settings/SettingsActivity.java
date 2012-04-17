@@ -72,8 +72,12 @@ public class SettingsActivity extends PreferenceActivity implements
     private ColorPickerPreference mPagePaperColorPickPreference;
     private ColorPickerPreference mPageSolidColorPickPreference;
     private PageIconSetPreference mPageIconSetPreference;
+    private FontPreference mPageTitleFontPreference;
+    private SeekBarPreference mPageTitleFontSizePreference;
+    private ColorPickerPreference mPageTitleTodayColorPickPreference;
+    private ColorPickerPreference mPageTitleTomorrowColorPickPreference;
     private FontPreference mPageItemFontPreference;
-    private SeekBarPreference mPageFontSizePreference;
+    private SeekBarPreference mPageItemFontSizePreference;
     private ColorPickerPreference mPageTextActiveColorPickPreference;
     private ColorPickerPreference mPageTextCompletedColorPickPreference;
     private ColorPickerPreference mPageItemDividerColorPickPreference;
@@ -137,9 +141,13 @@ public class SettingsActivity extends PreferenceActivity implements
                 (PreferenceGroup) findPreference("prefPagesScreenKey"),
                 mPageBackgroundPaperPreference, mPagePaperColorPickPreference,
                 mPageSolidColorPickPreference);
-        mPageIconSetPreference = (PageIconSetPreference) findPreference(PreferenceKind.PAGE_ICON_SET);
-        mPageItemFontPreference = (FontPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_TYPE);
-        mPageFontSizePreference = (SeekBarPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_SIZE);
+        mPageIconSetPreference = (PageIconSetPreference) findPreference(PreferenceKind.PAGE_ICON_SET);       
+        mPageTitleFontPreference = (FontPreference) findPreference(PreferenceKind.PAGE_TITLE_FONT);
+        mPageTitleFontSizePreference = (SeekBarPreference) findPreference(PreferenceKind.PAGE_TITLE_FONT_SIZE);
+        mPageTitleTodayColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_TITLE_TODAY_COLOR);
+        mPageTitleTomorrowColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_TITLE_TOMORROW_COLOR);       
+        mPageItemFontPreference = (FontPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT);
+        mPageItemFontSizePreference = (SeekBarPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_SIZE);
         mPageTextActiveColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_ITEM_ACTIVE_TEXT_COLOR);
         mPageTextCompletedColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_ITEM_COMPLETED_TEXT_COLOR);
         mPageItemDividerColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_ITEM_DIVIDER_COLOR);
@@ -154,7 +162,7 @@ public class SettingsActivity extends PreferenceActivity implements
                 (PreferenceGroup) findPreference("prefWidgetScreenKey"),
                 mWidgetBackgroundPaperPreference, mWidgetPaperColorPickPreference,
                 mWidgetSolidColorPickPreference);
-        mWidgetItemFontPreference = (FontPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_TYPE);
+        mWidgetItemFontPreference = (FontPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT);
         mWidgetFontSizePreference = (SeekBarPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_SIZE);
         mWidgetTextColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_ITEM_TEXT_COLOR);
         mWidgetTextCompletedColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_ITEM_COMPLETED_TEXT_COLOR);
@@ -277,11 +285,15 @@ public class SettingsActivity extends PreferenceActivity implements
         mPageBackgroundPaperPreference.setChecked(theme.backgroundPaper);
         mPagePaperColorPickPreference.onColorChanged(theme.paperColor);
         mPageSolidColorPickPreference.onColorChanged(theme.backgroundSolidColor);
-        mPageIconSetPreference.setValue(theme.iconSet);
-        mPageItemFontPreference.setValue(theme.font);
-        mPageFontSizePreference.setValue(theme.fontSize);
-        mPageTextActiveColorPickPreference.onColorChanged(theme.textColor);
-        mPageTextCompletedColorPickPreference.onColorChanged(theme.completedTextColor);
+        mPageIconSetPreference.setValue(theme.iconSet);    
+        mPageTitleFontPreference.setValue(theme.titleFont);
+        mPageTitleFontSizePreference.setValue(theme.titleFontSize);
+        mPageTitleTodayColorPickPreference.onColorChanged(theme.titleTodayTextColor);
+        mPageTitleTomorrowColorPickPreference.onColorChanged(theme.titleTomorrowTextColor);      
+        mPageItemFontPreference.setValue(theme.itemFont);
+        mPageItemFontSizePreference.setValue(theme.itemFontSize);
+        mPageTextActiveColorPickPreference.onColorChanged(theme.itemTextColor);
+        mPageTextCompletedColorPickPreference.onColorChanged(theme.itemCompletedTextColor);
         mPageItemDividerColorPickPreference.onColorChanged(theme.itemDividerColor);
     }
 
@@ -375,14 +387,16 @@ public class SettingsActivity extends PreferenceActivity implements
                 PreferenceConstants.DEFAULT_PAGE_ICON_SET.getKey());
 
         // Set font preferences to broadcast the change event.
-        editor.putString(PreferenceKind.PAGE_ITEM_FONT_TYPE.getKey(),
-                PreferenceConstants.DEFAULT_PAGE_FONT_TYPE.getKey());
-        editor.putString(PreferenceKind.WIDGET_ITEM_FONT_TYPE.getKey(),
+        editor.putString(PreferenceKind.PAGE_TITLE_FONT.getKey(),
+                PreferenceConstants.DEFAULT_PAGE_TITLE_FONT.getKey());
+        editor.putString(PreferenceKind.PAGE_ITEM_FONT.getKey(),
+                PreferenceConstants.DEFAULT_PAGE_ITEM_FONT.getKey());
+        editor.putString(PreferenceKind.WIDGET_ITEM_FONT.getKey(),
                 PreferenceConstants.DEFAULT_WIDGET_FONT_TYPE.getKey());
 
         // Set the seekbar preferences to broadcast the change event
         editor.putInt(PreferenceKind.PAGE_ITEM_FONT_SIZE.getKey(),
-                PreferenceConstants.DEFAULT_PAGE_FONT_SIZE);
+                PreferenceConstants.DEFAULT_PAGE_ITEM_FONT_SIZE);
         editor.putInt(PreferenceKind.WIDGET_ITEM_FONT_SIZE.getKey(),
                 PreferenceConstants.DEFAULT_WIDGET_ITEM_FONT_SIZE);
 
