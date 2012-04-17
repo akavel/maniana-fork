@@ -37,38 +37,38 @@ public class PageTheme extends Thumbnail {
                 PreferenceConstants.DEFAULT_PAGE_ITEM_DIVIDER_COLOR),
 
         new PageTheme("Yellow Pages", R.drawable.page_theme2_preview, false, 0xffffffff,
-                0xfffcfcb8, PageIconSet.HAND_DRAWN, ItemFontType.SAN_SERIF, 18, 0xff333333, 0xff909090,
+                0xfffcfcb8, PageIconSet.HAND_DRAWN, Font.SAN_SERIF, 18, 0xff333333, 0xff909090,
                 0x4def9900),
 
         new PageTheme("Dark Knight", R.drawable.page_theme3_preview, false, 0xffffffff, 0xff000000,
-                PageIconSet.HAND_DRAWN, ItemFontType.ELEGANT, 20, 0xffff8080, 0xff00aa00, 0x80ffff00),
+                PageIconSet.HAND_DRAWN, Font.ELEGANT, 20, 0xffff8080, 0xff00aa00, 0x80ffff00),
 
         new PageTheme("Spartan", R.drawable.page_theme4_preview, false, 0xffffffff, 0xffffffff,
-                PageIconSet.WHITE, ItemFontType.SERIF, 14, 0xff000000, 0xff000000, 0x00000000),
+                PageIconSet.WHITE, Font.SERIF, 14, 0xff000000, 0xff000000, 0x00000000),
 
         new PageTheme("Kermit", R.drawable.page_theme5_preview, true, 0xfff0fff0, 0xffaaffff,
-                PageIconSet.MODERN, ItemFontType.CASUAL, 16, 0xff111111, 0xff555555, 0x30000000),
+                PageIconSet.MODERN, Font.CASUAL, 16, 0xff111111, 0xff555555, 0x30000000),
     };
 
     public final boolean backgroundPaper;
     public final int paperColor;
     public final int backgroundSolidColor;
     public final PageIconSet iconSet;
-    public final ItemFontType fontType;
+    public final Font font;
     public final int fontSize;
     public final int textColor;
     public final int completedTextColor;
     public final int itemDividerColor;
 
     public PageTheme(String name, int drawableId, boolean backgroundPaper, int paperColor,
-            int backgroundSolidColor, PageIconSet iconSet, ItemFontType fontType, int fontSize,
+            int backgroundSolidColor, PageIconSet iconSet, Font font, int fontSize,
             int textColor, int completedTextColor, int itemDividerColor) {
         super(name, drawableId);
         this.backgroundPaper = backgroundPaper;
         this.paperColor = paperColor;
         this.backgroundSolidColor = backgroundSolidColor;
         this.iconSet = iconSet;
-        this.fontType = fontType;
+        this.font = font;
         this.fontSize = fontSize;
         this.textColor = textColor;
         this.completedTextColor = completedTextColor;

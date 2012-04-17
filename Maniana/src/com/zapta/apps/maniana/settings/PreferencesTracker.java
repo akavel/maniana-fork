@@ -50,7 +50,7 @@ public class PreferencesTracker implements PreferenceConstants {
     private int mCachedPagePaperColorPreference;
     private int mCachedPageBackgroundSolidColorPreference;
     private PageIconSet mCachedPageIconSetPreference;
-    private ItemFontType mCachedPageFontTypePreference;
+    private Font mCachedPageItemFontPreference;
     private int mCachedPageFontSizePreference;
     private int mCachedPageItemActiveTextColorPreference;
     private int mCachedPageItemCompletedTextColorPreference;
@@ -72,7 +72,7 @@ public class PreferencesTracker implements PreferenceConstants {
         updateCachedAutoSortPreference();
         updateCachedAutoDailyCleanupPreference();
         updateCachedPageIconSetPreference();
-        updateCachedPageFontTypePreference();
+        updateCachedPageItemFontPreference();
         updateCachedPageFontSizePreference();
         updateCachedPageItemActiveTextColorPreference();
         updateCachedPageItemCompletedTextColorPreference();
@@ -107,10 +107,10 @@ public class PreferencesTracker implements PreferenceConstants {
         mCachedPageIconSetPreference = PageIconSet.fromKey(key, DEFAULT_PAGE_ICON_SET);
     }
 
-    private final void updateCachedPageFontTypePreference() {
+    private final void updateCachedPageItemFontPreference() {
         final String key = mSharedPreferences.getString(
                 PreferenceKind.PAGE_ITEM_FONT_TYPE.getKey(), DEFAULT_PAGE_FONT_TYPE.getKey());
-        mCachedPageFontTypePreference = ItemFontType.fromKey(key, DEFAULT_PAGE_FONT_TYPE);
+        mCachedPageItemFontPreference = Font.fromKey(key, DEFAULT_PAGE_FONT_TYPE);
     }
 
     private final void updateCachedPageFontSizePreference() {
@@ -204,11 +204,11 @@ public class PreferencesTracker implements PreferenceConstants {
     }
 
     /** Read widget font type preference. Used by the list widget only. */
-    public static final ItemFontType readWidgetFontTypeFontTypePreference(
+    public static final Font readWidgetFontPreference(
             SharedPreferences sharedPreferences) {
         final String key = sharedPreferences.getString(
                 PreferenceKind.WIDGET_ITEM_FONT_TYPE.getKey(), DEFAULT_WIDGET_FONT_TYPE.getKey());
-        return ItemFontType.fromKey(key, DEFAULT_WIDGET_FONT_TYPE);
+        return Font.fromKey(key, DEFAULT_WIDGET_FONT_TYPE);
     }
 
     /** Read widget text color preference. Used by the list widget only. */
@@ -290,8 +290,8 @@ public class PreferencesTracker implements PreferenceConstants {
         return mCachedPageIconSetPreference;
     }
 
-    public final ItemFontType getItemFontTypePreference() {
-        return mCachedPageFontTypePreference;
+    public final Font getItemFontPreference() {
+        return mCachedPageItemFontPreference;
     }
 
     public final int getItemFontSizePreference() {
@@ -375,7 +375,7 @@ public class PreferencesTracker implements PreferenceConstants {
                 updateCachedPageIconSetPreference();
                 break;
             case PAGE_ITEM_FONT_TYPE:
-                updateCachedPageFontTypePreference();
+                updateCachedPageItemFontPreference();
                 break;
             case PAGE_ITEM_FONT_SIZE:
                 updateCachedPageFontSizePreference();

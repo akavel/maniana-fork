@@ -36,7 +36,7 @@ public interface PreferenceConstants {
     public static final int DEFAULT_PAGE_PAPER_COLOR = 0xffffffff;
     public static final int DEFAULT_PAGE_BACKGROUND_SOLID_COLOR = 0xffffffc0;
     public static final PageIconSet DEFAULT_PAGE_ICON_SET = PageIconSet.HAND_DRAWN;
-    public static final ItemFontType DEFAULT_PAGE_FONT_TYPE = ItemFontType.CASUAL;
+    public static final Font DEFAULT_PAGE_FONT_TYPE = Font.CASUAL;
     public static final int DEFAULT_PAGE_FONT_SIZE = 16;
     public static final int DEFAULT_ITEM_TEXT_COLOR = 0xff000000;
     public static final int DEFAULT_COMPLETED_ITEM_TEXT_COLOR = 0xff888888;
@@ -46,7 +46,7 @@ public interface PreferenceConstants {
     public static final boolean DEFAULT_WIDGET_BACKGROUND_PAPER = true;
     public static final int DEFAULT_WIDGET_PAPER_COLOR = 0xffffffff;
     public static final int DEFAULT_WIDGET_BACKGROUND_COLOR = 0x44000000;
-    public static final ItemFontType DEFAULT_WIDGET_FONT_TYPE = ItemFontType.CASUAL;
+    public static final Font DEFAULT_WIDGET_FONT_TYPE = Font.CASUAL;
     public static final int DEFAULT_WIDGET_ITEM_FONT_SIZE = 18;
     public static final boolean DEFAULT_WIDGET_AUTO_FIT = true;
     public static final int DEFAULT_WIDGET_TEXT_COLOR = 0xff444444;

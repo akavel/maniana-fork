@@ -29,7 +29,7 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
  * 
  * @author Tal Dayan
  */
-public enum ItemFontType implements KeyedEnum {
+public enum Font implements KeyedEnum {
     // NOTE: keys are persisted in preferences. Do not modify.
     CASUAL("Casual", "casual", 1.3f, 0.95f, null, "fonts/Daniel/Daniel-modified.ttf"),
     CURSIVE("Cursive", "cursive", 1.4f, 0.9f, null, "fonts/Vavont/Vavont-modified.ttf"),
@@ -59,7 +59,7 @@ public enum ItemFontType implements KeyedEnum {
     @Nullable
     final String mAssetFilePath;
 
-    private ItemFontType(String name, String key, float scale, float lineSpacingMultipler,
+    private Font(String name, String key, float scale, float lineSpacingMultipler,
             @Nullable Typeface sysTypeface, @Nullable String assertFilePath) {
         this.name = name;
         this.mKey = key;
@@ -79,8 +79,8 @@ public enum ItemFontType implements KeyedEnum {
 
     /** Return value with given key, fallback value if not found. */
     @Nullable
-    public final static ItemFontType fromKey(String key, @Nullable ItemFontType fallBack) {
-        return EnumUtil.fromKey(key, ItemFontType.values(), fallBack);
+    public final static Font fromKey(String key, @Nullable Font fallBack) {
+        return EnumUtil.fromKey(key, Font.values(), fallBack);
     }
 
     public final Typeface getTypeface(Context context) {

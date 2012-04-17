@@ -72,7 +72,7 @@ public class SettingsActivity extends PreferenceActivity implements
     private ColorPickerPreference mPagePaperColorPickPreference;
     private ColorPickerPreference mPageSolidColorPickPreference;
     private PageIconSetPreference mPageIconSetPreference;
-    private FontPreference mPageFontTypePreference;
+    private FontPreference mPageItemFontPreference;
     private SeekBarPreference mPageFontSizePreference;
     private ColorPickerPreference mPageTextActiveColorPickPreference;
     private ColorPickerPreference mPageTextCompletedColorPickPreference;
@@ -83,7 +83,7 @@ public class SettingsActivity extends PreferenceActivity implements
     private CheckBoxPreference mWidgetBackgroundPaperPreference;
     private ColorPickerPreference mWidgetPaperColorPickPreference;
     private ColorPickerPreference mWidgetSolidColorPickPreference;
-    private FontPreference mWidgetFontTypePreference;
+    private FontPreference mWidgetItemFontPreference;
     private SeekBarPreference mWidgetFontSizePreference;
     private ColorPickerPreference mWidgetTextColorPickPreference;
     private CheckBoxPreference mWidgetShowCompletedTasksPreference;
@@ -138,7 +138,7 @@ public class SettingsActivity extends PreferenceActivity implements
                 mPageBackgroundPaperPreference, mPagePaperColorPickPreference,
                 mPageSolidColorPickPreference);
         mPageIconSetPreference = (PageIconSetPreference) findPreference(PreferenceKind.PAGE_ICON_SET);
-        mPageFontTypePreference = (FontPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_TYPE);
+        mPageItemFontPreference = (FontPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_TYPE);
         mPageFontSizePreference = (SeekBarPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_SIZE);
         mPageTextActiveColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_ITEM_ACTIVE_TEXT_COLOR);
         mPageTextCompletedColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_ITEM_COMPLETED_TEXT_COLOR);
@@ -154,7 +154,7 @@ public class SettingsActivity extends PreferenceActivity implements
                 (PreferenceGroup) findPreference("prefWidgetScreenKey"),
                 mWidgetBackgroundPaperPreference, mWidgetPaperColorPickPreference,
                 mWidgetSolidColorPickPreference);
-        mWidgetFontTypePreference = (FontPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_TYPE);
+        mWidgetItemFontPreference = (FontPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_TYPE);
         mWidgetFontSizePreference = (SeekBarPreference) findPreference(PreferenceKind.WIDGET_ITEM_FONT_SIZE);
         mWidgetTextColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_ITEM_TEXT_COLOR);
         mWidgetTextCompletedColorPickPreference = findColorPickerPrerence(PreferenceKind.WIDGET_ITEM_COMPLETED_TEXT_COLOR);
@@ -278,7 +278,7 @@ public class SettingsActivity extends PreferenceActivity implements
         mPagePaperColorPickPreference.onColorChanged(theme.paperColor);
         mPageSolidColorPickPreference.onColorChanged(theme.backgroundSolidColor);
         mPageIconSetPreference.setValue(theme.iconSet);
-        mPageFontTypePreference.setValue(theme.fontType);
+        mPageItemFontPreference.setValue(theme.font);
         mPageFontSizePreference.setValue(theme.fontSize);
         mPageTextActiveColorPickPreference.onColorChanged(theme.textColor);
         mPageTextCompletedColorPickPreference.onColorChanged(theme.completedTextColor);
@@ -290,7 +290,7 @@ public class SettingsActivity extends PreferenceActivity implements
         mWidgetBackgroundPaperPreference.setChecked(theme.backgroundPaper);
         mWidgetPaperColorPickPreference.onColorChanged(theme.paperColor);
         mWidgetSolidColorPickPreference.onColorChanged(theme.backgroundColor);
-        mWidgetFontTypePreference.setValue(theme.fontType);
+        mWidgetItemFontPreference.setValue(theme.font);
         mWidgetFontSizePreference.setValue(theme.fontSize);
         mWidgetTextColorPickPreference.onColorChanged(theme.textColor);
         mWidgetTextCompletedColorPickPreference.onColorChanged(theme.completedTextColor);

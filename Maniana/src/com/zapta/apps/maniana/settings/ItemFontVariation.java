@@ -82,31 +82,31 @@ public class ItemFontVariation {
 
     public static final ItemFontVariation newFromPagePreferences(Context context,
             PreferencesTracker prefTracker) {
-        final ItemFontType fontType = prefTracker.getItemFontTypePreference();
+        final Font font = prefTracker.getItemFontPreference();
         final int color = prefTracker.getPageItemActiveTextColorPreference();
         final int completedColor = prefTracker.getPageItemCompletedTextColorPreference();
 
         final int rawFontSize = prefTracker.getItemFontSizePreference();
-        final int fontSize = (int) (rawFontSize * fontType.scale);
+        final int fontSize = (int) (rawFontSize * font.scale);
 
         // TODO: normalize '10' by device density?
-        return new ItemFontVariation(fontType.getTypeface(context), color, completedColor,
-                fontSize, fontType.lineSpacingMultipler, 10);
+        return new ItemFontVariation(font.getTypeface(context), color, completedColor,
+                fontSize, font.lineSpacingMultipler, 10);
     }
     
     public static final ItemFontVariation newFromWidgetPreferences(Context context,
             SharedPreferences sharedPreferences) {
-        final ItemFontType fontType = PreferencesTracker
-                .readWidgetFontTypeFontTypePreference(sharedPreferences);
+        final Font font = PreferencesTracker
+                .readWidgetFontPreference(sharedPreferences);
         final int color = PreferencesTracker.readWidgetTextColorPreference(sharedPreferences);
         final int completedColor = PreferencesTracker.readWidgetCompletedTextColorPreference(sharedPreferences);
 
         final int rawFontSize = PreferencesTracker
                 .readWidgetItemFontSizePreference(sharedPreferences);
-        final int fontSize = (int) (rawFontSize * fontType.scale);
+        final int fontSize = (int) (rawFontSize * font.scale);
 
-        return new ItemFontVariation(fontType.getTypeface(context), color, completedColor, fontSize,
-                fontType.lineSpacingMultipler, 0);
+        return new ItemFontVariation(font.getTypeface(context), color, completedColor, fontSize,
+                font.lineSpacingMultipler, 0);
     }
     
     public final int getTextSize() {

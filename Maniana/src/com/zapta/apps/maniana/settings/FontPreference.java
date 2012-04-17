@@ -34,9 +34,9 @@ import android.widget.CheckedTextView;
  */
 public class FontPreference extends DialogPreference implements DialogInterface.OnClickListener {
 
-    private final ItemFontType mDefaultValue;
+    private final Font mDefaultValue;
 
-    private ItemFontType mValue;
+    private Font mValue;
 
     /**
      * Format string for preference summary string (when dialog is closed). Can contain a single %s
@@ -44,16 +44,16 @@ public class FontPreference extends DialogPreference implements DialogInterface.
      */
     private String mSummaryFormat;
 
-    // Font adaptor over ItemFontType.values()
+    // List adaptor over Font.values()
     public class FontAdapter extends BaseAdapter {
         @Override
         public int getCount() {
-            return ItemFontType.values().length;
+            return Font.values().length;
         }
 
         @Override
         public Object getItem(int position) {
-            return ItemFontType.values()[position].name;
+            return Font.values()[position].name;
         }
 
         @Override
@@ -75,15 +75,15 @@ public class FontPreference extends DialogPreference implements DialogInterface.
 
             final CheckedTextView checkedTextView = (CheckedTextView) view
                     .findViewById(android.R.id.text1);
-            final ItemFontType fontType = ItemFontType.values()[position];
-            checkedTextView.setTypeface(fontType.getTypeface(getContext()));
+            final Font font = Font.values()[position];
+            checkedTextView.setTypeface(font.getTypeface(getContext()));
 
             // If you want to make the selected item having different foreground or background
             // color, be aware of themes. In some of them your foreground color may be the
             // background
             // color. So we don't mess with anything here.
-            checkedTextView.setText(fontType.name);
-            checkedTextView.setTextSize(20 * fontType.scale);
+            checkedTextView.setText(font.name);
+            checkedTextView.setTextSize(20 * font.scale);
 
             return view;
         }
@@ -94,7 +94,7 @@ public class FontPreference extends DialogPreference implements DialogInterface.
 
         final String defaultFontkey = attrs.getAttributeValue(
                 PreferenceConstants.ANDROID_NAME_SPACE, "defaultValue");
-        mDefaultValue = ItemFontType.fromKey(defaultFontkey, null);
+        mDefaultValue = Font.fromKey(defaultFontkey, null);
         checkNotNull(mDefaultValue, "Key: [%s]", defaultFontkey);
 
         mValue = mDefaultValue;
@@ -113,8 +113,8 @@ public class FontPreference extends DialogPreference implements DialogInterface.
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
-        if (which >= 0 && which < ItemFontType.values().length) {
-            final ItemFontType selectedFont = ItemFontType.values()[which];
+        if (which >= 0 && which < Font.values().length) {
+            final Font selectedFont = Font.values()[which];
             setValue(selectedFont);
             dialog.dismiss();
         }
@@ -126,12 +126,12 @@ public class FontPreference extends DialogPreference implements DialogInterface.
         if (restore) {
             mValue = shouldPersist() ? readValue() : mDefaultValue;
         } else {
-            mValue = ItemFontType.fromKey((String) defaultValue, mDefaultValue);
+            mValue = Font.fromKey((String) defaultValue, mDefaultValue);
         }
         updateSummaryWithCurrentValue();
     }
 
-    public final void setValue(ItemFontType font) {
+    public final void setValue(Font font) {
         mValue = font;
         Editor editor = getSharedPreferences().edit();
         editor.putString(getKey(), font.getKey());
@@ -139,7 +139,7 @@ public class FontPreference extends DialogPreference implements DialogInterface.
         updateSummaryWithCurrentValue();
     }
 
-    private final ItemFontType readValue() {
+    private final Font readValue() {
         final SharedPreferences sharedPreferences = getSharedPreferences();
         if (sharedPreferences == null) {
             // Shared preferences not bound yet
@@ -147,7 +147,7 @@ public class FontPreference extends DialogPreference implements DialogInterface.
         }
         final String selectedFontKey = sharedPreferences
                 .getString(getKey(), mDefaultValue.getKey());
-        return ItemFontType.fromKey(selectedFontKey, mDefaultValue);
+        return Font.fromKey(selectedFontKey, mDefaultValue);
     }
 
     private final void updateSummaryWithCurrentValue() {
