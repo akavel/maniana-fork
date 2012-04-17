@@ -37,9 +37,9 @@ public interface PreferenceConstants {
     public static final int DEFAULT_PAGE_BACKGROUND_SOLID_COLOR = 0xffffffc0;
     public static final PageIconSet DEFAULT_PAGE_ICON_SET = PageIconSet.HAND_DRAWN;
     public static final Font DEFAULT_PAGE_TITLE_FONT = Font.IMPACT;
-    public static final int DEFAULT_PAGE_TITLE_SIZE = 20;
+    public static final int DEFAULT_PAGE_TITLE_SIZE = 34;
     public static final int DEFAULT_PAGE_TITLE_TODAY_COLOR = 0xff0077ff;
-    public static final int DEFAULT_PAGE_TITLE_TOMORROW_COLOR = 0xff88aaff;
+    public static final int DEFAULT_PAGE_TITLE_TOMORROW_COLOR = 0xffcc0000;
     public static final Font DEFAULT_PAGE_ITEM_FONT = Font.CASUAL;
     public static final int DEFAULT_PAGE_ITEM_FONT_SIZE = 16;
     public static final int DEFAULT_ITEM_TEXT_COLOR = 0xff000000;

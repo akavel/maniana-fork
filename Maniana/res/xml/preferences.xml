@@ -95,17 +95,17 @@
                 android:key="prefPageTitleFontSizePtKey"
                 android:title="Size"
                 android:summary="Using %d points text size"
-                android:defaultValue="16"
+                android:defaultValue="34"
                 android:text="%dpt"
                 android:maxLevel="50"
                 android:minLevel="25" />
             <net.margaritov.preference.colorpicker.ColorPickerPreference
-                android:defaultValue="#ff000000"
+                android:defaultValue="#ff0077ff"
                 android:key="prefPageTitleTodayColorKey"
                 android:summary="Today text color"
                 android:title="Today Color" />
             <net.margaritov.preference.colorpicker.ColorPickerPreference
-                android:defaultValue="#ff000000"
+                android:defaultValue="#ffcc0000"
                 android:key="prefPageTitleTomorrowColorKey"
                 android:summary="Maniana text color"
                 android:title="Maniana Color" />
