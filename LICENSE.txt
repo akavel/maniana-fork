@@ -51,13 +51,13 @@ simplicio
 
 Page Icon Set 3
 button_*3.png
-http://findicons.com/pack/2232/wireframe_mono
-Wireframe Mono
-
-Page Icon Set 4
-button_*4.png
 http://findicons.com/pack/85/kids
 Kids
+
+Page Icon Set 4,5
+button_*4.png
+button_*4.png
+Jorge Montes
 
 Move item right/left Arrow icons
 arrow_left.png

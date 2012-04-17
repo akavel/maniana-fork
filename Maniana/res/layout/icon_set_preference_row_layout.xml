@@ -7,49 +7,58 @@
     android:orientation="horizontal"
     android:padding="5dp" >
 
-    <ImageView
-        android:id="@+id/icon_set_preference_icon1"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:paddingBottom="12dip"
-        android:paddingLeft="5dip"
-        android:paddingRight="5dip"
-        android:paddingTop="12dip"
-        android:src="@drawable/place_holder" />
+        android:background="@drawable/icon_set_selector_background"
+        android:orientation="horizontal"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip" >
 
-    <ImageView
-        android:id="@+id/icon_set_preference_icon2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:paddingBottom="12dip"
-        android:paddingLeft="5dip"
-        android:paddingRight="5dip"
-        android:paddingTop="12dip"
-        android:src="@drawable/place_holder" />
+        <ImageView
+            android:id="@+id/icon_set_preference_icon1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:paddingBottom="12dip"
+            android:paddingLeft="5dip"
+            android:paddingRight="5dip"
+            android:paddingTop="12dip"
+            android:src="@drawable/place_holder" />
 
-    <ImageView
-        android:id="@+id/icon_set_preference_icon3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:paddingBottom="12dip"
-        android:paddingLeft="5dip"
-        android:paddingRight="5dip"
-        android:paddingTop="12dip"
-        android:src="@drawable/place_holder" />
+        <ImageView
+            android:id="@+id/icon_set_preference_icon2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:paddingBottom="12dip"
+            android:paddingLeft="5dip"
+            android:paddingRight="5dip"
+            android:paddingTop="12dip"
+            android:src="@drawable/place_holder" />
 
-    <ImageView
-        android:id="@+id/icon_set_preference_icon4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:paddingBottom="12dip"
-        android:paddingLeft="5dip"
-        android:paddingRight="5dip"
-        android:paddingTop="12dip"
-        android:src="@drawable/place_holder" />
+        <ImageView
+            android:id="@+id/icon_set_preference_icon3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:paddingBottom="12dip"
+            android:paddingLeft="5dip"
+            android:paddingRight="5dip"
+            android:paddingTop="12dip"
+            android:src="@drawable/place_holder" />
+
+        <ImageView
+            android:id="@+id/icon_set_preference_icon4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:paddingBottom="12dip"
+            android:paddingLeft="5dip"
+            android:paddingRight="5dip"
+            android:paddingTop="12dip"
+            android:src="@drawable/place_holder" />
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="wrap_content"

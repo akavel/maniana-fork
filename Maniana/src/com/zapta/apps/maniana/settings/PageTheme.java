@@ -44,7 +44,7 @@ public class PageTheme extends Thumbnail {
                 PageIconSet.HAND_DRAWN, ItemFontType.ELEGANT, 20, 0xffff8080, 0xff00aa00, 0x80ffff00),
 
         new PageTheme("Spartan", R.drawable.page_theme4_preview, false, 0xffffffff, 0xffffffff,
-                PageIconSet.SILHOUETTE, ItemFontType.SERIF, 14, 0xff000000, 0xff000000, 0x00000000),
+                PageIconSet.WHITE, ItemFontType.SERIF, 14, 0xff000000, 0xff000000, 0x00000000),
 
         new PageTheme("Kermit", R.drawable.page_theme5_preview, true, 0xfff0fff0, 0xffaaffff,
                 PageIconSet.MODERN, ItemFontType.CASUAL, 16, 0xff111111, 0xff555555, 0x30000000),

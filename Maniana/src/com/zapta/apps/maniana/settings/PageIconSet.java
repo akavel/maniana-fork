@@ -41,20 +41,29 @@ public enum PageIconSet implements KeyedEnum {
             R.drawable.button_add_by_text2,
             R.drawable.button_add_by_voice2,
             R.drawable.button_clean2),
-    SILHOUETTE(
-            "Silhouette",
-            "silhouette",
+
+    PARTY(
+            "Party",
+            "party",
             R.drawable.button_undo3,
             R.drawable.button_add_by_text3,
             R.drawable.button_add_by_voice3,
             R.drawable.button_clean3),
-    PARTY(
-            "Party",
-            "party",
+    WHITE(
+            "White Silhouette",
+            "white",
             R.drawable.button_undo4,
             R.drawable.button_add_by_text4,
             R.drawable.button_add_by_voice4,
-            R.drawable.button_clean4);
+            R.drawable.button_clean4),
+
+    BLACK(
+            "Black Silhouette",
+            "black",
+            R.drawable.button_undo5,
+            R.drawable.button_add_by_text5,
+            R.drawable.button_add_by_voice5,
+            R.drawable.button_clean5);
 
     /** User visible name. */
     public final String name;
