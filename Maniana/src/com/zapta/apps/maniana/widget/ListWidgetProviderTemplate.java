@@ -40,7 +40,6 @@ import com.zapta.apps.maniana.util.BitmapUtil;
 import com.zapta.apps.maniana.util.DebugTimer;
 import com.zapta.apps.maniana.util.DisplayUtil;
 import com.zapta.apps.maniana.util.FileUtil;
-import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.Orientation;
 import com.zapta.apps.maniana.widget.ListWidgetSize.OrientationInfo;
 
@@ -237,10 +236,6 @@ public class ListWidgetProviderTemplate {
             currentSize = (lowSize + highSize) / 2;
             final boolean currentSizeFits = resizeText(widgetWidthPixels, widgetHeightPixels,
                     currentSize);
-
-            LogUtil.debug("*** [low: %s, high: %s], current: %s, fit: %s", lowSize, highSize,
-                    currentSize, currentSizeFits);
-
             if (currentSizeFits) {
                 lowSize = currentSize;
             } else {

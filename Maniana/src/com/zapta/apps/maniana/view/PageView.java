@@ -34,6 +34,7 @@ import com.zapta.apps.maniana.services.AppServices;
 import com.zapta.apps.maniana.settings.Font;
 import com.zapta.apps.maniana.settings.PageIconSet;
 import com.zapta.apps.maniana.util.ColorUtil;
+import com.zapta.apps.maniana.util.DisplayUtil;
 
 /**
  * A single page view. Contains title, date (today page only), items, and buttons.
@@ -86,11 +87,13 @@ public class PageView extends FrameLayout {
 
     private final AppContext mApp;
     private final PageKind mPageKind;
+    private final float mDensity;
 
     /** The sub view with the item list. */
     private final ItemListView mItemListView;
 
-    private final FrameLayout mPageTitleDivider;
+    private final View mPageTitleSection;
+    private final View mPageTitleDivider;
 
     private final ImageButton mIcsMenuOverflowButtonView;
 
@@ -112,12 +115,14 @@ public class PageView extends FrameLayout {
         super(checkNotNull(app.context()));
         mApp = app;
         mPageKind = pageKind;
+        mDensity = DisplayUtil.getDensity(app.context());
 
         mApp.services().layoutInflater().inflate(R.layout.page_layout, this);
 
         mPaperColorView = findViewById(R.id.page_paper_color);
 
-        mPageTitleDivider = (FrameLayout) findViewById(R.id.page_title_divider);
+        mPageTitleSection =  findViewById(R.id.page_title_section);
+        mPageTitleDivider = findViewById(R.id.page_title_divider);
 
         mButtonUndoView = (ImageButton) findViewById(R.id.page_undo_button);
         mButtonAddByTextView = (ImageButton) findViewById(R.id.page_add_by_text_button);
@@ -292,9 +297,22 @@ public class PageView extends FrameLayout {
     public final void onPageTitlePreferenceChange() {
         mPageTitleTextView.setTextColor(mPageKind.isToday() ? mApp.pref().getPageTitleTodayColor()
                 : mApp.pref().getPageTitleTomorowColor());
-        final Font font = mApp.pref().getPageTitleFontPreference();
-        mPageTitleTextView.setTypeface(font.getTypeface(mApp.context()));
-        mPageTitleTextView.setTextSize(mApp.pref().getPageTitleFontSizePreference() * font.scale);
+        final Font titleFont = mApp.pref().getPageTitleFontPreference();
+        final float titleFontSizeSP = mApp.pref().getPageTitleFontSizePreference() * titleFont.scale;
+        mPageTitleTextView.setTypeface(titleFont.getTypeface(mApp.context()));
+        mPageTitleTextView.setTextSize(titleFontSizeSP);
+        
+        // Match vertical padding to title text size
+        final int bottomPaddingPixels = (int)(Math.max(8, titleFontSizeSP * 0.12f) * mDensity);
+        mPageTitleSection.setPadding(0,  0, 0, bottomPaddingPixels);
+        
+        // Update date size to match title size
+        if (mPageKind.isToday()) {
+            final float dayTextSize = Math.min(20, Math.max(14, titleFontSizeSP * 0.45f));
+            final float dateTextSize = Math.min(15, Math.max(14, titleFontSizeSP * 0.4f));
+            mDayTextView.setTextSize(dayTextSize);
+            mDateTextView.setTextSize(dateTextSize);                   
+        }
     }
 
     /** Make the first item visible. */

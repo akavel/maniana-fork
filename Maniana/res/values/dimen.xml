@@ -1,32 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    
+    <dimen name="place_holder_sp">10sp</dimen>
+    <dimen name="place_holder_dip">10dip</dimen>
 
-    <dimen name="widget_margin">8dp</dimen>
-    <dimen name="icon_widget_label_top_margin">12dp</dimen>
-    <dimen name="icon_widget_label_right_margin">0dp</dimen>
+    <dimen name="widget_margin">8dip</dimen>
+    <dimen name="icon_widget_label_top_margin">12dip</dimen>
+    <dimen name="icon_widget_label_right_margin">0dip</dimen>
 
     <!-- Portrait Width -->
-    <dimen name="list_widget_width_1x_portrait">80dp</dimen>
-    <dimen name="list_widget_width_2x_portrait">145dp</dimen>
-    <dimen name="list_widget_width_3x_portrait">240dp</dimen>
-    <dimen name="list_widget_width_4x_portrait">304dp</dimen>
+    <dimen name="list_widget_width_1x_portrait">80dip</dimen>
+    <dimen name="list_widget_width_2x_portrait">145dip</dimen>
+    <dimen name="list_widget_width_3x_portrait">240dip</dimen>
+    <dimen name="list_widget_width_4x_portrait">304dip</dimen>
 
     <!-- Portrait Height -->
-    <dimen name="list_widget_height_x1_portrait">92dp</dimen>
-    <dimen name="list_widget_height_x2_portrait">186dp</dimen>
-    <dimen name="list_widget_height_x3_portrait">286dp</dimen>
-    <dimen name="list_widget_height_x4_portrait">394dp</dimen>
+    <dimen name="list_widget_height_x1_portrait">92dip</dimen>
+    <dimen name="list_widget_height_x2_portrait">186dip</dimen>
+    <dimen name="list_widget_height_x3_portrait">286dip</dimen>
+    <dimen name="list_widget_height_x4_portrait">394dip</dimen>
 
     <!-- Landscape Width -->
-    <dimen name="list_widget_width_1x_landscape">112dp</dimen>
-    <dimen name="list_widget_width_2x_landscape">192dp</dimen>
-    <dimen name="list_widget_width_3x_landscape">318dp</dimen>
-    <dimen name="list_widget_width_4x_landscape">400dp</dimen>
+    <dimen name="list_widget_width_1x_landscape">112dip</dimen>
+    <dimen name="list_widget_width_2x_landscape">192dip</dimen>
+    <dimen name="list_widget_width_3x_landscape">318dip</dimen>
+    <dimen name="list_widget_width_4x_landscape">400dip</dimen>
 
     <!-- Landscape Height -->
-    <dimen name="list_widget_height_x1_landscape">68dp</dimen>
-    <dimen name="list_widget_height_x2_landscape">132dp</dimen>
-    <dimen name="list_widget_height_x3_landscape">204dp</dimen>
-    <dimen name="list_widget_height_x4_landscape">278dp</dimen>
+    <dimen name="list_widget_height_x1_landscape">68dip</dimen>
+    <dimen name="list_widget_height_x2_landscape">132dip</dimen>
+    <dimen name="list_widget_height_x3_landscape">204dip</dimen>
+    <dimen name="list_widget_height_x4_landscape">278dip</dimen>
 
 </resources>

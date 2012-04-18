@@ -11,6 +11,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:paddingTop="@dimen/place_holder_dip"
+        android:paddingBottom="@dimen/place_holder_dip"
         android:orientation="horizontal" >
 
         <TextView
@@ -39,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/place_holder"
                 android:textColor="#666666"
-                android:textSize="22dip" />
+                android:textSize="@dimen/place_holder_sp" />
 
             <TextView
                 android:id="@+id/page_date_text"
@@ -47,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/place_holder"
                 android:textColor="#666666"
-                android:textSize="16dip" />
+                android:textSize="@dimen/place_holder_sp" />
         </LinearLayout>
 
         <ImageButton
