@@ -41,20 +41,20 @@ public class PageTheme extends Thumbnail {
                 PreferenceConstants.DEFAULT_PAGE_ITEM_DIVIDER_COLOR),
 
         new PageTheme("Yellow Pages", R.drawable.page_theme2_preview, false, 0xffffffff,
-                0xfffcfcb8, PageIconSet.HAND_DRAWN, Font.IMPACT, 20, 0xff0077ff, 0xff88aaff,
-                Font.SAN_SERIF, 18, 0xff333333, 0xff909090, 0x4def9900),
+                0xfffcfcb8, PageIconSet.MODERN, Font.IMPACT, 22,
+                PreferenceConstants.DEFAULT_PAGE_TITLE_TODAY_COLOR,
+                PreferenceConstants.DEFAULT_PAGE_TITLE_TOMORROW_COLOR, Font.SAN_SERIF, 16,
+                0xff333333, 0xff909090, 0x4def9900),
 
         new PageTheme("Dark Knight", R.drawable.page_theme3_preview, false, 0xffffffff, 0xff000000,
-                PageIconSet.HAND_DRAWN, Font.IMPACT, 20, 0xff0077ff, 0xff88aaff, Font.ELEGANT, 20,
-                0xffff8080, 0xff00aa00, 0x80ffff00),
+                PageIconSet.WHITE, Font.IMPACT, 30, 0xffb7d9ff, 0xffffb0b4, Font.ELEGANT, 20,
+                0xffffffff, 0xff7e7e7e, 0x45ffff00),
 
-        new PageTheme("Spartan", R.drawable.page_theme4_preview, false, 0xffffffff, 0xffffffff,
-                PageIconSet.WHITE, Font.IMPACT, 20, 0xff0077ff, 0xff88aaff, Font.SERIF, 14,
-                0xff000000, 0xff000000, 0x00000000),
-
-        new PageTheme("Kermit", R.drawable.page_theme5_preview, true, 0xfff0fff0, 0xffaaffff,
-                PageIconSet.MODERN, Font.IMPACT, 20, 0xff0077ff, 0xff88aaff, Font.CASUAL, 16,
-                0xff111111, 0xff555555, 0x30000000),
+        new PageTheme("Notebook", R.drawable.page_theme4_preview, true, 0xfff0fff0, 0xffaaffff,
+                PageIconSet.PARTY, Font.SAN_SERIF, 30,
+                PreferenceConstants.DEFAULT_PAGE_TITLE_TODAY_COLOR,
+                PreferenceConstants.DEFAULT_PAGE_TITLE_TOMORROW_COLOR, Font.CASUAL, 16, 0xff111111,
+                0xff555555, 0x30000000),
     };
 
     public final boolean backgroundPaper;

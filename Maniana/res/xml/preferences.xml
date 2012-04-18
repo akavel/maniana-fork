@@ -98,7 +98,7 @@
                 android:defaultValue="34"
                 android:text="%dpt"
                 android:maxLevel="40"
-                android:minLevel="22" />
+                android:minLevel="20" />
             <net.margaritov.preference.colorpicker.ColorPickerPreference
                 android:defaultValue="#ff0077ff"
                 android:key="prefPageTitleTodayColorKey"

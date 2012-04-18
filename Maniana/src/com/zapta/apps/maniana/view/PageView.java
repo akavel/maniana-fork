@@ -44,7 +44,7 @@ import com.zapta.apps.maniana.util.DisplayUtil;
 public class PageView extends FrameLayout {
     
     /** For testing only. */
-    private static final boolean FORCE_OVERFLOW_MENU_ON_ALL_DEVICES = true;
+    private static final boolean FORCE_OVERFLOW_MENU_ON_ALL_DEVICES = false;
 
     /**
      * Candidates for day/date color. Selected by distance from background color with a slight
@@ -308,8 +308,10 @@ public class PageView extends FrameLayout {
         
         // Update date size to match title size
         if (mPageKind.isToday()) {
-            final float dayTextSize = Math.min(20, Math.max(14, titleFontSizeSP * 0.45f));
-            final float dateTextSize = Math.min(15, Math.max(14, titleFontSizeSP * 0.4f));
+            final int dayTopPaddingPixels = (int) (titleFontSizeSP * mDensity * 0.16f + 0.5f);
+            final float dayTextSize = Math.min(18, Math.max(14, titleFontSizeSP * 0.35f));
+            final float dateTextSize = Math.min(14, Math.max(14, titleFontSizeSP * 0.30f));
+            mDayTextView.setPadding(0,  dayTopPaddingPixels, 0, 0);
             mDayTextView.setTextSize(dayTextSize);
             mDateTextView.setTextSize(dateTextSize);                   
         }
