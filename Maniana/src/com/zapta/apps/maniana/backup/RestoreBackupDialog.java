@@ -122,7 +122,6 @@ public class RestoreBackupDialog extends Dialog implements TrackablePopup {
     /** Called when the dialog was left open and the main activity pauses. */
     @Override
     public final void closeLeftOver() {
-        // LogUtil.debug("*** reastore backup dialog: close leftover");
         if (isShowing()) {
             dismiss();
         }

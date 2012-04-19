@@ -35,6 +35,7 @@ import com.zapta.apps.maniana.settings.Font;
 import com.zapta.apps.maniana.settings.PageIconSet;
 import com.zapta.apps.maniana.util.ColorUtil;
 import com.zapta.apps.maniana.util.DisplayUtil;
+import com.zapta.apps.maniana.util.LogUtil;
 
 /**
  * A single page view. Contains title, date (today page only), items, and buttons.
@@ -313,8 +314,8 @@ public class PageView extends FrameLayout {
         // Update date size to match title size
         if (mPageKind.isToday()) {
             final int dayTopPaddingPixels = (int) (titleFontSizeSP * mDensity * 0.16f + 0.5f);
-            final float dayTextSize = Math.min(18, Math.max(14, titleFontSizeSP * 0.35f));
-            final float dateTextSize = Math.min(14, Math.max(14, titleFontSizeSP * 0.30f));
+            final float dayTextSize = Math.min(20, Math.max(14, titleFontSizeSP * 0.35f));
+            final float dateTextSize = Math.min(16, Math.max(14, titleFontSizeSP * 0.30f));
             mDayTextView.setPadding(0,  dayTopPaddingPixels, 0, 0);
             mDayTextView.setTextSize(dayTextSize);
             mDateTextView.setTextSize(dateTextSize);                   

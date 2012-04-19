@@ -362,7 +362,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                 keptFileCount++;
             }
         }
-        LogUtil.debug("Garbage collected %d widget files in %dms, kept %d + %d files.",
+        LogUtil.debug("Garbage collected %d widget files in %dms, kept %d images + %d files.",
                 deletedFileCount, System.currentTimeMillis() - timeNowMillis, keptFileCount,
                 nonRelatedFiles);
     }
