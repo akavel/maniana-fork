@@ -95,7 +95,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:longClickable="false"
-            android:paddingLeft="5dip"
+            android:paddingLeft="8dip"
             android:paddingRight="30dip"
             android:src="@drawable/place_holder" >
         </ImageButton>
@@ -138,7 +138,7 @@
             android:background="@android:color/transparent"
             android:longClickable="true"
             android:paddingLeft="15dip"
-            android:paddingRight="6dip"
+            android:paddingRight="8dip"
             android:src="@drawable/place_holder" >
         </ImageButton>
     </LinearLayout>

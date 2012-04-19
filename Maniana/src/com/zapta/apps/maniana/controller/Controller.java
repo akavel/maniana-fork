@@ -204,10 +204,6 @@ public class Controller {
         // This may leave undo items in case we cleanup completed tasks.
         maybeHandleDateChange();
 
-        // NOTE: if we want the cleaned up items to stay in the undo buffers, move this
-        // statement before the maybeHandleDateChange above.
-        clearAllUndo();
-
         ++mOnAppResumeCount;
 
         // We supress the population if the first resume is with certain actions. It seems 
@@ -316,11 +312,10 @@ public class Controller {
             mApp.model().pushToToday(expireAllLocks, deleteCompletedItems);
             // Not bothering to test if anything changed. Always updating. This happens only once a
             // day.
+            mApp.model().clearAllUndo();
             mApp.view().updatePages();
         }
 
-        // NOTE(tal): we update the model push to today date even if we did not push. This will
-        // eliminate the need to parse the model date stamp for the rest of the day.
         mApp.model().setLastPushDateStamp(mApp.dateTracker().getDateStampString());
     }
 
