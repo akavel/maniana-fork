@@ -3,7 +3,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zapta.apps.maniana"
     android:versionCode="21"
-    android:versionName="1.01.21.d8" >
+    android:versionName="1.01.21" >
 
     <uses-sdk
         android:minSdkVersion="8"
