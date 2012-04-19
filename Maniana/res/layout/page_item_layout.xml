@@ -43,7 +43,7 @@
             android:paddingLeft="5dip"
             android:paddingRight="5dip"
             android:paddingTop="5dip"
-            android:src="@drawable/arrow_right" >
+            android:src="@drawable/place_holder" >
         </ImageView>
     </RelativeLayout>
 

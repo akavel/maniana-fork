@@ -244,6 +244,10 @@ public class PageView extends FrameLayout {
         mButtonAddByTextView.setImageResource(iconSet.buttonAddByTextResourceId);
         mButtonAddByVoiceView.setImageResource(iconSet.buttonAddByVoiceResourceId);
         mButtonCleanView.setImageResource(iconSet.buttonCleanResourceId);
+        
+        // Since the icon set affects also the item arrow icons, we need to update
+        // the items as well.
+        updateAllItemViews();
     }
 
     /**
@@ -348,7 +352,7 @@ public class PageView extends FrameLayout {
      * Update the item list to reflect the current model state. Does not affect other parts of the
      * page.
      */
-    public final void upadateAllItemViews() {
+    public final void updateAllItemViews() {
         // We simply force the model to send an updated notifcation.
         mItemListView.getAdapter().notifyDataSetChanged();
     }

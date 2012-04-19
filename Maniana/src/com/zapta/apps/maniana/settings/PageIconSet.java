@@ -33,14 +33,20 @@ public enum PageIconSet implements KeyedEnum {
             R.drawable.button_undo1,
             R.drawable.button_add_by_text1,
             R.drawable.button_add_by_voice1,
-            R.drawable.button_clean1),
+            R.drawable.button_clean1,
+            R.drawable.arrow_right1,
+            R.drawable.arrow_left1,
+            R.drawable.arrow_locked1),
     MODERN(
             "Modern",
             "modern",
             R.drawable.button_undo2,
             R.drawable.button_add_by_text2,
             R.drawable.button_add_by_voice2,
-            R.drawable.button_clean2),
+            R.drawable.button_clean2,
+            R.drawable.arrow_right2,
+            R.drawable.arrow_left2,
+            R.drawable.arrow_locked2),
 
     PARTY(
             "Party",
@@ -48,14 +54,20 @@ public enum PageIconSet implements KeyedEnum {
             R.drawable.button_undo3,
             R.drawable.button_add_by_text3,
             R.drawable.button_add_by_voice3,
-            R.drawable.button_clean3),
+            R.drawable.button_clean3,
+            R.drawable.arrow_right2,
+            R.drawable.arrow_left2,
+            R.drawable.arrow_locked2),
     WHITE(
             "White Silhouette",
             "white",
             R.drawable.button_undo4,
             R.drawable.button_add_by_text4,
             R.drawable.button_add_by_voice4,
-            R.drawable.button_clean4),
+            R.drawable.button_clean4,
+            R.drawable.arrow_right1,
+            R.drawable.arrow_left1,
+            R.drawable.arrow_locked1),
 
     BLACK(
             "Black Silhouette",
@@ -63,7 +75,10 @@ public enum PageIconSet implements KeyedEnum {
             R.drawable.button_undo5,
             R.drawable.button_add_by_text5,
             R.drawable.button_add_by_voice5,
-            R.drawable.button_clean5);
+            R.drawable.button_clean5,
+            R.drawable.arrow_right1,
+            R.drawable.arrow_left1,
+            R.drawable.arrow_locked1);
 
     /** User visible name. */
     public final String name;
@@ -72,6 +87,9 @@ public enum PageIconSet implements KeyedEnum {
     public final int buttonAddByTextResourceId;
     public final int buttonAddByVoiceResourceId;
     public final int buttonCleanResourceId;
+    public final int arrowRightResourceId;
+    public final int arrowLeftResourceId;
+    public final int arrowLockedResourceId;
 
     /**
      * Preference value key. Should match the values in preference xml. Persisted in user's
@@ -80,7 +98,9 @@ public enum PageIconSet implements KeyedEnum {
     private final String mKey;
 
     private PageIconSet(String name, String key, int buttonUndoResourceId,
-            int buttonAddByTextResourceId, int buttonAddByVoiceResourceId, int buttonCleanResourceId) {
+            int buttonAddByTextResourceId, int buttonAddByVoiceResourceId,
+            int buttonCleanResourceId, int arrowRightResourceId, int arrowLeftResourceId,
+            int arrowLockedResourceId) {
         this.name = name;
         this.mKey = key;
 
@@ -88,6 +108,9 @@ public enum PageIconSet implements KeyedEnum {
         this.buttonAddByTextResourceId = buttonAddByTextResourceId;
         this.buttonAddByVoiceResourceId = buttonAddByVoiceResourceId;
         this.buttonCleanResourceId = buttonCleanResourceId;
+        this.arrowRightResourceId = arrowRightResourceId;
+        this.arrowLeftResourceId = arrowLeftResourceId;
+        this.arrowLockedResourceId = arrowLockedResourceId;
     }
 
     @Override

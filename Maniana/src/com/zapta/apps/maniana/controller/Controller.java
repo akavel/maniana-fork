@@ -865,12 +865,6 @@ public class Controller {
     public final void onMainActivityDestroy() {
     }
 
-    /** Clear undo buffer of both model pages. */
-    private final void clearAllUndo() {
-        mApp.model().clearAllUndo();
-        mApp.view().updateUndoButtons();
-    }
-
     /** Clear undo buffer of given model page. */
     private final void clearPageUndo(PageKind pageKind) {
         mApp.model().clearPageUndo(pageKind);

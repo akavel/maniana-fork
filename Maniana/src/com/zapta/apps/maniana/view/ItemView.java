@@ -31,6 +31,8 @@ import com.zapta.apps.maniana.main.AppContext;
 import com.zapta.apps.maniana.model.ItemModelReadOnly;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.settings.ItemFontVariation;
+import com.zapta.apps.maniana.settings.PageIconSet;
+import com.zapta.apps.maniana.settings.PageTheme;
 
 /**
  * View of a single item.
@@ -53,7 +55,8 @@ public class ItemView extends FrameLayout {
     /** The kind of the page that contains this item. */
     private final PageKind mPageKind;
 
-    /** Cache of last display font variation. Used to avoid unnecessary changes. */
+    /** Cache of last user font variation. Used to avoid unnecessary updates. */
+    @Nullable
     private ItemFontVariation mLastFontVariaton = null;
 
     /** Cache of item is completed status. Used to avoid unnecessary changes. */
@@ -61,10 +64,6 @@ public class ItemView extends FrameLayout {
 
     /** Cache of the view highlighted status. Used to avoid unnecessary changes. */
     private boolean mLastIsHighlighted = false;
-
-    /** Cache of the view locked/unlocked status. Used to avoid unnecesary changes. */
-    @Nullable
-    private Boolean mLastIsLocked = null;
 
     public ItemView(AppContext app, PageKind pageKind, ItemModelReadOnly item) {
         super(app.context());
@@ -79,10 +78,7 @@ public class ItemView extends FrameLayout {
 
         mArrowView = (ImageView) findViewById(R.id.page_item_arrow);
 
-        mArrowView.setImageResource(mPageKind.isToday() ? R.drawable.arrow_right
-                : R.drawable.arrow_left);
-
-        updateFromItem(item);
+        updateFromItemModel(item);
     }
 
     @Override
@@ -137,7 +133,7 @@ public class ItemView extends FrameLayout {
         itemAninationView.startAnimation(animation);
     }
 
-    public final void updateFromItem(ItemModelReadOnly item) {
+    public final void updateFromItemModel(ItemModelReadOnly item) {
         updateItemButton(item.isLocked());
         mTextView.setText(item.getText());
         mColorView.setBackgroundColor(item.getColor().getColor(0x00000000));
@@ -155,20 +151,18 @@ public class ItemView extends FrameLayout {
 
     /** Update the item button (arrow vs lock). */
     private final void updateItemButton(boolean isLocked) {
+        final PageIconSet iconSet = mApp.pref().getPageIconSetPreference();
         final int newArrowDrawable;
-
-        // Update only if different form current state
-        if (mLastIsLocked == null || mLastIsLocked != isLocked) {
-            if (mPageKind.isToday()) {
-                newArrowDrawable = isLocked ? R.drawable.arrow_locked : R.drawable.arrow_right;
-            } else {
-                newArrowDrawable = isLocked ? R.drawable.arrow_locked : R.drawable.arrow_left;
-            }
-            mArrowView.setImageResource(newArrowDrawable);
-
-            // Cache new state.
-            mLastIsLocked = isLocked;
+        if (mPageKind.isToday()) {
+            newArrowDrawable = isLocked ? iconSet.arrowLockedResourceId
+                    : iconSet.arrowRightResourceId;
+        } else {
+            newArrowDrawable = isLocked ? iconSet.arrowLockedResourceId
+                    : iconSet.arrowLeftResourceId;
         }
+        // TODO: consider to cache last value and update only on actual change
+        // (motivation is performance, is is significant?).
+        mArrowView.setImageResource(newArrowDrawable);
     }
 
     /** Highlight this view using given background */

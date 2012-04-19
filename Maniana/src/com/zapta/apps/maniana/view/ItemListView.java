@@ -894,7 +894,7 @@ public class ItemListView extends ListView {
         // NOTE: this should always be non null but handling gracefully to avoid a
         // force close.
         if (itemView != null) {
-            itemView.updateFromItem(mAdapter.getItem(itemIndex));
+            itemView.updateFromItemModel(mAdapter.getItem(itemIndex));
         }
     }
 

@@ -123,7 +123,7 @@ public class AppView {
 
     public final void upadatePage(PageKind pageKind) {
         final PageView pageView = getPageView(pageKind);
-        pageView.upadateAllItemViews();
+        pageView.updateAllItemViews();
         pageView.updateUndoButton();
     }
 
