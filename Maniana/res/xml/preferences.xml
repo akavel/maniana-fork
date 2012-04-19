@@ -76,8 +76,8 @@
         <com.zapta.apps.maniana.settings.PageIconSetPreference
             android:defaultValue="handdrawn"
             android:key="prefPageIconSetKey"
-            android:summary="Using %s icon set"
-            android:title="Icon Set" />
+            android:summary="Using %s icons"
+            android:title="Icons" />
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#ffffddaa"
             android:key="prefPageItemDividerColorKey"
