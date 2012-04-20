@@ -32,7 +32,6 @@ import com.zapta.apps.maniana.model.ItemModelReadOnly;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.settings.ItemFontVariation;
 import com.zapta.apps.maniana.settings.PageIconSet;
-import com.zapta.apps.maniana.settings.PageTheme;
 
 /**
  * View of a single item.

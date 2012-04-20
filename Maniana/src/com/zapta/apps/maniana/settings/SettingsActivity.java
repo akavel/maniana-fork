@@ -38,6 +38,7 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceGroup;
 import android.text.format.Time;
+import android.widget.Toast;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
@@ -424,10 +425,9 @@ public class SettingsActivity extends PreferenceActivity implements
     }
 
     private final void onBackupClick() {
-
         AttachmentUtil.createAttachmentFile(this);
 
-        Intent intent = new Intent(Intent.ACTION_SEND);
+        final Intent intent = new Intent(Intent.ACTION_SEND);
         // sharingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         final String defaultToAddress = getBackupEmailAddress();
@@ -451,7 +451,11 @@ public class SettingsActivity extends PreferenceActivity implements
                 + AttachmentUtil.BACKUP_ATTACHMENT_FILE_NAME));
         intent.putExtra(Intent.EXTRA_STREAM, fileUri);
 
-        startActivity(intent);
+        try {
+          startActivity(intent);
+        } catch (android.content.ActivityNotFoundException e) {
+            Toast.makeText(this, "Gmail application not found", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private final void onShareClick() {

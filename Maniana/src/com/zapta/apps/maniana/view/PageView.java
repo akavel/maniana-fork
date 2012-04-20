@@ -35,7 +35,6 @@ import com.zapta.apps.maniana.settings.Font;
 import com.zapta.apps.maniana.settings.PageIconSet;
 import com.zapta.apps.maniana.util.ColorUtil;
 import com.zapta.apps.maniana.util.DisplayUtil;
-import com.zapta.apps.maniana.util.LogUtil;
 
 /**
  * A single page view. Contains title, date (today page only), items, and buttons.
