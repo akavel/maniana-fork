@@ -65,14 +65,14 @@ public class RestoreBackupDialog extends Dialog implements TrackablePopup {
         mApp = app;
         mListener = listener;
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.restore_backup_dialog_layout);
+        setContentView(R.layout.backup_restore_dialog_layout);
         setOwnerActivity(app.mainActivity());
 
         getWindow().setGravity(Gravity.CENTER);
 
-        final WebView webView = (WebView) findViewById(R.id.restore_backup_web_view);
+        final WebView webView = (WebView) findViewById(R.id.backup_restore_web_view);
 
-        final String assetFilePath = "forms/restore_backup_dialog.html";
+        final String assetFilePath = "forms/backup_restore_dialog.html";
         final FileReadResult fileReadResult = FileUtil.readFileToString(mApp.context(),
                 assetFilePath, true);
 
@@ -80,21 +80,21 @@ public class RestoreBackupDialog extends Dialog implements TrackablePopup {
         check(fileReadResult.outcome == FileReadOutcome.READ_OK,
                 "Error reading asset file: %s, outcome: %s", assetFilePath, fileReadResult.outcome);
 
-        findViewById(R.id.restore_backup_merge).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.backup_restore_merge).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onButtonClick(Action.MERGE);
             }
         });
-        
-        findViewById(R.id.restore_backup_replace).setOnClickListener(new View.OnClickListener() {
+
+        findViewById(R.id.backup_restore_replace).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onButtonClick(Action.REPLACE);
             }
         });
 
-        findViewById(R.id.restore_backup_cancel).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.backup_restore_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onButtonClick(Action.CANCEL);
@@ -107,8 +107,9 @@ public class RestoreBackupDialog extends Dialog implements TrackablePopup {
                 mApp.popupsTracker().untrack(RestoreBackupDialog.this);
             }
         });
-        
-        final String expandedText = TextUtil.expandMacros(fileReadResult.content, macroValues, true);
+
+        final String expandedText = TextUtil
+                .expandMacros(fileReadResult.content, macroValues, true);
 
         webView.loadDataWithBaseURL(PopupMessageActivity.ASSETS_BASE_URL + assetFilePath,
                 expandedText, null, "UTF-8", null);
@@ -140,6 +141,15 @@ public class RestoreBackupDialog extends Dialog implements TrackablePopup {
         macroValues.put("replace-keep", stats.replaceKeep);
         macroValues.put("replace-add", stats.replaceAdd);
         macroValues.put("replace-total", stats.replaceKeep + stats.replaceAdd);
+
+        macroValues.put("str_title", app.str(R.string.backup_restore_dialog_title));
+        macroValues.put("str_sub_title", app.str(R.string.backup_restore_dialog_sub_title));
+        macroValues.put("str_merge", app.str(R.string.backup_restore_dialog_Merge));
+        macroValues.put("str_replace", app.str(R.string.backup_restore_dialog_Replace));
+        macroValues.put("str_keep", app.str(R.string.backup_restore_dialog_Keep));
+        macroValues.put("str_delete", app.str(R.string.backup_restore_dialog_Delete));
+        macroValues.put("str_add", app.str(R.string.backup_restore_dialog_Add));
+        macroValues.put("str_total", app.str(R.string.backup_restore_dialog_Total));
 
         final RestoreBackupDialog dialog = new RestoreBackupDialog(app, listener, macroValues);
         app.popupsTracker().track(dialog);

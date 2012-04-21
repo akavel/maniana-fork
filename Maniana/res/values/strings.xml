@@ -35,12 +35,29 @@
     <string name="Task_list_replaced">Task list replaced</string>
     <string name="Task_list_merged">Task list merged</string>
     <string name="Task_list_not_changed">Task list not changed</string>
+    <string name="backup_restore_dialog_Merge">Merge</string>
+    <string name="backup_restore_dialog_Replace">Replace</string>
+    <string name="backup_restore_dialog_Cancel">Cancel</string>
+    <string name="backup_restore_dialog_Keep">Keep</string>
+    <string name="backup_restore_dialog_Delete">Delete</string>
+    <string name="backup_restore_dialog_Add">Add</string>
+    <string name="backup_restore_dialog_Total">Total</string>
+    <string name="backup_restore_dialog_title">Import Tasks Into Maniana?</string>
+    <string name="backup_restore_dialog_sub_title">Task summary</string>
 
     <!-- Page operations -->
     <string name="Auto_sorted">Auto sorted</string>
-    
+
     <!-- Page related -->
     <string name="Today_page_title">Today</string>
     <string name="Maniana_page_title">Maniana</string>
+
+    <!-- Item menu -->
+    <string name="item_menu_Done">Done</string>
+    <string name="item_menu_To_Do">To Do</string>
+    <string name="item_menu_Edit">Edit</string>
+    <string name="item_menu_Lock">Lock</string>
+    <string name="item_menu_Unlock">Unlock</string>
+    <string name="item_menu_Delete">Delete</string>
 
 </resources>

@@ -420,7 +420,7 @@ public class SettingsActivity extends PreferenceActivity implements
 
     private final void onRestoreBackupClick() {
         // Popup a message with restore instructions
-        final Intent intent = PopupMessageActivity.intentFor(this, MessageKind.RESTORE_BACKUP);
+        final Intent intent = PopupMessageActivity.intentFor(this, MessageKind.BACKUP_RESTORE);
         startActivity(intent);
     }
 

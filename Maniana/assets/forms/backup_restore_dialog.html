@@ -9,34 +9,34 @@ body { color: black; background: white; font-family: Verdana, sans-serif; }
 </style>
 </head>
 <body>
-<span style="color:#000099"><b>Import Tasks Into Maniana?</b></span>
+<span style="color:#000099"><b>${str_title}</b></span>
 <br><br>
-Task summary:<br>
+${str_sub_title}:<br>
 <br>
 <center>
 <table border="1" cellspacing="0" cellpadding="8" bordercolor="#888888">
 <tr>
   <td class="cell-top"></td>
-  <td class="cell-top"><b>Merge</b></td>
-  <td class="cell-top"><b>Replace</b></td>
+  <td class="cell-top"><b>${str_merge}</b></td>
+  <td class="cell-top"><b>${str_replace}</b></td>
 </tr>
 <tr>
-  <td class="cell-left">Keep</td>
+  <td class="cell-left">${str_keep}</td>
   <td class="cell-num">${merge-keep}</td>
   <td class="cell-num">${replace-keep}</td>
 </tr>
 <tr>
-  <td class="cell-left">Delete</td>
+  <td class="cell-left">${str_delete}</td>
   <td class="cell-num">${merge-delete}</td>
   <td class="cell-num">${replace-delete}</td>
 </tr>
 <tr>
-  <td class="cell-left">Add</td>
+  <td class="cell-left">${str_add}</td>
   <td class="cell-num">${merge-add}</td>
   <td class="cell-num">${replace-add}</td>
 </tr>
 <tr>
-  <td class="cell-left">Total</td>
+  <td class="cell-left">${str_total}</td>
   <td class="cell-num">${merge-total}</td>
   <td class="cell-num">${replace-total}</td>
 </tr>

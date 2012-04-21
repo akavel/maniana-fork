@@ -61,42 +61,48 @@ public class QuickActionsCache {
 
     public QuickActionItem getDoneAction() {
         if (mCachedActionDone == null) {
-            mCachedActionDone = newItem(DONE_ACTION_ID, "Done", R.drawable.item_menu_done);
+            mCachedActionDone = newItem(DONE_ACTION_ID, mApp.str(R.string.item_menu_Done),
+                    R.drawable.item_menu_done);
         }
         return mCachedActionDone;
     }
 
     public QuickActionItem getToDoAction() {
         if (mCachedActionTodo == null) {
-            mCachedActionTodo = newItem(TODO_ACTION_ID, "To Do", R.drawable.item_menu_todo);
+            mCachedActionTodo = newItem(TODO_ACTION_ID, mApp.str(R.string.item_menu_To_Do),
+                    R.drawable.item_menu_todo);
         }
         return mCachedActionTodo;
     }
 
     public QuickActionItem getEditAction() {
         if (mCachedActionEdit == null) {
-            mCachedActionEdit = newItem(EDIT_ACTION_ID, "Edit", R.drawable.item_menu_edit);
+            mCachedActionEdit = newItem(EDIT_ACTION_ID, mApp.str(R.string.item_menu_Edit),
+                    R.drawable.item_menu_edit);
         }
         return mCachedActionEdit;
     }
 
     public QuickActionItem getDeleteAction() {
         if (mCachedActionDelete == null) {
-            mCachedActionDelete = newItem(DELETE_ACTION_ID, "Delete", R.drawable.item_menu_delete);
+            mCachedActionDelete = newItem(DELETE_ACTION_ID, mApp.str(R.string.item_menu_Delete),
+                    R.drawable.item_menu_delete);
         }
         return mCachedActionDelete;
     }
 
     public QuickActionItem getLockAction() {
         if (mCachedActionLock == null) {
-            mCachedActionLock = newItem(LOCK_ACTION_ID, "Lock", R.drawable.item_menu_lock);
+            mCachedActionLock = newItem(LOCK_ACTION_ID, mApp.str(R.string.item_menu_Lock),
+                    R.drawable.item_menu_lock);
         }
         return mCachedActionLock;
     }
 
     public QuickActionItem getUnlockAction() {
         if (mCachedActionUnlock == null) {
-            mCachedActionUnlock = newItem(UNLOCK_ACTION_ID, "Unlock", R.drawable.item_menu_unlock);
+            mCachedActionUnlock = newItem(UNLOCK_ACTION_ID, mApp.str(R.string.item_menu_Unlock),
+                    R.drawable.item_menu_unlock);
         }
         return mCachedActionUnlock;
     }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/restore_backup_top_view"
+    android:id="@+id/backup_restore_top_view"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#ffaaaaaa"
@@ -8,7 +8,7 @@
     android:orientation="vertical" >
 
     <WebView
-        android:id="@+id/restore_backup_web_view"
+        android:id="@+id/backup_restore_web_view"
         android:layout_width="fill_parent"
         android:layout_height="340dip"
         android:layout_margin="10dip"
@@ -26,28 +26,28 @@
         android:paddingTop="5dip" >
 
         <Button
-            android:id="@+id/restore_backup_merge"
+            android:id="@+id/backup_restore_merge"
             android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_margin="5dip"
             android:layout_weight="1"
-            android:text="Merge" />
+            android:text="@string/backup_restore_dialog_Merge" />
 
         <Button
-            android:id="@+id/restore_backup_replace"
+            android:id="@+id/backup_restore_replace"
             android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_margin="5dip"
             android:layout_weight="1"
-            android:text="Replace" />
+            android:text="@string/backup_restore_dialog_Replace" />
 
         <Button
-            android:id="@+id/restore_backup_cancel"
+            android:id="@+id/backup_restore_cancel"
             android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_margin="5dip"
             android:layout_weight="1"
-            android:text="Cancel" />
+            android:text="@string/backup_restore_dialog_Cancel" />
     </LinearLayout>
 
 </LinearLayout>
