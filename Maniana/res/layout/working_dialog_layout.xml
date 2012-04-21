@@ -10,7 +10,7 @@
         android:layout_height="fill_parent"
         android:background="#00000000"
         android:padding="10dip"
-        android:text="Working..."
+        android:text="@string/place_holder"
         android:textColor="@color/color_place_holder"
         android:textSize="18sp" >
     </TextView>

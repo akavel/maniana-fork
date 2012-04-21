@@ -68,7 +68,7 @@ public class ColorPickerDialog
 
 		setContentView(layout);
 
-		setTitle("Select Color");
+		setTitle(getContext().getString(R.string.color_picker_Select_Color));
 		
 		mColorPicker = (ColorPickerView) layout.findViewById(R.id.color_picker_view);
 		mOldColor = (ColorPickerPanelView) layout.findViewById(R.id.old_color_panel);

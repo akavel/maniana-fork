@@ -142,11 +142,11 @@ public class SettingsActivity extends PreferenceActivity implements
                 (PreferenceGroup) findPreference("prefPagesScreenKey"),
                 mPageBackgroundPaperPreference, mPagePaperColorPickPreference,
                 mPageSolidColorPickPreference);
-        mPageIconSetPreference = (PageIconSetPreference) findPreference(PreferenceKind.PAGE_ICON_SET);       
+        mPageIconSetPreference = (PageIconSetPreference) findPreference(PreferenceKind.PAGE_ICON_SET);
         mPageTitleFontPreference = (FontPreference) findPreference(PreferenceKind.PAGE_TITLE_FONT);
         mPageTitleFontSizePreference = (SeekBarPreference) findPreference(PreferenceKind.PAGE_TITLE_FONT_SIZE);
         mPageTitleTodayColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_TITLE_TODAY_COLOR);
-        mPageTitleTomorrowColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_TITLE_TOMORROW_COLOR);       
+        mPageTitleTomorrowColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_TITLE_TOMORROW_COLOR);
         mPageItemFontPreference = (FontPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT);
         mPageItemFontSizePreference = (SeekBarPreference) findPreference(PreferenceKind.PAGE_ITEM_FONT_SIZE);
         mPageTextActiveColorPickPreference = findColorPickerPrerence(PreferenceKind.PAGE_ITEM_ACTIVE_TEXT_COLOR);
@@ -286,11 +286,11 @@ public class SettingsActivity extends PreferenceActivity implements
         mPageBackgroundPaperPreference.setChecked(theme.backgroundPaper);
         mPagePaperColorPickPreference.onColorChanged(theme.paperColor);
         mPageSolidColorPickPreference.onColorChanged(theme.backgroundSolidColor);
-        mPageIconSetPreference.setValue(theme.iconSet);    
+        mPageIconSetPreference.setValue(theme.iconSet);
         mPageTitleFontPreference.setValue(theme.titleFont);
         mPageTitleFontSizePreference.setValue(theme.titleFontSize);
         mPageTitleTodayColorPickPreference.onColorChanged(theme.titleTodayTextColor);
-        mPageTitleTomorrowColorPickPreference.onColorChanged(theme.titleTomorrowTextColor);      
+        mPageTitleTomorrowColorPickPreference.onColorChanged(theme.titleTomorrowTextColor);
         mPageItemFontPreference.setValue(theme.itemFont);
         mPageItemFontSizePreference.setValue(theme.itemFontSize);
         mPageTextActiveColorPickPreference.onColorChanged(theme.itemTextColor);
@@ -320,7 +320,8 @@ public class SettingsActivity extends PreferenceActivity implements
                     case DialogInterface.BUTTON_POSITIVE:
                         dialog.dismiss();
                         mWorkingDialog = new WorkingDialog(SettingsActivity.this,
-                                "Restoring defaults...");
+                                SettingsActivity.this
+                                        .getString(R.string.settings_Restoring_defaults));
                         mWorkingDialog.setOnShowListener(new DialogInterface.OnShowListener() {
                             @Override
                             public void onShow(DialogInterface arg0) {
@@ -452,7 +453,7 @@ public class SettingsActivity extends PreferenceActivity implements
         intent.putExtra(Intent.EXTRA_STREAM, fileUri);
 
         try {
-          startActivity(intent);
+            startActivity(intent);
         } catch (android.content.ActivityNotFoundException e) {
             Toast.makeText(this, "Gmail application not found", Toast.LENGTH_SHORT).show();
         }

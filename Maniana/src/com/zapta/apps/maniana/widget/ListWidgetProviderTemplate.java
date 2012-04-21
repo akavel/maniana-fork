@@ -302,7 +302,7 @@ public class ListWidgetProviderTemplate {
         }
 
         if (mModel == null) {
-            addTemplateMessageItem("(Maniana data not found)");
+            addTemplateMessageItem("(" + mContext.getString(R.string.widget_Maniana_data_not_found) + ")");
             return;
         }
 
@@ -310,8 +310,8 @@ public class ListWidgetProviderTemplate {
                 mIncludeCompletedItemsPreference);
 
         if (items.isEmpty()) {
-            final String emptyMessage = mIncludeCompletedItemsPreference ? "(no tasks)"
-                    : "(no active tasks)";
+            final String emptyMessage = "(" + mContext.getString(mIncludeCompletedItemsPreference ? 
+                    R.string.widget_no_tasks : R.string.widget_no_active_tasks) + ")";
             addTemplateMessageItem(emptyMessage);
             return;
         }

@@ -267,8 +267,4 @@ public class PageModel {
         }
         return true;
     }
-
-    // private static final int itemGroupIndex(ItemModelReadOnly item) {
-    // return item.isCompleted() ? (item.isLocked() ? 2 : 1) : (item.isLocked() ? 3 : 0);
-    // }
 }

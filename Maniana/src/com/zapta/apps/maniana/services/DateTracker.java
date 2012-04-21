@@ -54,7 +54,6 @@ public class DateTracker {
         if (!DateUtil.isSameDate(mTempTime, mCachedDate)) {
             mCachedDate.set(mTempTime);
             mCachedDateString = DateUtil.dateToString(mCachedDate);
-            // final long time = now.getTimeInMillis();
             mUserDayOfWeekString = mCachedDate.format("%A");
             mUserMonthDayString = mCachedDate.format("%b %d");
         }

@@ -2,6 +2,7 @@
 <resources>
 
     <!-- General -->
+    <string name="translation_language">English</string>
     <string name="app_name">Maniana</string>
     <string name="place_holder">(tbd)</string>
 
@@ -30,6 +31,7 @@
     <string name="Restored_d_deleted_tasks">Restored %d deleted tasks</string>
 
     <!-- Backup/Restore -->
+    <string name="Hint_try_using_Gmail_Download_button">Hint: try using Gmail Download button</string>
     <string name="Failed_to_read_backup_file">Failed to read backup file</string>
     <string name="Error_loading_the_backup_file">Error loading the backup file</string>
     <string name="Task_list_replaced">Task list replaced</string>
@@ -60,4 +62,21 @@
     <string name="item_menu_Unlock">Unlock</string>
     <string name="item_menu_Delete">Delete</string>
 
+    <!-- Voice Recognition -->
+    <string name="voice_recognition_Dictate_a_new_task">Dictate a new task</string>
+    <string name="voice_recognition_Select_best_match">Select best match</string>
+  
+    <!--  Settings -->
+    <string name="settings_Restoring_defaults">Restoring defaults...</string>
+    
+    <!--  Widget -->
+    <string name="widget_Maniana_data_not_found">Maniana data not found</string>
+    <string name="widget_no_tasks">no tasks</string>
+    <string name="widget_no_active_tasks">no active_tasks</string>
+    
+    <!-- Color Picker -->
+    <string name="color_picker_Select_Color">Select Color</string>
+        
+        
+    
 </resources>

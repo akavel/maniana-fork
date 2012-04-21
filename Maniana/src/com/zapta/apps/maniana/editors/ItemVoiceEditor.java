@@ -40,7 +40,7 @@ public class ItemVoiceEditor {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Dictate a new task");
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, parentActivity.getString(R.string.voice_recognition_Dictate_a_new_task));
         parentActivity.startActivityForResult(intent, requestCode);
     }
 
@@ -51,7 +51,7 @@ public class ItemVoiceEditor {
         // TODO: make this dialog trackable ?.
         final Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.voice_list_dialog_layout);
-        dialog.setTitle("Select best match");
+        dialog.setTitle(context.getString(R.string.voice_recognition_Select_best_match));
 
         ListView listView = (ListView) dialog.findViewById(R.id.voice_selection_list);
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,

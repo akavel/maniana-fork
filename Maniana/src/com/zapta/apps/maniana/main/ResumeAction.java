@@ -18,6 +18,7 @@ import javax.annotation.Nullable;
 
 import android.content.Intent;
 
+import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.util.IntentUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 
@@ -71,7 +72,7 @@ public enum ResumeAction {
                 // Since we don't have Gmail permissions, trying to access the attachment
                 // from the Gmail providers gives permission error.
                 if ("content".equals(scheme) && uriStringLC.contains("gmail")) {
-                    app.services().toast("Hint: try using Gmail Download button");
+                    app.services().toast(R.string.Hint_try_using_Gmail_Download_button);
                 }
             }
         }
