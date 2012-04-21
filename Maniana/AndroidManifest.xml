@@ -2,8 +2,8 @@
 <!-- NOTE: version code is incremented once per official Market release -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zapta.apps.maniana"
-    android:versionCode="21"
-    android:versionName="1.01.21" >
+    android:versionCode="22"
+    android:versionName="1.01.22.d01" >
 
     <uses-sdk
         android:minSdkVersion="8"

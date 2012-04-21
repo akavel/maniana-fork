@@ -236,6 +236,14 @@ public class AppServices {
     public final void toast(String message) {
         Toast.makeText(mApp.context(), message, Toast.LENGTH_SHORT).show();
     }
+    
+    public final void toast(int messageResourceId) {
+        toast(mApp.context().getString(messageResourceId));
+    }
+    
+    public final void toast(int messageResourceId, Object... args) {
+        toast(mApp.context().getString(messageResourceId, args));
+    }
 
     public static boolean isVoiceRecognitionSupported(Context context) {
         // Check to see if a recognition activity is present

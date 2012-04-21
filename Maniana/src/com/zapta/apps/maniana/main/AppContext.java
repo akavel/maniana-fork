@@ -77,6 +77,16 @@ public class AppContext {
         // The main activity is also the context.
         return (Context) mMainActivity;
     }
+    
+    // A convenience shortcut.
+    public final String str(int resourceId) {
+        return mMainActivity.getString(resourceId);
+    }
+    
+    // A convenience shortcut.
+    public final String str(int resourceId, Object... args) {
+        return mMainActivity.getString(resourceId, args);
+    }
 
     public PreferencesTracker pref() {
         return mAppPreferences;

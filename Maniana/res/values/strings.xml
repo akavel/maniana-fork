@@ -1,8 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- General -->
     <string name="app_name">Maniana</string>
-	<string name="place_holder">(tbd)</string>
-	<string name="arrow_right">→</string>
-	<string name="arrow_down">↓</string>
-	<string name="color_picker_message">Press on a color below to apply it</string>
+    <string name="place_holder">(tbd)</string>
+
+    <!-- Startup Error messages -->
+    <string name="Sample_task_list_not_found">Sample task list not found</string>
+    <string name="Error_loading_task_list">Error loading task list</string>
+
+    <!-- Color picker -->
+    <string name="Press_on_a_color_below_to_apply_it">Press on a color below to apply it</string>
+
+    <!-- Task editor related -->
+    <string name="Edit_Task">Edit Task</string>
+    <string name="New_Task">New Task</string>
+    <string name="Empty_task_deleted">Empty task deleted</string>
+
+    <!-- Page organize outcomes -->
+    <string name="Deleted_one_completed_task">Deleted one completed task</string>
+    <string name="Deleted_d_completed_tasks">Deleted %d completed tasks</string>
+    <string name="Tasks_reordered">Tasks reordered</string>
+    <string name="Tasks_reordered_Long_press_to_delete_one_completed_task">Tasks reordered. Long press to delete one completed task</string>
+    <string name="Tasks_reordered_Long_press_to_delete_d_completed_tasks">Tasks reordered. Long press to delete %d completed tasks</string>
+    <string name="Page_already_organized_Long_press_to_delete_one_completed_task">Page already organized. Long press to delete one completed task</string>
+    <string name="Page_already_organized_Long_press_to_delete_d_completed_tasks">Page already organized. Long press to delete %d completed tasks</string>
+    <string name="Page_already_organized">Page already organized</string>
+    <string name="Restored_one_deleted_task">Restored one deleted task</string>
+    <string name="Restored_d_deleted_tasks">Restored %d deleted tasks</string>
+
+    <!-- Backup/Restore -->
+    <string name="Failed_to_read_backup_file">Failed to read backup file</string>
+    <string name="Error_loading_the_backup_file">Error loading the backup file</string>
+    <string name="Task_list_replaced">Task list replaced</string>
+    <string name="Task_list_merged">Task list merged</string>
+    <string name="Task_list_not_changed">Task list not changed</string>
+
+    <!-- Page operations -->
+    <string name="Auto_sorted">Auto sorted</string>
+    
+    <!-- Page related -->
+    <string name="Today_page_title">Today</string>
+    <string name="Maniana_page_title">Maniana</string>
+
 </resources>

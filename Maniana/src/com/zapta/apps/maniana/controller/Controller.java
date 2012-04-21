@@ -29,6 +29,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
+import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.backup.RestoreBackupDialog;
 import com.zapta.apps.maniana.backup.RestoreBackupDialog.Action;
 import com.zapta.apps.maniana.backup.RestoreBackupDialog.RestoreBackupDialogListener;
@@ -206,7 +207,7 @@ public class Controller {
 
         ++mOnAppResumeCount;
 
-        // We supress the population if the first resume is with certain actions. It seems 
+        // We suppress the population if the first resume is with certain actions. It seems
         // to be more intuitive this way.
         if (mPopulateNewUserSampleDataOnResume) {
             if (resumeAction != ResumeAction.RESTORE_FROM_BABKUP_FILE) {
@@ -215,7 +216,7 @@ public class Controller {
                 if (result.outcome.isOk()) {
                     startPopupMessageSubActivity(MessageKind.NEW_USER);
                 } else {
-                    mApp.services().toast("Sample task list not found (%s)", result.outcome);
+                    mApp.services().toast(R.string.Sample_task_list_not_found);
                 }
             }
             mApp.model().setLastPushDateStamp(mApp.dateTracker().getDateStampString());
@@ -391,8 +392,8 @@ public class Controller {
             case QuickActionsCache.EDIT_ACTION_ID: {
                 mApp.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
                 final ItemModel item = mApp.model().getItemForMutation(pageKind, itemIndex);
-                ItemTextEditor.startEditor(mApp, "Edit Task", item.getText(), item.getColor(),
-                        new ItemTextEditor.ItemEditorListener() {
+                ItemTextEditor.startEditor(mApp, mApp.str(R.string.Edit_Task), item.getText(),
+                        item.getColor(), new ItemTextEditor.ItemEditorListener() {
                             @Override
                             public void onDismiss(String finalString, ItemColor finalColor) {
                                 // NOTE: at this point, finalString is also cleaned of leading or
@@ -400,7 +401,7 @@ public class Controller {
                                 if (finalString.length() == 0) {
                                     startItemDeletionWithAnination(pageKind, itemIndex);
                                     if (mApp.pref().getVerboseMessagesEnabledPreference()) {
-                                        mApp.services().toast("Empty task deleted");
+                                        mApp.services().toast(R.string.Empty_task_deleted);
                                     }
                                 } else {
                                     item.setText(finalString);
@@ -490,14 +491,18 @@ public class Controller {
         final int itemRestored = mApp.model().applyUndo(pageKind);
         maybeAutoSortPage(pageKind, false, false);
         mApp.view().upadatePage(pageKind);
-        mApp.services().toast("Restored %d deleted %s", itemRestored, taskOrTasks(itemRestored));
+        if (itemRestored == 1) {
+            mApp.services().toast(R.string.Restored_one_deleted_task);  
+        } else {
+            mApp.services().toast( R.string.Restored_d_deleted_tasks, itemRestored);
+        }
     }
 
     /** Called by the app view when the user clicks on the Add Item button. */
     public final void onAddItemByTextButton(final PageKind pageKind) {
         clearPageUndo(pageKind);
         mApp.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
-        ItemTextEditor.startEditor(mApp, "New Task", "", ItemColor.NONE,
+        ItemTextEditor.startEditor(mApp, mApp.str(R.string.New_Task), "", ItemColor.NONE,
                 new ItemTextEditor.ItemEditorListener() {
                     @Override
                     public void onDismiss(String finalString, ItemColor finalColor) {
@@ -549,7 +554,7 @@ public class Controller {
             final InputStream in = mApp.context().getContentResolver().openInputStream(uri);
             FileReadResult readResult = FileUtil.readFileToString(in, uri.toString());
             if (!readResult.outcome.isOk()) {
-                mApp.services().toast("Failed to read backup file.");
+                mApp.services().toast(R.string.Failed_to_read_backup_file);
                 return;
             }
             // TODO: test that the file size is reasonable
@@ -559,7 +564,7 @@ public class Controller {
             ModelDeserialization.deserializeModel(newModel, resultMetadata, readResult.content);
         } catch (Throwable e) {
             LogUtil.error(e, "Error while trying to restore data");
-            mApp.services().toast("Error processign the backup file");
+            mApp.services().toast(R.string.Error_loading_the_backup_file);
             return;
         }
 
@@ -578,15 +583,15 @@ public class Controller {
         switch (action) {
             case REPLACE:
                 mApp.model().restoreBackup(newModel);
-                mApp.services().toast("Task list replaced.");
+                mApp.services().toast(R.string.Task_list_replaced);
                 break;
             case MERGE:
                 mApp.model().mergeFrom(newModel);
-                mApp.services().toast("Task list merged.");
+                mApp.services().toast(R.string.Task_list_merged);
                 break;
             case CANCEL:
             default:
-                mApp.services().toast("Task list not changed.");
+                mApp.services().toast(R.string.Task_list_not_changed);
                 // Do nothing
                 return;
         }
@@ -655,33 +660,42 @@ public class Controller {
      */
     @Nullable
     private final String constructPageCleanMessage(OrganizePageSummary summary) {
-        final boolean isMinimal = !mApp.pref().getVerboseMessagesEnabledPreference();
+        if (!mApp.pref().getVerboseMessagesEnabledPreference()) {
+            return null;
+        }
 
+        // Deleted at least one completed tasks
         if (summary.completedItemsDeleted > 0) {
-            return isMinimal ? null : String.format("Deleted %d completed %s",
-                    summary.completedItemsDeleted, taskOrTasks(summary.completedItemsDeleted));
-        }
-
-        // Here when not deleted
-        if (summary.orderChanged) {
-            // Here when reorderd
-            if (isMinimal) {
-                return null;
+            if (summary.completedItemsDeleted == 1) {
+                return mApp.str(R.string.Deleted_one_completed_task);
             }
-            return (summary.completedItemsFound == 0) ? "Tasks reordered" : String.format(
-                    "Tasks reordered. Long press to delete %d completed %s",
-                    summary.completedItemsFound, taskOrTasks(summary.completedItemsFound));
+            return mApp.str(R.string.Deleted_d_completed_tasks, summary.completedItemsDeleted);
         }
 
-        // Here when was already ordered.
+        // Here when completed tasks not deleted
+        if (summary.orderChanged) {
+            // Here when not deleted but reordered
+            if (summary.completedItemsFound == 0) {
+                return mApp.str(R.string.Tasks_reordered);
+            }
+            if (summary.completedItemsFound == 1) {
+                return mApp.str(R.string.Tasks_reordered_Long_press_to_delete_one_completed_task);
+            }
+            return mApp.str(R.string.Tasks_reordered_Long_press_to_delete_d_completed_tasks,
+                    summary.completedItemsFound);
+        }
+
+        // Here when not deleted and not reordred.
         if (summary.completedItemsFound > 0) {
             // Here if found completed items.
-            return isMinimal ? null : String.format(
-                    "Page already organized. Long press to delete %d completed %s",
-                    summary.completedItemsFound, taskOrTasks(summary.completedItemsFound));
+            if (summary.completedItemsFound == 1) {
+                return mApp.str(R.string.Page_already_organized_Long_press_to_delete_one_completed_task);
+            }
+            return mApp.str(R.string.Page_already_organized_Long_press_to_delete_d_completed_tasks,
+                    summary.completedItemsFound);
         }
 
-        return isMinimal ? null : "Page already organized";
+        return mApp.str(R.string.Page_already_organized);
     }
 
     /** Called by the framework when the user makes a main menu selection. */
@@ -728,12 +742,12 @@ public class Controller {
             case PAGE_ICON_SET:
                 mApp.view().onPageIconSetPreferenceChange();
                 break;
-                
+
             case PAGE_ITEM_FONT:
             case PAGE_ITEM_FONT_SIZE:
             case PAGE_ITEM_ACTIVE_TEXT_COLOR:
             case PAGE_ITEM_COMPLETED_TEXT_COLOR:
-                // TODO: perform the call to onPageItemFontVariationPreferenceChange in 
+                // TODO: perform the call to onPageItemFontVariationPreferenceChange in
                 // preference tracker before calling this on change method of the controller.
                 mApp.pref().onPageItemFontVariationPreferenceChange();
                 mApp.view().onPageItemFontVariationPreferenceChange();
@@ -744,7 +758,7 @@ public class Controller {
             case PAGE_BACKGROUND_SOLID_COLOR:
                 mApp.view().onPageBackgroundPreferenceChange();
                 break;
-                
+
             case PAGE_TITLE_FONT:
             case PAGE_TITLE_FONT_SIZE:
             case PAGE_TITLE_TODAY_COLOR:
@@ -840,7 +854,7 @@ public class Controller {
                 break;
             case MODEL_DATA_ERROR:
                 mApp.model().clear();
-                mApp.services().toast("Error loading data (code %s)", startupKind);
+                mApp.services().toast(mApp.str(R.string.Error_loading_task_list) + " (" +  startupKind + ")");
             default:
                 LogUtil.error("Unknown startup message type: ", startupKind);
         }
@@ -871,11 +885,6 @@ public class Controller {
         mApp.view().updateUndoButton(pageKind);
     }
 
-    /** Return the correct 'n tasks' string. Result is user visible. */
-    private static final String taskOrTasks(int n) {
-        return (n == 1) ? "task" : "tasks";
-    }
-
     private final boolean maybeAutoSortPage(PageKind pageKind, boolean updateViewIfSorted,
             boolean showMessageIfSorted) {
         if (mApp.pref().getAutoSortPreference()) {
@@ -886,7 +895,7 @@ public class Controller {
                     mApp.view().upadatePage(pageKind);
                 }
                 if (showMessageIfSorted && mApp.pref().getVerboseMessagesEnabledPreference()) {
-                    mApp.services().toast("Auto sorted");
+                    mApp.services().toast(R.string.Auto_sorted);
                 }
                 return true;
             }
@@ -902,7 +911,7 @@ public class Controller {
         // NOTE: suppressing message if showing a sub activity (e.g. SettingActivity).
         if (sorted && showMessageIfSorted && mApp.pref().getVerboseMessagesEnabledPreference()
                 && !mInSubActivity) {
-            mApp.services().toast("Tasks sorted");
+            mApp.services().toast(R.string.Auto_sorted);
         }
         return sorted;
     }
@@ -927,7 +936,7 @@ public class Controller {
                                 itemOfInteresttOriginalIndex, mTempSummary);
                         mApp.view().upadatePage(pageKind);
                         if (mApp.pref().getVerboseMessagesEnabledPreference()) {
-                            mApp.services().toast("Auto sorted");
+                            mApp.services().toast(R.string.Auto_sorted);
                         }
                         if (mTempSummary.itemOfInterestNewIndex >= 0) {
                             // After the animation, briefly highlight the item at the new

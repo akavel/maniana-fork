@@ -42,7 +42,7 @@ import com.zapta.apps.maniana.util.DisplayUtil;
  * @author Tal Dayan
  */
 public class PageView extends FrameLayout {
-    
+
     /** For testing only. */
     private static final boolean FORCE_OVERFLOW_MENU_ON_ALL_DEVICES = false;
 
@@ -121,7 +121,7 @@ public class PageView extends FrameLayout {
 
         mPaperColorView = findViewById(R.id.page_paper_color);
 
-        mPageTitleSection =  findViewById(R.id.page_title_section);
+        mPageTitleSection = findViewById(R.id.page_title_section);
         mPageTitleDivider = findViewById(R.id.page_title_divider);
 
         mButtonUndoView = (ImageButton) findViewById(R.id.page_undo_button);
@@ -130,7 +130,6 @@ public class PageView extends FrameLayout {
         mButtonAddByVoiceView = (ImageButton) findViewById(R.id.page_add_by_voice_button);
 
         mButtonCleanView = (ImageButton) findViewById(R.id.page_clean_button);
-
 
         mIcsMenuOverflowButtonView = (ImageButton) findViewById(R.id.page_ics_menu_overflow_button);
 
@@ -144,10 +143,8 @@ public class PageView extends FrameLayout {
         mItemListView = (ItemListView) findViewById(R.id.page_item_list);
         mPageTitleTextView = (TextView) findViewById(R.id.page_title_text);
 
-        mPageTitleTextView.setText(mPageKind.isToday() ? "Today" : "Maniana");
-
-        // @@@ set font from preferences
-        // mPageTitleTextView.setTypeface(mApp.resources().getTitleTypeFace());
+        mPageTitleTextView.setText(mPageKind.isToday() ? R.string.Today_page_title
+                : R.string.Maniana_page_title);
 
         // Tomorrow page does not display date
         if (mPageKind.isTomorrow()) {
@@ -244,7 +241,7 @@ public class PageView extends FrameLayout {
         mButtonAddByTextView.setImageResource(iconSet.buttonAddByTextResourceId);
         mButtonAddByVoiceView.setImageResource(iconSet.buttonAddByVoiceResourceId);
         mButtonCleanView.setImageResource(iconSet.buttonCleanResourceId);
-        
+
         // Since the icon set affects also the item arrow icons, we need to update
         // the items as well.
         updateAllItemViews();
@@ -302,22 +299,23 @@ public class PageView extends FrameLayout {
         mPageTitleTextView.setTextColor(mPageKind.isToday() ? mApp.pref().getPageTitleTodayColor()
                 : mApp.pref().getPageTitleTomorowColor());
         final Font titleFont = mApp.pref().getPageTitleFontPreference();
-        final float titleFontSizeSP = mApp.pref().getPageTitleFontSizePreference() * titleFont.scale;
+        final float titleFontSizeSP = mApp.pref().getPageTitleFontSizePreference()
+                * titleFont.scale;
         mPageTitleTextView.setTypeface(titleFont.getTypeface(mApp.context()));
         mPageTitleTextView.setTextSize(titleFontSizeSP);
-        
+
         // Match vertical padding to title text size
-        final int bottomPaddingPixels = (int)(Math.max(8, titleFontSizeSP * 0.12f) * mDensity);
-        mPageTitleSection.setPadding(0,  0, 0, bottomPaddingPixels);
-        
+        final int bottomPaddingPixels = (int) (Math.max(8, titleFontSizeSP * 0.12f) * mDensity);
+        mPageTitleSection.setPadding(0, 0, 0, bottomPaddingPixels);
+
         // Update date size to match title size
         if (mPageKind.isToday()) {
             final int dayTopPaddingPixels = (int) (titleFontSizeSP * mDensity * 0.16f + 0.5f);
             final float dayTextSize = Math.min(20, Math.max(14, titleFontSizeSP * 0.35f));
             final float dateTextSize = Math.min(16, Math.max(14, titleFontSizeSP * 0.30f));
-            mDayTextView.setPadding(0,  dayTopPaddingPixels, 0, 0);
+            mDayTextView.setPadding(0, dayTopPaddingPixels, 0, 0);
             mDayTextView.setTextSize(dayTextSize);
-            mDateTextView.setTextSize(dateTextSize);                   
+            mDateTextView.setTextSize(dateTextSize);
         }
     }
 
