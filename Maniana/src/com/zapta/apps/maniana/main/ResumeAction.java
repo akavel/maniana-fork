@@ -72,7 +72,7 @@ public enum ResumeAction {
                 // Since we don't have Gmail permissions, trying to access the attachment
                 // from the Gmail providers gives permission error.
                 if ("content".equals(scheme) && uriStringLC.contains("gmail")) {
-                    app.services().toast(R.string.Hint_try_using_Gmail_Download_button);
+                    app.services().toast(R.string.backup_restore_Hint_try_using_Gmail_Download_button);
                 }
             }
         }

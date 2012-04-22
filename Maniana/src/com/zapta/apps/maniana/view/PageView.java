@@ -143,8 +143,8 @@ public class PageView extends FrameLayout {
         mItemListView = (ItemListView) findViewById(R.id.page_item_list);
         mPageTitleTextView = (TextView) findViewById(R.id.page_title_text);
 
-        mPageTitleTextView.setText(mPageKind.isToday() ? R.string.Today_page_title
-                : R.string.Maniana_page_title);
+        mPageTitleTextView.setText(mPageKind.isToday() ? R.string.page_title_Today
+                : R.string.page_title_Maniana);
 
         // Tomorrow page does not display date
         if (mPageKind.isTomorrow()) {

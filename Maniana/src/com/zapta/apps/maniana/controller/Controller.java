@@ -216,7 +216,7 @@ public class Controller {
                 if (result.outcome.isOk()) {
                     startPopupMessageSubActivity(MessageKind.NEW_USER);
                 } else {
-                    mApp.services().toast(R.string.Sample_task_list_not_found);
+                    mApp.services().toast(R.string.launch_error_Sample_task_list_not_found);
                 }
             }
             mApp.model().setLastPushDateStamp(mApp.dateTracker().getDateStampString());
@@ -392,7 +392,7 @@ public class Controller {
             case QuickActionsCache.EDIT_ACTION_ID: {
                 mApp.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
                 final ItemModel item = mApp.model().getItemForMutation(pageKind, itemIndex);
-                ItemTextEditor.startEditor(mApp, mApp.str(R.string.Edit_Task), item.getText(),
+                ItemTextEditor.startEditor(mApp, mApp.str(R.string.editor_title_Edit_Task), item.getText(),
                         item.getColor(), new ItemTextEditor.ItemEditorListener() {
                             @Override
                             public void onDismiss(String finalString, ItemColor finalColor) {
@@ -401,7 +401,7 @@ public class Controller {
                                 if (finalString.length() == 0) {
                                     startItemDeletionWithAnination(pageKind, itemIndex);
                                     if (mApp.pref().getVerboseMessagesEnabledPreference()) {
-                                        mApp.services().toast(R.string.Empty_task_deleted);
+                                        mApp.services().toast(R.string.editor_Empty_task_deleted);
                                     }
                                 } else {
                                     item.setText(finalString);
@@ -492,9 +492,9 @@ public class Controller {
         maybeAutoSortPage(pageKind, false, false);
         mApp.view().upadatePage(pageKind);
         if (itemRestored == 1) {
-            mApp.services().toast(R.string.Restored_one_deleted_task);  
+            mApp.services().toast(R.string.undo_Restored_one_deleted_task);  
         } else {
-            mApp.services().toast( R.string.Restored_d_deleted_tasks, itemRestored);
+            mApp.services().toast( R.string.undo_Restored_d_deleted_tasks, itemRestored);
         }
     }
 
@@ -502,7 +502,7 @@ public class Controller {
     public final void onAddItemByTextButton(final PageKind pageKind) {
         clearPageUndo(pageKind);
         mApp.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
-        ItemTextEditor.startEditor(mApp, mApp.str(R.string.New_Task), "", ItemColor.NONE,
+        ItemTextEditor.startEditor(mApp, mApp.str(R.string.editor_title_New_Task), "", ItemColor.NONE,
                 new ItemTextEditor.ItemEditorListener() {
                     @Override
                     public void onDismiss(String finalString, ItemColor finalColor) {
@@ -554,7 +554,7 @@ public class Controller {
             final InputStream in = mApp.context().getContentResolver().openInputStream(uri);
             FileReadResult readResult = FileUtil.readFileToString(in, uri.toString());
             if (!readResult.outcome.isOk()) {
-                mApp.services().toast(R.string.Failed_to_read_backup_file);
+                mApp.services().toast(R.string.backup_restore_Failed_to_read_backup_file);
                 return;
             }
             // TODO: test that the file size is reasonable
@@ -564,7 +564,7 @@ public class Controller {
             ModelDeserialization.deserializeModel(newModel, resultMetadata, readResult.content);
         } catch (Throwable e) {
             LogUtil.error(e, "Error while trying to restore data");
-            mApp.services().toast(R.string.Error_loading_the_backup_file);
+            mApp.services().toast(R.string.backup_restore_Error_loading_the_backup_file);
             return;
         }
 
@@ -583,15 +583,15 @@ public class Controller {
         switch (action) {
             case REPLACE:
                 mApp.model().restoreBackup(newModel);
-                mApp.services().toast(R.string.Task_list_replaced);
+                mApp.services().toast(R.string.backup_restore_Task_list_replaced);
                 break;
             case MERGE:
                 mApp.model().mergeFrom(newModel);
-                mApp.services().toast(R.string.Task_list_merged);
+                mApp.services().toast(R.string.backup_restore_Task_list_merged);
                 break;
             case CANCEL:
             default:
-                mApp.services().toast(R.string.Task_list_not_changed);
+                mApp.services().toast(R.string.backup_restore_Task_list_not_changed);
                 // Do nothing
                 return;
         }
@@ -667,21 +667,21 @@ public class Controller {
         // Deleted at least one completed tasks
         if (summary.completedItemsDeleted > 0) {
             if (summary.completedItemsDeleted == 1) {
-                return mApp.str(R.string.Deleted_one_completed_task);
+                return mApp.str(R.string.organize_outcome_Deleted_one_completed_task);
             }
-            return mApp.str(R.string.Deleted_d_completed_tasks, summary.completedItemsDeleted);
+            return mApp.str(R.string.organize_outcome_Deleted_d_completed_tasks, summary.completedItemsDeleted);
         }
 
         // Here when completed tasks not deleted
         if (summary.orderChanged) {
             // Here when not deleted but reordered
             if (summary.completedItemsFound == 0) {
-                return mApp.str(R.string.Tasks_reordered);
+                return mApp.str(R.string.organize_outcome_Tasks_reordered);
             }
             if (summary.completedItemsFound == 1) {
-                return mApp.str(R.string.Tasks_reordered_Long_press_to_delete_one_completed_task);
+                return mApp.str(R.string.organize_outcome_Tasks_reordered_Long_press_to_delete_one_completed_task);
             }
-            return mApp.str(R.string.Tasks_reordered_Long_press_to_delete_d_completed_tasks,
+            return mApp.str(R.string.organize_outcome_Tasks_reordered_Long_press_to_delete_d_completed_tasks,
                     summary.completedItemsFound);
         }
 
@@ -689,13 +689,13 @@ public class Controller {
         if (summary.completedItemsFound > 0) {
             // Here if found completed items.
             if (summary.completedItemsFound == 1) {
-                return mApp.str(R.string.Page_already_organized_Long_press_to_delete_one_completed_task);
+                return mApp.str(R.string.organize_outcome_Page_already_organized_Long_press_to_delete_one_completed_task);
             }
-            return mApp.str(R.string.Page_already_organized_Long_press_to_delete_d_completed_tasks,
+            return mApp.str(R.string.organize_outcome_Page_already_organized_Long_press_to_delete_d_completed_tasks,
                     summary.completedItemsFound);
         }
 
-        return mApp.str(R.string.Page_already_organized);
+        return mApp.str(R.string.organize_outcome_Page_already_organized);
     }
 
     /** Called by the framework when the user makes a main menu selection. */
@@ -854,7 +854,7 @@ public class Controller {
                 break;
             case MODEL_DATA_ERROR:
                 mApp.model().clear();
-                mApp.services().toast(mApp.str(R.string.Error_loading_task_list) + " (" +  startupKind + ")");
+                mApp.services().toast(mApp.str(R.string.launch_error_Error_loading_task_list) + " (" +  startupKind + ")");
             default:
                 LogUtil.error("Unknown startup message type: ", startupKind);
         }

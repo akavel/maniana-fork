@@ -1,82 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- General -->
-    <string name="translation_language">English</string>
-    <string name="app_name">Maniana</string>
+    <string name="canonical_app_name">Maniana</string>
     <string name="place_holder">(tbd)</string>
-
-    <!-- Startup Error messages -->
-    <string name="Sample_task_list_not_found">Sample task list not found</string>
-    <string name="Error_loading_task_list">Error loading task list</string>
-
-    <!-- Color picker -->
-    <string name="Press_on_a_color_below_to_apply_it">Press on a color below to apply it</string>
-
-    <!-- Task editor related -->
-    <string name="Edit_Task">Edit Task</string>
-    <string name="New_Task">New Task</string>
-    <string name="Empty_task_deleted">Empty task deleted</string>
-
-    <!-- Page organize outcomes -->
-    <string name="Deleted_one_completed_task">Deleted one completed task</string>
-    <string name="Deleted_d_completed_tasks">Deleted %d completed tasks</string>
-    <string name="Tasks_reordered">Tasks reordered</string>
-    <string name="Tasks_reordered_Long_press_to_delete_one_completed_task">Tasks reordered. Long press to delete one completed task</string>
-    <string name="Tasks_reordered_Long_press_to_delete_d_completed_tasks">Tasks reordered. Long press to delete %d completed tasks</string>
-    <string name="Page_already_organized_Long_press_to_delete_one_completed_task">Page already organized. Long press to delete one completed task</string>
-    <string name="Page_already_organized_Long_press_to_delete_d_completed_tasks">Page already organized. Long press to delete %d completed tasks</string>
-    <string name="Page_already_organized">Page already organized</string>
-    <string name="Restored_one_deleted_task">Restored one deleted task</string>
-    <string name="Restored_d_deleted_tasks">Restored %d deleted tasks</string>
-
-    <!-- Backup/Restore -->
-    <string name="Hint_try_using_Gmail_Download_button">Hint: try using Gmail Download button</string>
-    <string name="Failed_to_read_backup_file">Failed to read backup file</string>
-    <string name="Error_loading_the_backup_file">Error loading the backup file</string>
-    <string name="Task_list_replaced">Task list replaced</string>
-    <string name="Task_list_merged">Task list merged</string>
-    <string name="Task_list_not_changed">Task list not changed</string>
-    <string name="backup_restore_dialog_Merge">Merge</string>
-    <string name="backup_restore_dialog_Replace">Replace</string>
-    <string name="backup_restore_dialog_Cancel">Cancel</string>
-    <string name="backup_restore_dialog_Keep">Keep</string>
-    <string name="backup_restore_dialog_Delete">Delete</string>
-    <string name="backup_restore_dialog_Add">Add</string>
-    <string name="backup_restore_dialog_Total">Total</string>
-    <string name="backup_restore_dialog_title">Import Tasks Into Maniana?</string>
-    <string name="backup_restore_dialog_sub_title">Task summary</string>
-
-    <!-- Page operations -->
-    <string name="Auto_sorted">Auto sorted</string>
-
-    <!-- Page related -->
-    <string name="Today_page_title">Today</string>
-    <string name="Maniana_page_title">Maniana</string>
-
-    <!-- Item menu -->
-    <string name="item_menu_Done">Done</string>
-    <string name="item_menu_To_Do">To Do</string>
-    <string name="item_menu_Edit">Edit</string>
-    <string name="item_menu_Lock">Lock</string>
-    <string name="item_menu_Unlock">Unlock</string>
-    <string name="item_menu_Delete">Delete</string>
-
-    <!-- Voice Recognition -->
-    <string name="voice_recognition_Dictate_a_new_task">Dictate a new task</string>
-    <string name="voice_recognition_Select_best_match">Select best match</string>
-  
-    <!--  Settings -->
-    <string name="settings_Restoring_defaults">Restoring defaults...</string>
-    
-    <!--  Widget -->
-    <string name="widget_Maniana_data_not_found">Maniana data not found</string>
-    <string name="widget_no_tasks">no tasks</string>
-    <string name="widget_no_active_tasks">no active_tasks</string>
-    
-    <!-- Color Picker -->
-    <string name="color_picker_Select_Color">Select Color</string>
-        
-        
+    <string name="right_arrow_character">→</string>
+    <string name="down_arrow_character">↓</string>
     
 </resources>
