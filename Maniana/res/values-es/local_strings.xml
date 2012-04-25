@@ -17,7 +17,8 @@
   <string name="backup_restore_dialog_Add">Añadir</string>
   <string name="backup_restore_dialog_title">Importar tareas a Maniana?</string>
   <string name="backup_restore_dialog_sub_title">Resumen de tareas</string>
-  <string name="page_title_Today">Tareas hoy</string>
+  <string name="page_title_Today">Hoy</string>
+  <string name="page_title_Maniana">Maniana</string>
   <string name="item_menu_Done">Hecho</string>
   <string name="item_menu_Edit">Editar</string>
   <string name="item_menu_Lock">Bloquear</string>
@@ -25,7 +26,6 @@
   <string name="item_menu_Delete">Eliminar</string>
   <string name="voice_recognition_Dictate_a_new_task">Dictar una nueva tarea</string>
   <string name="voice_recognition_Select_best_match">Seleccione la mejor coincidencia</string>
-  <string name="settings_Restoring_defaults">Restaurar valores predeterminados...</string>
   <string name="widget_Maniana_data_not_found">No se encontraron datos de Maniana</string>
   <string name="widget_no_tasks">no hay tareas</string>
   <string name="widget_no_active_tasks">hay tareas activas</string>
@@ -33,4 +33,5 @@
   <string name="main_menu_Settings">Ajustes</string>
   <string name="main_menu_About">Acerca de</string>
   <string name="main_menu_Help">Ayuda</string>
+  <string name="settings_Restoring_defaults">Restaurar valores predeterminados...</string>
 </resources>

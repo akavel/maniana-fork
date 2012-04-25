@@ -44,7 +44,6 @@
   <string name="item_menu_Delete">מחק</string>
   <string name="voice_recognition_Dictate_a_new_task">הכתב משימה חדשה</string>
   <string name="voice_recognition_Select_best_match">בחר אפשרות נכונה</string>
-  <string name="settings_Restoring_defaults">משחזר ברירות מחדל</string>
   <string name="widget_Maniana_data_not_found">קובץ המשימות לא נמצא</string>
   <string name="widget_no_tasks">אין משימות</string>
   <string name="widget_no_active_tasks">אין משימות פעילות</string>
@@ -53,5 +52,5 @@
   <string name="main_menu_Settings">הגדרות</string>
   <string name="main_menu_About">אודות</string>
   <string name="main_menu_Help">עזרה</string>
-  <string name="settings_text_size_format_d_points">%dpt</string>
+  <string name="settings_Restoring_defaults">משחזר ברירות מחדל</string>
 </resources>
