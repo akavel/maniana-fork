@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string-array name="lockPeriodNames">
         <item>Once a Week</item>
         <item>Once a Month</item>
@@ -11,14 +12,14 @@
         <item>never</item>
     </string-array>
     <string-array name="lockPeriodSummaries">
-        <item>Once a week</item>
-        <item>Once a month</item>
-        <item>Never</item>
+        <item>@string/settings_lock_expiration_value_once_a_week</item>
+        <item>@string/settings_lock_expiration_value_once_a_month</item>
+        <item>@string/settings_lock_expiration_value_never</item>
     </string-array>
     <string-array name="applauseLevelNames">
-        <item>Never</item>
-        <item>Surprise Me</item>
-        <item>Always</item>
+        <item>@string/settings_applause_value_never</item>
+        <item>@string/settings_applause_value_sometimes</item>
+        <item>@string/settings_applause_value_always</item>
     </string-array>
     <string-array name="applauseLevelValues">
         <item>never</item>

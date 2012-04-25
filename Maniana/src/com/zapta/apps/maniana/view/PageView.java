@@ -44,7 +44,7 @@ import com.zapta.apps.maniana.util.DisplayUtil;
 public class PageView extends FrameLayout {
 
     /** For testing only. */
-    private static final boolean FORCE_OVERFLOW_MENU_ON_ALL_DEVICES = false;
+    private static final boolean FORCE_OVERFLOW_MENU_ON_ALL_DEVICES = true;
 
     /**
      * Candidates for day/date color. Selected by distance from background color with a slight

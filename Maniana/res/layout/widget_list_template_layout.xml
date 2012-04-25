@@ -31,7 +31,7 @@
                 android:layout_centerVertical="true"
                 android:background="#00000000"
                 android:paddingLeft="4dip"
-                android:text="TODAY"
+                android:text="@string/place_holder"
                 android:textColor="#ff444444"
                 android:textStyle="bold" />
 

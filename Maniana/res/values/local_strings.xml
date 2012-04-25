@@ -63,19 +63,85 @@
     <!-- Voice Recognition -->
     <string name="voice_recognition_Dictate_a_new_task">Dictate a new task</string>
     <string name="voice_recognition_Select_best_match">Select best match</string>
-  
-    <!--  Settings -->
-    <string name="settings_Restoring_defaults">Restoring defaults...</string>
-    
-    <!--  Widget -->
+
+    <!-- Widget -->
     <string name="widget_Maniana_data_not_found">Maniana data not found</string>
     <string name="widget_no_tasks">no tasks</string>
     <string name="widget_no_active_tasks">no active_tasks</string>
-    
+
     <!-- Color Picker -->
     <string name="color_picker_Press_on_a_color_below_to_apply_it">Press on a color below to apply it</string>
     <string name="color_picker_Select_Color">Select Color</string>
-        
-        
-    
+
+    <!-- Main Menu -->
+    <string name="main_menu_Settings">Settings</string>
+    <string name="main_menu_About">About</string>
+    <string name="main_menu_Help">Help</string>
+
+    <!-- Settings/Sound -->
+    <string name="settings_section_name_Sound">Sound</string>
+    <string name="settings_sound_title">Sound</string>
+    <string name="settings_sound_summary_on">Sound is enabled</string>
+    <string name="settings_sound_summary_off">Sound is disabled</string>
+    <string name="settings_applause_title">Applause</string>
+    <string name="settings_applause_value_never">Never</string>
+    <string name="settings_applause_value_sometimes">Surprise Me</string>
+    <string name="settings_applause_value_always">Always</string>
+
+    <!-- Settings/Behavior -->
+    <string name="settings_section_name_Behavior">Behavior</string>
+    <string name="settings_startup_animation_title">Startup Animation</string>
+    <string name="settings_startup_animation_summary_on">Enabled (review Maniana page)</string>
+    <string name="settings_startup_animation_summary_off">Disabled (faster app start)</string>
+    <string name="settings_detailed_messages_title">Detailed Messages</string>
+    <string name="settings_detailed_messages_summary_on">Enabled (trainee mode)</string>
+    <string name="settings_detailed_messages_summary_off">Disabled (expert mode)</string>
+    <string name="settings_auto_sort_title">Auto Task Sort</string>
+    <string name="settings_auto_sort_summary_on">Forcing task order (pending before completed before locked)</string>
+    <string name="settings_auto_sort_summary_off">Allowing arbitrary task order</string>
+    <string name="settings_daily_cleanup_title">Daily Task Cleanup</string>
+    <string name="settings_daily_cleanup_summary_on">Deleting completed tasks every midnight</string>
+    <string name="settings_daily_cleanup_summary_off">Daily deletion of completed tasks is disabled</string>
+    <string name="settings_lock_expiration_title">Lock Expiration</string>
+    <string name="settings_lock_expiration_value_once_a_week">Once a week</string>
+    <string name="settings_lock_expiration_value_once_a_month">Once a month</string>
+    <string name="settings_lock_expiration_value_never">Never</string>
+
+    <!-- Settings/Pages -->
+    <string name="settings_section_name_Pages">Pages</string>
+    <string name="settings_select_page_theme_title">Set By Theme</string>
+    <string name="settings_select_page_theme_summary">Click to select a predefined page setting</string>
+    <string name="settings_page_paper_title">Paper</string>
+    <string name="settings_page_paper_summary_on">Using paper background</string>
+    <string name="settings_page_paper_summary_off">Paper background disabled</string>
+    <string name="settings_page_paper_color_title">Page paper color</string>
+    <string name="settings_page_paper_color_summary">Paper Color</string>
+    <string name="settings_page_background_color_title">Background Color</string>
+    <string name="settings_page_background_color_summary">Page background Color</string>
+    <string name="settings_page_icons_title">Icons</string>
+    <string name="settings_page_icons_summary">Using %s icons</string>
+    <string name="settings_page_task_divider_color_title">Task Divider Color</string>
+    <string name="settings_page_task_divider_color_summary">Color of lines between tasks</string>
+
+    <!-- Settings/Pages/Title Text -->
+
+
+    <!-- Settings/Pages/Task Text -->
+
+
+    <!-- ??? -->
+    <string name="settings_Restoring_defaults">Restoring defaults...</string>
+    <string name="settings_section_name_List_Widget">List Widget</string>
+    <string name="settings_section_name_Backup">Backup</string>
+    <string name="settings_section_name_Miscellaneous">Miscellaneous</string>
+
+    <!-- Settings Common -->
+    <string name="settings_section_name_Title_Text">Title Text</string>
+    <string name="settings_section_name_Task_Text">Task Text</string>
+    <string name="settings_text_size_title">Size</string>
+    <string name="settings_text_size_summary">Using %d points text size</string>
+    <string name="settings_text_size_format_d_points">%dpt</string>
+    <string name="settings_font_selector_title">Font</string>
+    <string name="settings_font_selector_summary">Using %s font</string>
+
 </resources>

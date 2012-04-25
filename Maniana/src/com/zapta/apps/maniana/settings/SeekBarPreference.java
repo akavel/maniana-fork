@@ -14,9 +14,9 @@
 
 package com.zapta.apps.maniana.settings;
 
-import com.zapta.apps.maniana.util.Orientation;
-
+import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -24,6 +24,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.util.Orientation;
 
 /**
  * Custom preference for selecting an integer within range.
@@ -41,7 +44,7 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     private float mDensity;
 
     /** Format string for running label in dialog. Should contain %d. Attribute: text */
-    private final String mLabelFormat;
+    private final String mValueFormat;
 
     /** Default value. Attribute: defaultValue */
     private final int mDefaultValue;
@@ -71,15 +74,25 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
         super(context, attrs);
         mContext = context;
         mDensity = context.getResources().getDisplayMetrics().density;
-        mLabelFormat = attrs.getAttributeValue(PreferenceConstants.ANDROID_NAME_SPACE, "text");
+
+        // Attributes defined in res/values/attr.xml
+        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SeekBarPreference);
+
+        mValueFormat = a.getString(R.styleable.SeekBarPreference_valueFormat);
+        mSummaryFormat = a.getString(R.styleable.SeekBarPreference_summaryFormat);
+        mMinValue = a.getInt(R.styleable.SeekBarPreference_minValue, 0);
+        mMaxValue = a.getInt(R.styleable.SeekBarPreference_maxValue, 0);
+
+        checkNotNull(mValueFormat, "Null label format");
+        checkNotNull(mSummaryFormat, "Null summary format");
+
         mDefaultValue = attrs.getAttributeIntValue(PreferenceConstants.ANDROID_NAME_SPACE,
                 "defaultValue", 50);
-        mMinValue = attrs.getAttributeIntValue(PreferenceConstants.ANDROID_NAME_SPACE, "minLevel",
-                0);
-        mMaxValue = attrs.getAttributeIntValue(PreferenceConstants.ANDROID_NAME_SPACE, "maxLevel",
-                100);
         mValue = shouldPersist() ? getPersistedInt(mDefaultValue) : mDefaultValue;
-        mSummaryFormat = attrs.getAttributeValue(PreferenceConstants.ANDROID_NAME_SPACE, "summary");
+        
+        //LogUtil.debug("### summaryFormat=[%s], valueFormat=[%s], minValue=[%s], maxValue=[%s], value=[%s], defaultValue=[%s]",
+        //        mSummaryFormat, mValueFormat, mMinValue, mMaxValue, mValue, mDefaultValue);
+
         updateSummaryWithCurrentValue();
     }
 
@@ -142,7 +155,7 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
     @Override
     public void onProgressChanged(SeekBar seek, int seekBarValue, boolean fromTouch) {
         final int currentValue = seekBarValue + mMinValue;
-        mValueTextView.setText(String.format(mLabelFormat, currentValue));
+        mValueTextView.setText(String.format(mValueFormat, currentValue));
     }
 
     /** Called from mSeekBar. */

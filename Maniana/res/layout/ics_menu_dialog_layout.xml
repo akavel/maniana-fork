@@ -22,7 +22,7 @@
             android:paddingBottom="10dip"
             android:paddingLeft="10dip"
             android:paddingTop="6dip"
-            android:text="Maniana"
+            android:text="@string/translated_app_name"
             android:textColor="#ffcccccc"
             android:textSize="22sp" />
 
@@ -40,7 +40,7 @@
             android:paddingBottom="12dip"
             android:paddingLeft="10dip"
             android:paddingTop="20dip"
-            android:text="SETTINGS"
+            android:text="@string/main_menu_Settings"
             android:textColor="#ffcccccc"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -53,7 +53,7 @@
             android:paddingBottom="12dip"
             android:paddingLeft="10dip"
             android:paddingTop="12dip"
-            android:text="HELP"
+            android:text="@string/main_menu_Help"
             android:textColor="#ffcccccc"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -66,7 +66,7 @@
             android:paddingBottom="20dip"
             android:paddingLeft="10dip"
             android:paddingTop="12dip"
-            android:text="ABOUT"
+            android:text="@string/main_menu_About"
             android:textColor="#ffcccccc"
             android:textSize="24sp"
             android:textStyle="bold" />

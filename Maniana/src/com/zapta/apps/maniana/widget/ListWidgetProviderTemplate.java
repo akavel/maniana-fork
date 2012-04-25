@@ -37,7 +37,6 @@ import com.zapta.apps.maniana.model.ItemModelReadOnly;
 import com.zapta.apps.maniana.services.AppServices;
 import com.zapta.apps.maniana.settings.ItemFontVariation;
 import com.zapta.apps.maniana.util.BitmapUtil;
-import com.zapta.apps.maniana.util.DebugTimer;
 import com.zapta.apps.maniana.util.DisplayUtil;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.Orientation;
@@ -174,7 +173,7 @@ public class ListWidgetProviderTemplate {
     // Resize the template in preparation for rendering.
     private final void resizeToFit(int widgetWidthPixels, int widgetHeightPixels,
             int bottomPadding, ListWidgetSize listWidgetSize, Orientation orientation) {
-        DebugTimer timer = new DebugTimer();
+        //DebugTimer timer = new DebugTimer();
 
         final int minItemTextSize = mAutoFitPreference ? (int) (MIN_NORMALIZED_TEXT_SIZE * mDensity + 0.5f)
                 : mFontVariationPreference.getTextSize();
@@ -184,7 +183,7 @@ public class ListWidgetProviderTemplate {
                 mFontVariationPreference.getTextSize());
 
         if (fit || !mAutoFitPreference) {
-            timer.report("Fit done");
+            //timer.report("Fit done");
             return;
         }
 
@@ -194,7 +193,7 @@ public class ListWidgetProviderTemplate {
                     mFontVariationPreference.getTextSize());
         }
 
-        timer.report("Fit done");
+        //timer.report("Fit done");
     }
 
     /**
@@ -374,8 +373,13 @@ public class ListWidgetProviderTemplate {
             return;
         }
 
-        // Make toolbar visible
+        // Make the toolbar visible
         templateToolbarView.setVisibility(View.VISIBLE);
+        
+        // Set title in upper case format. We cannot do that in XML.
+        final TextView toolbarTitle = (TextView) templateToolbarView.findViewById(R.id.widget_list_template_toolbar_title);
+        final String title = mContext.getString(R.string.page_title_Today);
+        toolbarTitle.setText(title.toUpperCase());
 
         // Show or hide toolbar background.
         if (mPaperPreference) {

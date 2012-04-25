@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -122,7 +123,9 @@ public class PageIconSetPreference extends DialogPreference implements
         checkNotNull(mDefaultValue, "Unknown default icon pref key: [%s]", defaultIconSetKey);
         mValue = mDefaultValue;
 
-        mSummaryFormat = attrs.getAttributeValue(PreferenceConstants.ANDROID_NAME_SPACE, "summary");
+        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PageIconSetPreference);
+        mSummaryFormat = a.getString(R.styleable.PageIconSetPreference_summaryFormat);
+        
         updateSummaryWithCurrentValue();
     }
 

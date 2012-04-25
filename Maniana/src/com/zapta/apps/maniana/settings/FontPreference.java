@@ -15,11 +15,15 @@
 package com.zapta.apps.maniana.settings;
 
 import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
+
+import com.zapta.apps.maniana.R;
+
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -94,12 +98,15 @@ public class FontPreference extends DialogPreference implements DialogInterface.
 
         final String defaultFontkey = attrs.getAttributeValue(
                 PreferenceConstants.ANDROID_NAME_SPACE, "defaultValue");
+
         mDefaultValue = Font.fromKey(defaultFontkey, null);
         checkNotNull(mDefaultValue, "Key: [%s]", defaultFontkey);
 
         mValue = mDefaultValue;
 
-        mSummaryFormat = attrs.getAttributeValue(PreferenceConstants.ANDROID_NAME_SPACE, "summary");
+        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FontPreference);
+        mSummaryFormat = a.getString(R.styleable.FontPreference_summaryFormat);
+
         updateSummaryWithCurrentValue();
     }
 
