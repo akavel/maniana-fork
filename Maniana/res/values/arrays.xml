@@ -2,24 +2,19 @@
 <resources>
 
     <string-array name="lockPeriodNames">
-        <item>Once a Week</item>
-        <item>Once a Month</item>
-        <item>Never</item>
+        <item>@string/settings_lock_expiration_name_once_a_week</item>
+        <item>@string/settings_lock_expiration_name_once_a_month</item>
+        <item>@string/settings_lock_expiration_name_never</item>
     </string-array>
     <string-array name="lockPeriodValues">
         <item>weekly</item>
         <item>monthly</item>
         <item>never</item>
     </string-array>
-    <string-array name="lockPeriodSummaries">
-        <item>@string/settings_lock_expiration_value_once_a_week</item>
-        <item>@string/settings_lock_expiration_value_once_a_month</item>
-        <item>@string/settings_lock_expiration_value_never</item>
-    </string-array>
     <string-array name="applauseLevelNames">
-        <item>@string/settings_applause_value_never</item>
-        <item>@string/settings_applause_value_sometimes</item>
-        <item>@string/settings_applause_value_always</item>
+        <item>@string/settings_applause_name_never</item>
+        <item>@string/settings_applause_name_sometimes</item>
+        <item>@string/settings_applause_name_always</item>
     </string-array>
     <string-array name="applauseLevelValues">
         <item>never</item>
@@ -27,9 +22,9 @@
         <item>always</item>
     </string-array>
     <string-array name="applauseLevelSummaries">
-        <item>Never applaud when I complete a task</item>
-        <item>Surprise me</item>
-        <item>Always applaud when I complete a task</item>
+        <item>@string/settings_applause_summary_never</item>
+        <item>@string/settings_applause_summary_sometimes</item>
+        <item>@string/settings_applause_summary_always</item>
     </string-array>
 
 </resources>

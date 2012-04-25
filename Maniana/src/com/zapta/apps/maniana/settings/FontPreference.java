@@ -104,8 +104,11 @@ public class FontPreference extends DialogPreference implements DialogInterface.
 
         mValue = mDefaultValue;
 
-        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FontPreference);
-        mSummaryFormat = a.getString(R.styleable.FontPreference_summaryFormat);
+        {
+            final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FontPreference);
+            mSummaryFormat = a.getString(R.styleable.FontPreference_summaryFormat);
+            a.recycle();
+        }
 
         updateSummaryWithCurrentValue();
     }

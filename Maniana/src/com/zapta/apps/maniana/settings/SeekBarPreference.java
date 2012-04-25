@@ -76,12 +76,17 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
         mDensity = context.getResources().getDisplayMetrics().density;
 
         // Attributes defined in res/values/attr.xml
-        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SeekBarPreference);
+        {
+            final TypedArray a = context.obtainStyledAttributes(attrs,
+                    R.styleable.SeekBarPreference);
 
-        mValueFormat = a.getString(R.styleable.SeekBarPreference_valueFormat);
-        mSummaryFormat = a.getString(R.styleable.SeekBarPreference_summaryFormat);
-        mMinValue = a.getInt(R.styleable.SeekBarPreference_minValue, 0);
-        mMaxValue = a.getInt(R.styleable.SeekBarPreference_maxValue, 0);
+            mValueFormat = a.getString(R.styleable.SeekBarPreference_valueFormat);
+            mSummaryFormat = a.getString(R.styleable.SeekBarPreference_summaryFormat);
+            mMinValue = a.getInt(R.styleable.SeekBarPreference_minValue, 0);
+            mMaxValue = a.getInt(R.styleable.SeekBarPreference_maxValue, 0);
+            
+            a.recycle();
+        }
 
         checkNotNull(mValueFormat, "Null label format");
         checkNotNull(mSummaryFormat, "Null summary format");
@@ -89,9 +94,9 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
         mDefaultValue = attrs.getAttributeIntValue(PreferenceConstants.ANDROID_NAME_SPACE,
                 "defaultValue", 50);
         mValue = shouldPersist() ? getPersistedInt(mDefaultValue) : mDefaultValue;
-        
-        //LogUtil.debug("### summaryFormat=[%s], valueFormat=[%s], minValue=[%s], maxValue=[%s], value=[%s], defaultValue=[%s]",
-        //        mSummaryFormat, mValueFormat, mMinValue, mMaxValue, mValue, mDefaultValue);
+
+        // LogUtil.debug("### summaryFormat=[%s], valueFormat=[%s], minValue=[%s], maxValue=[%s], value=[%s], defaultValue=[%s]",
+        // mSummaryFormat, mValueFormat, mMinValue, mMaxValue, mValue, mDefaultValue);
 
         updateSummaryWithCurrentValue();
     }

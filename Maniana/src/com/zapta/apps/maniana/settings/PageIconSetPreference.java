@@ -94,7 +94,7 @@ public class PageIconSetPreference extends DialogPreference implements
             // list is small and is not used too often.
             ((RadioButton) view.findViewById(R.id.icon_set_preference_radio_button))
                     .setChecked(iconSet == mselectedIconSet);
-            
+
             ((ImageView) view.findViewById(R.id.icon_set_preference_icon1))
                     .setImageResource(iconSet.buttonUndoResourceId);
             ((ImageView) view.findViewById(R.id.icon_set_preference_icon2))
@@ -123,9 +123,13 @@ public class PageIconSetPreference extends DialogPreference implements
         checkNotNull(mDefaultValue, "Unknown default icon pref key: [%s]", defaultIconSetKey);
         mValue = mDefaultValue;
 
-        final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PageIconSetPreference);
-        mSummaryFormat = a.getString(R.styleable.PageIconSetPreference_summaryFormat);
-        
+        {
+            final TypedArray a = context.obtainStyledAttributes(attrs,
+                    R.styleable.PageIconSetPreference);
+            mSummaryFormat = a.getString(R.styleable.PageIconSetPreference_summaryFormat);
+            a.recycle();
+        }
+
         updateSummaryWithCurrentValue();
     }
 

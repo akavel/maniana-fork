@@ -62,20 +62,22 @@
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="prefPageBackgroundPaperKey"
-            android:summaryOff="@string/settings_page_paper_summary_off"
-            android:summaryOn="@string/settings_page_paper_summary_on"
-            android:title="@string/settings_page_paper_title" />
+            android:summaryOff="@string/settings_paper_summary_off"
+            android:summaryOn="@string/settings_paper_summary_on"
+            android:title="@string/settings_paper_title" />
+         
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#ffffffff"
             android:key="prefPagePaperColorKey"
-            android:summary="@string/settings_page_paper_color_summary"
-            android:title="@string/settings_page_paper_color_title" />
-      
+            android:summary="@string/settings_paper_color_summary"
+            android:title="@string/settings_paper_color_title" />
+            
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#ffffffc0"
             android:key="prefPageBackgroundSolidColorKey"
-            android:summary="@string/settings_page_background_color_summary"
-            android:title="@string/settings_page_background_color_title" />
+            android:summary="@string/settings_background_color_summary"
+            android:title="@string/settings_background_color_title" />
+            
         <com.zapta.apps.maniana.settings.PageIconSetPreference
             android:defaultValue="handdrawn"
             android:key="prefPageIconSetKey"
@@ -86,10 +88,9 @@
             android:key="prefPageItemDividerColorKey"
             android:summary="@string/settings_page_task_divider_color_summary"
             android:title="@string/settings_page_task_divider_color_title" />
-        <!-- @@@@ continue resource extraction here -->
         <PreferenceScreen
             android:title="@string/settings_section_name_Title_Text"
-            android:summary="Click to set title text properties">
+            android:summary="@string/settings_section_title_text_summary">
             <com.zapta.apps.maniana.settings.FontPreference
                 android:defaultValue="impact"
                 android:key="prefPageTitleFontKey"
@@ -103,33 +104,29 @@
                 maniana:valueFormat="@string/settings_text_size_format_d_points"
                 maniana:minValue="20"
                 maniana:maxValue="40" />
-                
-            <!-- @@@@ continue here -->
-            
             <net.margaritov.preference.colorpicker.ColorPickerPreference
                 android:defaultValue="#ff0077ff"
                 android:key="prefPageTitleTodayColorKey"
-                android:summary="Today text color"
-                android:title="Today Color" />
-                
+                android:summary="@string/settings_today_page_title_color_summary"
+                android:title="@string/settings_today_page_title_color_title" />
             <net.margaritov.preference.colorpicker.ColorPickerPreference
                 android:defaultValue="#ffcc0000"
                 android:key="prefPageTitleTomorrowColorKey"
-                android:summary="Maniana text color"
-                android:title="Maniana Color" />
+                android:summary="@string/settings_tomorrow_page_title_color_summary"
+                android:title="@string/settings_tomorrow_page_title_color_title" />
         </PreferenceScreen>
         <PreferenceScreen
-            android:title="@string/settings_section_name_Title_Text"
-            android:summary="Click to set task text properties">
+            android:title="@string/settings_section_name_Task_Text"
+            android:summary="@string/settings_section_task_text_summary">
             <com.zapta.apps.maniana.settings.FontPreference
                 android:defaultValue="casual"
                 android:key="prefItemFontKey"
-                maniana:summaryFormat="Using %s font"
-                android:title="Font" />
+                maniana:summaryFormat="settings_font_selector_summary"
+                android:title="@string/settings_font_selector_title" />
             <com.zapta.apps.maniana.settings.SeekBarPreference
                 android:key="prefPageItemFontSizePtKey"
-                android:title="Size"
-                maniana:summaryFormat="Using %d points text size"
+                android:title="@string/settings_text_size_title"
+                maniana:summaryFormat="@string/settings_text_size_summary"
                 android:defaultValue="16"
                 maniana:valueFormat="@string/settings_text_size_format_d_points"
                 maniana:maxValue="26"
@@ -137,84 +134,108 @@
             <net.margaritov.preference.colorpicker.ColorPickerPreference
                 android:defaultValue="#ff000000"
                 android:key="prefPageTextColorKey"
-                android:summary="Text color of pending tasks"
-                android:title="Color" />
+                android:summary="@string/settings_task_color_summary"
+                android:title="@string/settings_task_color_title" />
             <net.margaritov.preference.colorpicker.ColorPickerPreference
                 android:defaultValue="#ff888888"
                 android:key="prefPageCompletedTextColorKey"
-                android:summary="Text color of completed tasks"
-                android:title="Completed Tasks Color" />
+                android:summary="@string/settings_completed_task_color_summary"
+                android:title="@string/settings_completed_task_color_title" />
         </PreferenceScreen>
     </PreferenceScreen>
+   
     <PreferenceScreen
         android:title="@string/settings_section_name_List_Widget"
         android:key="prefWidgetScreenKey">
         <Preference
             android:key="prefWidgetSelectThemeKey"
-            android:summary="Click to select a predefined widget setting"
-            android:title="Set By Theme">
+            android:summary="@string/settings_select_widget_theme_summary"
+            android:title="@string/settings_select_widget_theme_title">
         </Preference>
+        
+        
+         
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="prefWidgetBackgroundPaperKey"
-            android:summaryOff="Using solid background color"
-            android:summaryOn="Using paper background"
-            android:title="Paper" />
+            android:summaryOff="@string/settings_paper_summary_off"
+            android:summaryOn="@string/settings_paper_summary_on"
+            android:title="@string/settings_paper_title" />
+            
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#ffffffff"
             android:key="prefWidgetPaperColorKey"
-            android:summary="List widget paper color"
-            android:title="Paper Color" />
+            android:summary="@string/settings_paper_color_summary"
+            android:title="@string/settings_paper_color_title" />
+            
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#44000000"
             android:key="prefWidgetBackgroundColorKey"
-            android:summary="List widget background color"
-            android:title="Background Color" />
+            android:summary="@string/settings_background_color_summary"
+            android:title="@string/settings_background_color_title" />
+            
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="prefWidgetShowToolbarKey"
-            android:summaryOff="Hiding widget toolbar"
-            android:summaryOn="Showing widget toolbar"
-            android:title="Show Toolbar" />
+            android:summaryOff="@string/settings_widget_show_toolbar_summary_off"
+            android:summaryOn="@string/settings_widget_show_toolbar_summary_on"
+            android:title="@string/settings_widget_show_toolbar_title" />
+            
+          
+             
         <PreferenceScreen
             android:title="@string/settings_section_name_Task_Text"
             android:key="prefWidgetTaskTextScreenKey"
-            android:summary="Click to set task text properties">
+            android:summary="@string/settings_section_task_text_summary">
+            
+            
             <com.zapta.apps.maniana.settings.FontPreference
                 android:defaultValue="casual"
                 android:key="prefWidgetItemFontKey"
-                maniana:summaryFormat="Using %s font"
-                android:title="Font" />
+                maniana:summaryFormat="@string/settings_font_selector_summary"
+                android:title="@string/settings_font_selector_title" />
+                
+                
+                
             <com.zapta.apps.maniana.settings.SeekBarPreference
                 android:key="prefWidgetItemFontSizePtKey"
-                android:title="Size"
-                maniana:summaryFormat="Using %d points text size"
+                android:title="@string/settings_text_size_title"
+                maniana:summaryFormat="@string/settings_text_size_summary"
                 android:defaultValue="18"
                 maniana:valueFormat="@string/settings_text_size_format_d_points"
                 maniana:maxValue="24"
                 maniana:minValue="10" />
+                
+                
+                
             <net.margaritov.preference.colorpicker.ColorPickerPreference
                 android:defaultValue="#ff330000"
                 android:key="prefWidgetTextColorKey"
-                android:summary="List widget text color"
-                android:title="Color" />
+                android:summary="settings_task_color_summary"
+                android:title="@string/settings_task_color_title" />               
+                   
             <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="prefWidgetSingleLineKey"
-                android:summaryOff="Wrapping longer tasks onto a second line"
-                android:summaryOn="Limiting tasks to a single line"
-                android:title="Single Line" />
+                android:summaryOff="@string/settings_widget_single_line_summary_off"
+                android:summaryOn="@string/settings_widget_single_line_summary_on"
+                android:title="@string/settings_widget_single_line_title" />              
+                  
             <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="prefWidgetShowCompletedKey"
-                android:summaryOff="Showing only active tasks"
-                android:summaryOn="Showing also completed tasks"
-                android:title="Show Completed Tasks" />
+                android:summaryOff="@string/settings_widget_show_completed_tasks_summary_off"
+                android:summaryOn="@string/settings_widget_show_completed_tasks_summary_on"
+                android:title="@string/settings_widget_show_completed_tasks_title" />
+                
+                  <!-- @@@@ continue here -->
+                
             <net.margaritov.preference.colorpicker.ColorPickerPreference
                 android:defaultValue="#ff888888"
                 android:key="prefWidgetCompletedTextColorKey"
                 android:summary="Text color of completed tasks"
                 android:title="Completed Text Color" />
+                
             <CheckBoxPreference
                 android:defaultValue="true"
                 android:key="prefWidgetAutoFitKey"

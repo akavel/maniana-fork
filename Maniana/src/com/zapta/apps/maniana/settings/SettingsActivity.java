@@ -561,7 +561,7 @@ public class SettingsActivity extends PreferenceActivity implements
 
             final String suffix = (wholeHoursLeft >= 0) ? construtLockTimeLeftMessageSuffix(wholeHoursLeft)
                     : "";
-            updateListPreferenceSummary(mLockPeriodListPreference, R.array.lockPeriodSummaries,
+            updateListPreferenceSummary(mLockPeriodListPreference, R.array.lockPeriodNames,
                     suffix);
         }
     }

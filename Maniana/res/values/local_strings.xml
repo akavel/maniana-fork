@@ -84,9 +84,12 @@
     <string name="settings_sound_summary_on">Sound is enabled</string>
     <string name="settings_sound_summary_off">Sound is disabled</string>
     <string name="settings_applause_title">Applause</string>
-    <string name="settings_applause_value_never">Never</string>
-    <string name="settings_applause_value_sometimes">Surprise Me</string>
-    <string name="settings_applause_value_always">Always</string>
+    <string name="settings_applause_name_never">Never</string>
+    <string name="settings_applause_name_sometimes">Surprise Me</string>
+    <string name="settings_applause_name_always">Always</string>
+    <string name="settings_applause_summary_never">Never applaud when I complete a task</string>
+    <string name="settings_applause_summary_sometimes">Surprise me</string>
+    <string name="settings_applause_summary_always">Always applaud when I complete a task</string>
 
     <!-- Settings/Behavior -->
     <string name="settings_section_name_Behavior">Behavior</string>
@@ -103,45 +106,95 @@
     <string name="settings_daily_cleanup_summary_on">Deleting completed tasks every midnight</string>
     <string name="settings_daily_cleanup_summary_off">Daily deletion of completed tasks is disabled</string>
     <string name="settings_lock_expiration_title">Lock Expiration</string>
-    <string name="settings_lock_expiration_value_once_a_week">Once a week</string>
-    <string name="settings_lock_expiration_value_once_a_month">Once a month</string>
-    <string name="settings_lock_expiration_value_never">Never</string>
+    <string name="settings_lock_expiration_name_once_a_week">Once a week</string>
+    <string name="settings_lock_expiration_name_once_a_month">Once a month</string>
+    <string name="settings_lock_expiration_name_never">Never</string>
+   
 
     <!-- Settings/Pages -->
     <string name="settings_section_name_Pages">Pages</string>
     <string name="settings_select_page_theme_title">Set By Theme</string>
     <string name="settings_select_page_theme_summary">Click to select a predefined page setting</string>
-    <string name="settings_page_paper_title">Paper</string>
-    <string name="settings_page_paper_summary_on">Using paper background</string>
-    <string name="settings_page_paper_summary_off">Paper background disabled</string>
-    <string name="settings_page_paper_color_title">Page paper color</string>
-    <string name="settings_page_paper_color_summary">Paper Color</string>
-    <string name="settings_page_background_color_title">Background Color</string>
-    <string name="settings_page_background_color_summary">Page background Color</string>
+    
+
+    
+   
+    
     <string name="settings_page_icons_title">Icons</string>
     <string name="settings_page_icons_summary">Using %s icons</string>
     <string name="settings_page_task_divider_color_title">Task Divider Color</string>
     <string name="settings_page_task_divider_color_summary">Color of lines between tasks</string>
 
     <!-- Settings/Pages/Title Text -->
-
+    <string name="settings_section_name_Title_Text">Title Text</string>
+    <string name="settings_section_title_text_summary">Click to set title text properties</string>
+    
+    <string name="settings_today_page_title_color_title">Today Color</string>
+    <string name="settings_today_page_title_color_summary">Today title text color</string>
+    
+    <string name="settings_tomorrow_page_title_color_title">Maniana Color</string>
+    <string name="settings_tomorrow_page_title_color_summary">Maniana title text color</string>
+    
 
     <!-- Settings/Pages/Task Text -->
-
+    
+   
+     
+   
+   <!-- Settings/List Widget -->
+   
+    <string name="settings_section_name_List_Widget">List Widget</string>
+    
+    <string name="settings_select_widget_theme_title">Set By Theme</string>
+    <string name="settings_select_widget_theme_summary">Click to select a predefined widget setting</string>
+    
+    <string name="settings_widget_show_toolbar_title">Show Toolbar</string>
+    <string name="settings_widget_show_toolbar_summary_on">Showing widget toolbar</string>
+    <string name="settings_widget_show_toolbar_summary_off">Hiding widget toolbar</string>
+  
+    <!-- Settings/Widget/Task Text -->
+    
+     <string name="settings_widget_single_line_title">Single Line</string>
+    <string name="settings_widget_single_line_summary_on">Limiting tasks to a single line</string>
+    <string name="settings_widget_single_line_summary_off">Wrapping longer tasks onto a second line</string>
+    
+       <string name="settings_widget_show_completed_tasks_title">Show Completed Tasks</string>
+    <string name="settings_widget_show_completed_tasks_summary_on">Showing also completed tasks</string>
+    <string name="settings_widget_show_completed_tasks_summary_off">Showing only active tasks</string>
+    
 
     <!-- ??? -->
     <string name="settings_Restoring_defaults">Restoring defaults...</string>
-    <string name="settings_section_name_List_Widget">List Widget</string>
+
     <string name="settings_section_name_Backup">Backup</string>
     <string name="settings_section_name_Miscellaneous">Miscellaneous</string>
 
     <!-- Settings Common -->
-    <string name="settings_section_name_Title_Text">Title Text</string>
-    <string name="settings_section_name_Task_Text">Task Text</string>
+      <string name="settings_section_name_Task_Text">Task Text</string>
+         <string name="settings_section_task_text_summary">Click to set task text properties</string>
+   
+   
     <string name="settings_text_size_title">Size</string>
     <string name="settings_text_size_summary">Using %d points text size</string>
     <string name="settings_text_size_format_d_points">%dpt</string>
+    
     <string name="settings_font_selector_title">Font</string>
     <string name="settings_font_selector_summary">Using %s font</string>
+    
+      <string name="settings_task_color_title">Color</string>
+   <string name="settings_task_color_summary">Text color of pending tasks</string>
+
+ <string name="settings_completed_task_color_title">Completed Task Color</string>
+   <string name="settings_completed_task_color_summary">Text color of completed tasks</string>
+ 
+    
+     <string name="settings_paper_title">Paper</string>
+    <string name="settings_paper_summary_on">Using paper background</string>
+    <string name="settings_paper_summary_off">Paper background disabled</string>
+    
+     <string name="settings_paper_color_title">Page paper color</string>
+    <string name="settings_paper_color_summary">Paper Color</string>
+    <string name="settings_background_color_title">Background Color</string>
+    <string name="settings_background_color_summary">Page background Color</string>
 
 </resources>
