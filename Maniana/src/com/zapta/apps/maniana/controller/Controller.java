@@ -48,7 +48,6 @@ import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.model.PushScope;
 import com.zapta.apps.maniana.persistence.ModelDeserialization;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
-import com.zapta.apps.maniana.persistence.ModelReadingResult;
 import com.zapta.apps.maniana.persistence.PersistenceMetadata;
 import com.zapta.apps.maniana.quick_action.QuickActionItem;
 import com.zapta.apps.maniana.settings.PreferenceKind;
