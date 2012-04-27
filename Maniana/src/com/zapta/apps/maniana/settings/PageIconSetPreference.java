@@ -53,16 +53,18 @@ public class PageIconSetPreference extends DialogPreference implements
     private String mSummaryFormat;
 
     public class IconSetAdapter extends BaseAdapter {
+        final Context mContext;
+        
         @Nullable
-        private final PageIconSet mselectedIconSet;
+        private final PageIconSet mSelectedIconSet;
 
         private final LayoutInflater mInflater;
 
-        public IconSetAdapter(PageIconSet selectedIconSet) {
-            this.mselectedIconSet = selectedIconSet;
+        public IconSetAdapter(Context context, PageIconSet selectedIconSet) {
+            this.mContext = context;
+            this.mSelectedIconSet = selectedIconSet;
             this.mInflater = (LayoutInflater) getContext().getSystemService(
                     Context.LAYOUT_INFLATER_SERVICE);
-            ;
         }
 
         @Override
@@ -72,7 +74,7 @@ public class PageIconSetPreference extends DialogPreference implements
 
         @Override
         public Object getItem(int position) {
-            return PageIconSet.values()[position].name;
+            return PageIconSet.values()[position].getName(mContext);
         }
 
         @Override
@@ -93,7 +95,7 @@ public class PageIconSetPreference extends DialogPreference implements
             // NOTE: we don't bother to keep the internal view refernces in an holder, this
             // list is small and is not used too often.
             ((RadioButton) view.findViewById(R.id.icon_set_preference_radio_button))
-                    .setChecked(iconSet == mselectedIconSet);
+                    .setChecked(iconSet == mSelectedIconSet);
 
             ((ImageView) view.findViewById(R.id.icon_set_preference_icon1))
                     .setImageResource(iconSet.buttonUndoResourceId);
@@ -136,7 +138,7 @@ public class PageIconSetPreference extends DialogPreference implements
     @Override
     protected void onPrepareDialogBuilder(Builder builder) {
         super.onPrepareDialogBuilder(builder);
-        final IconSetAdapter adapter = new IconSetAdapter(readValue());
+        final IconSetAdapter adapter = new IconSetAdapter(getContext(), readValue());
         builder.setAdapter(adapter, this);
         builder.setPositiveButton(null, null);
     }
@@ -178,6 +180,6 @@ public class PageIconSetPreference extends DialogPreference implements
     }
 
     private final void updateSummaryWithCurrentValue() {
-        super.setSummary(String.format(mSummaryFormat, mValue.name));
+        super.setSummary(String.format(mSummaryFormat, mValue.getName(getContext())));
     }
 }

@@ -392,8 +392,8 @@ public class Controller {
             case QuickActionsCache.EDIT_ACTION_ID: {
                 mApp.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
                 final ItemModel item = mApp.model().getItemForMutation(pageKind, itemIndex);
-                ItemTextEditor.startEditor(mApp, mApp.str(R.string.editor_title_Edit_Task), item.getText(),
-                        item.getColor(), new ItemTextEditor.ItemEditorListener() {
+                ItemTextEditor.startEditor(mApp, mApp.str(R.string.editor_title_Edit_Task),
+                        item.getText(), item.getColor(), new ItemTextEditor.ItemEditorListener() {
                             @Override
                             public void onDismiss(String finalString, ItemColor finalColor) {
                                 // NOTE: at this point, finalString is also cleaned of leading or
@@ -492,9 +492,9 @@ public class Controller {
         maybeAutoSortPage(pageKind, false, false);
         mApp.view().upadatePage(pageKind);
         if (itemRestored == 1) {
-            mApp.services().toast(R.string.undo_Restored_one_deleted_task);  
+            mApp.services().toast(R.string.undo_Restored_one_deleted_task);
         } else {
-            mApp.services().toast( R.string.undo_Restored_d_deleted_tasks, itemRestored);
+            mApp.services().toast(R.string.undo_Restored_d_deleted_tasks, itemRestored);
         }
     }
 
@@ -502,8 +502,8 @@ public class Controller {
     public final void onAddItemByTextButton(final PageKind pageKind) {
         clearPageUndo(pageKind);
         mApp.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
-        ItemTextEditor.startEditor(mApp, mApp.str(R.string.editor_title_New_Task), "", ItemColor.NONE,
-                new ItemTextEditor.ItemEditorListener() {
+        ItemTextEditor.startEditor(mApp, mApp.str(R.string.editor_title_New_Task), "",
+                ItemColor.NONE, new ItemTextEditor.ItemEditorListener() {
                     @Override
                     public void onDismiss(String finalString, ItemColor finalColor) {
                         maybeAddNewItem(finalString, finalColor, pageKind, true);
@@ -669,7 +669,8 @@ public class Controller {
             if (summary.completedItemsDeleted == 1) {
                 return mApp.str(R.string.organize_outcome_Deleted_one_completed_task);
             }
-            return mApp.str(R.string.organize_outcome_Deleted_d_completed_tasks, summary.completedItemsDeleted);
+            return mApp.str(R.string.organize_outcome_Deleted_d_completed_tasks,
+                    summary.completedItemsDeleted);
         }
 
         // Here when completed tasks not deleted
@@ -679,20 +680,24 @@ public class Controller {
                 return mApp.str(R.string.organize_outcome_Tasks_reordered);
             }
             if (summary.completedItemsFound == 1) {
-                return mApp.str(R.string.organize_outcome_Tasks_reordered_Long_press_to_delete_one_completed_task);
+                return mApp
+                        .str(R.string.organize_outcome_Tasks_reordered_Long_press_to_delete_one_completed_task);
             }
-            return mApp.str(R.string.organize_outcome_Tasks_reordered_Long_press_to_delete_d_completed_tasks,
-                    summary.completedItemsFound);
+            return mApp
+                    .str(R.string.organize_outcome_Tasks_reordered_Long_press_to_delete_d_completed_tasks,
+                            summary.completedItemsFound);
         }
 
         // Here when not deleted and not reordred.
         if (summary.completedItemsFound > 0) {
             // Here if found completed items.
             if (summary.completedItemsFound == 1) {
-                return mApp.str(R.string.organize_outcome_Page_already_organized_Long_press_to_delete_one_completed_task);
+                return mApp
+                        .str(R.string.organize_outcome_Page_already_organized_Long_press_to_delete_one_completed_task);
             }
-            return mApp.str(R.string.organize_outcome_Page_already_organized_Long_press_to_delete_d_completed_tasks,
-                    summary.completedItemsFound);
+            return mApp
+                    .str(R.string.organize_outcome_Page_already_organized_Long_press_to_delete_d_completed_tasks,
+                            summary.completedItemsFound);
         }
 
         return mApp.str(R.string.organize_outcome_Page_already_organized);
@@ -854,7 +859,9 @@ public class Controller {
                 break;
             case MODEL_DATA_ERROR:
                 mApp.model().clear();
-                mApp.services().toast(mApp.str(R.string.launch_error_Error_loading_task_list) + " (" +  startupKind + ")");
+                mApp.services().toast(
+                        mApp.str(R.string.launch_error_Error_loading_task_list) + " ("
+                                + startupKind.toString().toLowerCase() + ")");
             default:
                 LogUtil.error("Unknown startup message type: ", startupKind);
         }

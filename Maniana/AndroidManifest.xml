@@ -50,16 +50,17 @@
         </activity>
         <activity
             android:name=".settings.SettingsActivity"
-            android:label="Maniana Settings" >
+            android:label="@string/settings_top_level_title" >
         </activity>
+        <!-- NOTE: the label of the voice recongition activity is not visible to users(?) -->
         <activity
             android:name=".editors.VoiceRecognition"
-            android:label="My Voice Recognition" >
+            android:label="Voice Recognition" >
         </activity>
 
         <receiver
             android:name=".widget.ListWidgetProvider1"
-            android:label="Maniana List 4x1" >
+            android:label="@string/widget_name_list_4x1" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -70,7 +71,7 @@
         </receiver>
         <receiver
             android:name=".widget.ListWidgetProvider2"
-            android:label="Maniana List 4x2" >
+            android:label="string/@string/widget_name_list_4x2" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -81,7 +82,7 @@
         </receiver>
         <receiver
             android:name=".widget.ListWidgetProvider3"
-            android:label="Maniana List 4x3" >
+            android:label="@string/widget_name_list_4x3" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -92,7 +93,7 @@
         </receiver>
         <receiver
             android:name=".widget.ListWidgetProvider4"
-            android:label="Maniana List 2x2" >
+            android:label="@string/widget_name_list_2x2" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -103,7 +104,7 @@
         </receiver>
         <receiver
             android:name=".widget.ListWidgetProvider5"
-            android:label="Maniana List 4x4" >
+            android:label="@string/widget_name_list_4x4" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -114,7 +115,7 @@
         </receiver>
         <receiver
             android:name=".widget.IconWidgetProvider"
-            android:label="Maniana Icon" >
+            android:label="@string/widget_name_icon" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

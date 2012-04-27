@@ -26,7 +26,6 @@
   <string name="backup_restore_Task_list_not_changed">רשימת המשימות לא השתנתה</string>
   <string name="backup_restore_dialog_Merge">מזג</string>
   <string name="backup_restore_dialog_Replace">החלף</string>
-  <string name="backup_restore_dialog_Cancel">ביטול</string>
   <string name="backup_restore_dialog_Keep">שמור</string>
   <string name="backup_restore_dialog_Delete">מחק</string>
   <string name="backup_restore_dialog_Add">הוסף</string>

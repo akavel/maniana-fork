@@ -17,6 +17,7 @@ package com.zapta.apps.maniana.help;
 import static com.zapta.apps.maniana.util.Assertions.check;
 import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
 
+import java.io.InputStream;
 import java.util.Hashtable;
 
 import javax.annotation.Nullable;
@@ -54,18 +55,21 @@ public class PopupMessageActivity extends Activity {
     private static final String INTENT_MESSAGE_KIND_KEY = "com.zapta.apps.maniana.messageKind";
 
     public static enum MessageKind {
-        HELP("help/help.html", true, 0),
-        ABOUT("help/about.html", true, 0),
-        NEW_USER("help/new_user_welcome.html", false, 0xff00bb00),
-        WHATS_NEW("help/whats_new.html", false, 0xff00ccff),
-        BACKUP_RESTORE("help/restore_backup.html", false, 0xff0000ff);
+        HELP("help/help", ".html", true, 0),
+        ABOUT("help/about", ".html", true, 0),
+        NEW_USER("help/new_user_welcome", ".html", false, 0xff00bb00),
+        WHATS_NEW("help/whats_new", ".html", false, 0xff00ccff),
+        BACKUP_RESTORE("help/restore_backup", ".html", false, 0xff0000ff);
 
-        private final String assetRelativePath;
+        private final String assetRelativeBaseName;
+        private final String assetExtension;
         private final boolean isFullScreen;
         private final int frameColor;
 
-        private MessageKind(String assetRelativePath, boolean isFulLScreen, int frameColor) {
-            this.assetRelativePath = assetRelativePath;
+        private MessageKind(String assetRelativeBaseName, String assetExtension,
+                boolean isFulLScreen, int frameColor) {
+            this.assetRelativeBaseName = assetRelativeBaseName;
+            this.assetExtension = assetExtension;
             this.isFullScreen = isFulLScreen;
             this.frameColor = frameColor;
         }
@@ -131,22 +135,34 @@ public class PopupMessageActivity extends Activity {
     }
 
     private final void displayFromAsset(WebView webView, MessageKind messageKind) {
-        final FileReadResult fileReadResult = FileUtil.readFileToString(this,
-                messageKind.assetRelativePath, true);
+        // Open HTML assert file. First we try a language specific file and if could
+        // not open, fail over to the default one in english.      
+        String filePath = null;
+        InputStream in = null;
+        final String languageCode = getString(R.string.translation_language_code);
+        if (!languageCode.equals("en")) {
+            filePath = messageKind.assetRelativeBaseName + "-" + languageCode
+                    + messageKind.assetExtension;
+            in = FileUtil.openAssert(this, filePath);
+        }
+        if (in == null) {
+            filePath = messageKind.assetRelativeBaseName + messageKind.assetExtension;
+            in = FileUtil.openAssert(this, filePath);
+        }
+        final FileReadResult fileReadResult = FileUtil.readFileToString(in, filePath);
+
         // TODO: handle this more gracefully?
         check(fileReadResult.outcome == FileReadOutcome.READ_OK,
-                "Error reading asset file: %s, outcome: %s", messageKind.assetRelativePath,
-                fileReadResult.outcome);
+                "Error reading asset file: %s, outcome: %s", filePath, fileReadResult.outcome);
         final String htmlPage = expandMacros(fileReadResult.content);
-        webView.loadDataWithBaseURL(ASSETS_BASE_URL + messageKind.assetRelativePath, htmlPage,
-                null, "UTF-8", null);
+        webView.loadDataWithBaseURL(ASSETS_BASE_URL + filePath, htmlPage, null, "UTF-8", null);
     }
 
     private final String expandMacros(String text) {
         if (!TextUtil.constainsMacros(text)) {
             return text;
         }
-        final Hashtable<String, Object> macroValues = new Hashtable<String, Object>();        
+        final Hashtable<String, Object> macroValues = new Hashtable<String, Object>();
         final PackageInfo packageInfo = PackageUtil.getPackageInfo(this);
         macroValues.put("version_name", packageInfo.versionName);
         return TextUtil.expandMacros(text, macroValues, true);

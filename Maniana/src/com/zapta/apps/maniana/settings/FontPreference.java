@@ -50,6 +50,13 @@ public class FontPreference extends DialogPreference implements DialogInterface.
 
     // List adaptor over Font.values()
     public class FontAdapter extends BaseAdapter {
+        final Context mContext;
+
+        public FontAdapter(Context mContext) {
+            super();
+            this.mContext = mContext;
+        }
+
         @Override
         public int getCount() {
             return Font.values().length;
@@ -57,7 +64,7 @@ public class FontPreference extends DialogPreference implements DialogInterface.
 
         @Override
         public Object getItem(int position) {
-            return Font.values()[position].name;
+            return Font.values()[position].getName(mContext);
         }
 
         @Override
@@ -86,7 +93,7 @@ public class FontPreference extends DialogPreference implements DialogInterface.
             // color, be aware of themes. In some of them your foreground color may be the
             // background
             // color. So we don't mess with anything here.
-            checkedTextView.setText(font.name);
+            checkedTextView.setText(font.getName(mContext));
             checkedTextView.setTextSize(20 * font.scale);
 
             return view;
@@ -116,7 +123,7 @@ public class FontPreference extends DialogPreference implements DialogInterface.
     @Override
     protected void onPrepareDialogBuilder(Builder builder) {
         super.onPrepareDialogBuilder(builder);
-        final FontAdapter adapter = new FontAdapter();
+        final FontAdapter adapter = new FontAdapter(getContext());
         builder.setSingleChoiceItems(adapter, mValue.ordinal(), this);
         builder.setPositiveButton(null, null);
     }
@@ -161,6 +168,6 @@ public class FontPreference extends DialogPreference implements DialogInterface.
     }
 
     private final void updateSummaryWithCurrentValue() {
-        super.setSummary(String.format(mSummaryFormat, mValue.name));
+        super.setSummary(String.format(mSummaryFormat, mValue.getName(getContext())));
     }
 }

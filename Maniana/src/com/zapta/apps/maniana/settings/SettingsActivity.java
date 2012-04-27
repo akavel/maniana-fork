@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 import net.margaritov.preference.colorpicker.ColorPickerPreference;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -345,9 +346,10 @@ public class SettingsActivity extends PreferenceActivity implements
         };
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Revert all settings to default values?\n\n(Does not affect task data)")
-                .setPositiveButton("Yes!", dialogClickListener)
-                .setNegativeButton("No", dialogClickListener).show();
+        builder.setMessage(getString(R.string.settings_restore_default_confirmation_text))
+                .setPositiveButton(getString(R.string.settings_restore_default_confirmation_yes),
+                        dialogClickListener)
+                .setNegativeButton(getString(R.string.dialog_cancel), dialogClickListener).show();
     }
 
     private final void onResetSettingsConfirmed() {
@@ -438,14 +440,12 @@ public class SettingsActivity extends PreferenceActivity implements
 
         final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-dd-MM HH:mm:ss");
         final String timeString = dateFormat.format(new Date());
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Maniana backup " + timeString);
+        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.backup_email_message_subject)
+                + " " + timeString);
 
-        intent.putExtra(
-                Intent.EXTRA_TEXT,
-                "This email message was sent by Android's Maniana To Do List app.\n\n"
-                        + "It contains an attachment file with a backup copy of the task list.\n\n"
-                        + "To restore the task list, open this email message in an Android device where"
-                        + " Maniana is installed and click on the Download button of the attachment.");
+        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.backup_email_message_body_text1)
+                + "\n\n" + getString(R.string.backup_email_message_body_text2) + "\n\n"
+                + getString(R.string.backup_email_message_body_text3));
 
         intent.setType("application/json");
         final Uri fileUri = Uri.fromFile(new File("/mnt/sdcard/../.." + getFilesDir() + "/"
@@ -455,20 +455,21 @@ public class SettingsActivity extends PreferenceActivity implements
         try {
             startActivity(intent);
         } catch (android.content.ActivityNotFoundException e) {
-            Toast.makeText(this, "Gmail application not found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.backup_email_gmail_not_found_error),
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
     private final void onShareClick() {
         Intent sharingIntent = new Intent(Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        String message = "Check out Maniana, a free fun and easy to use todo "
-                + "list app on the Android Market:\n \n"
+        String message = getString(R.string.share_email_body_text) + "\n\n"
                 + "https://market.android.com/details?id=com.zapta.apps.maniana";
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
-                "Check out \"Maniana To Do List\"");
-        startActivity(Intent.createChooser(sharingIntent, "Share using"));
+                getString(R.string.share_email_subject));
+        startActivity(Intent.createChooser(sharingIntent,
+                getString(R.string.share_email_chooser_title)));
     }
 
     private final void onFeedbackClick() {
@@ -523,7 +524,7 @@ public class SettingsActivity extends PreferenceActivity implements
         }
 
         {
-            final String baseBackupEmailSummary = "Destination Gmail address for sending backup attachments.";
+            final String baseBackupEmailSummary = getString(R.string.settings_backup_gmail_address_base_summary);
             final String backupEmailAddress = getBackupEmailAddress();
             mBackupEmailPreference.setSummary((backupEmailAddress.length() > 0) ? "("
                     + backupEmailAddress + ")\n" + baseBackupEmailSummary : baseBackupEmailSummary);
@@ -531,8 +532,8 @@ public class SettingsActivity extends PreferenceActivity implements
             final boolean hasBackupEmailAddress = backupEmailAddress.contains("@")
                     && backupEmailAddress.contains(".");
             mBackupPreference
-                    .setSummary(hasBackupEmailAddress ? "Click to email a Maniana backup attachment to your Gmail account"
-                            : "Please enter your Gmail address to enable Maniana backups");
+                    .setSummary(hasBackupEmailAddress ? getString(R.string.setting_backup_do_backup_summary_on)
+                            : getString(R.string.setting_backup_do_backup_summary_off));
             mBackupPreference.setEnabled(hasBackupEmailAddress);
         }
 
@@ -559,10 +560,9 @@ public class SettingsActivity extends PreferenceActivity implements
                 wholeHoursLeft = -1;
             }
 
-            final String suffix = (wholeHoursLeft >= 0) ? construtLockTimeLeftMessageSuffix(wholeHoursLeft)
-                    : "";
-            updateListPreferenceSummary(mLockPeriodListPreference, R.array.lockPeriodNames,
-                    suffix);
+            final String suffix = (wholeHoursLeft >= 0) ? "  ("
+                    + construtLockTimeLeftMessageSuffix(this, wholeHoursLeft) + ")" : "";
+            updateListPreferenceSummary(mLockPeriodListPreference, R.array.lockPeriodNames, suffix);
         }
     }
 
@@ -571,15 +571,17 @@ public class SettingsActivity extends PreferenceActivity implements
     }
 
     @VisibleForTesting
-    static String construtLockTimeLeftMessageSuffix(int wholeHoursLeft) {
+    static String construtLockTimeLeftMessageSuffix(Context context, int wholeHoursLeft) {
         if (wholeHoursLeft < 16) {
-            return "  (tonight)";
+            return context.getString(R.string.time_string_tonight);
         }
         if (wholeHoursLeft < 48) {
-            return String.format("  (in %d hours)", wholeHoursLeft);
+            return String
+                    .format(context.getString(R.string.time_string_in_d_hours), wholeHoursLeft);
         }
         // Rounding up
-        return String.format("  (in %d days)", (wholeHoursLeft + 23) / 24);
+        return String.format(context.getString(R.string.time_string_in_d_days),
+                (wholeHoursLeft + 23) / 24);
     }
 
     private void updateListPreferenceSummary(ListPreference listPreference, int stringArrayId,

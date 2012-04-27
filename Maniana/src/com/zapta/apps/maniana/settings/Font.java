@@ -21,6 +21,7 @@ import javax.annotation.Nullable;
 import android.content.Context;
 import android.graphics.Typeface;
 
+import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.util.EnumUtil;
 import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 
@@ -31,15 +32,15 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
  */
 public enum Font implements KeyedEnum {
     // NOTE: keys are persisted in preferences. Do not modify.
-    CASUAL("Casual", "casual", 1.3f, 0.95f, null, "fonts/Daniel/Daniel-modified.ttf"),
-    CURSIVE("Cursive", "cursive", 1.4f, 0.9f, null, "fonts/Vavont/Vavont-modified.ttf"),
-    ELEGANT("Elegant", "elegant", 1.6f, 1.0f, null, "fonts/Pompiere/Pompiere-Regular-modified.ttf"),  
-    SAN_SERIF("San Serif", "sans", 1.2f, 1.1f, Typeface.SANS_SERIF, null),
-    SERIF("Serif", "serif", 1.2f, 1.1f, Typeface.SERIF, null),
-    IMPACT("Impact", "impact", 1.6f, 1.0f, null, "fonts/Damion/Damion-Regular.ttf");
+    CASUAL(R.string.font_name_Casual, "casual", 1.3f, 0.95f, null, "fonts/Daniel/Daniel-modified.ttf"),
+    CURSIVE(R.string.font_name_Cursive, "cursive", 1.4f, 0.9f, null, "fonts/Vavont/Vavont-modified.ttf"),
+    ELEGANT(R.string.font_name_Elegant, "elegant", 1.6f, 1.0f, null, "fonts/Pompiere/Pompiere-Regular-modified.ttf"),  
+    SAN_SERIF(R.string.font_name_Sans_Serif, "sans", 1.2f, 1.1f, Typeface.SANS_SERIF, null),
+    SERIF(R.string.font_name_Serif, "serif", 1.2f, 1.1f, Typeface.SERIF, null),
+    IMPACT(R.string.font_name_Impact, "impact", 1.6f, 1.0f, null, "fonts/Damion/Damion-Regular.ttf");
 
     /** User visible name. */
-    public final String name;
+    private final int nameResourceId;
 
     /**
      * Preference value key. Should match the values in preference xml. Persisted in user's
@@ -60,9 +61,9 @@ public enum Font implements KeyedEnum {
     @Nullable
     final String mAssetFilePath;
 
-    private Font(String name, String key, float scale, float lineSpacingMultipler,
+    private Font(int nameResourceId, String key, float scale, float lineSpacingMultipler,
             @Nullable Typeface sysTypeface, @Nullable String assertFilePath) {
-        this.name = name;
+        this.nameResourceId = nameResourceId;
         this.mKey = key;
         this.scale = scale;
         this.lineSpacingMultipler = lineSpacingMultipler;
@@ -76,6 +77,10 @@ public enum Font implements KeyedEnum {
     @Override
     public final String getKey() {
         return mKey;
+    }
+    
+    public final String getName(Context context) {
+        return context.getString(nameResourceId);
     }
 
     /** Return value with given key, fallback value if not found. */

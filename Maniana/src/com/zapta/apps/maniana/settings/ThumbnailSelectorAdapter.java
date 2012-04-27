@@ -79,7 +79,7 @@ public class ThumbnailSelectorAdapter<T extends Thumbnail> extends BaseAdapter {
         imageView.setImageResource(thumbnail.getDrawableId());
         // NOTE: the extra space at the preventsend truncation at the end due to the italic style.
         // The extra space at the beginning is to preserve the text centring.
-        textView.setText(" " + thumbnail.getName() + " ");
+        textView.setText(" " + thumbnail.getName(mContext) + " ");
         textView.setTextColor(mTextColor);
         return itemView;
     }

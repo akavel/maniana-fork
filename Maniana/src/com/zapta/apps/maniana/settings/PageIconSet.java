@@ -16,6 +16,8 @@ package com.zapta.apps.maniana.settings;
 
 import javax.annotation.Nullable;
 
+import android.content.Context;
+
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.util.EnumUtil;
 import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
@@ -28,7 +30,7 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 public enum PageIconSet implements KeyedEnum {
     // NOTE: keys are persisted in preferences. Do not modify.
     HAND_DRAWN(
-            "Hand Drawn",
+            R.string.page_icon_set_name_Hand_Drawn,
             "handdrawn",
             R.drawable.button_undo1,
             R.drawable.button_add_by_text1,
@@ -38,7 +40,7 @@ public enum PageIconSet implements KeyedEnum {
             R.drawable.arrow_left1,
             R.drawable.arrow_locked1),
     MODERN(
-            "Modern",
+            R.string.page_icon_set_name_Modern,
             "modern",
             R.drawable.button_undo2,
             R.drawable.button_add_by_text2,
@@ -49,7 +51,7 @@ public enum PageIconSet implements KeyedEnum {
             R.drawable.arrow_locked2),
 
     PARTY(
-            "Party",
+            R.string.page_icon_set_name_Party,
             "party",
             R.drawable.button_undo3,
             R.drawable.button_add_by_text3,
@@ -59,7 +61,7 @@ public enum PageIconSet implements KeyedEnum {
             R.drawable.arrow_left2,
             R.drawable.arrow_locked2),
     WHITE(
-            "White Silhouette",
+            R.string.page_icon_set_name_White_Silhouette,
             "white",
             R.drawable.button_undo4,
             R.drawable.button_add_by_text4,
@@ -70,7 +72,7 @@ public enum PageIconSet implements KeyedEnum {
             R.drawable.arrow_locked1),
 
     BLACK(
-            "Black Silhouette",
+            R.string.page_icon_set_name_Black_Silhouette,
             "black",
             R.drawable.button_undo5,
             R.drawable.button_add_by_text5,
@@ -81,7 +83,7 @@ public enum PageIconSet implements KeyedEnum {
             R.drawable.arrow_locked1);
 
     /** User visible name. */
-    public final String name;
+    public final int nameResourceId;
 
     public final int buttonUndoResourceId;
     public final int buttonAddByTextResourceId;
@@ -97,11 +99,11 @@ public enum PageIconSet implements KeyedEnum {
      */
     private final String mKey;
 
-    private PageIconSet(String name, String key, int buttonUndoResourceId,
+    private PageIconSet(int nameResourceId, String key, int buttonUndoResourceId,
             int buttonAddByTextResourceId, int buttonAddByVoiceResourceId,
             int buttonCleanResourceId, int arrowRightResourceId, int arrowLeftResourceId,
             int arrowLockedResourceId) {
-        this.name = name;
+        this.nameResourceId = nameResourceId;
         this.mKey = key;
 
         this.buttonUndoResourceId = buttonUndoResourceId;
@@ -112,7 +114,11 @@ public enum PageIconSet implements KeyedEnum {
         this.arrowLeftResourceId = arrowLeftResourceId;
         this.arrowLockedResourceId = arrowLockedResourceId;
     }
-
+    
+    public final String getName(Context context) {
+        return context.getString(nameResourceId);
+    }
+    
     @Override
     public final String getKey() {
         return mKey;

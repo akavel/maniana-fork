@@ -26,7 +26,6 @@
   <string name="backup_restore_Task_list_not_changed">Elenco attività non modificata</string>
   <string name="backup_restore_dialog_Merge">Unisci</string>
   <string name="backup_restore_dialog_Replace">Sostituisci</string>
-  <string name="backup_restore_dialog_Cancel">Cancella</string>
   <string name="backup_restore_dialog_Keep">Mantieni</string>
   <string name="backup_restore_dialog_Delete">Elimina</string>
   <string name="backup_restore_dialog_Add">Aggiungi</string>

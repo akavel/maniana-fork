@@ -25,7 +25,7 @@ public class PageTheme extends Thumbnail {
 
     public static final PageTheme[] PAGE_THEMES = {
         // Default
-        new PageTheme("On Paper", R.drawable.page_theme1_preview,
+        new PageTheme(R.string.page_theme_name_paper, R.drawable.page_theme1_preview,
                 PreferenceConstants.DEFAULT_PAGE_BACKGROUND_PAPER,
                 PreferenceConstants.DEFAULT_PAGE_PAPER_COLOR,
                 PreferenceConstants.DEFAULT_PAGE_BACKGROUND_SOLID_COLOR,
@@ -40,17 +40,17 @@ public class PageTheme extends Thumbnail {
                 PreferenceConstants.DEFAULT_COMPLETED_ITEM_TEXT_COLOR,
                 PreferenceConstants.DEFAULT_PAGE_ITEM_DIVIDER_COLOR),
 
-        new PageTheme("Yellow Pages", R.drawable.page_theme2_preview, false, 0xffffffff,
+        new PageTheme(R.string.page_theme_name_yellow, R.drawable.page_theme2_preview, false, 0xffffffff,
                 0xfffcfcb8, PageIconSet.MODERN, Font.IMPACT, 22,
                 PreferenceConstants.DEFAULT_PAGE_TITLE_TODAY_COLOR,
                 PreferenceConstants.DEFAULT_PAGE_TITLE_TOMORROW_COLOR, Font.SAN_SERIF, 16,
                 0xff333333, 0xff909090, 0x4def9900),
 
-        new PageTheme("Dark Knight", R.drawable.page_theme3_preview, false, 0xffffffff, 0xff000000,
+        new PageTheme(R.string.page_theme_name_dark, R.drawable.page_theme3_preview, false, 0xffffffff, 0xff000000,
                 PageIconSet.WHITE, Font.IMPACT, 30, 0xffb7d9ff, 0xffffb0b4, Font.ELEGANT, 20,
                 0xffffffff, 0xff7e7e7e, 0x45ffff00),
 
-        new PageTheme("Notebook", R.drawable.page_theme4_preview, true, 0xfff0fff0, 0xffaaffff,
+        new PageTheme(R.string.page_theme_name_notebook, R.drawable.page_theme4_preview, true, 0xfff0fff0, 0xffaaffff,
                 PageIconSet.PARTY, Font.SAN_SERIF, 30,
                 PreferenceConstants.DEFAULT_PAGE_TITLE_TODAY_COLOR,
                 PreferenceConstants.DEFAULT_PAGE_TITLE_TOMORROW_COLOR, Font.CASUAL, 16, 0xff111111,
@@ -71,11 +71,11 @@ public class PageTheme extends Thumbnail {
     public final int itemCompletedTextColor;
     public final int itemDividerColor;
 
-    public PageTheme(String name, int drawableId, boolean backgroundPaper, int paperColor,
+    public PageTheme(int nameResourceId, int drawableId, boolean backgroundPaper, int paperColor,
             int backgroundSolidColor, PageIconSet iconSet, Font titleFont, int titleFontSize,
             int titleTodayTextColor, int titleTomorrowTextColor, Font itemFont, int itemFontSize,
             int itemTextColor, int itemCompletedTextColor, int itemDividerColor) {
-        super(name, drawableId);
+        super(nameResourceId, drawableId);
         this.backgroundPaper = backgroundPaper;
         this.paperColor = paperColor;
         this.backgroundSolidColor = backgroundSolidColor;

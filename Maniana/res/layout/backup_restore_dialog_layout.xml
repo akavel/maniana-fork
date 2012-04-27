@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dip"
             android:layout_weight="1"
-            android:text="@string/backup_restore_dialog_Cancel" />
+            android:text="@string/dialog_cancel" />
     </LinearLayout>
 
 </LinearLayout>

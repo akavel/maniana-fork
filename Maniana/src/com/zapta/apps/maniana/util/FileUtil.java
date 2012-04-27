@@ -160,4 +160,18 @@ public final class FileUtil {
             }
         }
     }
+    
+    /** 
+     * Path is relative to .../assets/.
+     * If not null, caller should eventually close the returned stream.
+     */
+    @Nullable
+    public static InputStream openAssert(Context context, String path) {       
+        try {
+            return context.getAssets().open(path);
+        } catch (IOException e) {
+            LogUtil.info("Asset %s did not open (%s)", path, e.getClass().getSimpleName());
+            return null;
+        }    
+    }
 }

@@ -65,19 +65,16 @@
             android:summaryOff="@string/settings_paper_summary_off"
             android:summaryOn="@string/settings_paper_summary_on"
             android:title="@string/settings_paper_title" />
-         
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#ffffffff"
             android:key="prefPagePaperColorKey"
             android:summary="@string/settings_paper_color_summary"
             android:title="@string/settings_paper_color_title" />
-            
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#ffffffc0"
             android:key="prefPageBackgroundSolidColorKey"
             android:summary="@string/settings_background_color_summary"
             android:title="@string/settings_background_color_title" />
-            
         <com.zapta.apps.maniana.settings.PageIconSetPreference
             android:defaultValue="handdrawn"
             android:key="prefPageIconSetKey"
@@ -143,7 +140,6 @@
                 android:title="@string/settings_completed_task_color_title" />
         </PreferenceScreen>
     </PreferenceScreen>
-   
     <PreferenceScreen
         android:title="@string/settings_section_name_List_Widget"
         android:key="prefWidgetScreenKey">
@@ -152,51 +148,37 @@
             android:summary="@string/settings_select_widget_theme_summary"
             android:title="@string/settings_select_widget_theme_title">
         </Preference>
-        
-        
-         
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="prefWidgetBackgroundPaperKey"
             android:summaryOff="@string/settings_paper_summary_off"
             android:summaryOn="@string/settings_paper_summary_on"
             android:title="@string/settings_paper_title" />
-            
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#ffffffff"
             android:key="prefWidgetPaperColorKey"
             android:summary="@string/settings_paper_color_summary"
             android:title="@string/settings_paper_color_title" />
-            
         <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:defaultValue="#44000000"
             android:key="prefWidgetBackgroundColorKey"
             android:summary="@string/settings_background_color_summary"
             android:title="@string/settings_background_color_title" />
-            
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="prefWidgetShowToolbarKey"
             android:summaryOff="@string/settings_widget_show_toolbar_summary_off"
             android:summaryOn="@string/settings_widget_show_toolbar_summary_on"
             android:title="@string/settings_widget_show_toolbar_title" />
-            
-          
-             
         <PreferenceScreen
             android:title="@string/settings_section_name_Task_Text"
             android:key="prefWidgetTaskTextScreenKey"
             android:summary="@string/settings_section_task_text_summary">
-            
-            
             <com.zapta.apps.maniana.settings.FontPreference
                 android:defaultValue="casual"
                 android:key="prefWidgetItemFontKey"
                 maniana:summaryFormat="@string/settings_font_selector_summary"
                 android:title="@string/settings_font_selector_title" />
-                
-                
-                
             <com.zapta.apps.maniana.settings.SeekBarPreference
                 android:key="prefWidgetItemFontSizePtKey"
                 android:title="@string/settings_text_size_title"
@@ -205,82 +187,73 @@
                 maniana:valueFormat="@string/settings_text_size_format_d_points"
                 maniana:maxValue="24"
                 maniana:minValue="10" />
-                
-                
-                
             <net.margaritov.preference.colorpicker.ColorPickerPreference
                 android:defaultValue="#ff330000"
                 android:key="prefWidgetTextColorKey"
-                android:summary="settings_task_color_summary"
-                android:title="@string/settings_task_color_title" />               
-                   
+                android:summary="@string/settings_task_color_summary"
+                android:title="@string/settings_task_color_title" />
             <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="prefWidgetSingleLineKey"
                 android:summaryOff="@string/settings_widget_single_line_summary_off"
                 android:summaryOn="@string/settings_widget_single_line_summary_on"
-                android:title="@string/settings_widget_single_line_title" />              
-                  
+                android:title="@string/settings_widget_single_line_title" />
             <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="prefWidgetShowCompletedKey"
                 android:summaryOff="@string/settings_widget_show_completed_tasks_summary_off"
                 android:summaryOn="@string/settings_widget_show_completed_tasks_summary_on"
                 android:title="@string/settings_widget_show_completed_tasks_title" />
-                
-                  <!-- @@@@ continue here -->
-                
             <net.margaritov.preference.colorpicker.ColorPickerPreference
                 android:defaultValue="#ff888888"
                 android:key="prefWidgetCompletedTextColorKey"
-                android:summary="Text color of completed tasks"
-                android:title="Completed Text Color" />
-                
+                android:summary="@string/settings_completed_task_color_summary"
+                android:title="@string/settings_completed_task_color_title" />
             <CheckBoxPreference
                 android:defaultValue="true"
                 android:key="prefWidgetAutoFitKey"
-                android:summaryOff="Will not try to fit content to widget size."
-                android:summaryOn="If needed, will try to fit content to widget size (smaller text, single line, etc)"
-                android:title="Auto Fit" />
+                android:summaryOff="@string/settings_widget_sauto_fit_summary_off"
+                android:summaryOn="@string/settings_widget_auto_fit_summary_on"
+                android:title="@string/settings_widget_auto_fit_title" />
         </PreferenceScreen>
     </PreferenceScreen>
     <PreferenceScreen android:title="@string/settings_section_name_Backup">
         <EditTextPreference
             android:defaultValue=""
             android:key="prefBackupEmailKey"
-            android:title="Your Gmail Address"
-            android:hint="e.g. johndow@gmail.com"
+            android:title="@string/settings_backup_gmail_address_title"
+            android:hint="@string/settings_backup_gmail_address_hint"
             android:summary="@string/place_holder"
-            android:dialogTitle="Your Gmail address" />
+            android:dialogTitle="@string/settings_backup_gmail_address_title" />
         <Preference
             android:key="prefBackupKey"
             android:summary="@string/place_holder"
             android:title="Do Backup" />
         <Preference
             android:key="prefRestoreKey"
-            android:summary="Click for instructions"
-            android:title="Do Restore" />
+            android:summary="@string/settings_backup_do_restore_summary"
+            android:title="@string/settings_backup_do_restore_title" />
     </PreferenceScreen>
     <PreferenceScreen android:title="@string/settings_section_name_Miscellaneous">
         <Preference
             android:key="prefVersionInfoKey"
-            android:summary="Click to see release info"
-            android:title="Release Info">
+            android:summary="@string/settings_misc_release_info_summary"
+            android:title="@string/settings_misc_release_info_title">
         </Preference>
         <Preference
             android:key="prefShareKey"
-            android:summary="Click to tell a friend about Maniana"
-            android:title="Tell A Friend">
+            android:summary="@string/settings_misc_tell_a_friend_summary"
+            android:title="@string/settings_misc_tell_a_friend_title">
         </Preference>
         <Preference
             android:key="prefFeedbackKey"
-            android:summary="Click to provide feedback to the developers"
-            android:title="Send Us Feedback">
+            android:summary="@string/settings_misc_feedback_summary"
+            android:title="@string/settings_misc_feedback_title">
         </Preference>
         <Preference
             android:key="prefRestoreDefaultsKey"
-            android:summary="Click to restore the original settings. Does not affect task data"
-            android:title="Reset All Settings">
+            android:summary="@string/settings_misc_restore_defaults_summary"
+            android:title="@string/settings_misc_restore_defaults_title">
         </Preference>
     </PreferenceScreen>
 </PreferenceScreen>

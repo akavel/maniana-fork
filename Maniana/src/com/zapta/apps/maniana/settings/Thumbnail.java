@@ -13,6 +13,8 @@
  */
 package com.zapta.apps.maniana.settings;
 
+import android.content.Context;
+
 /**
  * Base class for selectable thumbnails.
  * 
@@ -20,18 +22,18 @@ package com.zapta.apps.maniana.settings;
  */
 public class Thumbnail {
     /** User visible name of this theme. */
-    private final String mName;
+    private final int mNameResourceId;
 
     /** Id of resource with theme preview image. */
     private final int mDrawableId;
 
-    public Thumbnail(String name, int drawableId) {
-        mName = name;
+    public Thumbnail(int nameResourceId, int drawableId) {
+        mNameResourceId = nameResourceId;
         mDrawableId = drawableId;
     }
 
-    public final String getName() {
-        return mName;
+    public final String getName(Context context) {
+        return context.getString(mNameResourceId);
     }
 
     public final int getDrawableId() {

@@ -34,7 +34,7 @@ public class WidgetTheme extends Thumbnail {
     // * cropped with GIMP to 360x250.
     public static final WidgetTheme[] WIDGET_THEMES = {
         // Default theme
-        new WidgetTheme("Paper Trail", R.drawable.widget_theme1_preview,
+        new WidgetTheme(R.string.widget_theme_name_paper, R.drawable.widget_theme1_preview,
                 PreferenceConstants.DEFAULT_WIDGET_BACKGROUND_PAPER,
                 PreferenceConstants.DEFAULT_WIDGET_PAPER_COLOR,
                 PreferenceConstants.DEFAULT_WIDGET_BACKGROUND_COLOR,
@@ -43,13 +43,13 @@ public class WidgetTheme extends Thumbnail {
                 PreferenceConstants.DEFAULT_WIDGET_TEXT_COLOR,
                 PreferenceConstants.DEFAULT_COMPLETED_ITEM_TEXT_COLOR,
                 PreferenceConstants.DEFAULT_WIDGET_SHOW_TOOLBAR),
-        new WidgetTheme("Crystal Clear", R.drawable.widget_theme2_preview, false, 0xffffffff,
+        new WidgetTheme(R.string.widget_theme_name_semi_transparanet, R.drawable.widget_theme2_preview, false, 0xffffffff,
                 0x44000000, Font.SAN_SERIF, 14, 0xffffff00, 0xffabffa2, true),
-        new WidgetTheme("Think Big", R.drawable.widget_theme3_preview, false, 0xffffffff,
+        new WidgetTheme(R.string.widget_theme_name_large_text, R.drawable.widget_theme3_preview, false, 0xffffffff,
                 0xff000000, Font.SAN_SERIF, 18, 0xff00ff00, 0xffaaaaaa, true),
-        new WidgetTheme("Legally Blonde", R.drawable.widget_theme4_preview, true, 0xffffccff,
+        new WidgetTheme(R.string.widget_theme_name_pink, R.drawable.widget_theme4_preview, true, 0xffffccff,
                 0xffff88ff, Font.CURSIVE, 18, 0xff404040, 0xff668866, true),
-        new WidgetTheme("Fine Print", R.drawable.widget_theme5_preview, false, 0xffffffff,
+        new WidgetTheme(R.string.widget_theme_name_small_text, R.drawable.widget_theme5_preview, false, 0xffffffff,
                 0x600000ff, Font.SAN_SERIF, 12, 0xffffff00, 0xffabffa2, false)
     };
 
@@ -62,10 +62,10 @@ public class WidgetTheme extends Thumbnail {
     public final int completedTextColor;
     public final boolean showToolbar;
 
-    public WidgetTheme(String name, int drawableId, boolean backgroundPaper, int paperColor,
+    public WidgetTheme(int nameResourceId, int drawableId, boolean backgroundPaper, int paperColor,
             int backgroundColor, Font font, int fontSize, int textColor, int completedTextColor,
             boolean showToolbar) {
-        super(name, drawableId);
+        super(nameResourceId, drawableId);
         this.backgroundPaper = backgroundPaper;
         this.paperColor = paperColor;
         this.backgroundColor = backgroundColor;
