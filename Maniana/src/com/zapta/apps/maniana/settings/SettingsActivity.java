@@ -520,7 +520,8 @@ public class SettingsActivity extends PreferenceActivity implements
             updateListPreferenceSummary(mApplauseLevelListPreference,
                     R.array.applauseLevelSummaries, null);
         } else {
-            mApplauseLevelListPreference.setSummary("(sound is off)");
+            mApplauseLevelListPreference.setSummary("("
+                    + getString(R.string.settings_applause_summary_sound_is_off) + ")");
         }
 
         {

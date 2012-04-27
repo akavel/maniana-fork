@@ -99,7 +99,7 @@
     <string name="settings_section_name_Sound">Sound</string>
     <string name="settings_sound_title">Sound</string>
     <string name="settings_sound_summary_on">Sound is enabled</string>
-    <string name="settings_sound_summary_off">Sound is disabled</string>
+    <string name="settings_sound_summary_off">Sound is disabled</string> 
     <string name="settings_applause_title">Applause</string>
     <string name="settings_applause_name_never">Never</string>
     <string name="settings_applause_name_sometimes">Surprise Me</string>
@@ -107,6 +107,7 @@
     <string name="settings_applause_summary_never">Never applaud when I complete a task</string>
     <string name="settings_applause_summary_sometimes">Surprise me</string>
     <string name="settings_applause_summary_always">Always applaud when I complete a task</string>
+    <string name="settings_applause_summary_sound_is_off">Sound is off</string>
 
     <!-- Settings/Behavior -->
     <string name="settings_section_name_Behavior">Behavior</string>
