@@ -3,11 +3,9 @@
 
     <!-- General -->
     <string name="translation_language_name">English</string>
-    <string name="translation_language_code">en</string>
     <string name="translated_app_name">Maniana</string>
 
     <!-- Startup Error messages -->
-    <string name="launch_error_Sample_task_list_not_found">Sample task list not found</string>
     <string name="launch_error_Error_loading_task_list">Error loading task list</string>
 
     <!-- Task editor related -->
@@ -244,6 +242,15 @@
     <string name="widget_name_list_4x4">Maniana List 4x4</string>
     <string name="widget_name_list_2x2">Maniana List 2x2</string>
     <string name="widget_name_icon">Maniana Icon</string>
+
+    <!-- Sample tasks (for new users) -->
+    <string name="sample_tast_text_11">Drag left to switch page</string>
+    <string name="sample_tast_text_12">Tap on this task and select Done</string>
+    <string name="sample_tast_text_13">Tap on the arrow to do this task tomorrow</string>
+    <string name="sample_tast_text_14">Tap on the red mark to change its color</string>
+    <string name="sample_tast_text_15">Long press on this task and move it up</string>
+    <string name="sample_tast_text_16">See Settings and  Help for more features</string>
+    <string name="sample_tast_text_21">This task will be moved to the Today page on midnight</string>
 
     <!-- Common -->
     <string name="dialog_cancel">Cancel</string>

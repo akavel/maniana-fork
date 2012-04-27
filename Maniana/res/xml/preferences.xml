@@ -228,7 +228,7 @@
         <Preference
             android:key="prefBackupKey"
             android:summary="@string/place_holder"
-            android:title="Do Backup" />
+            android:title="@string/settings_backup_do_backup_title" />
         <Preference
             android:key="prefRestoreKey"
             android:summary="@string/settings_backup_do_restore_summary"

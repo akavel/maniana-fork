@@ -211,13 +211,8 @@ public class Controller {
         // to be more intuitive this way.
         if (mPopulateNewUserSampleDataOnResume) {
             if (resumeAction != ResumeAction.RESTORE_FROM_BABKUP_FILE) {
-                final ModelReadingResult result = ModelPersistence.readSampleModelFile(
-                        mApp.context(), mApp.model());
-                if (result.outcome.isOk()) {
-                    startPopupMessageSubActivity(MessageKind.NEW_USER);
-                } else {
-                    mApp.services().toast(R.string.launch_error_Sample_task_list_not_found);
-                }
+                populateModelWithSampleTasks(mApp.model());
+                startPopupMessageSubActivity(MessageKind.NEW_USER);
             }
             mApp.model().setLastPushDateStamp(mApp.dateTracker().getDateStampString());
             mApp.model().setDirty();
@@ -280,6 +275,27 @@ public class Controller {
             default:
                 // Do nothing
         }
+    }
+
+    /** Populate given model with new user's sample tasks. */
+    private final void populateModelWithSampleTasks(AppModel model) {
+        // Today's page
+        model.appendItem(PageKind.TODAY, new ItemModel(mApp.str(R.string.sample_tast_text_11),
+                false, false, ItemColor.NONE));
+        model.appendItem(PageKind.TODAY, new ItemModel(mApp.str(R.string.sample_tast_text_12),
+                false, false, ItemColor.NONE));
+        model.appendItem(PageKind.TODAY, new ItemModel(mApp.str(R.string.sample_tast_text_13),
+                false, false, ItemColor.NONE));
+        model.appendItem(PageKind.TODAY, new ItemModel(mApp.str(R.string.sample_tast_text_14),
+                false, false, ItemColor.RED));
+        model.appendItem(PageKind.TODAY, new ItemModel(mApp.str(R.string.sample_tast_text_15),
+                false, false, ItemColor.BLUE));
+        model.appendItem(PageKind.TODAY, new ItemModel(mApp.str(R.string.sample_tast_text_16),
+                false, false, ItemColor.NONE));
+
+        // Tommorow's page
+        model.appendItem(PageKind.TOMOROW, new ItemModel(mApp.str(R.string.sample_tast_text_21),
+                false, false, ItemColor.NONE));
     }
 
     /** Update date and if needed push model items from Tomorow to Today. */

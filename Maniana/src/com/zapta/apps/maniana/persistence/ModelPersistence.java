@@ -33,9 +33,6 @@ import com.zapta.apps.maniana.util.LogUtil;
  */
 public class ModelPersistence {
 
-    /** Path to asset with sample model in JSON format. */
-    private static final String NEW_USER_MODEL_ASSET_NAME = "data/new_user_data.json";
-
     /** Path to file where model is persisted. */
     public static final String DATA_FILE_NAME = "maniana_data.json";
 
@@ -53,16 +50,6 @@ public class ModelPersistence {
             // Model need to be rewritten
             resultModel.setDirty();
         }
-        return result;
-    }
-
-    /** Read the new user sample model file from the assert repository. */
-    public static final ModelReadingResult readSampleModelFile(Context context, AppModel resultModel) {
-        ModelReadingResult result = readModelFileInternal(context, resultModel,
-                NEW_USER_MODEL_ASSET_NAME, true);
-        // Since we did not load the model from the data file, it is dirty and need to be
-        // persisted.
-        resultModel.setDirty();
         return result;
     }
 
