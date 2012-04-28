@@ -54,7 +54,7 @@
             android:entries="@array/lockPeriodNames"
             android:entryValues="@array/lockPeriodValues"
             android:key="prefLockPeriodKey"
-            android:summary="Locks expiration period"
+            android:summary="@string/place_holder"
             android:title="@string/settings_lock_expiration_title" />
     </PreferenceScreen>
     <PreferenceScreen
@@ -124,7 +124,7 @@
             <com.zapta.apps.maniana.settings.FontPreference
                 android:defaultValue="casual"
                 android:key="prefItemFontKey"
-                maniana:summaryFormat="settings_font_selector_summary"
+                maniana:summaryFormat="@string/settings_font_selector_summary"
                 android:title="@string/settings_font_selector_title" />
             <com.zapta.apps.maniana.settings.SeekBarPreference
                 android:key="prefPageItemFontSizePtKey"
