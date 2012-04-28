@@ -104,6 +104,11 @@ public class AppModel {
     public final int getPageItemCount(PageKind pageKind) {
         return getPageModel(pageKind).itemCount();
     }
+    
+    /** Get number of incomplete items in given page. */
+    public final int getPagePendingItemCount(PageKind pageKind) {
+        return getPageModel(pageKind).pendingItemCount();
+    }
 
     /** Get total number of items. */
     public final int getItemCount() {

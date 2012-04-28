@@ -56,6 +56,7 @@ import com.zapta.apps.maniana.util.AttachmentUtil;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult;
 import com.zapta.apps.maniana.util.LogUtil;
+import com.zapta.apps.maniana.util.NotificationUtil;
 import com.zapta.apps.maniana.view.AppView;
 import com.zapta.apps.maniana.view.AppView.ItemAnimationType;
 import com.zapta.apps.maniana.widget.BaseWidgetProvider;
@@ -203,11 +204,13 @@ public class Controller {
     public final void onMainActivityResume(ResumeAction resumeAction, @Nullable Intent resumeIntent) {
         // This may leave undo items in case we cleanup completed tasks.
         maybeHandleDateChange();
+        
+        NotificationUtil.clearPendingItemsNotification(mApp.context());
 
         ++mOnAppResumeCount;
 
-        // We suppress the population if the first resume is with certain actions. It seems
-        // to be more intuitive this way.
+        // We suppress the population of new user sample tasks if the first resume is with certain actions. 
+        // It seems to be more intuitive this way.
         if (mPopulateNewUserSampleDataOnResume) {
             if (resumeAction != ResumeAction.RESTORE_FROM_BABKUP_FILE) {
                 populateModelWithSampleTasks(mApp.model());

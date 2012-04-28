@@ -28,10 +28,11 @@ import com.zapta.apps.maniana.model.ModelUtil;
 import com.zapta.apps.maniana.model.OrganizePageSummary;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.model.PushScope;
-import com.zapta.apps.maniana.persistence.ModelReadingResult;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
+import com.zapta.apps.maniana.persistence.ModelReadingResult;
 import com.zapta.apps.maniana.settings.LockExpirationPeriod;
 import com.zapta.apps.maniana.settings.PreferencesTracker;
+import com.zapta.apps.maniana.util.NotificationUtil;
 
 /**
  * Base class widget providers.
@@ -42,6 +43,9 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
 
     /** Model is already pushed and sorted according to current settings. */
     public static void updateAllWidgetsFromModel(Context context, @Nullable AppModel model) {
+        // TODO: experimental, remove
+        //NotificationUtil.sendPendingItemsNotification(context, model.getPagePendingItemCount(PageKind.TODAY));
+        
         IconWidgetProvider.updateAllIconWidgetsFromModel(context, model);
         ListWidgetProvider.updateAllListWidgetsFromModel(context, model);
     }
@@ -89,6 +93,12 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
                 OrganizePageSummary summary = new OrganizePageSummary();
                 model.organizePageWithUndo(PageKind.TODAY, false, -1, summary);
                 // NOTE: we don't bother to sort Maniana page since it does not affect the widgets
+            }
+            
+            // We piggy back on the widget update to issue notifications.
+            final int pendingItemsCount = model.getPagePendingItemCount(PageKind.TODAY);
+            if (pendingItemsCount > 0) {
+                NotificationUtil.sendPendingItemsNotification(context, pendingItemsCount);
             }
         } 
 

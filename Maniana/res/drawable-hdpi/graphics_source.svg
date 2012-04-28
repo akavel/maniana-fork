@@ -24,16 +24,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4.9544052"
-     inkscape:cx="459.76419"
-     inkscape:cy="737.10526"
+     inkscape:zoom="2.42"
+     inkscape:cx="563.58986"
+     inkscape:cy="777.06564"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1321"
-     inkscape:window-height="678"
-     inkscape:window-x="8"
-     inkscape:window-y="7"
+     inkscape:window-width="1192"
+     inkscape:window-height="603"
+     inkscape:window-x="40"
+     inkscape:window-y="0"
      inkscape:window-maximized="0" />
   <metadata
      id="metadata7">
@@ -43,7 +43,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -103,21 +103,21 @@
     <text
        xml:space="preserve"
        style="font-size:4px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="397.06476"
-       y="352.60147"
+       x="422.6846"
+       y="352.18826"
        id="text3759"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3761"
-         x="397.06476"
-         y="352.60147">Widget header icons</tspan><tspan
+         x="422.6846"
+         y="352.18826">Widget header icons</tspan><tspan
          sodipodi:role="line"
-         x="397.06476"
-         y="357.60147"
+         x="422.6846"
+         y="357.18826"
          id="tspan3765">Export as 28x28 png.</tspan><tspan
          sodipodi:role="line"
-         x="397.06476"
-         y="362.60147"
+         x="422.6846"
+         y="362.18826"
          id="tspan3763">Each icon contains an invisible 28x28 boundary</tspan></text>
     <rect
        inkscape:export-ydpi="90"
@@ -138,5 +138,33 @@
        inkscape:export-filename="/Users/tal/projects/maniana/repo/Maniana/res/drawable-hdpi/widget_add_by_voice.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
+    <rect
+       style="opacity:0.59051723000000000;fill:none;stroke:#919191;stroke-width:2.77099999999999991;stroke-linecap:butt;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect2995"
+       width="21.228643"
+       height="19.228645"
+       x="561.99518"
+       y="269.86935"
+       ry="3.3116622" />
+    <path
+       style="opacity:0.59051723000000000;fill:#919191;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;fill-opacity:1"
+       d="m 573.83064,273.88735 0.0334,3.32661 -8.9991,0 0,4.50479 8.9991,0 0.0334,3.36125 6.45661,-5.71761 -6.52351,-5.47504 z"
+       id="rect3773"
+       inkscape:connector-curvature="0" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text3798"
+       y="277.80811"
+       x="607.80859"
+       style="font-size:4px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       xml:space="preserve"><tspan
+         y="277.80811"
+         x="607.80859"
+         id="tspan3800"
+         sodipodi:role="line">Notification icon. Export is 24w x 28h</tspan><tspan
+         id="tspan3804"
+         y="282.80811"
+         x="607.80859"
+         sodipodi:role="line" /></text>
   </g>
 </svg>

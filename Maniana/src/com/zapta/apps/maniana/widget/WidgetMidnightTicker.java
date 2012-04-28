@@ -24,7 +24,7 @@ import android.text.format.Time;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**
- * Provides midnight trigger for updating the widgets
+ * Provides midnight trigger for updating the widgets and issuing notifications.
  * 
  * @author Tal Dayan
  */

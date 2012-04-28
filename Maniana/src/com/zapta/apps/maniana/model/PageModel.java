@@ -100,6 +100,17 @@ public class PageModel {
     public final int itemCount() {
         return mItems.size();
     }
+    
+    /** Get number of incomplete items in this page. */
+    public final int pendingItemCount() {
+        int count = 0;
+        for (ItemModel item : mItems) {
+          if (!item.isCompleted()) {
+              count++;
+          }
+        }
+        return count;
+    }
 
     /**
      * Copy cloned items from other page. Undo buffer is not changed.
