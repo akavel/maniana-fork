@@ -198,7 +198,7 @@ public class SettingsActivity extends PreferenceActivity implements
         // key strings match.
         findPreference(PreferenceKind.AUTO_SORT);
         findPreference(PreferenceKind.AUTO_DAILY_CLEANUP);
-
+        findPreference(PreferenceKind.DAILY_NOTIFICATION);
         findPreference(PreferenceKind.WIDGET_SINGLE_LINE);
 
         mPageSelectThemePreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -379,6 +379,8 @@ public class SettingsActivity extends PreferenceActivity implements
 
         // NOTE: for checkbox whose default value is false, need to set them
         // here to false.
+        editor.putBoolean(PreferenceKind.DAILY_NOTIFICATION.getKey(),
+                PreferenceConstants.DEFAULT_DAILY_NOTIFICATION);
         editor.putBoolean(PreferenceKind.WIDGET_SHOW_COMPLETED_ITEMS.getKey(),
                 PreferenceConstants.DEFAULT_WIDGET_SHOW_COMPLETED_ITEMS);
         editor.putBoolean(PreferenceKind.WIDGET_SINGLE_LINE.getKey(),

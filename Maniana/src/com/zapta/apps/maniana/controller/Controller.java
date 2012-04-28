@@ -802,6 +802,7 @@ public class Controller {
 
             case SOUND_ENABLED:
             case APPLAUSE_LEVEL:
+            case DAILY_NOTIFICATION:
             case LOCK_PERIOD:
             case VERBOSE_MESSAGES:
             case STARTUP_ANIMATION:

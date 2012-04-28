@@ -43,6 +43,7 @@ public enum PreferenceKind implements KeyedEnum {
     VERBOSE_MESSAGES("prefVerboseMessagesKey"),
     AUTO_SORT("prefAutoSortKey"),
     AUTO_DAILY_CLEANUP("prefAutoDailyCleanupKey"),
+    DAILY_NOTIFICATION("prefDailyNotificationKey"),
     LOCK_PERIOD("prefLockPeriodKey"),
 
     // Page

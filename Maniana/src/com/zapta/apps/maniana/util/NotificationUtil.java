@@ -24,16 +24,18 @@ import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.main.MainActivity;
 
 /**
- * Experimental. Clean up.
+ * Notifcation operations.
  * 
  * @author Tal Dayan
  */
 public class NotificationUtil {
-    /** Unique within the app. */
+    /** Arbitrary notification ID, unique within this app. */
     private static final int NOTIFICATION_ID = 1000;
 
     /**
-     * Send pending items notification. Ok to call multiple times. pendingItemsCount should be >= 1.
+     * Send pending items notification. Ok to call multiple times (they do not accumulate).
+     * pendingItemsCount should be >= 1. Should be called only if notifications are enabled in app
+     * settings.
      */
     public static void sendPendingItemsNotification(Context context, int pendingItemsCount) {
         LogUtil.debug("*** sending notification");
@@ -41,30 +43,36 @@ public class NotificationUtil {
         final NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // TODO: set this to midnight. 
+        // TODO: set this to midnight.
         final long when = System.currentTimeMillis();
 
+        final String ticker = (pendingItemsCount == 1) ? context
+                .getString(R.string.notification_ticker_single_task) : context.getString(
+                R.string.notification_ticker_d_tasks, pendingItemsCount);
+
         final Notification notification = new Notification(R.drawable.app_notification_icon,
-                String.format("Maniana has %d active tasks", pendingItemsCount), when);
-        
+                ticker, when);
+
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
         notification.flags |= Notification.FLAG_ONLY_ALERT_ONCE;
         notification.number = pendingItemsCount;
 
-        // Context context = getApplicationContext();
-        final CharSequence contentTitle = "Maniana To Do List";
-        // TODO: handle the case of single. Currently assuming plural.
-        final CharSequence contentText = String.format("Tap to review %d active tasks",
-                pendingItemsCount);
+        final String title = context.getString(R.string.notification_title);
+        
+        final String content = (pendingItemsCount == 1) ? context
+                .getString(R.string.notification_content_single_task) : context.getString(
+                R.string.notification_content_d_tasks, pendingItemsCount);
+                        
         final Intent notificationIntent = new Intent(context, MainActivity.class);
         final PendingIntent pendingItent = PendingIntent.getActivity(context, 0,
                 notificationIntent, 0);
 
-        notification.setLatestEventInfo(context, contentTitle, contentText, pendingItent);
+        notification.setLatestEventInfo(context, title, content, pendingItent);
 
         notificationManager.notify(NOTIFICATION_ID, notification);
     }
 
+    /** Clear any pending notification. */
     public static void clearPendingItemsNotification(Context context) {
         final NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);

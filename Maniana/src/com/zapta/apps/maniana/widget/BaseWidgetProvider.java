@@ -43,9 +43,10 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
 
     /** Model is already pushed and sorted according to current settings. */
     public static void updateAllWidgetsFromModel(Context context, @Nullable AppModel model) {
-        // TODO: experimental, remove
-        //NotificationUtil.sendPendingItemsNotification(context, model.getPagePendingItemCount(PageKind.TODAY));
-        
+        // For testing only
+        // NotificationUtil.sendPendingItemsNotification(context,
+        //         model.getPagePendingItemCount(PageKind.TODAY));
+
         IconWidgetProvider.updateAllIconWidgetsFromModel(context, model);
         ListWidgetProvider.updateAllListWidgetsFromModel(context, model);
     }
@@ -59,8 +60,8 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
     protected static AppModel loadModelForWidgets(Context context) {
         // Load model
         final AppModel model = new AppModel();
-        final ModelReadingResult modelLoadingResult = ModelPersistence.readModelFile(context,
-                model);
+        final ModelReadingResult modelLoadingResult = ModelPersistence
+                .readModelFile(context, model);
         if (!modelLoadingResult.outcome.isOk()) {
             return null;
         }
@@ -86,7 +87,7 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
         if (pushScope.isActive()) {
             final boolean unlockAllLocks = (pushScope == PushScope.ALL);
             model.pushToToday(unlockAllLocks, removeCompletedOnPush);
-            
+
             // NOTE: if not pushing, model is assumed to already be consistent with the
             // current auto sorting setting.
             if (sortItems) {
@@ -94,13 +95,15 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
                 model.organizePageWithUndo(PageKind.TODAY, false, -1, summary);
                 // NOTE: we don't bother to sort Maniana page since it does not affect the widgets
             }
-            
+
             // We piggy back on the widget update to issue notifications.
-            final int pendingItemsCount = model.getPagePendingItemCount(PageKind.TODAY);
-            if (pendingItemsCount > 0) {
-                NotificationUtil.sendPendingItemsNotification(context, pendingItemsCount);
+            if (PreferencesTracker.readDailyNotificationPreference(sharedPreferences)) {
+                final int pendingItemsCount = model.getPagePendingItemCount(PageKind.TODAY);
+                if (pendingItemsCount > 0) {
+                    NotificationUtil.sendPendingItemsNotification(context, pendingItemsCount);
+                }
             }
-        } 
+        }
 
         return model;
     }

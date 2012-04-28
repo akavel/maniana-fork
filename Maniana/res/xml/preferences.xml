@@ -43,6 +43,12 @@
             android:summaryOff="@string/settings_daily_cleanup_summary_off"
             android:summaryOn="@string/settings_daily_cleanup_summary_on"
             android:title="@string/settings_daily_cleanup_title" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="prefDailyNotificationKey"
+            android:summaryOff="@string/settings_daily_notification_summary_off"
+            android:summaryOn="@string/settings_daily_notification_summary_on"
+            android:title="@string/settings_daily_notification_title" />
         <ListPreference
             android:defaultValue="never"
             android:entries="@array/lockPeriodNames"
