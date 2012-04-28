@@ -131,7 +131,7 @@
     <string name="settings_daily_cleanup_summary_on">Deleting completed tasks every midnight</string>
     <string name="settings_daily_cleanup_summary_off">Daily deletion of completed tasks is disabled</string>
     <string name="settings_daily_notification_title">Daily Notification</string>
-    <string name="settings_daily_notification_summary_on">Will notify daily if having active task</string>
+    <string name="settings_daily_notification_summary_on">Will notify daily if having active tasks</string>
     <string name="settings_daily_notification_summary_off">Daily notification is off</string>
     <string name="settings_lock_expiration_title">Lock Expiration</string>
     <string name="settings_lock_expiration_name_once_a_week">Once a week</string>

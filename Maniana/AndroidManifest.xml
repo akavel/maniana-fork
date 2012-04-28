@@ -71,7 +71,7 @@
         </receiver>
         <receiver
             android:name=".widget.ListWidgetProvider2"
-            android:label="string/@string/widget_name_list_4x2" >
+            android:label="@string/widget_name_list_4x2" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
