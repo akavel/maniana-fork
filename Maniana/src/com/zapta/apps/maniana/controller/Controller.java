@@ -507,11 +507,6 @@ public class Controller {
         }, millis);
     }
 
-    /** Called by the app view when the user clicks on the Settings button. */
-    public final void onIcsMenuOverflowButtonClick(PageKind pageKind) {
-        mApp.mainActivity().openOptionsMenu();
-    }
-
     /** Called by the app view when the user clicks on the Undo button. */
     public final void onUndoButton(PageKind pageKind) {
         mApp.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_RETURN, false);

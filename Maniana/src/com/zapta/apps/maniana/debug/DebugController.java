@@ -18,9 +18,12 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
+import com.zapta.apps.maniana.help.PopupMessageActivity;
+import com.zapta.apps.maniana.help.PopupMessageActivity.MessageKind;
 import com.zapta.apps.maniana.main.AppContext;
 import com.zapta.apps.maniana.settings.PreferenceKind;
 import com.zapta.apps.maniana.util.NotificationUtil;
+import com.zapta.apps.maniana.view.IcsMainMenuDialog;
 
 public class DebugController {
 
@@ -44,6 +47,12 @@ public class DebugController {
                 break;
             case NOTIFICATION_CLEAR:
                 NotificationUtil.clearPendingItemsNotification(mApp.context());
+                break;
+            case NEW_USER:
+                mApp.context().startActivity(PopupMessageActivity.intentFor(mApp.context(), MessageKind.NEW_USER));
+                break;
+            case ICS_MENU:
+                IcsMainMenuDialog.showMenu(mApp);
                 break;
             case EXIT:
                 setDebugMode(false);

@@ -15,10 +15,12 @@
 package com.zapta.apps.maniana.debug;
 
 public enum DebugCommand {
-
+    // NOTE: debug mode strings are not translated. English only.
     NOTIFICATION_SINGLE("Notification (1)"),
     NOTIFICATION_MULTI("Notification (17)"),
     NOTIFICATION_CLEAR("Notification (clear)"),
+    NEW_USER("New user message"),
+    ICS_MENU("ICS menu"),
     EXIT("Exit debug mode");
     
     public final String text;
