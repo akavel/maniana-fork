@@ -212,10 +212,10 @@
     <string name="settings_paper_title">Paper</string>
     <string name="settings_paper_summary_on">Using paper background</string>
     <string name="settings_paper_summary_off">Paper background disabled</string>
-    <string name="settings_paper_color_title">Page paper color</string>
+    <string name="settings_paper_color_title">Paper color</string>
     <string name="settings_paper_color_summary">Paper Color</string>
     <string name="settings_background_color_title">Background Color</string>
-    <string name="settings_background_color_summary">Page background Color</string>
+    <string name="settings_background_color_summary">Background Color</string>
 
     <!-- Font names -->
     <string name="font_name_Casual">Casual</string>
