@@ -109,6 +109,11 @@ public class SettingsActivity extends PreferenceActivity implements
     // TODO: implement popup help message for do restore
     private Preference mRestoreBackupPreference;
 
+    // Debug
+    private Preference mDebugScreenPrefernece;
+    private CheckBoxPreference mDebugModePrefernece;
+    private PreferenceSelector mDebugScreenPreferenceSelector;
+
     /** For temp time calculations. Avoiding new object creation. */
     private Time tempTime = new Time();
 
@@ -186,6 +191,12 @@ public class SettingsActivity extends PreferenceActivity implements
         mBackupPreference = findPreference(PreferenceKind.BACKUP);
         mRestoreBackupPreference = findPreference(PreferenceKind.RESTORE);
 
+        // Debug
+        mDebugScreenPrefernece = findPreference("prefDebugScreenKey");
+        mDebugModePrefernece = (CheckBoxPreference) findPreference(PreferenceKind.DEBUG_MODE);
+        mDebugScreenPreferenceSelector = new PreferenceSelector(getPreferenceScreen(),
+                mDebugModePrefernece, mDebugScreenPrefernece, null);
+
         // Enabled alpha channel in colors pickers that need it.
         mPageItemDividerColorPickPreference.setAlphaSliderEnabled(true);
         mWidgetSolidColorPickPreference.setAlphaSliderEnabled(true);
@@ -200,6 +211,7 @@ public class SettingsActivity extends PreferenceActivity implements
         findPreference(PreferenceKind.AUTO_DAILY_CLEANUP);
         findPreference(PreferenceKind.DAILY_NOTIFICATION);
         findPreference(PreferenceKind.WIDGET_SINGLE_LINE);
+        //findPreference(PreferenceKind.DEBUG_MODE);
 
         mPageSelectThemePreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
@@ -385,8 +397,8 @@ public class SettingsActivity extends PreferenceActivity implements
                 PreferenceConstants.DEFAULT_WIDGET_SHOW_COMPLETED_ITEMS);
         editor.putBoolean(PreferenceKind.WIDGET_SINGLE_LINE.getKey(),
                 PreferenceConstants.DEFAULT_WIDGET_SINGLE_LINE);
-        editor.putBoolean(PreferenceKind.WIDGET_AUTO_FIT.getKey(),
-                PreferenceConstants.DEFAULT_WIDGET_AUTO_FIT);
+        editor.putBoolean(PreferenceKind.DEBUG_MODE.getKey(),
+                PreferenceConstants.DEFAULT_DEBUG_MODE);
 
         // Set icon set preferences to broadcast the change event.
         editor.putString(PreferenceKind.PAGE_ICON_SET.getKey(),
@@ -544,6 +556,7 @@ public class SettingsActivity extends PreferenceActivity implements
         mPageColorPreferenceSelector.update();
         mWidgetColorPreferenceSelector.update();
         mWidgetCompletedTasksColorSelector.update();
+        mDebugScreenPreferenceSelector.update();
 
         // For lock expiration preference, also show the time until next expiration. This require
         // some computation.

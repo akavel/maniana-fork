@@ -312,6 +312,10 @@ public class PreferencesTracker implements PreferenceConstants {
                 DEFAULT_AUTO_DAILY_CLEANUP);
     }
 
+    public static final boolean readDebugModePreference(SharedPreferences sharedPreferences) {
+        return sharedPreferences.getBoolean(PreferenceKind.DEBUG_MODE.getKey(), DEFAULT_DEBUG_MODE);
+    }
+
     public final boolean getSoundEnabledPreference() {
         return mCachedAllowSoundsPreference;
     }

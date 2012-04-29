@@ -262,4 +262,16 @@
             android:title="@string/settings_misc_restore_defaults_title">
         </Preference>
     </PreferenceScreen>
+    <!-- For developers use only. Not intended for normal usage. -->
+    <!-- Does not require translation. Shown only when flag is on. -->
+    <PreferenceScreen
+        android:title="Debug"
+        android:key="prefDebugScreenKey">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="prefDebugModeKey"
+            android:summaryOff="Debug mode is off"
+            android:summaryOn="Debug mode is on"
+            android:title="Debug Mode" />
+    </PreferenceScreen>
 </PreferenceScreen>

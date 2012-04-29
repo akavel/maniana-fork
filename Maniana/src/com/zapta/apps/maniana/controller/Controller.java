@@ -50,6 +50,7 @@ import com.zapta.apps.maniana.persistence.ModelDeserialization;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.persistence.PersistenceMetadata;
 import com.zapta.apps.maniana.quick_action.QuickActionItem;
+import com.zapta.apps.maniana.settings.DebugSetting;
 import com.zapta.apps.maniana.settings.PreferenceKind;
 import com.zapta.apps.maniana.settings.SettingsActivity;
 import com.zapta.apps.maniana.util.AttachmentUtil;
@@ -69,6 +70,9 @@ import com.zapta.apps.maniana.widget.BaseWidgetProvider;
  */
 public class Controller {
 
+    // Adding a task with this exact text triggered on the debug mode.
+    private static final String DEBUG_MODE_TASK_CODE = "#debug#";
+    
     private static final int VOICE_RECOGNITION_REQUEST_CODE = 1001;
 
     /** The app context. Provide access to the model, view and services. */
@@ -540,6 +544,14 @@ public class Controller {
             boolean upperCaseIt) {
         String cleanedValue = text.trim();
         if (cleanedValue.length() == 0) {
+            return;
+        }
+        
+        // Look for special string to enable debug mode. 
+        if (cleanedValue.equals("#debug#")) {
+            DebugSetting.setDebugMode(mApp.context(), true);
+            mApp.services().toast("Enabled debug mode");
+            // Do not add the item.
             return;
         }
 

@@ -85,7 +85,10 @@ public enum PreferenceKind implements KeyedEnum {
     // Backup (Experimental)
     BACKUP_EMAIL("prefBackupEmailKey"),
     BACKUP("prefBackupKey"),
-    RESTORE("prefRestoreKey");
+    RESTORE("prefRestoreKey"),
+    
+    // Debug
+    DEBUG_MODE("prefDebugModeKey");
 
     /** Preference item key. Persisted. Change only if must. Must match preferences XML definitions. */
     private final String mKey;

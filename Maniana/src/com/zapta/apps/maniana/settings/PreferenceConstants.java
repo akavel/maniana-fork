@@ -59,8 +59,10 @@ public interface PreferenceConstants {
     public static final int DEFAULT_WIDGET_ITEM_COMPLETED_TEXT_COLOR = 0xff888888;
     public static final boolean DEFAULT_WIDGET_SHOW_TOOLBAR = true;
     public static final boolean DEFAULT_WIDGET_SINGLE_LINE = false;
+    
+    // Debug
+    public static final boolean DEFAULT_DEBUG_MODE = false;
 
     /** Android name sapce used in XML docs. */
     public static final String ANDROID_NAME_SPACE = "http://schemas.android.com/apk/res/android";
-
 }
