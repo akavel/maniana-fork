@@ -312,10 +312,6 @@ public class PreferencesTracker implements PreferenceConstants {
                 DEFAULT_AUTO_DAILY_CLEANUP);
     }
 
-    public static final boolean readDebugModePreference(SharedPreferences sharedPreferences) {
-        return sharedPreferences.getBoolean(PreferenceKind.DEBUG_MODE.getKey(), DEFAULT_DEBUG_MODE);
-    }
-
     public final boolean getSoundEnabledPreference() {
         return mCachedAllowSoundsPreference;
     }
@@ -487,6 +483,7 @@ public class PreferencesTracker implements PreferenceConstants {
             case WIDGET_SHOW_TOOLBAR:
             case WIDGET_SINGLE_LINE:
             case BACKUP_EMAIL:
+            case DEBUG_MODE:
                 // These ones are not cached or used here. Just reported to controller to
                 // trigger the widget update and backup service.
                 break;

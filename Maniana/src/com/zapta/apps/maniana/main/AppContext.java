@@ -18,6 +18,7 @@ import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
 import android.content.Context;
 
 import com.zapta.apps.maniana.controller.Controller;
+import com.zapta.apps.maniana.debug.DebugController;
 import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.services.AppResources;
 import com.zapta.apps.maniana.services.AppServices;
@@ -52,6 +53,9 @@ public class AppContext {
 
     /** The app controller. Contains the main app logic. */
     private Controller mController;
+    
+    /** Debug mode operations. */
+    private DebugController mDebugController;
 
     /** The app view. */
     private AppView mView;
@@ -65,7 +69,8 @@ public class AppContext {
         mAppPreferences = new PreferencesTracker(this);
         mResources = new AppResources(this);
         mServices = new AppServices(this);
-        mController = new Controller(this);
+        mDebugController = new DebugController(this);
+        mController = new Controller(this);     
         mView = new AppView(this);
     }
 
@@ -115,8 +120,12 @@ public class AppContext {
     public final Controller controller() {
         return mController;
     }
-
+    
     public final AppView view() {
         return mView;
+    }
+
+    public final DebugController debug() {
+        return mDebugController;
     }
 }

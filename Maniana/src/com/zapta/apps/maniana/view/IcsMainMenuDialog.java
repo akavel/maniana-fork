@@ -41,7 +41,18 @@ public class IcsMainMenuDialog {
 
         for (MainMenuEntry entry : MainMenuEntry.values()) {
             final MainMenuEntry finalEntry = entry;
-            final TextView textView = (TextView) dialog.findViewById(menuEntryViewId(entry));
+
+            final TextView textView = (TextView) dialog.findViewById(entry.icsMenuEntryId);
+
+            if (entry == MainMenuEntry.DEBUG) {
+                if (!app.debug().isDebugMode()) {
+                    textView.setVisibility(View.GONE);
+                    continue;
+                }
+                textView.setVisibility(View.VISIBLE);
+            }
+
+            // Set action
             textView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -57,19 +68,4 @@ public class IcsMainMenuDialog {
         dialog.dismiss();
         app.controller().onMainMenuSelection(entry);
     }
-
-    /** Map menu entry enum value to menu dialog text view ids. */
-    private static final int menuEntryViewId(MainMenuEntry entry) {
-        switch (entry) {
-            case SETTINGS:
-                return R.id.ics_menu_settings;
-            case HELP:
-                return R.id.ics_menu_help;
-            case ABOUT:
-                return R.id.ics_menu_about;
-            default:
-                throw new RuntimeException("Unknown menu entry: " + entry);
-        }
-    }
-
 }

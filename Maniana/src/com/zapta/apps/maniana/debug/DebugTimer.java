@@ -12,7 +12,9 @@
  * the License.
  */
 
-package com.zapta.apps.maniana.util;
+package com.zapta.apps.maniana.debug;
+
+import com.zapta.apps.maniana.util.LogUtil;
 
 /**
  * Debug utility to measure operation timing.

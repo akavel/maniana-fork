@@ -14,13 +14,47 @@
 
 package com.zapta.apps.maniana.controller;
 
+import javax.annotation.Nullable;
+
+import com.zapta.apps.maniana.R;
+
 /**
  * Entries of the main menu.
  * 
  * @author Tal Dayan
  */
 public enum MainMenuEntry {
-    SETTINGS,
-    HELP,
-    ABOUT;
+    SETTINGS(R.id.main_menu_settings, R.id.ics_menu_settings),
+    HELP(R.id.main_menu_help, R.id.ics_menu_help),
+    ABOUT(R.id.main_menu_about, R.id.ics_menu_about),
+    DEBUG(R.id.main_menu_debug, R.id.ics_menu_debug);
+
+    public final int mainMenuEntryId;
+    public final int icsMenuEntryId;
+
+    private MainMenuEntry(int mainMenuEntryId, int icsMenuEntryId) {
+        this.mainMenuEntryId = mainMenuEntryId;
+        this.icsMenuEntryId = icsMenuEntryId;
+    }
+
+    @Nullable
+    public static final MainMenuEntry byMainMenuId(int mainMenuEntryId) {
+        for (MainMenuEntry entry : MainMenuEntry.values()) {
+            if (mainMenuEntryId == entry.mainMenuEntryId) {
+                return entry;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public static final MainMenuEntry byIcsMenuId(int icsMenuEntryId) {
+        for (MainMenuEntry entry : MainMenuEntry.values()) {
+            if (icsMenuEntryId == entry.icsMenuEntryId) {
+                return entry;
+            }
+        }
+        return null;
+    }
+
 }

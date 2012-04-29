@@ -50,7 +50,6 @@ import com.zapta.apps.maniana.persistence.ModelDeserialization;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.persistence.PersistenceMetadata;
 import com.zapta.apps.maniana.quick_action.QuickActionItem;
-import com.zapta.apps.maniana.settings.DebugSetting;
 import com.zapta.apps.maniana.settings.PreferenceKind;
 import com.zapta.apps.maniana.settings.SettingsActivity;
 import com.zapta.apps.maniana.util.AttachmentUtil;
@@ -71,8 +70,13 @@ import com.zapta.apps.maniana.widget.BaseWidgetProvider;
 public class Controller {
 
     // Adding a task with this exact text triggered on the debug mode.
+    // Debug mode expose few commands that may be useful for developers. When enabled,
+    // debug mode commands are available via the 'Debug' entry in the main menu.
+    // Note that debug commands can change any time as the developers needs change.
+    // Also, we don't bother to translate debug mode strings. They are always in
+    // English.
     private static final String DEBUG_MODE_TASK_CODE = "#debug#";
-    
+
     private static final int VOICE_RECOGNITION_REQUEST_CODE = 1001;
 
     /** The app context. Provide access to the model, view and services. */
@@ -208,12 +212,13 @@ public class Controller {
     public final void onMainActivityResume(ResumeAction resumeAction, @Nullable Intent resumeIntent) {
         // This may leave undo items in case we cleanup completed tasks.
         maybeHandleDateChange();
-        
+
         NotificationUtil.clearPendingItemsNotification(mApp.context());
 
         ++mOnAppResumeCount;
 
-        // We suppress the population of new user sample tasks if the first resume is with certain actions. 
+        // We suppress the population of new user sample tasks if the first resume is with certain
+        // actions.
         // It seems to be more intuitive this way.
         if (mPopulateNewUserSampleDataOnResume) {
             if (resumeAction != ResumeAction.RESTORE_FROM_BABKUP_FILE) {
@@ -546,11 +551,10 @@ public class Controller {
         if (cleanedValue.length() == 0) {
             return;
         }
-        
-        // Look for special string to enable debug mode. 
-        if (cleanedValue.equals("#debug#")) {
-            DebugSetting.setDebugMode(mApp.context(), true);
-            mApp.services().toast("Enabled debug mode");
+
+        // Look for special string to enable debug mode.
+        if (cleanedValue.equals(DEBUG_MODE_TASK_CODE)) {
+            mApp.debug().setDebugMode(true);
             // Do not add the item.
             return;
         }
@@ -736,18 +740,18 @@ public class Controller {
     /** Called by the framework when the user makes a main menu selection. */
     public final void onMainMenuSelection(MainMenuEntry entry) {
         switch (entry) {
-            case HELP: {
+            case HELP:
                 startPopupMessageSubActivity(MessageKind.HELP);
                 break;
-            }
-            case SETTINGS: {
+            case SETTINGS:
                 startSubActivity(SettingsActivity.class);
                 break;
-            }
-            case ABOUT: {
+            case ABOUT:
                 startPopupMessageSubActivity(MessageKind.ABOUT);
                 break;
-            }
+            case DEBUG:
+                mApp.debug().onDebugClick();
+                break;
             default:
                 throw new RuntimeException("Unknown main menu action id: " + entry);
         }
@@ -845,6 +849,10 @@ public class Controller {
                 break;
 
             case BACKUP_EMAIL:
+                // Nothing to do here.
+                break;
+
+            case DEBUG_MODE:
                 // Nothing to do here.
                 break;
 

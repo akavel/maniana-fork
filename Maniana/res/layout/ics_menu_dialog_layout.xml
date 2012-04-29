@@ -68,6 +68,19 @@
             android:textColor="#ffcccccc"
             android:textSize="24sp"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/ics_menu_debug"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/list_selector_press_background"
+            android:paddingBottom="20dip"
+            android:paddingLeft="10dip"
+            android:paddingTop="12dip"
+            android:text="Debug"
+            android:textColor="#ffcccccc"
+            android:textSize="24sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </FrameLayout>

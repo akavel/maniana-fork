@@ -28,8 +28,8 @@ import android.view.Window;
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.controller.MainMenuEntry;
 import com.zapta.apps.maniana.controller.StartupKind;
-import com.zapta.apps.maniana.persistence.ModelReadingResult;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
+import com.zapta.apps.maniana.persistence.ModelReadingResult;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**
@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
 
     /** Used to pass resume action from onNewIntent() to onResume(). */
     private ResumeAction mResumeAction = ResumeAction.NONE;
-    
+
     /** Contains the intent that triggered mResumeAction. Null FF action = NONE. */
     @Nullable
     private Intent mResumeIntent = null;
@@ -59,8 +59,8 @@ public class MainActivity extends Activity {
         mApp = new AppContext(this);
 
         // Load model from file
-        final ModelReadingResult modelLoadResult = ModelPersistence.readModelFile(
-                mApp.context(), mApp.model());
+        final ModelReadingResult modelLoadResult = ModelPersistence.readModelFile(mApp.context(),
+                mApp.model());
 
         final StartupKind startupKind;
         switch (modelLoadResult.outcome) {
@@ -124,7 +124,7 @@ public class MainActivity extends Activity {
         mApp.pref().release();
     }
 
-    /** Called by the framework when user opened the app main menu. */
+    /** Called by the framework once when user opened the app main menu the first time. */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // For the old style option menu
@@ -139,24 +139,23 @@ public class MainActivity extends Activity {
         // return false;
     }
 
+    /** Called each time before the menu is shown. */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        final MenuItem debugItem = menu.findItem(R.id.main_menu_debug);
+        debugItem.setVisible(mApp.debug().isDebugMode());
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     /** Called by the framework when the user make a selection in the app main menu. */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        final MainMenuEntry mainMenuEntry;
-
-        switch (item.getItemId()) {
-            case R.id.main_menu_settings:
-                mainMenuEntry = MainMenuEntry.SETTINGS;
-                break;
-            case R.id.main_menu_help:
-                mainMenuEntry = MainMenuEntry.HELP;
-                break;
-            case R.id.main_menu_about:
-                mainMenuEntry = MainMenuEntry.ABOUT;
-                break;
-            default:
-                LogUtil.error("Unknown option menu item id: " + item.getTitle());
-                return true;
+        @Nullable
+        final MainMenuEntry mainMenuEntry = MainMenuEntry.byMainMenuId(item.getItemId());
+        
+        if (mainMenuEntry == null) {
+            LogUtil.error("Unknown option menu item id: " + item.getTitle());
+            return true;
         }
 
         mApp.controller().onMainMenuSelection(mainMenuEntry);
@@ -181,10 +180,9 @@ public class MainActivity extends Activity {
         // Get the action for this resume
         final Intent thisResumeIntent = mResumeIntent;
         final ResumeAction thisResumeAction = mResumeAction;
-        
+
         mResumeIntent = null;
         mResumeAction = ResumeAction.NONE;
-        
 
         // Inform the controller
         mApp.controller().onMainActivityResume(thisResumeAction, thisResumeIntent);
