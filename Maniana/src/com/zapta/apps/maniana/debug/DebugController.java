@@ -49,7 +49,8 @@ public class DebugController {
                 NotificationUtil.clearPendingItemsNotification(mApp.context());
                 break;
             case NEW_USER:
-                mApp.context().startActivity(PopupMessageActivity.intentFor(mApp.context(), MessageKind.NEW_USER));
+                mApp.context().startActivity(
+                        PopupMessageActivity.intentFor(mApp.context(), MessageKind.NEW_USER));
                 break;
             case ICS_MENU:
                 IcsMainMenuDialog.showMenu(mApp);
