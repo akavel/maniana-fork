@@ -69,13 +69,13 @@ import com.zapta.apps.maniana.widget.BaseWidgetProvider;
  */
 public class Controller {
 
-    // Adding a task with this exact text triggered on the debug mode.
-    // Debug mode expose few commands that may be useful for developers. When enabled,
+    // Adding a task with this exact text turns on the debug mode.
+    // Debug mode exposes few commands that may be useful for developers. When enabled,
     // debug mode commands are available via the 'Debug' entry in the main menu.
     // Note that debug commands can change any time as the developers needs change.
     // Also, we don't bother to translate debug mode strings. They are always in
     // English.
-    private static final String DEBUG_MODE_TASK_CODE = "#debug#";
+    private static final String DEBUG_MODE_TASK_CODE = "#d#";
 
     private static final int VOICE_RECOGNITION_REQUEST_CODE = 1001;
 
