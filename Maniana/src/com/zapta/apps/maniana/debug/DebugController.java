@@ -14,6 +14,8 @@
 
 package com.zapta.apps.maniana.debug;
 
+import javax.annotation.Nullable;
+
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
@@ -28,6 +30,9 @@ import com.zapta.apps.maniana.view.IcsMainMenuDialog;
 public class DebugController {
 
     private final AppContext mApp;
+
+    @Nullable
+    private ShakeDetector mShakeDetector = null;
 
     public DebugController(AppContext mApp) {
         this.mApp = mApp;
@@ -54,12 +59,26 @@ public class DebugController {
                 break;
             case ICS_MENU:
                 IcsMainMenuDialog.showMenu(mApp);
+            case SHAKE_ON1:
+                if (mShakeDetector != null) {
+                    mShakeDetector.disable();
+                    mShakeDetector = null;
+                }
+                mShakeDetector = new ShakeDetector1(mApp);
+                mShakeDetector.enable();
                 break;
+            case SHAKE_OFF:
+                if (mShakeDetector != null) {
+                    mShakeDetector.disable();
+                    mShakeDetector = null;
+                }
+                break;
+
             case EXIT:
                 setDebugMode(false);
                 break;
             default:
-                mApp.services().toast("Unknown debug command: " + command);
+                mApp.services().toast("Not implemented: " + command);
         }
     }
 

@@ -14,20 +14,10 @@
 
 package com.zapta.apps.maniana.debug;
 
-public enum DebugCommand {
-    // NOTE: debug mode strings are not translated. English only.
-    NOTIFICATION_SINGLE("Notification (1)"),
-    NOTIFICATION_MULTI("Notification (17)"),
-    NOTIFICATION_CLEAR("Notification (clear)"),
-    NEW_USER("New user message"),
-    ICS_MENU("ICS menu"),
-    SHAKE_ON1("Shake detector 1"),
-    SHAKE_OFF("Shake detector OFF"),
-    EXIT("Exit debug mode");
-    
-    public final String text;
-    
-    private DebugCommand(String text) {
-        this.text = text;
-    }
+public interface ShakeDetector {
+
+    public abstract void enable();
+
+    public abstract void disable();
+
 }
