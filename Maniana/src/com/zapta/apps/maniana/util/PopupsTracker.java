@@ -50,6 +50,10 @@ public class PopupsTracker {
             mTrackedPopups.remove(popup);
         }
     }
+    
+    public final int count() {
+        return mTrackedPopups.size();
+    }
 
     /** Close dialogs that were left open. */
     public final void closeAllLeftOvers() {

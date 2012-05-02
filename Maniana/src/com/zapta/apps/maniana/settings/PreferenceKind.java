@@ -45,6 +45,11 @@ public enum PreferenceKind implements KeyedEnum {
     AUTO_DAILY_CLEANUP("prefAutoDailyCleanupKey"),
     DAILY_NOTIFICATION("prefDailyNotificationKey"),
     LOCK_PERIOD("prefLockPeriodKey"),
+    
+    // Shaker
+    SHAKER_ENABLED("prefShakerEnableKey"),
+    SHAKER_ACTION("prefShakerActionKey"),
+    SHAKER_SENSITIVITY("prefShakerForceKey"),
 
     // Page
     PAGE_SELECT_THEME("prefPageSelectThemeKey"),

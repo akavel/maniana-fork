@@ -44,6 +44,11 @@ public class PreferencesTracker implements PreferenceConstants {
     private boolean mCachedAutoSortPreference;
     private boolean mCachedAutoDailyCleanupPreference;
     private LockExpirationPeriod mCachedLockExpirationPeriodPrefernece;
+    
+    // Shaker
+    private boolean mCachedShakerEnabledPreference;
+    private ShakerAction mCachedShakerActionPreference;
+    private int mCachedShakerSensitivityPreference;
 
     // Page
     private boolean mCachedPageBackgroundPaperPreference;
@@ -75,6 +80,9 @@ public class PreferencesTracker implements PreferenceConstants {
         updateCachedApplauseLevelPreference();
         updateCachedAutoSortPreference();
         updateCachedAutoDailyCleanupPreference();
+        updateCachedShakerEnabledPreference();
+        updateCachedShakerActionPreference();
+        updateCachedShakerSensitivityPreference();
         updateCachedPageIconSetPreference();
         updateCachedPageItemFontPreference();
         updateCachedPageTitleFontPreference();
@@ -107,6 +115,22 @@ public class PreferencesTracker implements PreferenceConstants {
     private final void updateCachedAllowSoundsPreference() {
         mCachedAllowSoundsPreference = mSharedPreferences.getBoolean(
                 PreferenceKind.SOUND_ENABLED.getKey(), DEFAULT_ALLOWS_SOUND_EFFECTS);
+    }
+    
+    private final void updateCachedShakerEnabledPreference() {
+        mCachedShakerEnabledPreference = mSharedPreferences.getBoolean(
+                PreferenceKind.SHAKER_ENABLED.getKey(), DEFAULT_SHAKER_ENABLED);
+    }
+    
+    private final void updateCachedShakerActionPreference() {
+        final String key = mSharedPreferences.getString(PreferenceKind.SHAKER_ACTION.getKey(),
+                DEFAULT_SHAKER_ACTION.getKey());
+        mCachedShakerActionPreference = ShakerAction.fromKey(key, DEFAULT_SHAKER_ACTION);
+    }
+    
+    private final void updateCachedShakerSensitivityPreference() {
+        mCachedShakerSensitivityPreference = mSharedPreferences.getInt(
+                PreferenceKind.SHAKER_SENSITIVITY.getKey(), DEFAULT_SHAKER_SENSITIVITY);
     }
 
     private final void updateCachedPageBackgroundPaperPreference() {
@@ -321,6 +345,18 @@ public class PreferencesTracker implements PreferenceConstants {
         return mCachedApplauseLevelPreference;
     }
 
+    public final boolean getShakerEnabledPreference() {
+        return mCachedShakerEnabledPreference;
+    }
+    
+    public final ShakerAction getShakerActionPreference() {
+        return mCachedShakerActionPreference;
+    }
+    
+    public final int getShakerSensitivityPreference() {
+        return mCachedShakerSensitivityPreference;
+    }
+    
     public final PageIconSet getPageIconSetPreference() {
         return mCachedPageIconSetPreference;
     }
@@ -410,18 +446,46 @@ public class PreferencesTracker implements PreferenceConstants {
 
         // TODO: order by definition order of PreferenceKind.
         switch (id) {
+            // Sound
             case SOUND_ENABLED:
                 updateCachedAllowSoundsPreference();
                 break;
             case APPLAUSE_LEVEL:
                 updateCachedApplauseLevelPreference();
                 break;
+                
+             // Behavior
             case AUTO_SORT:
                 updateCachedAutoSortPreference();
                 break;
             case AUTO_DAILY_CLEANUP:
                 updateCachedAutoDailyCleanupPreference();
                 break;
+            case LOCK_PERIOD:
+                updateCachedLockExpierationPeriodPreference();
+                break;
+            case VERBOSE_MESSAGES:
+                updateCachedVerboseMessagesPreference();
+                break;
+            case STARTUP_ANIMATION:
+                updateCachedStartupAnimationPreference();
+                break;
+            case DAILY_NOTIFICATION:
+                // Do nothing
+                break;
+                
+            // Shaker
+            case SHAKER_ENABLED:
+                updateCachedShakerEnabledPreference();
+                break;
+            case SHAKER_ACTION:
+                updateCachedShakerActionPreference();
+                break;
+            case SHAKER_SENSITIVITY:
+                updateCachedShakerSensitivityPreference();
+                break;
+             
+            // Page
             case PAGE_ICON_SET:
                 updateCachedPageIconSetPreference();
                 break;
@@ -461,16 +525,8 @@ public class PreferencesTracker implements PreferenceConstants {
             case PAGE_ITEM_DIVIDER_COLOR:
                 updateCachedPageItemDividerColorPreference();
                 break;
-            case LOCK_PERIOD:
-                updateCachedLockExpierationPeriodPreference();
-                break;
-            case VERBOSE_MESSAGES:
-                updateCachedVerboseMessagesPreference();
-                break;
-            case STARTUP_ANIMATION:
-                updateCachedStartupAnimationPreference();
-                break;
-            case DAILY_NOTIFICATION:
+                
+            // Widget
             case WIDGET_BACKGROUND_PAPER:
             case WIDGET_PAPER_COLOR:
             case WIDGET_BACKGROUND_COLOR:

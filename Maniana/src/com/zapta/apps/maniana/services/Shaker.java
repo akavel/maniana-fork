@@ -12,14 +12,23 @@
  * the License.
  */
 
-package com.zapta.apps.maniana.debug;
+package com.zapta.apps.maniana.services;
 
-/**
- * Debug commands interface. Used by the debug dialog.
+/** 
+ * Common interface for shake detector implementations.
  * 
  * @author Tal Dayan
  */
-public interface DebugCommand {
-    /** Display text. Not translated. English only. */
-    String getText();
+public interface Shaker {
+    
+    /** Called on shake events. */
+    public interface ShakerListener {
+        void onShake();
+    }
+
+    /** Return true if actually enabled. */
+    public abstract boolean resume(int force);
+
+    public abstract void pause();
+
 }

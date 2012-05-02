@@ -31,6 +31,11 @@ public interface PreferenceConstants {
     public static final boolean DEFAULT_AUTO_DAILY_CLEANUP = true;
     public static final boolean DEFAULT_DAILY_NOTIFICATION = false;
     public static final LockExpirationPeriod DEFAULT_LOCK_PERIOD = LockExpirationPeriod.NEVER;
+    
+    // Shaker
+    public static final boolean DEFAULT_SHAKER_ENABLED = false;
+    public static final ShakerAction DEFAULT_SHAKER_ACTION = ShakerAction.NEW_ITEM_BY_TEXT;
+    public static final int DEFAULT_SHAKER_SENSITIVITY = 5;
 
     // Page
     public static final boolean DEFAULT_PAGE_BACKGROUND_PAPER = true;

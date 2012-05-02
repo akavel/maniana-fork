@@ -15,11 +15,24 @@
 package com.zapta.apps.maniana.debug;
 
 /**
- * Debug commands interface. Used by the debug dialog.
+ * Commands of the debug main dialog.
  * 
  * @author Tal Dayan
  */
-public interface DebugCommand {
-    /** Display text. Not translated. English only. */
-    String getText();
+public enum DebugCommandMain implements DebugCommand {
+    NOTIFICATIONS("Notification..."),
+    NEW_USER("New user message"),
+    ICS_MENU("ICS menu"),
+    EXIT("Exit debug mode");
+    
+    private final String mText;
+    
+    private DebugCommandMain(String text) {
+        this.mText = text;
+    }
+    
+    @Override
+    public String getText() {
+        return mText;
+    }
 }

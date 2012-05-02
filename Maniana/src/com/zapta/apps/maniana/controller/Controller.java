@@ -50,8 +50,12 @@ import com.zapta.apps.maniana.persistence.ModelDeserialization;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.persistence.PersistenceMetadata;
 import com.zapta.apps.maniana.quick_action.QuickActionItem;
+import com.zapta.apps.maniana.services.Shaker;
+import com.zapta.apps.maniana.services.Shaker.ShakerListener;
+import com.zapta.apps.maniana.services.ShakeImpl;
 import com.zapta.apps.maniana.settings.PreferenceKind;
 import com.zapta.apps.maniana.settings.SettingsActivity;
+import com.zapta.apps.maniana.settings.ShakerAction;
 import com.zapta.apps.maniana.util.AttachmentUtil;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult;
@@ -67,7 +71,7 @@ import com.zapta.apps.maniana.widget.BaseWidgetProvider;
  * 
  * @author Tal Dayan
  */
-public class Controller {
+public class Controller implements ShakerListener {
 
     // Adding a task with this exact text turns on the debug mode.
     // Debug mode exposes few commands that may be useful for developers. When enabled,
@@ -95,6 +99,9 @@ public class Controller {
      * app re-entry.
      */
     private boolean mInSubActivity = false;
+
+    @Nullable
+    private Shaker mOptionalShaker = null;
 
     /**
      * Preallocated temp object. Used to reduce object alloctation.
@@ -183,6 +190,9 @@ public class Controller {
 
     /** Called when the activity is paused */
     public final void onMainActivityPause() {
+        if (mOptionalShaker != null) {
+            mOptionalShaker.pause();
+        }
         // Close any leftover dialogs. This provides a more intuitive user experience.
         mApp.popupsTracker().closeAllLeftOvers();
         flushModelChanges(false);
@@ -285,6 +295,22 @@ public class Controller {
             case ONLY_RESET_PAGE:
             default:
                 // Do nothing
+        }
+
+        resumeShaker();
+    }
+
+    private final void resumeShaker() {
+        if (mApp.pref().getShakerEnabledPreference()) {
+            if (mOptionalShaker == null) {
+                mOptionalShaker = new ShakeImpl(mApp.context(), this);
+            }
+            mOptionalShaker.resume(mApp.pref().getShakerSensitivityPreference());
+        } else {
+            if (mOptionalShaker != null) {
+                mOptionalShaker.pause();
+                mOptionalShaker = null;
+            }
         }
     }
 
@@ -681,6 +707,32 @@ public class Controller {
         }
     }
 
+    /** Called from shake detector. */
+    public final void onShake() {
+        // If we have open dialogs ignore this shake event.
+        if (mApp.popupsTracker().count() > 0) {
+            LogUtil.info("Shake ignored (dialog opened)");
+            return;
+        }
+
+        // Handle the shake event
+        final PageKind currentPage = mApp.view().getCurrentPage();
+        final ShakerAction action = mApp.pref().getShakerActionPreference();
+        switch (action) {
+            case NEW_ITEM_BY_TEXT:
+                onAddItemByTextButton(currentPage);
+                break;
+            case NEW_ITEM_BY_VOICE:
+                onAddItemByVoiceButton(currentPage);
+                break;
+            case CLEAN:
+                onCleanPageButton(currentPage, true);
+                break;
+            default:
+                mApp.services().toast("Unknown action: " + action);
+        }
+    }
+
     /**
      * Compose the message to show to the user after a page cleanup operation.
      * 
@@ -745,7 +797,7 @@ public class Controller {
                 startPopupMessageSubActivity(MessageKind.ABOUT);
                 break;
             case DEBUG:
-                mApp.debug().onDebugClick();
+                mApp.debug().startMainDialog();
                 break;
             default:
                 throw new RuntimeException("Unknown main menu action id: " + entry);
@@ -823,6 +875,14 @@ public class Controller {
             case AUTO_DAILY_CLEANUP:
                 // This setting may affect the widget on next update but by itself, its
                 // change event does require widget update (?).
+                break;
+
+            case SHAKER_ENABLED:
+            case SHAKER_ACTION:
+            case SHAKER_SENSITIVITY:
+                // Nothing to do here. The controller will update the shaker next time
+                // it will be resumed. Since setting is done in a separate activity,
+                // the controller is paused when setting is changed.
                 break;
 
             case WIDGET_BACKGROUND_PAPER:

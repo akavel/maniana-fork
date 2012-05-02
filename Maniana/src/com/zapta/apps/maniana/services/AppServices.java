@@ -110,11 +110,11 @@ public class AppServices {
         mDensity = DisplayUtil.getDensity(app.context());
     }
 
-    public int getAppVersionCode() {
+    public final int getAppVersionCode() {
         return mAppVersionCode;
     }
 
-    public String getAppVersionName() {
+    public final String getAppVersionName() {
         return mAppVersionName;
     }
 

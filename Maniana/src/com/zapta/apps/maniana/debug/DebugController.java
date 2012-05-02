@@ -14,8 +14,6 @@
 
 package com.zapta.apps.maniana.debug;
 
-import javax.annotation.Nullable;
-
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
@@ -27,31 +25,34 @@ import com.zapta.apps.maniana.settings.PreferenceKind;
 import com.zapta.apps.maniana.util.NotificationUtil;
 import com.zapta.apps.maniana.view.IcsMainMenuDialog;
 
+/**
+ * Controller for the debug functionality.
+ * 
+ * @author Tal Dayan
+ */
 public class DebugController {
 
     private final AppContext mApp;
-
-    @Nullable
-    private ShakeDetector mShakeDetector = null;
 
     public DebugController(AppContext mApp) {
         this.mApp = mApp;
     }
 
-    public final void onDebugClick() {
-        DebugDialog.startDialog(mApp);
+    /** Call this one to allow the user to select a debug command. */
+    public final void startMainDialog() {
+        DebugDialog.startDialog(mApp, "Debug", DebugCommandMain.values(),
+                new DebugDialogListener<DebugCommandMain>() {
+                    @Override
+                    public void onDebugCommand(DebugCommandMain command) {
+                        onDebugCommandMain(command);
+                    }
+                });
     }
 
-    public final void onDebugCommand(DebugCommand command) {
+    private final void onDebugCommandMain(DebugCommandMain command) {
         switch (command) {
-            case NOTIFICATION_SINGLE:
-                NotificationUtil.sendPendingItemsNotification(mApp.context(), 1);
-                break;
-            case NOTIFICATION_MULTI:
-                NotificationUtil.sendPendingItemsNotification(mApp.context(), 17);
-                break;
-            case NOTIFICATION_CLEAR:
-                NotificationUtil.clearPendingItemsNotification(mApp.context());
+            case NOTIFICATIONS:
+                startNotificationDialog();
                 break;
             case NEW_USER:
                 mApp.context().startActivity(
@@ -59,19 +60,6 @@ public class DebugController {
                 break;
             case ICS_MENU:
                 IcsMainMenuDialog.showMenu(mApp);
-            case SHAKE_ON1:
-                if (mShakeDetector != null) {
-                    mShakeDetector.disable();
-                    mShakeDetector = null;
-                }
-                mShakeDetector = new ShakeDetector1(mApp);
-                mShakeDetector.enable();
-                break;
-            case SHAKE_OFF:
-                if (mShakeDetector != null) {
-                    mShakeDetector.disable();
-                    mShakeDetector = null;
-                }
                 break;
 
             case EXIT:
@@ -82,6 +70,33 @@ public class DebugController {
         }
     }
 
+    private final void startNotificationDialog() {
+        DebugDialog.startDialog(mApp, "Debug Notifications", DebugCommandNotification.values(),
+                new DebugDialogListener<DebugCommandNotification>() {
+                    @Override
+                    public void onDebugCommand(DebugCommandNotification command) {
+                        onDebugCommandNotification(command);
+                    }
+                });
+    }
+
+    private final void onDebugCommandNotification(DebugCommandNotification command) {
+        switch (command) {
+            case NOTIFICATION_SINGLE:
+                NotificationUtil.sendPendingItemsNotification(mApp.context(), 1);
+                break;
+            case NOTIFICATION_MULTI:
+                NotificationUtil.sendPendingItemsNotification(mApp.context(), 17);
+                break;
+            case NOTIFICATION_CLEAR:
+                NotificationUtil.clearPendingItemsNotification(mApp.context());
+                break;
+            default:
+                mApp.services().toast("Not implemented: " + command);
+        }
+    }
+
+    /** Write a persisted debug mode flag value */
     public final void setDebugMode(boolean flag) {
         mApp.services().toast("Debug mode: " + (flag ? "ON" : "OFF"));
         final SharedPreferences sharedPreferences = PreferenceManager
@@ -91,6 +106,7 @@ public class DebugController {
         editor.commit();
     }
 
+    /** Read the persisted debug mode flag value. */
     public final boolean isDebugMode() {
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mApp
                 .context());

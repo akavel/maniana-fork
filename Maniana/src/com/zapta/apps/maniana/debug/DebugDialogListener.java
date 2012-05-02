@@ -14,10 +14,11 @@
 
 package com.zapta.apps.maniana.debug;
 
-public interface ShakeDetector {
-
-    public abstract void enable();
-
-    public abstract void disable();
-
+/** 
+ * Listener for debug dialog command selection event.
+ * 
+ * @author Tal Dayan
+ */
+public interface DebugDialogListener<T extends DebugCommand> {
+    void onDebugCommand(T command);
 }

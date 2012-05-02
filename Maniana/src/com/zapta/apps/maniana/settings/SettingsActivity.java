@@ -385,6 +385,8 @@ public class SettingsActivity extends PreferenceActivity implements
                 PreferenceConstants.DEFAULT_WIDGET_SHOW_COMPLETED_ITEMS);
         editor.putBoolean(PreferenceKind.WIDGET_SINGLE_LINE.getKey(),
                 PreferenceConstants.DEFAULT_WIDGET_SINGLE_LINE);
+        editor.putBoolean(PreferenceKind.SHAKER_ENABLED.getKey(),
+                PreferenceConstants.DEFAULT_SHAKER_ENABLED);
 
         // Set icon set preferences to broadcast the change event.
         editor.putString(PreferenceKind.PAGE_ICON_SET.getKey(),

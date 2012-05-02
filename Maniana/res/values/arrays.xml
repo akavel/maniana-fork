@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--  Lock expiration period -->
     <string-array name="lockPeriodNames">
         <item>@string/settings_lock_expiration_name_once_a_week</item>
         <item>@string/settings_lock_expiration_name_once_a_month</item>
@@ -11,6 +12,8 @@
         <item>monthly</item>
         <item>never</item>
     </string-array>
+    
+    <!--  Applause -->
     <string-array name="applauseLevelNames">
         <item>@string/settings_applause_name_never</item>
         <item>@string/settings_applause_name_sometimes</item>
@@ -25,6 +28,23 @@
         <item>@string/settings_applause_summary_never</item>
         <item>@string/settings_applause_summary_sometimes</item>
         <item>@string/settings_applause_summary_always</item>
+    </string-array>
+    
+    <!-- Shake detector -->
+    <string-array name="shakerActionNames">
+        <item>New item by text</item>
+        <item>New item by voice</item>
+        <item>Clean</item>
+    </string-array>
+    <string-array name="shakerActionValues">
+        <item>new_text</item>
+        <item>new_voice</item>
+        <item>clean</item>
+    </string-array>
+    <string-array name="shakerActionSummaries">
+        <item>Add by text</item>
+        <item>Add by voice</item>
+        <item>Clean page</item>
     </string-array>
 
 </resources>

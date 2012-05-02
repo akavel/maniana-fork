@@ -15,11 +15,23 @@
 package com.zapta.apps.maniana.debug;
 
 /**
- * Debug commands interface. Used by the debug dialog.
- * 
- * @author Tal Dayan
+ * Commands of debug notification dialog.
+ *
+ * @author: Tal Dayan
  */
-public interface DebugCommand {
-    /** Display text. Not translated. English only. */
-    String getText();
+public enum DebugCommandNotification implements DebugCommand {
+    NOTIFICATION_SINGLE("Notification (1)"),
+    NOTIFICATION_MULTI("Notification (17)"),
+    NOTIFICATION_CLEAR("Notification (clear)");
+    
+    private final String mText;
+    
+    private DebugCommandNotification(String text) {
+        this.mText = text;
+    }
+    
+    @Override
+    public String getText() {
+        return mText;
+    }
 }

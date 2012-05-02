@@ -19,23 +19,28 @@ import android.content.DialogInterface;
 
 import com.zapta.apps.maniana.main.AppContext;
 
+/** 
+ * A static typed dialog for selecting debug commands. 
+ * 
+ * @author: Tal Dayan
+ */
 public class DebugDialog {
 
-    public static final void startDialog(final AppContext app) {
-        
+    public static final <T extends DebugCommand> void startDialog(final AppContext app, String title, 
+            final T commands[], final DebugDialogListener<T> listener) {
         // Create array with command strings
-        final int n = DebugCommand.values().length;
-        final String[] items = new String[n];
+        final int n = commands.length;
+        final String[] commandsText = new String[n];
         for (int i = 0; i < n; i++) {
-            items[i] = DebugCommand.values()[i].text;
+            commandsText[i] = commands[i].getText();
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(app.context());
-        builder.setTitle("Debug Commands");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
+        builder.setTitle(title);
+        builder.setItems(commandsText, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int itemIndex) {
-                final DebugCommand command = DebugCommand.values()[itemIndex];
-                app.debug().onDebugCommand(command);
+                final T command = commands[itemIndex];
+                listener.onDebugCommand(command);
             }
         }).show();
     }
