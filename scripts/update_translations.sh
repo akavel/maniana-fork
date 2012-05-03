@@ -1,18 +1,19 @@
 #!/bin/bash
-
+#
 # A script to fetch the updated translations from crowdin.net.
 # Tested on Max osx.
 #
 # TODO: add assertions (dir/files exists, exist status ok, etc)
 # TODO: convert file formats from DOS to unix 
+# TODO: allow to override language list from command line
+
+# List of two letter codes of languages to update
+languages="it ja"
 
 # Definitions
 tmproot="/tmp"
 tmp="${tmproot}/maniana_tmp"
 url="http://crowdin.net/download/project/maniana.zip"
-
-# List of two letter codes of languages to update
-languages="it ja"
 
 # Create an empty temp working dir
 # Note: rm -rf is a risky command so we use 'maniana_tmp' explicitly.
@@ -39,7 +40,7 @@ ls -al ${tmp}
 for lang in ${languages}
 do
   echo
-  echo "--- Language: ${lang}"
+  echo "--- Language: [${lang}]"
   cp -v ${tmp}/${lang}/local_strings.xml ../Maniana/res/values-${lang}/local_strings.xml
 
   for name in help new_user_welcome restore_backup
