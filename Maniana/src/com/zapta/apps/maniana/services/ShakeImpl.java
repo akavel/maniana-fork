@@ -100,7 +100,7 @@ public class ShakeImpl implements Shaker {
     }
     
     private final void resetHistory() {
-        LogUtil.debug("Reseting history");
+        //LogUtil.debug("Reseting history");
         
         Arrays.fill(history, 0);
         nextIndex = 0;
@@ -115,7 +115,7 @@ public class ShakeImpl implements Shaker {
     }
 
     private final void resetState() {
-        LogUtil.debug("Reseting state");
+        //LogUtil.debug("Reseting state");
         resetHistory();       
 
         lastX = 0f;
@@ -223,7 +223,7 @@ public class ShakeImpl implements Shaker {
         // Map sensitivity to threshold. Values are based on trial and error..
         threshold = 1300 + (force * 700);
 
-        LogUtil.debug("Shaker resumed, force: %s, threshold: %s", actualForce, threshold);
+        //LogUtil.debug("Shaker resumed, force: %s, threshold: %s", actualForce, threshold);
         return mIsResumed;
     }
 
