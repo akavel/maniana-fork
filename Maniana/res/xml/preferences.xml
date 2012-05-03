@@ -56,32 +56,33 @@
             android:key="prefLockPeriodKey"
             android:summary="@string/place_holder"
             android:title="@string/settings_lock_expiration_title" />
-    </PreferenceScreen>
-    <!-- Shacker -->
-    <PreferenceScreen android:title="Shaker (Experimental)">
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="prefShakerEnableKey"
-            android:summaryOff="Shake detection is disabled"
-            android:summaryOn="Enabled (when Maniana pages are displayed)"
-            android:title="Shake Detection" />
-        <com.zapta.apps.maniana.settings.SeekBarPreference
-            android:key="prefShakerForceKey"
-            android:title="Force"
-            android:dependency="prefShakerEnableKey"
-            maniana:summaryFormat="Shaking the device at magnitude %d will activate the action"
-            android:defaultValue="5"
-            maniana:valueFormat="%d"
-            maniana:minValue="1"
-            maniana:maxValue="10" />
-        <ListPreference
-            android:defaultValue="new_text"
-            android:dependency="prefShakerEnableKey"
-            android:entries="@array/shakerActionNames"
-            android:entryValues="@array/shakerActionValues"
-            android:key="prefShakerActionKey"
-            android:summary="@string/place_holder"
-            android:title="Action" />
+        <PreferenceScreen
+            android:title="@string/settings_section_name_Shaker"
+            android:summary="@string/settings_section_shaker_summary">
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="prefShakerEnableKey"
+                android:summaryOff="@string/settings_shaker_enabled_summary_off"
+                android:summaryOn="@string/settings_shaker_enabled_summary_on"
+                android:title="@string/settings_shaker_enabled_title" />
+            <com.zapta.apps.maniana.settings.SeekBarPreference
+                android:key="prefShakerForceKey"
+                android:title="@string/settings_shaker_force_level_title"
+                android:dependency="prefShakerEnableKey"
+                maniana:summaryFormat="@string/settings_shaker_force_level_summary_format"
+                android:defaultValue="5"
+                maniana:valueFormat="%d"
+                maniana:minValue="1"
+                maniana:maxValue="10" />
+            <ListPreference
+                android:defaultValue="new_text"
+                android:dependency="prefShakerEnableKey"
+                android:entries="@array/shakerActionNames"
+                android:entryValues="@array/shakerActionValues"
+                android:key="prefShakerActionKey"
+                android:summary="@string/place_holder"
+                android:title="@string/settings_shaker_action_title" />
+        </PreferenceScreen>
     </PreferenceScreen>
     <PreferenceScreen
         android:title="@string/settings_section_name_Pages"

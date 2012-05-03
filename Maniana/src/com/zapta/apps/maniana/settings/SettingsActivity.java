@@ -68,6 +68,9 @@ public class SettingsActivity extends PreferenceActivity implements
 
     // Behavior
     private ListPreference mLockPeriodListPreference;
+    
+    // Shaking
+    private ListPreference mShakerActionPreference;
 
     // Page
     private CheckBoxPreference mPageBackgroundPaperPreference;
@@ -134,6 +137,9 @@ public class SettingsActivity extends PreferenceActivity implements
 
         // Behavior
         mLockPeriodListPreference = (ListPreference) findPreference(PreferenceKind.LOCK_PERIOD);
+        
+        // Shaker
+        mShakerActionPreference = (ListPreference) findPreference(PreferenceKind.SHAKER_ACTION);
 
         // Pages
         mPageBackgroundPaperPreference = (CheckBoxPreference) findPreference(PreferenceKind.PAGE_BACKGROUND_PAPER);
@@ -567,6 +573,8 @@ public class SettingsActivity extends PreferenceActivity implements
                     + construtLockTimeLeftMessageSuffix(this, wholeHoursLeft) + ")" : "";
             updateListPreferenceSummary(mLockPeriodListPreference, R.array.lockPeriodNames, suffix);
         }
+        
+        updateListPreferenceSummary(mShakerActionPreference, R.array.shakerActionNames, null);
     }
 
     private final String getBackupEmailAddress() {

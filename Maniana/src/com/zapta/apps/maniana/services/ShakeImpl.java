@@ -55,7 +55,7 @@ public class ShakeImpl implements Shaker {
     private float lastZ;
 
     /** System time of previous event. */
-    private long lastTimeMillis;
+    private long mLastTimeMillis;
 
     /** Magnitude from last N2 events. */
     private final int[] history = new int[N2];
@@ -98,22 +98,31 @@ public class ShakeImpl implements Shaker {
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
-
-    private final void resetState() {
+    
+    private final void resetHistory() {
+        LogUtil.debug("Reseting history");
+        
         Arrays.fill(history, 0);
         nextIndex = 0;
 
         sum1 = 0;
         sum2 = 0;
+        
+        // TODO: have a more explicit 'history full' condition.
+        //
+        // Suppress shake events until the history buffer will get refilled
+        blackout = N2 - 1;
+    }
+
+    private final void resetState() {
+        LogUtil.debug("Reseting state");
+        resetHistory();       
 
         lastX = 0f;
         lastY = 0f;
         lastZ = 0f;
 
-        lastTimeMillis = 0;
-
-        // Suppress shake events until the history buffer will get refilled
-        blackout = N2;
+        mLastTimeMillis = 0;     
     }
 
     /**
@@ -132,25 +141,34 @@ public class ShakeImpl implements Shaker {
         // Calculate acceleration change (first derivative of acceleration vector).
         final float dX = x - lastX;
         final float dY = y - lastY;
-        final float dZ = z - lastZ;
+        final float dZ = z - lastZ;      
 
+        final long currentTimeMillis = System.currentTimeMillis();
+        
+        // If no previous sample than skip this event.       
+        if (mLastTimeMillis == 0) {
+            LogUtil.info("No prev sample, skipping this one");
+            mLastTimeMillis = currentTimeMillis;
+            return;
+        }
+        
         // If delta time is way too long, reset state. Sensing has paused
-        // for some reason.
-        final long timeNowMillies = System.currentTimeMillis();
-        final long deltaTimeMillis = (timeNowMillies - lastTimeMillis);
+        // for some reason.       
+        final long deltaTimeMillis = (currentTimeMillis - mLastTimeMillis);
         if (deltaTimeMillis > 5000) {
-            LogUtil.info("Reseting shaker state, dt: %sms", deltaTimeMillis);
-            resetState();
-            lastTimeMillis = timeNowMillies;
+            // TODO: reseting here loose the current event data. This will require
+            // one more event to settle down. Can we preserve it in the lastXYZT?
+            LogUtil.info("Reseting history, dt: %sms", deltaTimeMillis);
+            resetHistory();
             return;
         }
 
-        lastTimeMillis = timeNowMillies;
+        mLastTimeMillis = currentTimeMillis;
 
         // Calculate change magnitude |<dx, dy, dz>|. Scaled by an arbitrary scale
         // to provide enough int bits of accuracy. We use ints to avoid accomulating
         // error in the incremental tracking of sum1, sum2.
-        final int newValue = (int) (Math.sqrt((dX * dX) + (dY * dY) + (dZ * dZ)) * 400);
+        final int newValue = (int) (Math.sqrt((dX * dX) + (dY * dY) + (dZ * dZ)) * 500);
 
         // Push to history queue and update incrementally the N1 and N2 sums.
         final int droppedValue1 = history[(nextIndex + N2 - N1) % N2];
@@ -195,6 +213,7 @@ public class ShakeImpl implements Shaker {
     public boolean resume(int force) {
         if (!mIsResumed) {
             resetState();
+            // Using NORMAL (low) rate for better battery life.
             mIsResumed = mSensorManager.registerListener(mSensorListener, mAccelerometer,
                     SensorManager.SENSOR_DELAY_NORMAL);
         }
@@ -202,7 +221,7 @@ public class ShakeImpl implements Shaker {
         final int actualForce = Math.max(1, Math.min(10, force));
 
         // Map sensitivity to threshold. Values are based on trial and error..
-        threshold = 1800 + (force * 700);
+        threshold = 1300 + (force * 700);
 
         LogUtil.debug("Shaker resumed, force: %s, threshold: %s", actualForce, threshold);
         return mIsResumed;

@@ -300,12 +300,20 @@ public class Controller implements ShakerListener {
         resumeShaker();
     }
 
+    /**
+     * Called when main activity is resumed. It updates the shaker state based on current settings.
+     */
     private final void resumeShaker() {
         if (mApp.pref().getShakerEnabledPreference()) {
-            if (mOptionalShaker == null) {
+            final boolean installShaker = (mOptionalShaker == null);
+            if (installShaker) {
                 mOptionalShaker = new ShakeImpl(mApp.context(), this);
             }
-            mOptionalShaker.resume(mApp.pref().getShakerSensitivityPreference());
+            final boolean shakerSupported = mOptionalShaker.resume(mApp.pref()
+                    .getShakerSensitivityPreference());
+            if (installShaker && !shakerSupported) {
+                mApp.services().toast(mApp.str(R.string.shaking_service_not_available));
+            }
         } else {
             if (mOptionalShaker != null) {
                 mOptionalShaker.pause();
@@ -727,6 +735,12 @@ public class Controller implements ShakerListener {
                 break;
             case CLEAN:
                 onCleanPageButton(currentPage, true);
+                break;
+            case QUIT:
+                // if (!mApp.pref().getVerboseMessagesEnabledPreference()) {
+                // mApp.services().toast("Shake action: quit");
+                // }
+                mApp.mainActivity().finish();
                 break;
             default:
                 mApp.services().toast("Unknown action: " + action);

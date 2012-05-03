@@ -27,7 +27,8 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 public enum ShakerAction implements KeyedEnum {
     NEW_ITEM_BY_TEXT("new_text"),
     NEW_ITEM_BY_VOICE("new_voice"),
-    CLEAN("clean");
+    CLEAN("clean"),
+    QUIT("quit");
 
     private final String mKey;
 

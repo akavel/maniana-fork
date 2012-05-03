@@ -106,7 +106,7 @@
     <string name="settings_section_name_Sound">Sound</string>
     <string name="settings_sound_title">Sound</string>
     <string name="settings_sound_summary_on">Sound is enabled</string>
-    <string name="settings_sound_summary_off">Sound is disabled</string> 
+    <string name="settings_sound_summary_off">Sound is disabled</string>
     <string name="settings_applause_title">Applause</string>
     <string name="settings_applause_name_never">Never</string>
     <string name="settings_applause_name_sometimes">Surprise Me</string>
@@ -139,12 +139,23 @@
     <string name="settings_lock_expiration_name_never">Never</string>
 
     <!-- Settings/Shaker -->
-    <string name="settings_section_name_Shaker">Shaker (Experimental)</string>
-
+    <string name="settings_section_name_Shaker">Shaking Action</string>
+    <string name="settings_section_shaker_summary">Click to set shaking action</string>
+    <string name="settings_shaker_enabled_title">Shake Detection</string>
+    <string name="settings_shaker_enabled_summary_on">Enabled in Maniana pages</string>
+    <string name="settings_shaker_enabled_summary_off">Shake detection is disabled</string>
+    <string name="settings_shaker_force_level_title">Detection Level</string>
+    <string name="settings_shaker_force_level_summary_format">Shaking magnitude %d or higher</string>
+    <string name="settings_shaker_action_title">Shake Action</string>
+    <string name="settings_shaker_action_name_add_by_text">New task by text</string>
+    <string name="settings_shaker_action_name_add_by_voice">New task by voice</string>
+    <string name="settings_shaker_action_name_clean">Clean page</string>
+    <string name="settings_shaker_action_name_quit">Quit Maniana</string>
 
     <!-- Settings/Pages -->
     <string name="settings_section_name_Pages">Pages</string>
     <string name="settings_select_page_theme_title">Set By Theme</string>
+    <string name="shaking_service_not_available">Shake detection not supported</string>
     <string name="settings_select_page_theme_summary">Click to select a predefined page setting</string>
     <string name="settings_page_icons_title">Icons</string>
     <string name="settings_page_icons_summary">Using %s icons</string>
@@ -161,6 +172,7 @@
 
     <!-- Settings/Pages/Task Text -->
     <!-- No section specific strings, using only common strings -->
+
 
     <!-- Settings/List Widget -->
     <string name="settings_section_name_List_Widget">List Widget</string>
