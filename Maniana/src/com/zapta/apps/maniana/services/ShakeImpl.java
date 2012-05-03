@@ -50,34 +50,34 @@ public class ShakeImpl implements Shaker {
     private boolean mIsResumed = false;
 
     /** Acceleration from previous event. */
-    private float lastX;
-    private float lastY;
-    private float lastZ;
+    private float mLastX;
+    private float mLastY;
+    private float mLastZ;
 
     /** System time of previous event. */
-    private long mLastTimeMillis;
+    private long mLastEventTimeMillis;
 
     /** Magnitude from last N2 events. */
-    private final int[] history = new int[N2];
+    private final int[] mHistory = new int[N2];
 
     /** Next insertion point in history, [0..N1) */
-    private int nextIndex;
+    private int mNextIndex;
 
     /** Sum of the last N1 history points. */
-    private int sum1;
+    private int mSum1;
 
     /** Sum of the last N2 history points. */
-    private int sum2;
+    private int mSum2;
 
     /** If greater than zero, do not allow a shake event for this number of sensor events. */
-    private int blackout = 0;
+    private int mBlackout = 0;
 
-    // TODO: remove this field.
-    /** Used to log a heat beat when shaker is active. */
-    private int mEventCounter = 0;
+    /** Used to report shaker's liveliness */
+    private long mLastLiveReportingTimeMillis;
+    private int mEvnetsSinceLastLiveReporting;
 
     /** Shake event is triggered when signal > this value. Set later. */
-    private int threshold;
+    private int mThreshold;
 
     /** Event handling adapter. */
     private final SensorEventListener mSensorListener = new SensorEventListener() {
@@ -95,42 +95,56 @@ public class ShakeImpl implements Shaker {
     /** Constructor. Leaves the shaker in paused state. */
     public ShakeImpl(Context context, ShakerListener listner) {
         this.mListener = listner;
+        // NOTE: this call sometimes hangs under emulator.
+        // See http://code.google.com/p/android/issues/detail?id=2566
+        // See http://stackoverflow.com/questions/8626718
+        LogUtil.debug("Shaker: getting sensor service...");
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        LogUtil.debug("Shaker: got sensor service.");
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
-    
-    private final void resetHistory() {
-        //LogUtil.debug("Reseting history");
-        
-        Arrays.fill(history, 0);
-        nextIndex = 0;
 
-        sum1 = 0;
-        sum2 = 0;
-        
+    private final void resetHistory() {
+        Arrays.fill(mHistory, 0);
+        mNextIndex = 0;
+
+        mSum1 = 0;
+        mSum2 = 0;
+
         // TODO: have a more explicit 'history full' condition.
         //
         // Suppress shake events until the history buffer will get refilled
-        blackout = N2 - 1;
+        mBlackout = N2 - 1;
     }
 
     private final void resetState() {
-        //LogUtil.debug("Reseting state");
-        resetHistory();       
+        // LogUtil.debug("Reseting state");
+        resetHistory();
 
-        lastX = 0f;
-        lastY = 0f;
-        lastZ = 0f;
+        mLastX = 0f;
+        mLastY = 0f;
+        mLastZ = 0f;
 
-        mLastTimeMillis = 0;     
+        mLastEventTimeMillis = 0;
+
+        mLastLiveReportingTimeMillis = System.currentTimeMillis();
+        mEvnetsSinceLastLiveReporting = 0;
     }
 
     /**
      * Accelerometer change event. Called periodically when in resume state.
      */
     private void handleSensorChanged(SensorEvent se) {
-        if ((mEventCounter++ % 200) == 0) {
-            LogUtil.info("Shake detector is active");
+        final long currentEventTimeMillis = System.currentTimeMillis();
+        mEvnetsSinceLastLiveReporting++;
+        final long reportingDeltaTimeMillis = currentEventTimeMillis - mLastLiveReportingTimeMillis;
+        
+        // Report every 15 secs
+        if (reportingDeltaTimeMillis >  (15 * 1000)) {
+            LogUtil.info("Shaker:  %d events in %dms",
+                    mEvnetsSinceLastLiveReporting, reportingDeltaTimeMillis);
+            mLastLiveReportingTimeMillis = currentEventTimeMillis;
+            mEvnetsSinceLastLiveReporting = 0;
         }
 
         // Accelerations in X,Y,Z direction
@@ -139,31 +153,27 @@ public class ShakeImpl implements Shaker {
         final float z = se.values[SensorManager.DATA_Z];
 
         // Calculate acceleration change (first derivative of acceleration vector).
-        final float dX = x - lastX;
-        final float dY = y - lastY;
-        final float dZ = z - lastZ;      
+        final float dX = x - mLastX;
+        final float dY = y - mLastY;
+        final float dZ = z - mLastZ;
 
-        final long currentTimeMillis = System.currentTimeMillis();
-        
-        // If no previous sample than skip this event.       
-        if (mLastTimeMillis == 0) {
-            LogUtil.info("No prev sample, skipping this one");
-            mLastTimeMillis = currentTimeMillis;
+        // If no previous sample than skip this event.
+        if (mLastEventTimeMillis == 0) {
+            LogUtil.info("Shaker: No prev sample, skipping this one");
+            mLastEventTimeMillis = currentEventTimeMillis;
             return;
         }
-        
+
         // If delta time is way too long, reset state. Sensing has paused
-        // for some reason.       
-        final long deltaTimeMillis = (currentTimeMillis - mLastTimeMillis);
+        // for some reason.
+        final long deltaTimeMillis = (currentEventTimeMillis - mLastEventTimeMillis);
+        mLastEventTimeMillis = currentEventTimeMillis;
         if (deltaTimeMillis > 5000) {
-            // TODO: reseting here loose the current event data. This will require
-            // one more event to settle down. Can we preserve it in the lastXYZT?
-            LogUtil.info("Reseting history, dt: %sms", deltaTimeMillis);
+            // Note: resetHistory() preserve the lastXYZ and last event time.
+            LogUtil.info("Shaker: Reseting history, dt: %sms", deltaTimeMillis);
             resetHistory();
             return;
         }
-
-        mLastTimeMillis = currentTimeMillis;
 
         // Calculate change magnitude |<dx, dy, dz>|. Scaled by an arbitrary scale
         // to provide enough int bits of accuracy. We use ints to avoid accomulating
@@ -171,41 +181,42 @@ public class ShakeImpl implements Shaker {
         final int newValue = (int) (Math.sqrt((dX * dX) + (dY * dY) + (dZ * dZ)) * 500);
 
         // Push to history queue and update incrementally the N1 and N2 sums.
-        final int droppedValue1 = history[(nextIndex + N2 - N1) % N2];
-        final int droppedValue2 = history[nextIndex];
+        final int droppedValue1 = mHistory[(mNextIndex + N2 - N1) % N2];
+        final int droppedValue2 = mHistory[mNextIndex];
 
-        history[nextIndex++] = newValue;
-        if (nextIndex >= N2) {
-            nextIndex = 0;
+        mHistory[mNextIndex++] = newValue;
+        if (mNextIndex >= N2) {
+            mNextIndex = 0;
         }
 
-        sum1 += (newValue - droppedValue1);
-        sum2 += (newValue - droppedValue2);
+        mSum1 += (newValue - droppedValue1);
+        mSum2 += (newValue - droppedValue2);
 
         // Save for next iteration
-        lastX = x;
-        lastY = y;
-        lastZ = z;
+        mLastX = x;
+        mLastY = y;
+        mLastZ = z;
 
         // If in blackout, don't issue a shake event in this cycle.
-        if (blackout > 0) {
-            blackout--;
+        if (mBlackout > 0) {
+            mBlackout--;
             return;
         }
 
         // The monitored signal is the difference between the short term average and the long
         // term average (noise level)
-        final int avg1 = sum1 / N1;
-        final int avg2 = sum2 / N2;
+        final int avg1 = mSum1 / N1;
+        final int avg2 = mSum2 / N2;
         final int signal = (avg1 - avg2);
 
         // LogUtil.debug("signal: %s", signal);
 
         // Compare signal to the detection threshold
-        if (signal > threshold) {
+        if (signal > mThreshold) {
+            LogUtil.info("Shaker: initiaging onShake()");
             mListener.onShake();
             // Debouncing. Avoid successive shake event for the next N2 cycles.
-            blackout = N2;
+            mBlackout = N2;
         }
     }
 
@@ -221,9 +232,8 @@ public class ShakeImpl implements Shaker {
         final int actualForce = Math.max(1, Math.min(10, force));
 
         // Map sensitivity to threshold. Values are based on trial and error..
-        threshold = 1300 + (force * 700);
-
-        //LogUtil.debug("Shaker resumed, force: %s, threshold: %s", actualForce, threshold);
+        mThreshold = 1300 + (actualForce * 700);
+        // LogUtil.debug("Shaker resumed, force: %s, threshold: %s", actualForce, threshold);
         return mIsResumed;
     }
 
