@@ -139,9 +139,9 @@ public class ShakeImpl implements Shaker {
         mEvnetsSinceLastLiveReporting++;
         final long reportingDeltaTimeMillis = currentEventTimeMillis - mLastLiveReportingTimeMillis;
         
-        // Report every 15 secs
-        if (reportingDeltaTimeMillis >  (15 * 1000)) {
-            LogUtil.info("Shaker:  %d events in %dms",
+        // Report every 30 secs
+        if (reportingDeltaTimeMillis >  (30 * 1000)) {
+            LogUtil.info("Shaker: %d events in %dms",
                     mEvnetsSinceLastLiveReporting, reportingDeltaTimeMillis);
             mLastLiveReportingTimeMillis = currentEventTimeMillis;
             mEvnetsSinceLastLiveReporting = 0;

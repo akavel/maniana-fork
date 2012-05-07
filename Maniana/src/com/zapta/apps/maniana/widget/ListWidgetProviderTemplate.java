@@ -52,7 +52,7 @@ import com.zapta.apps.maniana.widget.ListWidgetSize.OrientationInfo;
 public class ListWidgetProviderTemplate {
 
     /** Will scale item text size down to this size in SP units. */
-    private static final int MIN_NORMALIZED_TEXT_SIZE = 9;
+    private static final int MIN_NORMALIZED_TEXT_SIZE = 10;                           ;
 
     @Nullable
     private final AppModel mModel;
@@ -173,9 +173,9 @@ public class ListWidgetProviderTemplate {
     // Resize the template in preparation for rendering.
     private final void resizeToFit(int widgetWidthPixels, int widgetHeightPixels,
             int bottomPadding, ListWidgetSize listWidgetSize, Orientation orientation) {
-        //DebugTimer timer = new DebugTimer();
+        // DebugTimer timer = new DebugTimer();
 
-        final int minItemTextSize = mAutoFitPreference ? (int) (MIN_NORMALIZED_TEXT_SIZE * mDensity + 0.5f)
+        final int minItemTextSize = mAutoFitPreference ? MIN_NORMALIZED_TEXT_SIZE
                 : mFontVariationPreference.getTextSize();
 
         setSingleLine(mSingleLinePreference);
@@ -183,7 +183,7 @@ public class ListWidgetProviderTemplate {
                 mFontVariationPreference.getTextSize());
 
         if (fit || !mAutoFitPreference) {
-            //timer.report("Fit done");
+            // timer.report("Fit done");
             return;
         }
 
@@ -193,7 +193,7 @@ public class ListWidgetProviderTemplate {
                     mFontVariationPreference.getTextSize());
         }
 
-        //timer.report("Fit done");
+        // timer.report("Fit done");
     }
 
     /**
@@ -301,7 +301,8 @@ public class ListWidgetProviderTemplate {
         }
 
         if (mModel == null) {
-            addTemplateMessageItem("(" + mContext.getString(R.string.widget_Maniana_data_not_found) + ")");
+            addTemplateMessageItem("(" + mContext.getString(R.string.widget_Maniana_data_not_found)
+                    + ")");
             return;
         }
 
@@ -309,8 +310,10 @@ public class ListWidgetProviderTemplate {
                 mIncludeCompletedItemsPreference);
 
         if (items.isEmpty()) {
-            final String emptyMessage = "(" + mContext.getString(mIncludeCompletedItemsPreference ? 
-                    R.string.widget_no_tasks : R.string.widget_no_active_tasks) + ")";
+            final String emptyMessage = "("
+                    + mContext
+                            .getString(mIncludeCompletedItemsPreference ? R.string.widget_no_tasks
+                                    : R.string.widget_no_active_tasks) + ")";
             addTemplateMessageItem(emptyMessage);
             return;
         }
@@ -375,9 +378,10 @@ public class ListWidgetProviderTemplate {
 
         // Make the toolbar visible
         templateToolbarView.setVisibility(View.VISIBLE);
-        
+
         // Set title in upper case format. We cannot do that in XML.
-        final TextView toolbarTitle = (TextView) templateToolbarView.findViewById(R.id.widget_list_template_toolbar_title);
+        final TextView toolbarTitle = (TextView) templateToolbarView
+                .findViewById(R.id.widget_list_template_toolbar_title);
         final String title = mContext.getString(R.string.page_title_Today);
         toolbarTitle.setText(title.toUpperCase());
 
