@@ -23,6 +23,7 @@ public enum DebugCommandMain implements DebugCommand {
     NOTIFICATIONS("Notification..."),
     NEW_USER("New user message"),
     ICS_MENU("ICS menu"),
+    ON_SHAKE("onShake()"),
     EXIT("Exit debug mode");
     
     private final String mText;

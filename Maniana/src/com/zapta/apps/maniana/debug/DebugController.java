@@ -61,7 +61,9 @@ public class DebugController {
             case ICS_MENU:
                 IcsMainMenuDialog.showMenu(mApp);
                 break;
-
+            case ON_SHAKE:
+                mApp.controller().onShake();
+                break;
             case EXIT:
                 setDebugMode(false);
                 break;
