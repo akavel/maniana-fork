@@ -3,8 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Maniana"/>
+	<classpathentry kind="lib" path="/Maniana/libs/jsr305-1.3.7.jar"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="lib" path="/Maniana/lib/jsr305-1.3.7.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
