@@ -31,7 +31,7 @@ public class PaperBackground {
 
     private static final PaperBackground PAPER_BACKGROUNDS[] = new PaperBackground[] {
         new PaperBackground(R.drawable.widget_paper_104x114, 104, 114, 4),
-        new PaperBackground(R.drawable.widget_paper_304x094, 304, 94, 4),
+        new PaperBackground(R.drawable.widget_paper_300x064, 300, 64, 4),
         new PaperBackground(R.drawable.widget_paper_304x194, 304, 194, 4),
         new PaperBackground(R.drawable.widget_paper_304x282, 304, 382, 4)
     };
