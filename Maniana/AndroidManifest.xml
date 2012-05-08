@@ -14,7 +14,8 @@
     <application
         android:backupAgent=".backup.AppBackupHelper"
         android:icon="@drawable/app_icon"
-        android:label="@string/translated_app_name" >
+        android:label="@string/translated_app_name" 
+        android:name=".main.MyApp">
         <meta-data
             android:name="com.google.android.backup.api_key"
             android:value="AEdPqrEAAAAIuy5K_Vn8AGynwe5lz1SxJqwTxbg5gnd4bb3hPg" />

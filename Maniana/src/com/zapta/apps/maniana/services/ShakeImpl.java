@@ -98,9 +98,9 @@ public class ShakeImpl implements Shaker {
         // NOTE: this call sometimes hangs under emulator.
         // See http://code.google.com/p/android/issues/detail?id=2566
         // See http://stackoverflow.com/questions/8626718
-        LogUtil.debug("Shaker: getting sensor service...");
+        LogUtil.info("Shaker: getting sensor service...");
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        LogUtil.debug("Shaker: got sensor service.");
+        LogUtil.info("Shaker: got sensor service.");
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
 
