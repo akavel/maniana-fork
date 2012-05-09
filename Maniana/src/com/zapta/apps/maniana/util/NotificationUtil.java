@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.main.MainActivity;
 
 /**
@@ -28,6 +29,7 @@ import com.zapta.apps.maniana.main.MainActivity;
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public class NotificationUtil {
     /** Arbitrary notification ID, unique within this app. */
     private static final int NOTIFICATION_ID = 1000;

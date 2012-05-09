@@ -18,7 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.zapta.apps.maniana.main.AppContext;
+import com.zapta.apps.maniana.annotations.MainActivityScope;
+import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.model.ItemModelReadOnly;
 import com.zapta.apps.maniana.model.PageKind;
 
@@ -27,12 +28,13 @@ import com.zapta.apps.maniana.model.PageKind;
  * 
  * @author Tal Dayan
  */
+@MainActivityScope
 public class ItemListViewAdapter extends BaseAdapter {
-    private final AppContext mApp;
+    private final MainActivityState mMainActivityState;
     private final PageKind mPageKind;
 
-    public ItemListViewAdapter(AppContext app, PageKind pageKind) {
-        this.mApp = app;
+    public ItemListViewAdapter(MainActivityState mainActivityState, PageKind pageKind) {
+        this.mMainActivityState = mainActivityState;
         this.mPageKind = pageKind;
     }
 
@@ -50,12 +52,12 @@ public class ItemListViewAdapter extends BaseAdapter {
 
     @Override
     public final int getCount() {
-        return mApp.model().getPageItemCount(mPageKind);
+        return mMainActivityState.model().getPageItemCount(mPageKind);
     }
 
     @Override
     public final ItemModelReadOnly getItem(int position) {
-        return mApp.model().getItemReadOnly(mPageKind, position);
+        return mMainActivityState.model().getItemReadOnly(mPageKind, position);
     }
 
     @Override
@@ -65,12 +67,13 @@ public class ItemListViewAdapter extends BaseAdapter {
 
     @Override
     public final View getView(int position, View convertView, ViewGroup parent) {
-        final ItemModelReadOnly itemModel = mApp.model().getItemReadOnly(mPageKind, position);
+        final ItemModelReadOnly itemModel = mMainActivityState.model().getItemReadOnly(mPageKind,
+                position);
 
         final ItemView itemView;
         if (convertView == null) {
             // Handle the case where the list view need a new item view.
-            itemView = new ItemView(mApp, mPageKind, itemModel);
+            itemView = new ItemView(mMainActivityState, mPageKind, itemModel);
         } else {
             // Handle the case where the list view recycles an old item view.
             itemView = (ItemView) (convertView);

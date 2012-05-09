@@ -28,12 +28,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.MainActivityScope;
 
 /**
  * Item voice recognition editor.
  * 
  * @author Tal Dayan
  */
+@MainActivityScope
 public class ItemVoiceEditor {
 
     public static void startVoiceEditor(Activity parentActivity, int requestCode) {

@@ -38,7 +38,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zapta.apps.maniana.R;
-import com.zapta.apps.maniana.main.AppContext;
+import com.zapta.apps.maniana.annotations.ActivityScope;
+import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
 
 /**
@@ -47,9 +48,10 @@ import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
  * @author Tal Dayan (adapted to Maniana) Based on example by Lorensius W. L. T
  *         <lorenz@londatiga.net>.
  */
+@ActivityScope
 public class QuickActionMenu implements OnDismissListener, TrackablePopup {
 
-    private final AppContext mApp;
+    private final MainActivityState mApp;
 
     /** The window that contains the menu's top view. */
     private final PopupWindow mMenuWindow;
@@ -73,7 +75,7 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
      * @param mContext Context
      * @param orientation Layout orientation, can be vartical or horizontal
      */
-    public QuickActionMenu(AppContext app, OnActionItemOutcomeListener outcomeListener) {
+    public QuickActionMenu(MainActivityState app, OnActionItemOutcomeListener outcomeListener) {
         mApp = app;
         mMenuWindow = new PopupWindow(app.context());
 

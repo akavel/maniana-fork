@@ -19,12 +19,15 @@ import static com.zapta.apps.maniana.util.Assertions.check;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.zapta.apps.maniana.annotations.ActivityScope;
+
 /**
  * Tracks dialogs and other popups used by the main activity. Used to close left over popups when
  * the main activity pauses.
  * 
  * @author Tal Dayan
  */
+@ActivityScope
 public class PopupsTracker {
 
     /** Trackable popups must implement this method. */

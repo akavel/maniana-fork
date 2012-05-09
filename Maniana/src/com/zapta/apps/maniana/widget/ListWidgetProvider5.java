@@ -14,9 +14,12 @@
 
 package com.zapta.apps.maniana.widget;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 /**
  * @author Tal Dayan
  */
+@ApplicationScope
 public class ListWidgetProvider5 extends ListWidgetProvider {
 
     @Override

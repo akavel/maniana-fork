@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.format.Time;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.main.MyApp;
 import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.model.ModelUtil;
@@ -38,6 +39,7 @@ import com.zapta.apps.maniana.util.NotificationUtil;
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public abstract class BaseWidgetProvider extends AppWidgetProvider {
 
     /** Model is already pushed and sorted according to current settings. */

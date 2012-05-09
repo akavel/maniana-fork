@@ -27,10 +27,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.zapta.apps.maniana.R;
-import com.zapta.apps.maniana.main.AppContext;
+import com.zapta.apps.maniana.annotations.MainActivityScope;
+import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.quick_action.QuickActionItem;
-import com.zapta.apps.maniana.services.AppServices;
+import com.zapta.apps.maniana.services.MainActivityServices;
 import com.zapta.apps.maniana.settings.Font;
 import com.zapta.apps.maniana.settings.PageIconSet;
 import com.zapta.apps.maniana.util.ColorUtil;
@@ -41,6 +42,7 @@ import com.zapta.apps.maniana.util.DisplayUtil;
  * 
  * @author Tal Dayan
  */
+@MainActivityScope
 public class PageView extends FrameLayout {
 
     /** For testing only. */
@@ -85,7 +87,7 @@ public class PageView extends FrameLayout {
         R.drawable.item_highlight_yellow
     };
 
-    private final AppContext mApp;
+    private final MainActivityState mMainActivityState;
     private final PageKind mPageKind;
     private final float mDensity;
 
@@ -111,13 +113,13 @@ public class PageView extends FrameLayout {
 
     private final View mPaperColorView;
 
-    public PageView(AppContext app, PageKind pageKind) {
+    public PageView(MainActivityState app, PageKind pageKind) {
         super(checkNotNull(app.context()));
-        mApp = app;
+        mMainActivityState = app;
         mPageKind = pageKind;
         mDensity = DisplayUtil.getDensity(app.context());
 
-        mApp.services().layoutInflater().inflate(R.layout.page_layout, this);
+        mMainActivityState.services().layoutInflater().inflate(R.layout.page_layout, this);
 
         mPaperColorView = findViewById(R.id.page_paper_color);
 
@@ -152,8 +154,8 @@ public class PageView extends FrameLayout {
             dataTimeSection.setVisibility(View.GONE);
         }
 
-        final ItemListViewAdapter adapter = new ItemListViewAdapter(mApp, mPageKind);
-        mItemListView.setApp(mApp, adapter);
+        final ItemListViewAdapter adapter = new ItemListViewAdapter(mMainActivityState, mPageKind);
+        mItemListView.setApp(mMainActivityState, adapter);
 
         if (mUsesIcsMenuOverflowButton) {
             mIcsMenuOverflowButtonView.setOnClickListener(new OnClickListener() {
@@ -171,15 +173,15 @@ public class PageView extends FrameLayout {
         mButtonUndoView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mApp.controller().onUndoButton(mPageKind);
+                mMainActivityState.controller().onUndoButton(mPageKind);
             }
         });
 
-        if (AppServices.isVoiceRecognitionSupported(mApp.context())) {
+        if (MainActivityServices.isVoiceRecognitionSupported(mMainActivityState.context())) {
             mButtonAddByVoiceView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mApp.controller().onAddItemByVoiceButton(mPageKind);
+                    mMainActivityState.controller().onAddItemByVoiceButton(mPageKind);
                 }
             });
         } else {
@@ -189,21 +191,21 @@ public class PageView extends FrameLayout {
         mButtonAddByTextView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mApp.controller().onAddItemByTextButton(mPageKind);
+                mMainActivityState.controller().onAddItemByTextButton(mPageKind);
             }
         });
 
         mButtonCleanView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mApp.controller().onCleanPageButton(mPageKind, false);
+                mMainActivityState.controller().onCleanPageButton(mPageKind, false);
             }
         });
 
         mButtonCleanView.setOnLongClickListener(new OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                mApp.controller().onCleanPageButton(mPageKind, true);
+                mMainActivityState.controller().onCleanPageButton(mPageKind, true);
                 return true;
             }
         });
@@ -218,7 +220,7 @@ public class PageView extends FrameLayout {
     /** Called when the user clicks on the ics overflow menu button. */
     private final void onIcsMenuOverflowButtonClick() {
 
-        IcsMainMenuDialog.showMenu(mApp);
+        IcsMainMenuDialog.showMenu(mMainActivityState);
 
     }
 
@@ -227,8 +229,8 @@ public class PageView extends FrameLayout {
     public final void onDateChange() {
         // Only Today page has date.
         check(mPageKind.isToday());
-        mDayTextView.setText(mApp.dateTracker().getUserDayOfWeekString());
-        mDateTextView.setText(mApp.dateTracker().getUserMonthDayString());
+        mDayTextView.setText(mMainActivityState.dateTracker().getUserDayOfWeekString());
+        mDateTextView.setText(mMainActivityState.dateTracker().getUserMonthDayString());
     }
 
     public final void onPageItemFontVariationPreferenceChange() {
@@ -236,7 +238,7 @@ public class PageView extends FrameLayout {
     }
 
     public final void onPageIconSetPreferenceChange() {
-        final PageIconSet iconSet = mApp.pref().getPageIconSetPreference();
+        final PageIconSet iconSet = mMainActivityState.prefTracker().getPageIconSetPreference();
         mButtonUndoView.setImageResource(iconSet.buttonUndoResourceId);
         mButtonAddByTextView.setImageResource(iconSet.buttonAddByTextResourceId);
         mButtonAddByVoiceView.setImageResource(iconSet.buttonAddByVoiceResourceId);
@@ -256,15 +258,15 @@ public class PageView extends FrameLayout {
     public final void onPageBackgroundPreferenceChange() {
         // Set the background color or image
         final int baseBackgroundColor;
-        if (mApp.pref().getBackgroundPaperPreference()) {
+        if (mMainActivityState.prefTracker().getBackgroundPaperPreference()) {
             final int backgroundImageId = (mPageKind.isToday()) ? R.drawable.page_bg_left
                     : R.drawable.page_bg_right;
             setBackgroundResource(backgroundImageId);
-            final int paperColor = mApp.pref().getPagePaperColorPreference();
+            final int paperColor = mMainActivityState.prefTracker().getPagePaperColorPreference();
             mPaperColorView.setBackgroundColor(ColorUtil.mapPaperColorPrefernce(paperColor));
             baseBackgroundColor = paperColor;
         } else {
-            final int backgroundColor = mApp.pref().getPageBackgroundSolidColorPreference();
+            final int backgroundColor = mMainActivityState.prefTracker().getPageBackgroundSolidColorPreference();
             setBackgroundColor(backgroundColor);
             mPaperColorView.setBackgroundColor(0x00000000);
             baseBackgroundColor = backgroundColor;
@@ -296,12 +298,12 @@ public class PageView extends FrameLayout {
     }
 
     public final void onPageTitlePreferenceChange() {
-        mPageTitleTextView.setTextColor(mPageKind.isToday() ? mApp.pref().getPageTitleTodayColor()
-                : mApp.pref().getPageTitleTomorowColor());
-        final Font titleFont = mApp.pref().getPageTitleFontPreference();
-        final float titleFontSizeSP = mApp.pref().getPageTitleFontSizePreference()
+        mPageTitleTextView.setTextColor(mPageKind.isToday() ? mMainActivityState.prefTracker().getPageTitleTodayColor()
+                : mMainActivityState.prefTracker().getPageTitleTomorowColor());
+        final Font titleFont = mMainActivityState.prefTracker().getPageTitleFontPreference();
+        final float titleFontSizeSP = mMainActivityState.prefTracker().getPageTitleFontSizePreference()
                 * titleFont.scale;
-        mPageTitleTextView.setTypeface(titleFont.getTypeface(mApp.context()));
+        mPageTitleTextView.setTypeface(titleFont.getTypeface(mMainActivityState.context()));
         mPageTitleTextView.setTextSize(titleFontSizeSP);
 
         // Match vertical padding to title text size
@@ -365,13 +367,13 @@ public class PageView extends FrameLayout {
 
     /** Update undo button bases on the current model state. */
     public final void updateUndoButton() {
-        final boolean hasUndo = mApp.model().pageHasUndo(mPageKind);
+        final boolean hasUndo = mMainActivityState.model().pageHasUndo(mPageKind);
         mButtonUndoView.setVisibility(hasUndo ? VISIBLE : INVISIBLE);
     }
 
     /** Update item divider color on preference change */
     public final void onItemDividerColorPreferenceChange() {
-        final int dividerColor = mApp.pref().getPageItemDividerColorPreference();
+        final int dividerColor = mMainActivityState.prefTracker().getPageItemDividerColorPreference();
 
         // The alpha at the edge is 25% of the center alpha
         final int endGradiantColor = (dividerColor & 0x00ffffff)

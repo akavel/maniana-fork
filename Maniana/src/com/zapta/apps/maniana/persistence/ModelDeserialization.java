@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.model.ItemColor;
 import com.zapta.apps.maniana.model.ItemModel;
@@ -31,6 +32,7 @@ import com.zapta.apps.maniana.util.LogUtil;
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public class ModelDeserialization implements FieldNames {
 
     /**

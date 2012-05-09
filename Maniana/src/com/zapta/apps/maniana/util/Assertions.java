@@ -14,11 +14,14 @@
 
 package com.zapta.apps.maniana.util;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 /**
  * Provide assertion methods.
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public final class Assertions {
 
     /** Do not instantiate */

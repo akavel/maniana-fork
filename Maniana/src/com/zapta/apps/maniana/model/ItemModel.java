@@ -14,11 +14,14 @@
 
 package com.zapta.apps.maniana.model;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 /**
  * Represents the data of a single item.
  * 
  * @author Tal Dayan.
  */
+@ApplicationScope
 public class ItemModel implements ItemModelReadOnly {
 
     /** The item text. */

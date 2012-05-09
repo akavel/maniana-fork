@@ -20,8 +20,9 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.controller.MainMenuEntry;
-import com.zapta.apps.maniana.main.AppContext;
+import com.zapta.apps.maniana.main.MainActivityState;
 
 /**
  * Main menu dialog for API > 10 (e.g. Ice Cream Sandwich). The old option menu has been deprecated
@@ -29,14 +30,15 @@ import com.zapta.apps.maniana.main.AppContext;
  * 
  * @author Tal Dayan
  */
+@MainActivityScope
 public class IcsMainMenuDialog {
 
     /** Do not instantiate */
     private IcsMainMenuDialog() {
     }
 
-    public static final void showMenu(final AppContext app) {
-        final Dialog dialog = new Dialog(app.context(), R.style.IcsMainMenuStyle);
+    public static final void showMenu(final MainActivityState mainActivityState) {
+        final Dialog dialog = new Dialog(mainActivityState.context(), R.style.IcsMainMenuStyle);
         dialog.setContentView(R.layout.ics_menu_dialog_layout);
 
         for (MainMenuEntry entry : MainMenuEntry.values()) {
@@ -45,7 +47,7 @@ public class IcsMainMenuDialog {
             final TextView textView = (TextView) dialog.findViewById(entry.icsMenuEntryId);
 
             if (entry == MainMenuEntry.DEBUG) {
-                if (!app.debug().isDebugMode()) {
+                if (!mainActivityState.debugController().isDebugMode()) {
                     textView.setVisibility(View.GONE);
                     continue;
                 }
@@ -56,7 +58,7 @@ public class IcsMainMenuDialog {
             textView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    menuEntryClicked(app, dialog, finalEntry);
+                    menuEntryClicked(mainActivityState, dialog, finalEntry);
                 }
             });
         }
@@ -64,8 +66,9 @@ public class IcsMainMenuDialog {
         dialog.show();
     }
 
-    private static final void menuEntryClicked(AppContext app, Dialog dialog, MainMenuEntry entry) {
+    private static final void menuEntryClicked(MainActivityState mainActivityState, Dialog dialog,
+            MainMenuEntry entry) {
         dialog.dismiss();
-        app.controller().onMainMenuSelection(entry);
+        mainActivityState.controller().onMainMenuSelection(entry);
     }
 }

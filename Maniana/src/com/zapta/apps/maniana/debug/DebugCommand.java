@@ -14,11 +14,14 @@
 
 package com.zapta.apps.maniana.debug;
 
+import com.zapta.apps.maniana.annotations.MainActivityScope;
+
 /**
  * Debug commands interface. Used by the debug dialog.
  * 
  * @author Tal Dayan
  */
+@MainActivityScope
 public interface DebugCommand {
     /** Display text. Not translated. English only. */
     String getText();

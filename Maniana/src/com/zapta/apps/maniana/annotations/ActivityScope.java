@@ -12,12 +12,9 @@
  * the License.
  */
 
-package com.zapta.apps.maniana.util;
+package com.zapta.apps.maniana.annotations;
 
-/**
- * Annotation for private methods and classes that are exposed for testing.
- * 
- * @author Tal Dayan
- */
-public @interface VisibleForTesting {
+/** Annotation for code that runs within an activity. */
+public @interface ActivityScope {
+
 }

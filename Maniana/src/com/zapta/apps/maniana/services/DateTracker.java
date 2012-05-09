@@ -16,6 +16,7 @@ package com.zapta.apps.maniana.services;
 
 import android.text.format.Time;
 
+import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.model.ModelUtil;
 import com.zapta.apps.maniana.model.PushScope;
 import com.zapta.apps.maniana.settings.LockExpirationPeriod;
@@ -27,6 +28,7 @@ import com.zapta.apps.maniana.util.DateUtil;
  * 
  * @author Tal Dayan
  */
+@MainActivityScope
 public class DateTracker {
 
     /** Caching of current user visible day of week. E.g. "Sunday" */

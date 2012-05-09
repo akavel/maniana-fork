@@ -14,6 +14,8 @@
 
 package com.zapta.apps.maniana.util;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -26,6 +28,7 @@ import android.graphics.RectF;
 /**
  * @author Tal Dayan
  */
+@ApplicationScope
 public final class BitmapUtil {
 
     /** Do not instantiate */

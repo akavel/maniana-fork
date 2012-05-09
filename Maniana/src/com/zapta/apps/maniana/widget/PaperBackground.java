@@ -17,6 +17,7 @@ package com.zapta.apps.maniana.widget;
 import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**
@@ -27,6 +28,7 @@ import com.zapta.apps.maniana.util.LogUtil;
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public class PaperBackground {
 
     private static final PaperBackground PAPER_BACKGROUNDS[] = new PaperBackground[] {

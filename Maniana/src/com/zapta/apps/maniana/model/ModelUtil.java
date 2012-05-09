@@ -15,6 +15,7 @@ package com.zapta.apps.maniana.model;
 
 import android.text.format.Time;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.settings.LockExpirationPeriod;
 import com.zapta.apps.maniana.util.DateUtil;
 import com.zapta.apps.maniana.util.LogUtil;
@@ -24,6 +25,7 @@ import com.zapta.apps.maniana.util.LogUtil;
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public class ModelUtil {
 
     /**

@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.format.Time;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**
@@ -30,6 +31,7 @@ import com.zapta.apps.maniana.util.LogUtil;
  */
 // TODO: have this receiver responding also to date or time zone change by user. Since they may
 // also affect the widgets.
+@ApplicationScope
 public class WidgetMidnightTicker extends BroadcastReceiver {
 
     // Should match AndroidManifest.xml.

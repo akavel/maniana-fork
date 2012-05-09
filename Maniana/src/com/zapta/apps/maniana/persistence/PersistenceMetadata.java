@@ -17,7 +17,10 @@ package com.zapta.apps.maniana.persistence;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 /** Represents additional data that is persisted with the model. */
+@ApplicationScope
 public class PersistenceMetadata {
 
     public static final int DEFAULT_WRITER_VERSION_CODE = 0;

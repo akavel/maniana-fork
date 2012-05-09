@@ -14,11 +14,14 @@
 
 package com.zapta.apps.maniana.model;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 /**
  * Represents the two page kinds.
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public enum PageKind {
     TODAY,
     TOMOROW;

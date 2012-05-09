@@ -17,6 +17,7 @@ package com.zapta.apps.maniana.widget;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.model.ItemModelReadOnly;
 import com.zapta.apps.maniana.model.PageKind;
@@ -26,6 +27,7 @@ import com.zapta.apps.maniana.model.PageKind;
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public abstract class WidgetUtil {
 
     /** Do not instantiate */

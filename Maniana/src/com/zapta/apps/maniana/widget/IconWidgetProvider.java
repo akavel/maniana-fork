@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.main.MainActivity;
 import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.model.ItemModelReadOnly;
@@ -35,6 +36,7 @@ import com.zapta.apps.maniana.model.ItemModelReadOnly;
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public class IconWidgetProvider extends BaseWidgetProvider {
 
     public IconWidgetProvider() {

@@ -14,11 +14,14 @@
 
 package com.zapta.apps.maniana.util;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 import android.content.Intent;
 
 /**
  * @author Tal Dayan
  */
+@ApplicationScope
 public final class IntentUtil {
 
     /** Do not instantiate */

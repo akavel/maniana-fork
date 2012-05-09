@@ -16,9 +16,12 @@ package com.zapta.apps.maniana.util;
 
 import javax.annotation.Nullable;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 /**
  * @author Tal Dayan
  */
+@ApplicationScope
 public class EnumUtil {
 
     public static interface KeyedEnum {

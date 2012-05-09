@@ -14,11 +14,14 @@
 
 package com.zapta.apps.maniana.debug;
 
+import com.zapta.apps.maniana.annotations.MainActivityScope;
+
 /**
  * Commands of debug notification dialog.
  *
  * @author: Tal Dayan
  */
+@MainActivityScope
 public enum DebugCommandNotification implements DebugCommand {
     NOTIFICATION_SINGLE("Notification (1)"),
     NOTIFICATION_MULTI("Notification (17)"),

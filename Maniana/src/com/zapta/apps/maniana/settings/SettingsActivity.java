@@ -42,13 +42,14 @@ import android.text.format.Time;
 import android.widget.Toast;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.ActivityScope;
+import com.zapta.apps.maniana.annotations.VisibleForTesting;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
 import com.zapta.apps.maniana.help.PopupMessageActivity.MessageKind;
 import com.zapta.apps.maniana.util.AttachmentUtil;
 import com.zapta.apps.maniana.util.DateUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.PopupsTracker;
-import com.zapta.apps.maniana.util.VisibleForTesting;
 import com.zapta.apps.maniana.util.WorkingDialog;
 
 /**
@@ -59,6 +60,7 @@ import com.zapta.apps.maniana.util.WorkingDialog;
  * 
  * @author Tal Dayan
  */
+@ActivityScope
 public class SettingsActivity extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
 

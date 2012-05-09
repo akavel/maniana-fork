@@ -25,7 +25,8 @@ import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.zapta.apps.maniana.R;
-import com.zapta.apps.maniana.main.AppContext;
+import com.zapta.apps.maniana.annotations.MainActivityScope;
+import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.model.ItemColor;
 import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
 
@@ -39,13 +40,14 @@ import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
  * 
  * @author Tal Dayan
  */
+@MainActivityScope
 public class ItemTextEditor extends Dialog implements TrackablePopup {
 
     public interface ItemEditorListener {
         void onDismiss(String finalText, ItemColor finalColor);
     }
 
-    private final AppContext mApp;
+    private final MainActivityState mMainState;
 
     private final ItemEditorListener mListener;
 
@@ -61,16 +63,16 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
     private ItemColor mItemColor;
 
     /** Private constructor. Use startEditor() to create and launch an editor. */
-    private ItemTextEditor(final AppContext app, String title, String initialText,
+    private ItemTextEditor(final MainActivityState mainActivityState, String title, String initialText,
             ItemColor initialItemColor, ItemEditorListener listener) {
         // TODO: reorder and organize the statements below for better reliability.
-        super(app.context());
-        mApp = app;
+        super(mainActivityState.context());
+        mMainState = mainActivityState;
         mListener = listener;
         mItemColor = initialItemColor;
         setContentView(R.layout.editor_layout);
         setTitle(title);
-        setOwnerActivity(app.mainActivity());
+        setOwnerActivity(mainActivityState.mainActivity());
 
         // Get sub views
         mEditTextView = (EditText) findViewById(R.id.editor_text);
@@ -79,7 +81,7 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
         // Set text and style. Always using non completed variation, even if the
         // item is completed.
         mEditTextView.setText(initialText);
-        app.pref().getPageItemFontVariation().apply(mEditTextView, false, false);
+        mainActivityState.prefTracker().getPageItemFontVariation().apply(mEditTextView, false, false);
 
         // EditorEventAdapter eventAdapter = new EditorEventAdapter();
         setOnDismissListener(new OnDismissListener() {
@@ -131,7 +133,7 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
 
     /** Called when the dialog get dismissed. */
     private final void handleOnDismiss() {
-        mApp.popupsTracker().untrack(this);
+        mMainState.popupsTracker().untrack(this);
         // If not already reported during the close leftover.
         if (!dismissAlreadyReported) {
             mListener.onDismiss(mEditTextView.getText().toString(), mItemColor);
@@ -154,7 +156,7 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
     private final void handleColorClicked() {
         mItemColor = mItemColor.nextCyclicColor();
         updateColorView();
-        mApp.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_SPACEBAR, false);
+        mMainState.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_SPACEBAR, false);
     }
 
     private final void updateColorView() {
@@ -182,7 +184,7 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
      * @param initialText initial edited item text
      * @param listener listener to callback on changes and on end.
      */
-    public static void startEditor(final AppContext app, String title, String initialText,
+    public static void startEditor(final MainActivityState app, String title, String initialText,
             ItemColor initialItemColor, final ItemEditorListener listener) {
         final ItemTextEditor dialog = new ItemTextEditor(app, title, initialText, initialItemColor,
                 listener);

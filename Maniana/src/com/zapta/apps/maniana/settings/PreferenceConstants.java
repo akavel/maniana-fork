@@ -14,11 +14,14 @@
 
 package com.zapta.apps.maniana.settings;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 /**
  * Default preference values. All values should match the default values in Preferences.xml
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public interface PreferenceConstants {
     // Sound
     public static final boolean DEFAULT_ALLOWS_SOUND_EFFECTS = true;

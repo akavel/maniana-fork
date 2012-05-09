@@ -32,9 +32,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.model.ItemModelReadOnly;
-import com.zapta.apps.maniana.services.AppServices;
+import com.zapta.apps.maniana.services.MainActivityServices;
 import com.zapta.apps.maniana.settings.ItemFontVariation;
 import com.zapta.apps.maniana.util.BitmapUtil;
 import com.zapta.apps.maniana.util.DisplayUtil;
@@ -49,6 +50,7 @@ import com.zapta.apps.maniana.widget.ListWidgetSize.OrientationInfo;
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public class ListWidgetProviderTemplate {
 
     /** Will scale item text size down to this size in SP units. */
@@ -393,7 +395,7 @@ public class ListWidgetProviderTemplate {
         }
 
         // The voice recognition button is shown only if this device supports voice recognition.
-        if (AppServices.isVoiceRecognitionSupported(mContext)) {
+        if (MainActivityServices.isVoiceRecognitionSupported(mContext)) {
             templateAddTextByVoiceButton.setVisibility(View.VISIBLE);
         } else {
             templateAddTextByVoiceButton.setVisibility(View.GONE);

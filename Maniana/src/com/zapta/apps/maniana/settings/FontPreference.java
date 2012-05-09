@@ -17,6 +17,7 @@ package com.zapta.apps.maniana.settings;
 import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.ActivityScope;
 
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -36,6 +37,7 @@ import android.widget.CheckedTextView;
  * @author George Yunaev (http://tinyurl.com/7jnoubo)
  * @author Tal Dayan
  */
+@ActivityScope
 public class FontPreference extends DialogPreference implements DialogInterface.OnClickListener {
 
     private final Font mDefaultValue;

@@ -18,6 +18,8 @@ import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
 
 import javax.annotation.Nullable;
 
+import com.zapta.apps.maniana.annotations.ActivityScope;
+
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceGroup;
@@ -28,6 +30,7 @@ import android.preference.PreferenceGroup;
  * 
  * @author Tal Dayan
  */
+@ActivityScope
 public class PreferenceSelector {
     private final PreferenceGroup mGroup;
     private final CheckBoxPreference mCheckbox;

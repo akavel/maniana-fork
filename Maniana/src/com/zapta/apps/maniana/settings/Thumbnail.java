@@ -13,6 +13,8 @@
  */
 package com.zapta.apps.maniana.settings;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 import android.content.Context;
 
 /**
@@ -20,6 +22,7 @@ import android.content.Context;
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public class Thumbnail {
     /** User visible name of this theme. */
     private final int mNameResourceId;

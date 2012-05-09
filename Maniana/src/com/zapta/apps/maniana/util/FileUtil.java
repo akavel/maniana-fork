@@ -24,6 +24,7 @@ import javax.annotation.Nullable;
 import android.content.Context;
 import android.graphics.Bitmap;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult.FileReadOutcome;
 
 /**
@@ -31,6 +32,7 @@ import com.zapta.apps.maniana.util.FileUtil.FileReadResult.FileReadOutcome;
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public final class FileUtil {
 
     /** Do not instantiate */

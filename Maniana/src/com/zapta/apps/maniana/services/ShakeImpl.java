@@ -22,6 +22,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**
@@ -34,6 +35,7 @@ import com.zapta.apps.maniana.util.LogUtil;
  * 
  * @author Tal Dayan.
  */
+@MainActivityScope
 public class ShakeImpl implements Shaker {
 
     /** Number of events in the short term time window */

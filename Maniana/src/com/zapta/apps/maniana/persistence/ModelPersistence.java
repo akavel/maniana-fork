@@ -18,7 +18,8 @@ import org.json.JSONException;
 
 import android.content.Context;
 
-import com.zapta.apps.maniana.main.AppContext;
+import com.zapta.apps.maniana.annotations.MainActivityScope;
+import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.persistence.ModelReadingResult.ModelLoadingOutcome;
 import com.zapta.apps.maniana.util.FileUtil;
@@ -31,6 +32,8 @@ import com.zapta.apps.maniana.util.LogUtil;
  * 
  * @author Tal Dayan
  */
+// TODO: add syncrhonization and make it an app scope level.
+@MainActivityScope
 public class ModelPersistence {
 
     /** Path to file where model is persisted. */
@@ -88,7 +91,7 @@ public class ModelPersistence {
         }
     }
 
-    public static final void writeModelFile(AppContext app, AppModel model,
+    public static final void writeModelFile(MainActivityState app, AppModel model,
             PersistenceMetadata metadata) {
         LogUtil.info("Saving model to file: " + DATA_FILE_NAME);
         final String json = ModelSerialization.serializeModel(model, metadata);

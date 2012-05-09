@@ -19,6 +19,7 @@ import javax.annotation.Nullable;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 
+import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**
@@ -26,6 +27,7 @@ import com.zapta.apps.maniana.util.LogUtil;
  * 
  * @author Tal Dayan
  */
+@MainActivityScope
 public class PreferencesTracker {
 
     public static interface PreferenceChangeListener {

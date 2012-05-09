@@ -30,6 +30,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.backup.RestoreBackupDialog;
 import com.zapta.apps.maniana.backup.RestoreBackupDialog.Action;
 import com.zapta.apps.maniana.backup.RestoreBackupDialog.RestoreBackupDialogListener;
@@ -37,8 +38,8 @@ import com.zapta.apps.maniana.editors.ItemTextEditor;
 import com.zapta.apps.maniana.editors.ItemVoiceEditor;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
 import com.zapta.apps.maniana.help.PopupMessageActivity.MessageKind;
-import com.zapta.apps.maniana.main.AppContext;
-import com.zapta.apps.maniana.main.ResumeAction;
+import com.zapta.apps.maniana.main.MainActivityState;
+import com.zapta.apps.maniana.main.MainActivityResumeAction;
 import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.model.ItemColor;
 import com.zapta.apps.maniana.model.ItemModel;
@@ -71,6 +72,7 @@ import com.zapta.apps.maniana.widget.BaseWidgetProvider;
  * 
  * @author Tal Dayan
  */
+@MainActivityScope
 public class Controller implements ShakerListener {
 
     // Adding a task with this exact text turns on the debug mode.
@@ -84,7 +86,7 @@ public class Controller implements ShakerListener {
     private static final int VOICE_RECOGNITION_REQUEST_CODE = 1001;
 
     /** The app context. Provide access to the model, view and services. */
-    private final AppContext mApp;
+    private final MainActivityState mApp;
 
     private final QuickActionsCache mQuickActionCache;
 
@@ -108,7 +110,7 @@ public class Controller implements ShakerListener {
      */
     private final OrganizePageSummary mTempSummary = new OrganizePageSummary();
 
-    public Controller(AppContext app) {
+    public Controller(MainActivityState app) {
         mApp = app;
         mQuickActionCache = new QuickActionsCache(app);
     }
@@ -219,7 +221,7 @@ public class Controller implements ShakerListener {
     }
 
     /** Called when the main activity is resumed, including after app creation. */
-    public final void onMainActivityResume(ResumeAction resumeAction, @Nullable Intent resumeIntent) {
+    public final void onMainActivityResume(MainActivityResumeAction resumeAction, @Nullable Intent resumeIntent) {
         // This may leave undo items in case we cleanup completed tasks.
         maybeHandleDateChange();
 
@@ -231,7 +233,7 @@ public class Controller implements ShakerListener {
         // actions.
         // It seems to be more intuitive this way.
         if (mPopulateNewUserSampleDataOnResume) {
-            if (resumeAction != ResumeAction.RESTORE_FROM_BABKUP_FILE) {
+            if (resumeAction != MainActivityResumeAction.RESTORE_FROM_BABKUP_FILE) {
                 populateModelWithSampleTasks(mApp.model());
                 startPopupMessageSubActivity(MessageKind.NEW_USER);
             }
@@ -255,8 +257,8 @@ public class Controller implements ShakerListener {
             // depending on settings. In case of an actual resume action, we skip
             // the animation to save user's time.
             final boolean isAppStartup = (mOnAppResumeCount == 1);
-            final boolean actionAllowsAnimation = (resumeAction.isNone() || resumeAction == ResumeAction.ONLY_RESET_PAGE);
-            final boolean doAnimation = isAppStartup && mApp.pref().getStartupAnimationPreference()
+            final boolean actionAllowsAnimation = (resumeAction.isNone() || resumeAction == MainActivityResumeAction.ONLY_RESET_PAGE);
+            final boolean doAnimation = isAppStartup && mApp.prefTracker().getStartupAnimationPreference()
                     && actionAllowsAnimation;
             if (doAnimation) {
                 // Show initial animation
@@ -304,12 +306,12 @@ public class Controller implements ShakerListener {
      * Called when main activity is resumed. It updates the shaker state based on current settings.
      */
     private final void resumeShaker() {
-        if (mApp.pref().getShakerEnabledPreference()) {
+        if (mApp.prefTracker().getShakerEnabledPreference()) {
             final boolean installShaker = (mOptionalShaker == null);
             if (installShaker) {
                 mOptionalShaker = new ShakeImpl(mApp.context(), this);
             }
-            final boolean shakerSupported = mOptionalShaker.resume(mApp.pref()
+            final boolean shakerSupported = mOptionalShaker.resume(mApp.prefTracker()
                     .getShakerSensitivityPreference());
             if (installShaker && !shakerSupported) {
                 mApp.services().toast(mApp.str(R.string.shaking_service_not_available));
@@ -360,7 +362,7 @@ public class Controller implements ShakerListener {
 
         // Determine if to expire all locks
         final PushScope pushScope = mApp.dateTracker().computePushScope(modelPushDateStamp,
-                mApp.pref().reader().getLockExpierationPeriodPreference());
+                mApp.prefTracker().reader().getLockExpierationPeriodPreference());
 
         if (pushScope == PushScope.NONE) {
             // Not expected because of the quick check above
@@ -369,7 +371,7 @@ public class Controller implements ShakerListener {
                     trackerTodayDateStamp);
         } else {
             final boolean expireAllLocks = (pushScope == PushScope.ALL);
-            final boolean deleteCompletedItems = mApp.pref().reader().getAutoDailyCleanupPreference();
+            final boolean deleteCompletedItems = mApp.prefTracker().reader().getAutoDailyCleanupPreference();
             LogUtil.info("Model push scope: %s, auto_cleanup=%s", pushScope, deleteCompletedItems);
             mApp.model().pushToToday(expireAllLocks, deleteCompletedItems);
             // Not bothering to test if anything changed. Always updating. This happens only once a
@@ -461,7 +463,7 @@ public class Controller implements ShakerListener {
                                 // trailing
                                 if (finalString.length() == 0) {
                                     startItemDeletionWithAnination(pageKind, itemIndex);
-                                    if (mApp.pref().getVerboseMessagesEnabledPreference()) {
+                                    if (mApp.prefTracker().getVerboseMessagesEnabledPreference()) {
                                         mApp.services().toast(R.string.editor_Empty_task_deleted);
                                     }
                                 } else {
@@ -583,7 +585,7 @@ public class Controller implements ShakerListener {
 
         // Look for special string to enable debug mode.
         if (cleanedValue.equals(DEBUG_MODE_TASK_CODE)) {
-            mApp.debug().setDebugMode(true);
+            mApp.debugController().setDebugMode(true);
             // Do not add the item.
             return;
         }
@@ -725,7 +727,7 @@ public class Controller implements ShakerListener {
 
         // Handle the shake event
         final PageKind currentPage = mApp.view().getCurrentPage();
-        final ShakerAction action = mApp.pref().reader().getShakerActionPreference();
+        final ShakerAction action = mApp.prefTracker().reader().getShakerActionPreference();
         switch (action) {
             case NEW_ITEM_BY_TEXT:
                 onAddItemByTextButton(currentPage);
@@ -755,7 +757,7 @@ public class Controller implements ShakerListener {
      */
     @Nullable
     private final String constructPageCleanMessage(OrganizePageSummary summary) {
-        if (!mApp.pref().getVerboseMessagesEnabledPreference()) {
+        if (!mApp.prefTracker().getVerboseMessagesEnabledPreference()) {
             return null;
         }
 
@@ -811,7 +813,7 @@ public class Controller implements ShakerListener {
                 startPopupMessageSubActivity(MessageKind.ABOUT);
                 break;
             case DEBUG:
-                mApp.debug().startMainDialog();
+                mApp.debugController().startMainDialog();
                 break;
             default:
                 throw new RuntimeException("Unknown main menu action id: " + entry);
@@ -871,7 +873,7 @@ public class Controller implements ShakerListener {
                 maybeAutoSortPages(true, true);
                 // If auto sort got enabled, this may affect the list widgets and thus
                 // we force widget updated. In the other direction it's not required.
-                flushModelChanges(mApp.pref().getAutoSortPreference());
+                flushModelChanges(mApp.prefTracker().getAutoSortPreference());
                 break;
 
             case SOUND_ENABLED:
@@ -939,7 +941,7 @@ public class Controller implements ShakerListener {
     }
 
     /** Called by the main activity when it is created. */
-    public final void onMainActivityCreated(StartupKind startupKind) {
+    public final void onMainActivityCreated(MainActivityStartupKind startupKind) {
         // NOTE: at this point the model has not been processed yet for potential
         // task move/cleanup due to date change. This is done later in the
         // onMainActivityResume() event.
@@ -999,14 +1001,14 @@ public class Controller implements ShakerListener {
 
     private final boolean maybeAutoSortPage(PageKind pageKind, boolean updateViewIfSorted,
             boolean showMessageIfSorted) {
-        if (mApp.pref().getAutoSortPreference()) {
+        if (mApp.prefTracker().getAutoSortPreference()) {
             // NOTE: reusing temp summary mmeber.
             mApp.model().organizePageWithUndo(pageKind, false, -1, mTempSummary);
             if (mTempSummary.orderChanged) {
                 if (updateViewIfSorted) {
                     mApp.view().upadatePage(pageKind);
                 }
-                if (showMessageIfSorted && mApp.pref().getVerboseMessagesEnabledPreference()) {
+                if (showMessageIfSorted && mApp.prefTracker().getVerboseMessagesEnabledPreference()) {
                     mApp.services().toast(R.string.Auto_sorted);
                 }
                 return true;
@@ -1021,7 +1023,7 @@ public class Controller implements ShakerListener {
         final boolean sorted2 = maybeAutoSortPage(PageKind.TOMOROW, updateViewIfSorted, false);
         final boolean sorted = sorted1 || sorted2;
         // NOTE: suppressing message if showing a sub activity (e.g. SettingActivity).
-        if (sorted && showMessageIfSorted && mApp.pref().getVerboseMessagesEnabledPreference()
+        if (sorted && showMessageIfSorted && mApp.prefTracker().getVerboseMessagesEnabledPreference()
                 && !mInSubActivity) {
             mApp.services().toast(R.string.Auto_sorted);
         }
@@ -1035,7 +1037,7 @@ public class Controller implements ShakerListener {
      */
     private final void maybeAutosortPageWithItemOfInterest(final PageKind pageKind,
             final int itemOfInteresttOriginalIndex) {
-        if (!mApp.pref().getAutoSortPreference() || mApp.model().isPageSorted(pageKind)) {
+        if (!mApp.prefTracker().getAutoSortPreference() || mApp.model().isPageSorted(pageKind)) {
             return;
         }
 
@@ -1047,7 +1049,7 @@ public class Controller implements ShakerListener {
                         mApp.model().organizePageWithUndo(pageKind, false,
                                 itemOfInteresttOriginalIndex, mTempSummary);
                         mApp.view().upadatePage(pageKind);
-                        if (mApp.pref().getVerboseMessagesEnabledPreference()) {
+                        if (mApp.prefTracker().getVerboseMessagesEnabledPreference()) {
                             mApp.services().toast(R.string.Auto_sorted);
                         }
                         if (mTempSummary.itemOfInterestNewIndex >= 0) {

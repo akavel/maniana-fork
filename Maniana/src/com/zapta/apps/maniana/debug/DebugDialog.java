@@ -17,16 +17,18 @@ package com.zapta.apps.maniana.debug;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 
-import com.zapta.apps.maniana.main.AppContext;
+import com.zapta.apps.maniana.annotations.MainActivityScope;
+import com.zapta.apps.maniana.main.MainActivityState;
 
 /** 
  * A static typed dialog for selecting debug commands. 
  * 
  * @author: Tal Dayan
  */
+@MainActivityScope
 public class DebugDialog {
 
-    public static final <T extends DebugCommand> void startDialog(final AppContext app, String title, 
+    public static final <T extends DebugCommand> void startDialog(final MainActivityState mainActivityState, String title, 
             final T commands[], final DebugDialogListener<T> listener) {
         // Create array with command strings
         final int n = commands.length;
@@ -35,7 +37,7 @@ public class DebugDialog {
             commandsText[i] = commands[i].getText();
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(app.context());
+        AlertDialog.Builder builder = new AlertDialog.Builder(mainActivityState.context());
         builder.setTitle(title);
         builder.setItems(commandsText, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int itemIndex) {

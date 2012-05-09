@@ -14,6 +14,7 @@
 
 package com.zapta.apps.maniana.debug;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**
@@ -21,6 +22,7 @@ import com.zapta.apps.maniana.util.LogUtil;
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public final class DebugTimer {
 
     private final long mStartTimeMillis;

@@ -23,6 +23,7 @@ import android.app.backup.FileBackupHelper;
 import android.app.backup.SharedPreferencesBackupHelper;
 import android.os.ParcelFileDescriptor;
 
+import com.zapta.apps.maniana.annotations.BackupAgentScope;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.util.LogUtil;
 
@@ -34,6 +35,7 @@ import com.zapta.apps.maniana.util.LogUtil;
  *         Note: to Force backup run the following after a data change:<br>
  *         adb shell bmgr run
  */
+@BackupAgentScope
 public class AppBackupHelper extends BackupAgentHelper {
 
     /** Unique key of the data file backup helper */

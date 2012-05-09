@@ -19,6 +19,9 @@ import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
 
 import javax.annotation.Nullable;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
+@ApplicationScope
 public class ModelReadingResult {
 
     public static enum ModelLoadingOutcome {

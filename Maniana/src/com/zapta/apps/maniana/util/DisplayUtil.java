@@ -14,11 +14,14 @@
 
 package com.zapta.apps.maniana.util;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 import android.content.Context;
 
 /**
  * @author Tal Dayan
  */
+@ApplicationScope
 public final class DisplayUtil {
 
     /** Do not instantiate */

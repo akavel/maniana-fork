@@ -28,7 +28,7 @@ import android.webkit.WebView;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
-import com.zapta.apps.maniana.main.AppContext;
+import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.model.AppModel.ProjectedImportStats;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult;
@@ -54,12 +54,12 @@ public class RestoreBackupDialog extends Dialog implements TrackablePopup {
         void onSelection(Action action);
     }
 
-    private final AppContext mApp;
+    private final MainActivityState mApp;
 
     private final RestoreBackupDialogListener mListener;
 
     /** Private constructor. Use startDialog() to create and launch a dialog. */
-    private RestoreBackupDialog(final AppContext app, RestoreBackupDialogListener listener,
+    private RestoreBackupDialog(final MainActivityState app, RestoreBackupDialogListener listener,
             Map<String, Object> macroValues) {
         super(app.context());
         mApp = app;
@@ -128,7 +128,7 @@ public class RestoreBackupDialog extends Dialog implements TrackablePopup {
         }
     }
 
-    public static void startDialog(final AppContext app,
+    public static void startDialog(final MainActivityState app,
             final RestoreBackupDialogListener listener, ProjectedImportStats stats) {
 
         // NOTE: macro names matches those in the html asset file.

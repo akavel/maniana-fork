@@ -14,11 +14,14 @@
 
 package com.zapta.apps.maniana.services;
 
+import com.zapta.apps.maniana.annotations.MainActivityScope;
+
 /** 
  * Common interface for shake detector implementations.
  * 
  * @author Tal Dayan
  */
+@MainActivityScope
 public interface Shaker {
     
     /** Called on shake events. */

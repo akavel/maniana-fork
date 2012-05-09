@@ -22,6 +22,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.ActivityScope;
 import com.zapta.apps.maniana.util.PopupsTracker;
 import com.zapta.apps.maniana.util.TrackableDialogPopup;
 
@@ -30,6 +31,7 @@ import com.zapta.apps.maniana.util.TrackableDialogPopup;
  * 
  * @author Tal Dayan
  */
+@ActivityScope
 public class ThumbnailSelector<T extends Thumbnail> extends TrackableDialogPopup {
 
     public interface ThumbnailSelectorListener<T extends Thumbnail> {

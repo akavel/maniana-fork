@@ -27,7 +27,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zapta.apps.maniana.R;
-import com.zapta.apps.maniana.main.AppContext;
+import com.zapta.apps.maniana.annotations.MainActivityScope;
+import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.model.ItemModelReadOnly;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.settings.ItemFontVariation;
@@ -38,9 +39,10 @@ import com.zapta.apps.maniana.settings.PageIconSet;
  * 
  * @author Tal Dayan
  */
+@MainActivityScope
 public class ItemView extends FrameLayout {
 
-    private final AppContext mApp;
+    private final MainActivityState mMainActivityState;
 
     /** The sub view that contains the color flag. */
     private final View mColorView;
@@ -64,12 +66,12 @@ public class ItemView extends FrameLayout {
     /** Cache of the view highlighted status. Used to avoid unnecessary changes. */
     private boolean mLastIsHighlighted = false;
 
-    public ItemView(AppContext app, PageKind pageKind, ItemModelReadOnly item) {
-        super(app.context());
-        this.mApp = app;
+    public ItemView(MainActivityState mainActivityState, PageKind pageKind, ItemModelReadOnly item) {
+        super(mainActivityState.context());
+        this.mMainActivityState = mainActivityState;
         this.mPageKind = pageKind;
 
-        mApp.services().layoutInflater().inflate(R.layout.page_item_layout, this);
+        mMainActivityState.services().layoutInflater().inflate(R.layout.page_item_layout, this);
 
         mColorView = findViewById(R.id.page_item_color);
 
@@ -140,7 +142,7 @@ public class ItemView extends FrameLayout {
     }
 
     private final void updateFont(boolean isItemCompleted) {
-        final ItemFontVariation newItemFontVariation = mApp.pref().getPageItemFontVariation();
+        final ItemFontVariation newItemFontVariation = mMainActivityState.prefTracker().getPageItemFontVariation();
         if (newItemFontVariation != mLastFontVariaton || isItemCompleted || mLastIsCompleted) {
             newItemFontVariation.apply(mTextView, isItemCompleted, true);
             mLastFontVariaton = newItemFontVariation;
@@ -150,7 +152,7 @@ public class ItemView extends FrameLayout {
 
     /** Update the item button (arrow vs lock). */
     private final void updateItemButton(boolean isLocked) {
-        final PageIconSet iconSet = mApp.pref().getPageIconSetPreference();
+        final PageIconSet iconSet = mMainActivityState.prefTracker().getPageIconSetPreference();
         final int newArrowDrawable;
         if (mPageKind.isToday()) {
             newArrowDrawable = isLocked ? iconSet.arrowLockedResourceId

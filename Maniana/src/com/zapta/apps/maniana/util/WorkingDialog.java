@@ -20,12 +20,14 @@ import android.view.Window;
 import android.widget.TextView;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.ActivityScope;
 
 /**
  * A opoup dialog for short 'wait' messages
  * 
  * @author tal
  */
+@ActivityScope
 public class WorkingDialog extends Dialog {
 
     public WorkingDialog(Context context, String message) {

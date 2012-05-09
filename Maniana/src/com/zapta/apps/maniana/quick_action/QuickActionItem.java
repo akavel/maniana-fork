@@ -16,11 +16,14 @@ package com.zapta.apps.maniana.quick_action;
 
 import android.graphics.drawable.Drawable;
 
+import com.zapta.apps.maniana.annotations.ActivityScope;
+
 /**
  * Immutable representation of a quick action menu item.
  * 
  * @author Tal Dayan
  */
+@ActivityScope
 public class QuickActionItem {
 
     /** The icon to display. */

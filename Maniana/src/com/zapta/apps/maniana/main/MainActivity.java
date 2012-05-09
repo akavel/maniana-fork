@@ -27,7 +27,7 @@ import android.view.Window;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.controller.MainMenuEntry;
-import com.zapta.apps.maniana.controller.StartupKind;
+import com.zapta.apps.maniana.controller.MainActivityStartupKind;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.persistence.ModelReadingResult;
 import com.zapta.apps.maniana.util.LogUtil;
@@ -39,10 +39,10 @@ import com.zapta.apps.maniana.util.LogUtil;
  */
 public class MainActivity extends Activity {
 
-    private AppContext mApp;
+    private MainActivityState mState;
 
     /** Used to pass resume action from onNewIntent() to onResume(). */
-    private ResumeAction mResumeAction = ResumeAction.NONE;
+    private MainActivityResumeAction mResumeAction = MainActivityResumeAction.NONE;
 
     /** Contains the intent that triggered mResumeAction. Null FF action = NONE. */
     @Nullable
@@ -56,29 +56,29 @@ public class MainActivity extends Activity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         // App context Ties all the app pieces together.
-        mApp = new AppContext(this);
+        mState = new MainActivityState(this);
 
         // Load model from file
-        final ModelReadingResult modelLoadResult = ModelPersistence.readModelFile(mApp.context(),
-                mApp.model());
+        final ModelReadingResult modelLoadResult = ModelPersistence.readModelFile(mState.context(),
+                mState.model());
 
-        final StartupKind startupKind;
+        final MainActivityStartupKind startupKind;
         switch (modelLoadResult.outcome) {
             case FILE_READ_OK: {
                 final int oldVersionCode = modelLoadResult.metadata.writerVersionCode;
-                final int newVersionCode = mApp.services().getAppVersionCode();
+                final int newVersionCode = mState.services().getAppVersionCode();
                 final boolean isSameVersion = (oldVersionCode == newVersionCode);
                 final boolean isSilentUpgrade = isSilentUpgrade(oldVersionCode, newVersionCode);
-                startupKind = isSameVersion ? StartupKind.NORMAL
-                        : (isSilentUpgrade ? StartupKind.NEW_VERSION_SILENT
-                                : StartupKind.NEW_VERSION_ANNOUNCE);
+                startupKind = isSameVersion ? MainActivityStartupKind.NORMAL
+                        : (isSilentUpgrade ? MainActivityStartupKind.NEW_VERSION_SILENT
+                                : MainActivityStartupKind.NEW_VERSION_ANNOUNCE);
                 break;
             }
             case FILE_NOT_FOUND: {
                 // Model should be empty here
-                startupKind = StartupKind.NEW_USER;
+                startupKind = MainActivityStartupKind.NEW_USER;
                 // Prevent moving item from Tomorow to Today.
-                mApp.model().setLastPushDateStamp(mApp.dateTracker().getDateStampString());
+                mState.model().setLastPushDateStamp(mState.dateTracker().getDateStampString());
                 break;
             }
 
@@ -86,22 +86,22 @@ public class MainActivity extends Activity {
                 LogUtil.error("Unknown model loading outcome: " + modelLoadResult.outcome);
                 // Falling through intentionally.
             case FILE_HAS_ERRORS:
-                mApp.model().clear();
-                mApp.model().setLastPushDateStamp(mApp.dateTracker().getDateStampString());
-                startupKind = StartupKind.MODEL_DATA_ERROR;
+                mState.model().clear();
+                mState.model().setLastPushDateStamp(mState.dateTracker().getDateStampString());
+                startupKind = MainActivityStartupKind.MODEL_DATA_ERROR;
         }
 
         // Inform the view about the model data change
-        mApp.view().updatePages();
+        mState.view().updatePages();
 
         // Set top view of this activity
-        setContentView(mApp.view().getRootView());
+        setContentView(mState.view().getRootView());
 
         // Track resume action from the launch intent
         trackResumeAction(getIntent());
 
         // Tell the controller the app was just created.
-        mApp.controller().onMainActivityCreated(startupKind);
+        mState.controller().onMainActivityCreated(startupKind);
 
     }
 
@@ -119,9 +119,9 @@ public class MainActivity extends Activity {
     public void onDestroy() {
         super.onDestroy();
         // Tell the controller the app is being destroyed.
-        mApp.controller().onMainActivityDestroy();
+        mState.controller().onMainActivityDestroy();
         // Make sure we release the preferences listener.
-        mApp.pref().release();
+        mState.prefTracker().release();
     }
 
     /** Called by the framework once when user opened the app main menu the first time. */
@@ -143,7 +143,7 @@ public class MainActivity extends Activity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         final MenuItem debugItem = menu.findItem(R.id.main_menu_debug);
-        debugItem.setVisible(mApp.debug().isDebugMode());
+        debugItem.setVisible(mState.debugController().isDebugMode());
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -158,7 +158,7 @@ public class MainActivity extends Activity {
             return true;
         }
 
-        mApp.controller().onMainMenuSelection(mainMenuEntry);
+        mState.controller().onMainMenuSelection(mainMenuEntry);
         return true;
     }
 
@@ -167,9 +167,9 @@ public class MainActivity extends Activity {
     protected void onPause() {
         super.onPause();
         mResumeIntent = null;
-        mResumeAction = ResumeAction.NONE;
+        mResumeAction = MainActivityResumeAction.NONE;
         // Inform the controller.
-        mApp.controller().onMainActivityPause();
+        mState.controller().onMainActivityPause();
     }
 
     /** Called by the framework when this activity is resumed. */
@@ -179,20 +179,20 @@ public class MainActivity extends Activity {
 
         // Get the action for this resume
         final Intent thisResumeIntent = mResumeIntent;
-        final ResumeAction thisResumeAction = mResumeAction;
+        final MainActivityResumeAction thisResumeAction = mResumeAction;
 
         mResumeIntent = null;
-        mResumeAction = ResumeAction.NONE;
+        mResumeAction = MainActivityResumeAction.NONE;
 
         // Inform the controller
-        mApp.controller().onMainActivityResume(thisResumeAction, thisResumeIntent);
+        mState.controller().onMainActivityResume(thisResumeAction, thisResumeIntent);
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         boolean eventHandled = false;
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            eventHandled = mApp.controller().onBackButton();
+            eventHandled = mState.controller().onBackButton();
         }
         return eventHandled || super.onKeyDown(keyCode, event);
     }
@@ -200,7 +200,7 @@ public class MainActivity extends Activity {
     /** Delegates sub sctivities result to the controller. */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        mApp.controller().onActivityResult(requestCode, resultCode, intent);
+        mState.controller().onActivityResult(requestCode, resultCode, intent);
     }
 
     /**
@@ -216,6 +216,6 @@ public class MainActivity extends Activity {
     /** Update the resume action from the given launch intent. */
     private final void trackResumeAction(Intent launchIntent) {
         mResumeIntent = launchIntent;
-        mResumeAction = ResumeAction.fromIntent(mApp, launchIntent);
+        mResumeAction = MainActivityResumeAction.fromIntent(mState, launchIntent);
     }
 }

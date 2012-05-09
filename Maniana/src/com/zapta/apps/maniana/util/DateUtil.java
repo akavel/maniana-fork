@@ -14,6 +14,8 @@
 
 package com.zapta.apps.maniana.util;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 import android.text.format.Time;
 
 /**
@@ -21,6 +23,7 @@ import android.text.format.Time;
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public final class DateUtil {
 
     /** Do not instantiate */

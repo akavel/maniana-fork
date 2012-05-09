@@ -18,9 +18,10 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
+import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
 import com.zapta.apps.maniana.help.PopupMessageActivity.MessageKind;
-import com.zapta.apps.maniana.main.AppContext;
+import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.settings.PreferenceKind;
 import com.zapta.apps.maniana.util.NotificationUtil;
 import com.zapta.apps.maniana.view.IcsMainMenuDialog;
@@ -30,17 +31,18 @@ import com.zapta.apps.maniana.view.IcsMainMenuDialog;
  * 
  * @author Tal Dayan
  */
+@MainActivityScope
 public class DebugController {
 
-    private final AppContext mApp;
+    private final MainActivityState mMainActivityState;
 
-    public DebugController(AppContext mApp) {
-        this.mApp = mApp;
+    public DebugController(MainActivityState mMainActivityState) {
+        this.mMainActivityState = mMainActivityState;
     }
 
     /** Call this one to allow the user to select a debug command. */
     public final void startMainDialog() {
-        DebugDialog.startDialog(mApp, "Debug", DebugCommandMain.values(),
+        DebugDialog.startDialog(mMainActivityState, "Debug", DebugCommandMain.values(),
                 new DebugDialogListener<DebugCommandMain>() {
                     @Override
                     public void onDebugCommand(DebugCommandMain command) {
@@ -55,25 +57,25 @@ public class DebugController {
                 startNotificationDialog();
                 break;
             case NEW_USER:
-                mApp.context().startActivity(
-                        PopupMessageActivity.intentFor(mApp.context(), MessageKind.NEW_USER));
+                mMainActivityState.context().startActivity(
+                        PopupMessageActivity.intentFor(mMainActivityState.context(), MessageKind.NEW_USER));
                 break;
             case ICS_MENU:
-                IcsMainMenuDialog.showMenu(mApp);
+                IcsMainMenuDialog.showMenu(mMainActivityState);
                 break;
             case ON_SHAKE:
-                mApp.controller().onShake();
+                mMainActivityState.controller().onShake();
                 break;
             case EXIT:
                 setDebugMode(false);
                 break;
             default:
-                mApp.services().toast("Not implemented: " + command);
+                mMainActivityState.services().toast("Not implemented: " + command);
         }
     }
 
     private final void startNotificationDialog() {
-        DebugDialog.startDialog(mApp, "Debug Notifications", DebugCommandNotification.values(),
+        DebugDialog.startDialog(mMainActivityState, "Debug Notifications", DebugCommandNotification.values(),
                 new DebugDialogListener<DebugCommandNotification>() {
                     @Override
                     public void onDebugCommand(DebugCommandNotification command) {
@@ -85,24 +87,24 @@ public class DebugController {
     private final void onDebugCommandNotification(DebugCommandNotification command) {
         switch (command) {
             case NOTIFICATION_SINGLE:
-                NotificationUtil.sendPendingItemsNotification(mApp.context(), 1);
+                NotificationUtil.sendPendingItemsNotification(mMainActivityState.context(), 1);
                 break;
             case NOTIFICATION_MULTI:
-                NotificationUtil.sendPendingItemsNotification(mApp.context(), 17);
+                NotificationUtil.sendPendingItemsNotification(mMainActivityState.context(), 17);
                 break;
             case NOTIFICATION_CLEAR:
-                NotificationUtil.clearPendingItemsNotification(mApp.context());
+                NotificationUtil.clearPendingItemsNotification(mMainActivityState.context());
                 break;
             default:
-                mApp.services().toast("Not implemented: " + command);
+                mMainActivityState.services().toast("Not implemented: " + command);
         }
     }
 
     /** Write a persisted debug mode flag value */
     public final void setDebugMode(boolean flag) {
-        mApp.services().toast("Debug mode: " + (flag ? "ON" : "OFF"));
+        mMainActivityState.services().toast("Debug mode: " + (flag ? "ON" : "OFF"));
         final SharedPreferences sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(mApp.context());
+                .getDefaultSharedPreferences(mMainActivityState.context());
         final Editor editor = sharedPreferences.edit();
         editor.putBoolean(PreferenceKind.DEBUG_MODE.getKey(), flag);
         editor.commit();
@@ -110,7 +112,7 @@ public class DebugController {
 
     /** Read the persisted debug mode flag value. */
     public final boolean isDebugMode() {
-        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mApp
+        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mMainActivityState
                 .context());
         return mSharedPreferences.getBoolean(PreferenceKind.DEBUG_MODE.getKey(), false);
     }

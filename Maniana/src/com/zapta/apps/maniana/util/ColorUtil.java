@@ -15,11 +15,16 @@
 package com.zapta.apps.maniana.util;
 
 import static com.zapta.apps.maniana.util.Assertions.check;
+
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+import com.zapta.apps.maniana.annotations.VisibleForTesting;
+
 import android.graphics.Color;
 
 /**
  * @author Tal Dayan
  */
+@ApplicationScope
 public final class ColorUtil {
 
     /** Do not instantiate */

@@ -16,6 +16,7 @@ package com.zapta.apps.maniana.settings;
 
 import javax.annotation.Nullable;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.util.EnumUtil;
 import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 
@@ -33,6 +34,7 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public enum PreferenceKind implements KeyedEnum {
     // Sound
     SOUND_ENABLED("prefAllowSoundKey"),

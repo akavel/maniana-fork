@@ -14,11 +14,14 @@
 
 package com.zapta.apps.maniana.model;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 /**
  * Represents a read only aspect of an item model.
  * 
  * @author Tal Dayan.
  */
+@ApplicationScope
 public interface ItemModelReadOnly {
 
     /** Number of groups by which items are sorted. */

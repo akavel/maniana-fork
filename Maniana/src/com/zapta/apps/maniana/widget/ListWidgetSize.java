@@ -15,12 +15,14 @@
 package com.zapta.apps.maniana.widget;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.ApplicationScope;
 
 /**
  * Descriptor of supported list widget sizes.
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public class ListWidgetSize {
 
     static class OrientationInfo {

@@ -36,7 +36,8 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.zapta.apps.maniana.main.AppContext;
+import com.zapta.apps.maniana.annotations.MainActivityScope;
+import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.quick_action.QuickActionItem;
 import com.zapta.apps.maniana.quick_action.QuickActionMenu;
 import com.zapta.apps.maniana.quick_action.QuickActionMenu.OnActionItemOutcomeListener;
@@ -47,6 +48,7 @@ import com.zapta.apps.maniana.util.LogUtil;
  * 
  * @author Tal Dayan
  */
+@MainActivityScope
 public class ItemListView extends ListView {
 
     /** Id for handler messages indicating long press timeout. */
@@ -73,8 +75,8 @@ public class ItemListView extends ListView {
     /** Indicates that a drag scroll tick message is in flight. */
     private boolean mPedningDragScrollTick = false;
 
-    /** Provided access to app components. */
-    private AppContext mApp;
+    /** Provided access to main activity components. */
+    private MainActivityState mainActivityStte;
 
     /** Adapter to the underlying model page item list. */
     private ItemListViewAdapter mAdapter;
@@ -250,8 +252,8 @@ public class ItemListView extends ListView {
      * @param app the app context.
      * @param adapter adapter to the underlying PageModel item list.
      */
-    public final void setApp(AppContext app, ItemListViewAdapter adapter) {
-        this.mApp = checkNotNull(app);
+    public final void setApp(MainActivityState app, ItemListViewAdapter adapter) {
+        this.mainActivityStte = checkNotNull(app);
         this.mAdapter = checkNotNull(adapter);
         super.setAdapter(adapter);
     }
@@ -417,7 +419,7 @@ public class ItemListView extends ListView {
                     mDragedItemImageViewWindowParams.x = 0;
                     mDragedItemImageViewWindowParams.y = eventYInListView - mPressPointInItemViewY
                             + mListViewOffsetInScreenY;
-                    mApp.services()
+                    mainActivityStte.services()
                             .windowManager()
                             .updateViewLayout(mDragedItemImageView,
                                     mDragedItemImageViewWindowParams);
@@ -453,15 +455,15 @@ public class ItemListView extends ListView {
                 if (cachedLastState == State.DOWN_STABLE && action == MotionEvent.ACTION_UP) {
                     switch (cachedPressedItemArea) {
                         case COLOR:
-                            mApp.controller().onItemColorClick(mAdapter.pageKind(),
+                            mainActivityStte.controller().onItemColorClick(mAdapter.pageKind(),
                                     cachedPressDownItemIndex);
                             break;
                         case TEXT:
-                            mApp.controller().onItemTextClick(mAdapter.pageKind(),
+                            mainActivityStte.controller().onItemTextClick(mAdapter.pageKind(),
                                     cachedPressDownItemIndex);
                             break;
                         case BUTTON:
-                            mApp.controller().onItemArrowClick(mAdapter.pageKind(),
+                            mainActivityStte.controller().onItemArrowClick(mAdapter.pageKind(),
                                     cachedPressDownItemIndex);
                             break;
                         default:
@@ -475,7 +477,7 @@ public class ItemListView extends ListView {
                         && cachedDragCurrentHighlightedItemIndex >= 0
                         && cachedDragCurrentHighlightedItemIndex < getCount()
                         && cachedDragCurrentHighlightedItemIndex != cachedPressDownItemIndex) {
-                    mApp.controller().onItemMoveInPage(mAdapter.pageKind(),
+                    mainActivityStte.controller().onItemMoveInPage(mAdapter.pageKind(),
                             cachedPressDownItemIndex, cachedDragCurrentHighlightedItemIndex);
                     return OnTouchEventOutcome.CALL_SUPER;
                 }
@@ -638,8 +640,8 @@ public class ItemListView extends ListView {
         if (LogUtil.DEBUG_LEVEL >= 3) {
             LogUtil.debug("down to drag");
         }
-        mApp.services().vibrateForLongPress();
-        mApp.services().windowManager()
+        mainActivityStte.services().vibrateForLongPress();
+        mainActivityStte.services().windowManager()
                 .addView(mDragedItemImageView, mDragedItemImageViewWindowParams);
         setState(State.DOWN_DRAG);
 
@@ -659,14 +661,14 @@ public class ItemListView extends ListView {
     /** Display item menu on top of given item */
     public void showItemMenu(final int itemIndex, QuickActionItem actions[],
             final int dismissActionId) {
-        final QuickActionMenu quickActionMenu = new QuickActionMenu(mApp,
+        final QuickActionMenu quickActionMenu = new QuickActionMenu(mainActivityStte,
                 new OnActionItemOutcomeListener() {
                     @Override
                     public void onOutcome(QuickActionMenu source, QuickActionItem actionItem) {
-                        mApp.popupsTracker().untrack(source);
+                        mainActivityStte.popupsTracker().untrack(source);
                         final int actionId = (actionItem != null) ? actionItem.getActionId()
                                 : dismissActionId;
-                        mApp.controller().onItemMenuSelection(mAdapter.pageKind(), itemIndex,
+                        mainActivityStte.controller().onItemMenuSelection(mAdapter.pageKind(), itemIndex,
                                 actionId);
                     }
                 });
@@ -679,7 +681,7 @@ public class ItemListView extends ListView {
         final ItemView itemView = getItemViewIfVisible(itemIndex);
         // NOTE: this should always be non null but handling gracefully to avoid a forced close.
         if (itemView != null) {
-            mApp.popupsTracker().track(quickActionMenu);
+            mainActivityStte.popupsTracker().track(quickActionMenu);
             quickActionMenu.show(itemView);
         }
     }
@@ -708,7 +710,7 @@ public class ItemListView extends ListView {
 
                 if (mState == State.DOWN_DRAG) {
                     mDragedItemImageView.setVisibility(GONE);
-                    mApp.services().windowManager().removeView(mDragedItemImageView);
+                    mainActivityStte.services().windowManager().removeView(mDragedItemImageView);
                     updateViewsHighlight(-1);
                 }
 

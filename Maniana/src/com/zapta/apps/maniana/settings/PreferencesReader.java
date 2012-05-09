@@ -14,6 +14,8 @@
 
 package com.zapta.apps.maniana.settings;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -22,6 +24,7 @@ import android.content.SharedPreferences;
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public class PreferencesReader implements PreferenceConstants {
 
     private final Context mContext;

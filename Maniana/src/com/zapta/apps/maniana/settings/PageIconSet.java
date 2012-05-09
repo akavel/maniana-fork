@@ -19,6 +19,7 @@ import javax.annotation.Nullable;
 import android.content.Context;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.util.EnumUtil;
 import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 
@@ -27,6 +28,7 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public enum PageIconSet implements KeyedEnum {
     // NOTE: keys are persisted in preferences. Do not modify.
     HAND_DRAWN(

@@ -17,39 +17,39 @@ package com.zapta.apps.maniana.main;
 import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
 import android.content.Context;
 
+import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.controller.Controller;
 import com.zapta.apps.maniana.debug.DebugController;
 import com.zapta.apps.maniana.model.AppModel;
-import com.zapta.apps.maniana.services.AppResources;
-import com.zapta.apps.maniana.services.AppServices;
+import com.zapta.apps.maniana.services.MainActivityServices;
 import com.zapta.apps.maniana.services.DateTracker;
 import com.zapta.apps.maniana.settings.PreferenceKind;
+import com.zapta.apps.maniana.settings.PreferencesReader;
 import com.zapta.apps.maniana.settings.PreferencesTracker;
 import com.zapta.apps.maniana.util.PopupsTracker;
 import com.zapta.apps.maniana.view.AppView;
 
 /**
- * Central references to all parts of the application. Initialized once upon main activity creation.
+ * Represents the global state of the main activity.
  * 
  * @author Tal Dayan.
  */
-public class AppContext {
-    /** The main activity of this app. */
+@MainActivityScope
+public class MainActivityState {
+    
+    private final MyApp mApp;
+
     private final MainActivity mMainActivity;
 
-    /** The preferences tracker of this app. */
-    private PreferencesTracker mAppPreferences;
+    private final PreferencesReader mPreferencesReader;
+    
+    private final PreferencesTracker mPreferencesTracker;
 
-    /** The data tracker of this app. */
-    private DateTracker mDateTracker = new DateTracker();
+    private final DateTracker mDateTracker = new DateTracker();
 
-    /** Access to resources used by this app */
-    private AppResources mResources;
+    private MainActivityServices mServices;
 
-    /** Common services used by this app */
-    private AppServices mServices;
-
-    /** The app data model. Contains the items' data. */
+    /** Task data. */
     private AppModel mModel;
 
     /** The app controller. Contains the main app logic. */
@@ -58,17 +58,18 @@ public class AppContext {
     /** Debug mode operations. */
     private DebugController mDebugController;
 
-    /** The app view. */
+    /** The main activity view. */
     private AppView mView;
 
     /** The open dialog tracker. */
     private final PopupsTracker mPopupsTracker = new PopupsTracker();
 
-    AppContext(MainActivity mainActivity) {
+    MainActivityState(MainActivity mainActivity) {
         mMainActivity = checkNotNull(mainActivity);
         mModel = new AppModel();
-        final MyApp app = (MyApp) mainActivity.getApplication();
-        mAppPreferences = new PreferencesTracker(app.preferencesReader(),
+        mApp = (MyApp) mainActivity.getApplication();
+        mPreferencesReader = mApp.preferencesReader();
+        mPreferencesTracker = new PreferencesTracker(mApp.preferencesReader(),
                 new PreferencesTracker.PreferenceChangeListener() {
                     @Override
                     public void onPreferenceChange(PreferenceKind preferenceKind) {
@@ -77,11 +78,14 @@ public class AppContext {
                         }
                     }
                 });
-        mResources = new AppResources(this);
-        mServices = new AppServices(this);
+        mServices = new MainActivityServices(this);
         mDebugController = new DebugController(this);
         mController = new Controller(this);
         mView = new AppView(this);
+    }
+    
+    public final MyApp app() {
+        return mApp;
     }
 
     public final MainActivity mainActivity() {
@@ -103,8 +107,12 @@ public class AppContext {
         return mMainActivity.getString(resourceId, args);
     }
 
-    public PreferencesTracker pref() {
-        return mAppPreferences;
+    public PreferencesTracker prefTracker() {
+        return mPreferencesTracker;
+    }
+    
+    public PreferencesReader prefReader() {
+        return mPreferencesReader;
     }
 
     public final DateTracker dateTracker() {
@@ -115,11 +123,7 @@ public class AppContext {
         return mPopupsTracker;
     }
 
-    public final AppResources resources() {
-        return mResources;
-    }
-
-    public final AppServices services() {
+    public final MainActivityServices services() {
         return mServices;
     }
 
@@ -135,7 +139,7 @@ public class AppContext {
         return mView;
     }
 
-    public final DebugController debug() {
+    public final DebugController debugController() {
         return mDebugController;
     }
 }

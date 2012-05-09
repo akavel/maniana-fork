@@ -28,11 +28,12 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.main.MainActivity;
 import com.zapta.apps.maniana.main.MyApp;
-import com.zapta.apps.maniana.main.ResumeAction;
+import com.zapta.apps.maniana.main.MainActivityResumeAction;
 import com.zapta.apps.maniana.model.AppModel;
-import com.zapta.apps.maniana.services.AppServices;
+import com.zapta.apps.maniana.services.MainActivityServices;
 import com.zapta.apps.maniana.settings.ItemFontVariation;
 import com.zapta.apps.maniana.settings.PreferencesReader;
 import com.zapta.apps.maniana.util.ColorUtil;
@@ -100,6 +101,7 @@ import com.zapta.apps.maniana.widget.ListWidgetSize.OrientationInfo;
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
     /** Used to avoid too frequent file garbage collection. */
@@ -171,7 +173,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
                 R.layout.widget_list_layout);
         setOnClickLaunch(context, remoteViews, R.id.widget_list_bitmaps,
-                ResumeAction.ONLY_RESET_PAGE);
+                MainActivityResumeAction.ONLY_RESET_PAGE);
 
         setRemoteViewsToolbar(context, remoteViews, toolbarEanbled);
 
@@ -254,18 +256,18 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             remoteViews.setInt(R.id.widget_list_toolbar_add_by_text_overlay, "setVisibility",
                     View.VISIBLE);
             setOnClickLaunch(context, remoteViews, R.id.widget_list_toolbar_add_by_text_overlay,
-                    ResumeAction.ADD_NEW_ITEM_BY_TEXT);
+                    MainActivityResumeAction.ADD_NEW_ITEM_BY_TEXT);
         } else { // templateAddTextByVoiceButton.setVisibility(View.GONE);
             remoteViews.setInt(R.id.widget_list_toolbar_add_by_text_overlay, "setVisibility",
                     View.GONE);
         }
 
         // Set or disable the click overlay of the add-item-by-voice button.
-        if (toolbarEnabled && AppServices.isVoiceRecognitionSupported(context)) {
+        if (toolbarEnabled && MainActivityServices.isVoiceRecognitionSupported(context)) {
             remoteViews.setInt(R.id.widget_list_toolbar_add_by_voice_overlay, "setVisibility",
                     View.VISIBLE);
             setOnClickLaunch(context, remoteViews, R.id.widget_list_toolbar_add_by_voice_overlay,
-                    ResumeAction.ADD_NEW_ITEM_BY_VOICE);
+                    MainActivityResumeAction.ADD_NEW_ITEM_BY_VOICE);
         } else {
             remoteViews.setInt(R.id.widget_list_toolbar_add_by_voice_overlay, "setVisibility",
                     View.GONE);
@@ -274,9 +276,9 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
     /** Set onClick() action of given remote view element to launch the app. */
     private static final void setOnClickLaunch(Context context, RemoteViews remoteViews,
-            int viewId, ResumeAction resumeAction) {
+            int viewId, MainActivityResumeAction resumeAction) {
         final Intent intent = new Intent(context, MainActivity.class);
-        ResumeAction.setInIntent(intent, resumeAction);
+        MainActivityResumeAction.setInIntent(intent, resumeAction);
         // Setting unique intent action and using FLAG_UPDATE_CURRENT to avoid cross
         // reuse of pending intents. See http://tinyurl.com/8axhrlp for more info.
         intent.setAction("maniana.list_widget." + resumeAction.toString());

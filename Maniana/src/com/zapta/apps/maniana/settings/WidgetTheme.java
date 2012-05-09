@@ -15,12 +15,14 @@
 package com.zapta.apps.maniana.settings;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.ApplicationScope;
 
 /**
  * Widget predefined themes.
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public class WidgetTheme extends Thumbnail {
     // NOTE: preview images capture parameters:
     // * Taken on CM7 Nexus S 

@@ -14,6 +14,8 @@
 
 package com.zapta.apps.maniana.settings;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -27,6 +29,7 @@ import android.widget.TextView;
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public class ItemFontVariation {
     
     private final Typeface mTypeFace;

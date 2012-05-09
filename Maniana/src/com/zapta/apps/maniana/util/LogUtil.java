@@ -14,6 +14,8 @@
 
 package com.zapta.apps.maniana.util;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 import android.util.Log;
 
 /**
@@ -21,6 +23,7 @@ import android.util.Log;
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public final class LogUtil {
 
     /** The current debug level. */
@@ -100,5 +103,4 @@ public final class LogUtil {
     public static final void error(Throwable e, String message) {
         Log.e(TAG, message, e);
     }
-
 }

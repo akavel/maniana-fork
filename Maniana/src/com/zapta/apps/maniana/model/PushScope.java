@@ -14,11 +14,14 @@
 
 package com.zapta.apps.maniana.model;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 /**
  * What items should be moved from Tomorow to Today
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public enum PushScope {
     NONE,
     UNLOCKED_ONLY,

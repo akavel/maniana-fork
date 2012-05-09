@@ -35,6 +35,7 @@ import android.webkit.WebView;
 import android.webkit.WebView.PictureListener;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.ActivityScope;
 import com.zapta.apps.maniana.util.DisplayUtil;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult;
@@ -48,6 +49,7 @@ import com.zapta.apps.maniana.util.TextUtil;
  * 
  * @author Tal Dayan.
  */
+@ActivityScope
 public class PopupMessageActivity extends Activity {
 
     private static final int BORDER_WIDTH_DIP = 5;
@@ -190,9 +192,8 @@ public class PopupMessageActivity extends Activity {
             // finish();
             return null;
         }
-
+        
         checkNotNull(messageKind);
-
         return messageKind;
     }
 

@@ -22,13 +22,15 @@ import java.util.ListIterator;
 
 import javax.annotation.Nullable;
 
-import com.zapta.apps.maniana.util.VisibleForTesting;
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+import com.zapta.apps.maniana.annotations.VisibleForTesting;
 
 /**
  * Contains the data of a single page.
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public class PageModel {
     /** List of items in the order they are displayed to the user */
     private final List<ItemModel> mItems = new ArrayList<ItemModel>();

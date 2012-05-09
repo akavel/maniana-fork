@@ -12,16 +12,9 @@
  * the License.
  */
 
-package com.zapta.apps.maniana.debug;
+package com.zapta.apps.maniana.annotations;
 
-import com.zapta.apps.maniana.annotations.MainActivityScope;
+/** Annotation for code that runs within the backup service agent. */
+public @interface BackupAgentScope {
 
-/** 
- * Listener for debug dialog command selection event.
- * 
- * @author Tal Dayan
- */
-@MainActivityScope
-public interface DebugDialogListener<T extends DebugCommand> {
-    void onDebugCommand(T command);
 }

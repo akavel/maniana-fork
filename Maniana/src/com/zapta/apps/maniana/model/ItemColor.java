@@ -18,6 +18,7 @@ import javax.annotation.Nullable;
 
 import android.graphics.Color;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.util.EnumUtil;
 import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 
@@ -26,6 +27,7 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public enum ItemColor implements KeyedEnum {
     // Item order determines the color sequence the user gets when tapping the screen.
     // It also defines an decreasing order of importance between the non NONE colors

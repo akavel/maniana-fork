@@ -17,12 +17,14 @@ package com.zapta.apps.maniana.controller;
 import javax.annotation.Nullable;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.MainActivityScope;
 
 /**
  * Entries of the main menu.
  * 
  * @author Tal Dayan
  */
+@MainActivityScope
 public enum MainMenuEntry {
     SETTINGS(R.id.main_menu_settings, R.id.ics_menu_settings),
     HELP(R.id.main_menu_help, R.id.ics_menu_help),

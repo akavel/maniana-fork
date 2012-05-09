@@ -14,11 +14,14 @@
 
 package com.zapta.apps.maniana.model;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 /**
  * Contains the results of a page cleanup operation.
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public class OrganizePageSummary {
     public int completedItemsFound;
     public int completedItemsDeleted;

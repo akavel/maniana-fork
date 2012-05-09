@@ -20,7 +20,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 
-import com.zapta.apps.maniana.main.AppContext;
+import com.zapta.apps.maniana.annotations.MainActivityScope;
+import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.quick_action.QuickActionItem;
 
@@ -29,6 +30,7 @@ import com.zapta.apps.maniana.quick_action.QuickActionItem;
  * 
  * @author Tal Dayan
  */
+@MainActivityScope
 public class AppView {
 
     public static enum ItemAnimationType {
@@ -37,7 +39,7 @@ public class AppView {
         SORTING_ITEM,
     }
 
-    private final AppContext mApp;
+    private final MainActivityState mMainActivityState;
 
     /** The view with the two horizontally scrolling pages. */
     private final ViewPager mViewPager;
@@ -51,13 +53,13 @@ public class AppView {
     /** Track the displayed page of the underlying view pager. */
     private int mCurrentPageIndex = 0;
 
-    public AppView(AppContext app) {
-        this.mApp = app;
+    public AppView(MainActivityState mainActivityState) {
+        this.mMainActivityState = mainActivityState;
 
-        mTodayPageView = new PageView(mApp, PageKind.TODAY);
-        mTomorowPageView = new PageView(mApp, PageKind.TOMOROW);
+        mTodayPageView = new PageView(mMainActivityState, PageKind.TODAY);
+        mTomorowPageView = new PageView(mMainActivityState, PageKind.TOMOROW);
 
-        mViewPager = new ViewPager(mApp.context());
+        mViewPager = new ViewPager(mMainActivityState.context());
         mViewPager.setAdapter(new PagerViewAdapter(mTodayPageView, mTomorowPageView));
 
         // Make sure we are in sync with the view.

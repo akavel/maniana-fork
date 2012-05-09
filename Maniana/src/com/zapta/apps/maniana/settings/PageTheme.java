@@ -15,12 +15,14 @@
 package com.zapta.apps.maniana.settings;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.ApplicationScope;
 
 /**
  * Today/Tomorrow pages predefined themes.
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public class PageTheme extends Thumbnail {
 
     public static final PageTheme[] PAGE_THEMES = {

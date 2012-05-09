@@ -17,6 +17,7 @@ package com.zapta.apps.maniana.util;
 import android.app.Dialog;
 import android.content.Context;
 
+import com.zapta.apps.maniana.annotations.ActivityScope;
 import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
 
 /**
@@ -24,6 +25,7 @@ import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
  * 
  * @author Tal Dayan
  */
+@ActivityScope
 public abstract class TrackableDialogPopup extends Dialog implements TrackablePopup {
 
     private final PopupsTracker mParentPopupTracker;

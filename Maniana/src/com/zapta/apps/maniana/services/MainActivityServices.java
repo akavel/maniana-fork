@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
@@ -35,7 +36,8 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.zapta.apps.maniana.R;
-import com.zapta.apps.maniana.main.AppContext;
+import com.zapta.apps.maniana.annotations.MainActivityScope;
+import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.util.DisplayUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.PackageUtil;
@@ -45,14 +47,15 @@ import com.zapta.apps.maniana.util.PackageUtil;
  * 
  * @author Tal Dayan
  */
-public class AppServices {
+@MainActivityScope
+public class MainActivityServices {
 
     /** A combined listener. */
     private static interface MediaPlayerListener extends OnCompletionListener, OnErrorListener {
     }
 
     /** The app context. */
-    private final AppContext mApp;
+    private final MainActivityState mMainActivityState;
 
     private final int mAppVersionCode;
 
@@ -89,25 +92,26 @@ public class AppServices {
     @Nullable
     private MediaPlayer mMediaPlayer;
 
-    public AppServices(AppContext app) {
-        this.mApp = app;
+    public MainActivityServices(MainActivityState mainActivityState) {
+        this.mMainActivityState = mainActivityState;
 
-        PackageInfo packageInfo = PackageUtil.getPackageInfo(mApp.context());
+        PackageInfo packageInfo = PackageUtil.getPackageInfo(mMainActivityState.context());
         mAppVersionCode = packageInfo.versionCode;
         mAppVersionName = packageInfo.versionName;
 
-        mWindowManager = (WindowManager) app.context().getSystemService(Context.WINDOW_SERVICE);
-        mLayoutInflater = (LayoutInflater) app.context().getSystemService(
+        mWindowManager = (WindowManager) mainActivityState.context().getSystemService(
+                Context.WINDOW_SERVICE);
+        mLayoutInflater = (LayoutInflater) mainActivityState.context().getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
 
-        mNormalizedSoundEffectVolume = mApp.context().getResources()
+        mNormalizedSoundEffectVolume = mMainActivityState.context().getResources()
                 .getInteger(R.integer.sound_effect_volume_percent) / 100.0f;
 
         mRandom = new Random();
 
-        mBackupManager = new BackupManager(mApp.context());
+        mBackupManager = new BackupManager(mMainActivityState.context());
 
-        mDensity = DisplayUtil.getDensity(app.context());
+        mDensity = DisplayUtil.getDensity(mainActivityState.context());
     }
 
     public final int getAppVersionCode() {
@@ -142,7 +146,8 @@ public class AppServices {
 
     /** Activate a medium length vibration */
     public final void vibrateForLongPress() {
-        mApp.view()
+        mMainActivityState
+                .view()
                 .getRootView()
                 .performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,
                         HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
@@ -156,9 +161,10 @@ public class AppServices {
      *        settings. If true then activate a short vibration instead, otherwise do nothing.
      */
     public final void maybePlayStockSound(int fxEffectType, boolean fallBackToShortVibration) {
-        if (mApp.pref().getSoundEnabledPreference()) {
-            mApp.resources().getAudioManager()
-                    .playSoundEffect(fxEffectType, mNormalizedSoundEffectVolume);
+        if (mMainActivityState.prefTracker().getSoundEnabledPreference()) {
+            final AudioManager audioManager = (AudioManager) mMainActivityState.context()
+                    .getSystemService(Context.AUDIO_SERVICE);
+            audioManager.playSoundEffect(fxEffectType, mNormalizedSoundEffectVolume);
         } else if (fallBackToShortVibration) {
             vibrateForLongPress();
         }
@@ -193,10 +199,10 @@ public class AppServices {
      * @return true if applause should be played.
      */
     private final boolean shouldPlayApplauseSoundClip() {
-        if (!mApp.pref().getSoundEnabledPreference()) {
+        if (!mMainActivityState.prefTracker().getSoundEnabledPreference()) {
             return false;
         }
-        switch (mApp.pref().getApplauseLevelPreference()) {
+        switch (mMainActivityState.prefTracker().getApplauseLevelPreference()) {
             case NEVER:
                 return false;
             case ALWAYS:
@@ -209,7 +215,7 @@ public class AppServices {
 
     private final void startPlayingSoundClip(int rawResourceId) {
         releaseMediaPlayer();
-        mMediaPlayer = MediaPlayer.create(mApp.context(), rawResourceId);
+        mMediaPlayer = MediaPlayer.create(mMainActivityState.context(), rawResourceId);
 
         // Added as a response to this FC report from a user:
         // https://code.google.com/p/maniana/issues/detail?id=8
@@ -234,15 +240,15 @@ public class AppServices {
      * does not allocate a vararg array
      */
     public final void toast(String message) {
-        Toast.makeText(mApp.context(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(mMainActivityState.context(), message, Toast.LENGTH_SHORT).show();
     }
-    
+
     public final void toast(int messageResourceId) {
-        toast(mApp.context().getString(messageResourceId));
+        toast(mMainActivityState.context().getString(messageResourceId));
     }
-    
+
     public final void toast(int messageResourceId, Object... args) {
-        toast(mApp.context().getString(messageResourceId, args));
+        toast(mMainActivityState.context().getString(messageResourceId, args));
     }
 
     public static boolean isVoiceRecognitionSupported(Context context) {

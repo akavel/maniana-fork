@@ -12,22 +12,14 @@
  * the License.
  */
 
-package com.zapta.apps.maniana.controller;
+package com.zapta.apps.maniana.annotations;
+
 
 /**
- * The app starts with these cases of model loading.
+ * Annotation for private methods and classes that are exposed for testing.
  * 
  * @author Tal Dayan
  */
-public enum StartupKind {
-    /** Loaded model data file, no app version change. */
-    NORMAL,
-    /** No model data file, loaded sample data. */
-    NEW_USER,
-    /** Loaded model data file. Current app version is different than file writer */
-    NEW_VERSION_ANNOUNCE,
-    /** Same as NEW_VERSION but should suppress new version message. */
-    NEW_VERSION_SILENT,
-    /** Model data file found but has error reading/parsing. */
-    MODEL_DATA_ERROR;
+@ApplicationScope
+public @interface VisibleForTesting {
 }

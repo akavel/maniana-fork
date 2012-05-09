@@ -20,11 +20,14 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 import android.text.TextUtils;
 
 /**
  * @author Tal Dayan
  */
+@ApplicationScope
 public final class TextUtil {
 
     /** Do not instantiate */

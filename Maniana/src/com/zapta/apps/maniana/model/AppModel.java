@@ -20,8 +20,9 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+import com.zapta.apps.maniana.annotations.VisibleForTesting;
 import com.zapta.apps.maniana.util.LogUtil;
-import com.zapta.apps.maniana.util.VisibleForTesting;
 
 /**
  * Contains the app data. Persisted across app activations. Controlled by the app controller.
@@ -29,6 +30,7 @@ import com.zapta.apps.maniana.util.VisibleForTesting;
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public class AppModel {
 
     /** Selected to not match any valid timestamp. */

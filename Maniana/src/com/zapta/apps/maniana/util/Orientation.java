@@ -14,10 +14,13 @@
 
 package com.zapta.apps.maniana.util;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 import android.content.Context;
 import android.content.res.Configuration;
 
 /** Represents screen orientations. It is safe to assume that this type is binary. */
+@ApplicationScope
 public enum Orientation {
     PORTRAIT(true, false),
     LANDSCAPE(false, true);

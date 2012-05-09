@@ -19,6 +19,8 @@ import javax.annotation.Nullable;
 import android.content.Intent;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.util.IntentUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 
@@ -27,7 +29,8 @@ import com.zapta.apps.maniana.util.LogUtil;
  * 
  * @author Tal Dayan
  */
-public enum ResumeAction {
+@ApplicationScope
+public enum MainActivityResumeAction {
     /** No action. */
     NONE,
     /** Make today page visible. */
@@ -43,19 +46,20 @@ public enum ResumeAction {
     private static final String RESUME_ACTION_KEY = "maniana_resume_action";
 
     /** Default action when action is not specified in the launch intent. */
-    private static final ResumeAction DEFAULT_ACTION = ONLY_RESET_PAGE;
+    private static final MainActivityResumeAction DEFAULT_ACTION = ONLY_RESET_PAGE;
 
     public boolean isNone() {
         return this == NONE;
     }
 
     /** Serialize a resume action in an intent. */
-    public static void setInIntent(Intent intent, ResumeAction resumeAction) {
+    public static void setInIntent(Intent intent, MainActivityResumeAction resumeAction) {
         intent.putExtra(RESUME_ACTION_KEY, resumeAction.toString());
     }
 
     /** Deserialize a resume action from an intent */
-    public static ResumeAction fromIntent(AppContext app, Intent intent) {
+    @MainActivityScope
+    public static MainActivityResumeAction fromIntent(MainActivityState mainActivityState, Intent intent) {
         // Comment out intent dump
         IntentUtil.dumpIntent(intent, false);
 
@@ -72,7 +76,7 @@ public enum ResumeAction {
                 // Since we don't have Gmail permissions, trying to access the attachment
                 // from the Gmail providers gives permission error.
                 if ("content".equals(scheme) && uriStringLC.contains("gmail")) {
-                    app.services().toast(R.string.backup_restore_Hint_try_using_Gmail_Download_button);
+                    mainActivityState.services().toast(R.string.backup_restore_Hint_try_using_Gmail_Download_button);
                 }
             }
         }
@@ -84,7 +88,7 @@ public enum ResumeAction {
         }
 
         @Nullable
-        final ResumeAction value = ResumeAction.valueOf(strValue);
+        final MainActivityResumeAction value = MainActivityResumeAction.valueOf(strValue);
         if (value == null) {
             LogUtil.error("Unknown resume action string: [%s]", strValue);
             return DEFAULT_ACTION;

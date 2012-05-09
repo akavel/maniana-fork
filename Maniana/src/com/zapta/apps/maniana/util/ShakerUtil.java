@@ -14,6 +14,8 @@
 
 package com.zapta.apps.maniana.util;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -25,6 +27,7 @@ import android.hardware.SensorManager;
  * 
  * @author Tal Dayan.
  */
+@ApplicationScope
 public class ShakerUtil  {
 
     /** Used to test if sensor service is available. */

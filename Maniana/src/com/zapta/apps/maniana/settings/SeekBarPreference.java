@@ -26,6 +26,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.ActivityScope;
 import com.zapta.apps.maniana.util.Orientation;
 
 /**
@@ -36,6 +37,7 @@ import com.zapta.apps.maniana.util.Orientation;
  * @Author Matthew Wiggins
  * @author Tal Dayan
  */
+@ActivityScope
 public class SeekBarPreference extends DialogPreference implements SeekBar.OnSeekBarChangeListener {
 
     private final Context mContext;

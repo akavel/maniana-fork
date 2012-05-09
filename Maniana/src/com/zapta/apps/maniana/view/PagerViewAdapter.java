@@ -16,6 +16,8 @@ package com.zapta.apps.maniana.view;
 
 import java.util.ArrayList;
 
+import com.zapta.apps.maniana.annotations.MainActivityScope;
+
 import android.os.Parcelable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -26,6 +28,7 @@ import android.view.View;
  * 
  * @author Tal Dayan
  */
+@MainActivityScope
 public class PagerViewAdapter extends PagerAdapter {
     /** A list with today and tomorow pages. */
     private final ArrayList<PageView> pages;

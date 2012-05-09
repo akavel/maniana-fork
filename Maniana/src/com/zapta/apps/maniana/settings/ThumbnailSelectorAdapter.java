@@ -24,12 +24,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.ActivityScope;
 
 /**
  * Provide assertion methods.
  * 
  * @author Tal Dayan
  */
+@ActivityScope
 public class ThumbnailSelectorAdapter<T extends Thumbnail> extends BaseAdapter {
 
     private final Context mContext;

@@ -14,6 +14,8 @@
 
 package com.zapta.apps.maniana.util;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -22,6 +24,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 /**
  * @author Tal Dayan
  */
+@ApplicationScope
 public final class PackageUtil {
 
     /** Do not instantiate */

@@ -14,6 +14,8 @@
 
 package com.zapta.apps.maniana.view;
 
+import com.zapta.apps.maniana.annotations.ActivityScope;
+
 import android.view.MotionEvent;
 
 /**
@@ -21,6 +23,7 @@ import android.view.MotionEvent;
  * 
  * @author Tal Dayan
  */
+@ActivityScope
 public class ViewUtil {
 
     /** Return a developer friendly action name. Not user visible. */

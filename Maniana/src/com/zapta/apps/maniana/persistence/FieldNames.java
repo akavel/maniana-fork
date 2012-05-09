@@ -14,11 +14,14 @@
 
 package com.zapta.apps.maniana.persistence;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
+
 /** 
  * Field names used in the serialization.
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public interface FieldNames {
     
     // WARNINNG: changing these value may break comparability with old data files.

@@ -34,11 +34,13 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.ActivityScope;
 
 /**
  * @author George Yunaev (http://tinyurl.com/7jnoubo)
  * @author Tal Dayan
  */
+@ActivityScope
 public class PageIconSetPreference extends DialogPreference implements
         DialogInterface.OnClickListener {
 

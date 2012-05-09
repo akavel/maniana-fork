@@ -18,6 +18,7 @@ import java.io.File;
 
 import android.content.Context;
 
+import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult;
 
@@ -26,6 +27,7 @@ import com.zapta.apps.maniana.util.FileUtil.FileReadResult;
  * 
  * @author Tal Dayan
  */
+@ApplicationScope
 public final class AttachmentUtil {
     
     public static final String BACKUP_ATTACHMENT_FILE_NAME = "maniana_backup.json";
