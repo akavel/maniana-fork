@@ -19,10 +19,9 @@ import javax.annotation.Nullable;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.text.format.Time;
 
+import com.zapta.apps.maniana.main.MyApp;
 import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.model.ModelUtil;
 import com.zapta.apps.maniana.model.OrganizePageSummary;
@@ -31,7 +30,7 @@ import com.zapta.apps.maniana.model.PushScope;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.persistence.ModelReadingResult;
 import com.zapta.apps.maniana.settings.LockExpirationPeriod;
-import com.zapta.apps.maniana.settings.PreferencesTracker;
+import com.zapta.apps.maniana.settings.PreferencesReader;
 import com.zapta.apps.maniana.util.NotificationUtil;
 
 /**
@@ -45,7 +44,7 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
     public static void updateAllWidgetsFromModel(Context context, @Nullable AppModel model) {
         // For testing only
         // NotificationUtil.sendPendingItemsNotification(context,
-        //         model.getPagePendingItemCount(PageKind.TODAY));
+        // model.getPagePendingItemCount(PageKind.TODAY));
 
         IconWidgetProvider.updateAllIconWidgetsFromModel(context, model);
         ListWidgetProvider.updateAllListWidgetsFromModel(context, model);
@@ -66,17 +65,15 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
             return null;
         }
 
-        final SharedPreferences sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(context);
+        final MyApp app = (MyApp) context.getApplicationContext();
+        final PreferencesReader prefReader = app.preferencesReader();
 
-        final LockExpirationPeriod lockExpirationPeriod = PreferencesTracker
-                .readLockExpierationPeriodPreference(sharedPreferences);
-        final boolean removeCompletedOnPush = PreferencesTracker
-                .readAutoDailyCleanupPreference(sharedPreferences);
-        final boolean includeCompletedItems = PreferencesTracker
-                .readWidgetShowCompletedItemsPreference(sharedPreferences);
-        final boolean sortItems = includeCompletedItems ? PreferencesTracker
-                .readAutoSortPreference(sharedPreferences) : false;
+        final LockExpirationPeriod lockExpirationPeriod = prefReader
+                .getLockExpierationPeriodPreference();
+        final boolean removeCompletedOnPush = prefReader.getAutoDailyCleanupPreference();
+        final boolean includeCompletedItems = prefReader.getWidgetShowCompletedItemsPreference();
+        final boolean sortItems = includeCompletedItems ? prefReader.getAutoSortPreference()
+                : false;
 
         Time timeNow = new Time();
         timeNow.setToNow();
@@ -97,7 +94,7 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
             }
 
             // We piggy back on the widget update to issue notifications.
-            if (PreferencesTracker.readDailyNotificationPreference(sharedPreferences)) {
+            if (prefReader.getDailyNotificationPreference()) {
                 final int pendingItemsCount = model.getPagePendingItemCount(PageKind.TODAY);
                 if (pendingItemsCount > 0) {
                     NotificationUtil.sendPendingItemsNotification(context, pendingItemsCount);

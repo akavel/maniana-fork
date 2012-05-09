@@ -23,6 +23,7 @@ import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.services.AppResources;
 import com.zapta.apps.maniana.services.AppServices;
 import com.zapta.apps.maniana.services.DateTracker;
+import com.zapta.apps.maniana.settings.PreferenceKind;
 import com.zapta.apps.maniana.settings.PreferencesTracker;
 import com.zapta.apps.maniana.util.PopupsTracker;
 import com.zapta.apps.maniana.view.AppView;
@@ -53,7 +54,7 @@ public class AppContext {
 
     /** The app controller. Contains the main app logic. */
     private Controller mController;
-    
+
     /** Debug mode operations. */
     private DebugController mDebugController;
 
@@ -66,11 +67,20 @@ public class AppContext {
     AppContext(MainActivity mainActivity) {
         mMainActivity = checkNotNull(mainActivity);
         mModel = new AppModel();
-        mAppPreferences = new PreferencesTracker(this);
+        final MyApp app = (MyApp) mainActivity.getApplication();
+        mAppPreferences = new PreferencesTracker(app.preferencesReader(),
+                new PreferencesTracker.PreferenceChangeListener() {
+                    @Override
+                    public void onPreferenceChange(PreferenceKind preferenceKind) {
+                        if (mController != null) {
+                            mController.onPreferenceChange(preferenceKind);
+                        }
+                    }
+                });
         mResources = new AppResources(this);
         mServices = new AppServices(this);
         mDebugController = new DebugController(this);
-        mController = new Controller(this);     
+        mController = new Controller(this);
         mView = new AppView(this);
     }
 
@@ -82,12 +92,12 @@ public class AppContext {
         // The main activity is also the context.
         return (Context) mMainActivity;
     }
-    
+
     // A convenience shortcut.
     public final String str(int resourceId) {
         return mMainActivity.getString(resourceId);
     }
-    
+
     // A convenience shortcut.
     public final String str(int resourceId, Object... args) {
         return mMainActivity.getString(resourceId, args);
@@ -120,7 +130,7 @@ public class AppContext {
     public final Controller controller() {
         return mController;
     }
-    
+
     public final AppView view() {
         return mView;
     }

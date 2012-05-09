@@ -15,7 +15,6 @@
 package com.zapta.apps.maniana.settings;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.widget.TextView;
@@ -95,14 +94,14 @@ public class ItemFontVariation {
     }
     
     public static final ItemFontVariation newFromWidgetPreferences(Context context,
-            SharedPreferences sharedPreferences) {
-        final Font font = PreferencesTracker
-                .readWidgetFontPreference(sharedPreferences);
-        final int color = PreferencesTracker.readWidgetTextColorPreference(sharedPreferences);
-        final int completedColor = PreferencesTracker.readWidgetCompletedTextColorPreference(sharedPreferences);
+            PreferencesReader prefReader) {
+        final Font font = prefReader
+                .getWidgetFontPreference();
+        final int color = prefReader.getWidgetTextColorPreference();
+        final int completedColor = prefReader.getWidgetCompletedTextColorPreference();
 
-        final int rawFontSize = PreferencesTracker
-                .readWidgetItemFontSizePreference(sharedPreferences);
+        final int rawFontSize = prefReader
+                .getWidgetItemFontSizePreference();
         final int fontSize = (int) (rawFontSize * font.scale);
 
         return new ItemFontVariation(font.getTypeface(context), color, completedColor, fontSize,

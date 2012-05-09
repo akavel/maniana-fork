@@ -23,19 +23,18 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.RemoteViews;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.main.MainActivity;
+import com.zapta.apps.maniana.main.MyApp;
 import com.zapta.apps.maniana.main.ResumeAction;
 import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.services.AppServices;
 import com.zapta.apps.maniana.settings.ItemFontVariation;
-import com.zapta.apps.maniana.settings.PreferencesTracker;
+import com.zapta.apps.maniana.settings.PreferencesReader;
 import com.zapta.apps.maniana.util.ColorUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.Orientation;
@@ -138,27 +137,27 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             return;
         }
 
-        final SharedPreferences sharedPreferences = PreferenceManager
-                .getDefaultSharedPreferences(context);
+        final MyApp app = (MyApp) context.getApplicationContext();
+        final PreferencesReader prefReader = app.preferencesReader();
 
-        final boolean paper = PreferencesTracker
-                .readWidgetBackgroundPaperPreference(sharedPreferences);
+        final boolean paper = prefReader
+                .getWidgetBackgroundPaperPreference();
 
-        final int templateBackgroundColor = templateBackgroundColor(sharedPreferences, paper);
+        final int templateBackgroundColor = templateBackgroundColor(prefReader, paper);
 
         final ItemFontVariation fontVariation = ItemFontVariation.newFromWidgetPreferences(context,
-                sharedPreferences);
+                prefReader);
 
-        final boolean toolbarEanbled = PreferencesTracker
-                .readWidgetShowToolbarPreference(sharedPreferences);
+        final boolean toolbarEanbled = prefReader
+                .getWidgetShowToolbarPreference();
 
-        final boolean includeCompletedItems = PreferencesTracker
-                .readWidgetShowCompletedItemsPreference(sharedPreferences);
+        final boolean includeCompletedItems = prefReader
+                .getWidgetShowCompletedItemsPreference();
 
-        final boolean singleLine = PreferencesTracker
-                .readWidgetSingleLinePreference(sharedPreferences);
+        final boolean singleLine = prefReader
+                .getWidgetSingleLinePreference();
 
-        final boolean autoFit = PreferencesTracker.readWidgetAutoFitPreference(sharedPreferences);
+        final boolean autoFit = prefReader.getWidgetAutoFitPreference();
 
         // NOTE: we use a template layout that is rendered to a bitmap rather rendering directly
         // a remote view. This allows us to use custom fonts which are not supported by
@@ -186,15 +185,15 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
     }
 
     /** Compute the template background color. */
-    private static int templateBackgroundColor(final SharedPreferences sharedPreferences,
+    private static int templateBackgroundColor(final PreferencesReader prefReader,
             final boolean backgroundPaper) {
         if (!backgroundPaper) {
-            return PreferencesTracker.readWidgetBackgroundColorPreference(sharedPreferences);
+            return prefReader.getWidgetBackgroundColorPreference();
         }
 
         // Using paper background.
-        return ColorUtil.mapPaperColorPrefernce(PreferencesTracker
-                .readWidgetPaperColorPreference(sharedPreferences));
+        return ColorUtil.mapPaperColorPrefernce(prefReader
+                .getWidgetPaperColorPreference());
     }
 
     /** Set the image of a single orientation. */

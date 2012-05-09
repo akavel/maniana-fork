@@ -15,7 +15,9 @@
 package com.zapta.apps.maniana.main;
 
 import android.app.Application;
+import android.preference.PreferenceManager;
 
+import com.zapta.apps.maniana.settings.PreferencesReader;
 import com.zapta.apps.maniana.util.LogUtil;
 
 public class MyApp extends Application {
@@ -23,21 +25,23 @@ public class MyApp extends Application {
     /** For debugging. */
     public final int objectId;
 
+    private PreferencesReader mPreferencesReader;
+
     public MyApp() {
         this.objectId = System.identityHashCode(this);
+       
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        this.mPreferencesReader = new PreferencesReader(this,
+                PreferenceManager.getDefaultSharedPreferences(this));
         LogUtil.debug("App object onCreate(): %d, thread %s", objectId,
                 System.identityHashCode(Thread.currentThread()));
     }
-
-    @Override
-    public void onTerminate() {
-        LogUtil.debug("App object onTerminate(): %d, thread %s",
-                System.identityHashCode(Thread.currentThread()));
-        super.onTerminate();
+    
+    public final PreferencesReader preferencesReader() {
+        return mPreferencesReader;
     }
 }

@@ -360,7 +360,7 @@ public class Controller implements ShakerListener {
 
         // Determine if to expire all locks
         final PushScope pushScope = mApp.dateTracker().computePushScope(modelPushDateStamp,
-                mApp.pref().getLockExpirationPeriodPrefernece());
+                mApp.pref().reader().getLockExpierationPeriodPreference());
 
         if (pushScope == PushScope.NONE) {
             // Not expected because of the quick check above
@@ -369,7 +369,7 @@ public class Controller implements ShakerListener {
                     trackerTodayDateStamp);
         } else {
             final boolean expireAllLocks = (pushScope == PushScope.ALL);
-            final boolean deleteCompletedItems = mApp.pref().getAutoDailyCleanupPreference();
+            final boolean deleteCompletedItems = mApp.pref().reader().getAutoDailyCleanupPreference();
             LogUtil.info("Model push scope: %s, auto_cleanup=%s", pushScope, deleteCompletedItems);
             mApp.model().pushToToday(expireAllLocks, deleteCompletedItems);
             // Not bothering to test if anything changed. Always updating. This happens only once a
@@ -725,7 +725,7 @@ public class Controller implements ShakerListener {
 
         // Handle the shake event
         final PageKind currentPage = mApp.view().getCurrentPage();
-        final ShakerAction action = mApp.pref().getShakerActionPreference();
+        final ShakerAction action = mApp.pref().reader().getShakerActionPreference();
         switch (action) {
             case NEW_ITEM_BY_TEXT:
                 onAddItemByTextButton(currentPage);
@@ -847,9 +847,6 @@ public class Controller implements ShakerListener {
             case PAGE_ITEM_FONT_SIZE:
             case PAGE_ITEM_ACTIVE_TEXT_COLOR:
             case PAGE_ITEM_COMPLETED_TEXT_COLOR:
-                // TODO: perform the call to onPageItemFontVariationPreferenceChange in
-                // preference tracker before calling this on change method of the controller.
-                mApp.pref().onPageItemFontVariationPreferenceChange();
                 mApp.view().onPageItemFontVariationPreferenceChange();
                 break;
 
