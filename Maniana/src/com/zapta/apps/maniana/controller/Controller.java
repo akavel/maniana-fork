@@ -86,7 +86,7 @@ public class Controller implements ShakerListener {
     private static final int VOICE_RECOGNITION_REQUEST_CODE = 1001;
 
     /** The app context. Provide access to the model, view and services. */
-    private final MainActivityState mApp;
+    private final MainActivityState mMainActivityState;
 
     private final QuickActionsCache mQuickActionCache;
 
@@ -110,37 +110,37 @@ public class Controller implements ShakerListener {
      */
     private final OrganizePageSummary mTempSummary = new OrganizePageSummary();
 
-    public Controller(MainActivityState app) {
-        mApp = app;
-        mQuickActionCache = new QuickActionsCache(app);
+    public Controller(MainActivityState mainActivityState) {
+        mMainActivityState = mainActivityState;
+        mQuickActionCache = new QuickActionsCache(mainActivityState);
     }
 
     /** Called by the view when user clicks on item's text area */
     public void onItemTextClick(PageKind pageKind, int itemIndex) {
-        mApp.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
+        mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
         showItemMenu(pageKind, itemIndex);
     }
 
     /** Called the view when user clicks on item's color swatch area */
     public final void onItemColorClick(final PageKind pageKind, final int itemIndex) {
-        mApp.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_SPACEBAR, false);
-        final ItemModel item = mApp.model().getItemForMutation(pageKind, itemIndex);
+        mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_SPACEBAR, false);
+        final ItemModel item = mMainActivityState.model().getItemForMutation(pageKind, itemIndex);
         item.setColor(item.getColor().nextCyclicColor());
-        mApp.view().updatePage(pageKind);
+        mMainActivityState.view().updatePage(pageKind);
     }
 
     /** Called by the view when user clicks on item's arrow/lock area */
     public final void onItemArrowClick(final PageKind pageKind, final int itemIndex) {
         // If item locked, show item menu, allowing to unlock it.
-        if (mApp.model().getItemReadOnly(pageKind, itemIndex).isLocked()) {
+        if (mMainActivityState.model().getItemReadOnly(pageKind, itemIndex).isLocked()) {
             showItemMenu(pageKind, itemIndex);
             return;
         }
 
         // Here when item is not locked. Animate and move to other page and do the actual
         // move in the model at the end of the animation.
-        mApp.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_RETURN, false);
-        mApp.view().startItemAnimation(pageKind, itemIndex,
+        mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_RETURN, false);
+        mMainActivityState.view().startItemAnimation(pageKind, itemIndex,
                 AppView.ItemAnimationType.MOVING_ITEM_TO_OTHER_PAGE, 0, new Runnable() {
                     @Override
                     public void run() {
@@ -157,31 +157,32 @@ public class Controller implements ShakerListener {
      */
     private final void moveItemToOtherPage(PageKind pageKind, int itemIndex) {
         // Remove item from current page.
-        final ItemModel item = mApp.model().removeItem(pageKind, itemIndex);
+        final ItemModel item = mMainActivityState.model().removeItem(pageKind, itemIndex);
         // Insert at the beginning of the other page.
         final PageKind otherPageKind = pageKind.otherPageKind();
-        mApp.model().insertItem(otherPageKind, 0, item);
+        mMainActivityState.model().insertItem(otherPageKind, 0, item);
 
-        mApp.model().clearAllUndo();
+        mMainActivityState.model().clearAllUndo();
         maybeAutoSortPage(otherPageKind, false, false);
-        mApp.view().updatePages();
+        mMainActivityState.view().updatePages();
 
         // The item is inserted at the top of the other page. Scroll there so it is visible
         // if the user flips to the other page.
         // NOTE(tal): This must be done after updateAlLPages(), otherwise it is ignored.
-        mApp.view().scrollToTop(otherPageKind);
+        mMainActivityState.view().scrollToTop(otherPageKind);
     }
 
     /** Called by the view when the user drag an item within the page */
     public final void onItemMoveInPage(final PageKind pageKind, final int sourceItemIndex,
             final int destinationItemIndex) {
-        final ItemModel itemModel = mApp.model().removeItem(pageKind, sourceItemIndex);
+        final ItemModel itemModel = mMainActivityState.model()
+                .removeItem(pageKind, sourceItemIndex);
         // NOTE(tal): if source index < destination index, the item removal above affect the index
         // of the destination by 1. Despite that, we don't compensate for it as this acieve a more
         // intuitive behavior and allow to move an item to the end of the list.
-        mApp.model().insertItem(pageKind, destinationItemIndex, itemModel);
-        mApp.view().updatePage(pageKind);
-        mApp.view().getRootView().post(new Runnable() {
+        mMainActivityState.model().insertItem(pageKind, destinationItemIndex, itemModel);
+        mMainActivityState.view().updatePage(pageKind);
+        mMainActivityState.view().getRootView().post(new Runnable() {
             @Override
             public void run() {
                 maybeAutosortPageWithItemOfInterest(pageKind, destinationItemIndex);
@@ -196,24 +197,26 @@ public class Controller implements ShakerListener {
             mOptionalShaker.pause();
         }
         // Close any leftover dialogs. This provides a more intuitive user experience.
-        mApp.popupsTracker().closeAllLeftOvers();
+        mMainActivityState.popupsTracker().closeAllLeftOvers();
         flushModelChanges(false);
     }
 
     /** If model is dirty then persist and update widgets. */
     private final void flushModelChanges(boolean alwaysUpdateAllWidgets) {
         // If state is dirty persist data so we don't lose it if the app will not resumed.
-        final boolean modelWasDirty = mApp.model().isDirty();
+        final boolean modelWasDirty = mMainActivityState.model().isDirty();
         if (modelWasDirty) {
-            final PersistenceMetadata metadata = new PersistenceMetadata(mApp.services()
-                    .getAppVersionCode(), mApp.services().getAppVersionName());
+            final PersistenceMetadata metadata = new PersistenceMetadata(mMainActivityState
+                    .services().getAppVersionCode(), mMainActivityState.services()
+                    .getAppVersionName());
             // NOTE(tal): this clears the dirty bit.
-            ModelPersistence.writeModelFile(mApp, mApp.model(), metadata);
-            check(!mApp.model().isDirty());
+            ModelPersistence.writeModelFile(mMainActivityState, mMainActivityState.model(),
+                    metadata);
+            check(!mMainActivityState.model().isDirty());
             onBackupDataChange();
 
             // Use this opportunity also to garbage collect old attachment files.
-            AttachmentUtil.garbageCollectAttachmentFile(mApp.context());
+            AttachmentUtil.garbageCollectAttachmentFile(mMainActivityState.context());
         }
         if (modelWasDirty || alwaysUpdateAllWidgets) {
             updateAllWidgets();
@@ -226,7 +229,7 @@ public class Controller implements ShakerListener {
         // This may leave undo items in case we cleanup completed tasks.
         maybeHandleDateChange();
 
-        NotificationUtil.clearPendingItemsNotification(mApp.context());
+        NotificationUtil.clearPendingItemsNotification(mMainActivityState.context());
 
         ++mOnAppResumeCount;
 
@@ -235,11 +238,12 @@ public class Controller implements ShakerListener {
         // It seems to be more intuitive this way.
         if (mPopulateNewUserSampleDataOnResume) {
             if (resumeAction != MainActivityResumeAction.RESTORE_FROM_BABKUP_FILE) {
-                populateModelWithSampleTasks(mApp.model());
+                populateModelWithSampleTasks(mMainActivityState.model());
                 startPopupMessageSubActivity(MessageKind.NEW_USER);
             }
-            mApp.model().setLastPushDateStamp(mApp.dateTracker().getDateStampString());
-            mApp.model().setDirty();
+            mMainActivityState.model().setLastPushDateStamp(
+                    mMainActivityState.dateTracker().getDateStampString());
+            mMainActivityState.model().setDirty();
             mPopulateNewUserSampleDataOnResume = false;
         }
 
@@ -251,8 +255,8 @@ public class Controller implements ShakerListener {
 
         if (!preserveView) {
             // Force both pages to be scrolled to top. More intuitive this way.
-            mApp.view().scrollToTop(PageKind.TOMOROW);
-            mApp.view().scrollToTop(PageKind.TODAY);
+            mMainActivityState.view().scrollToTop(PageKind.TOMOROW);
+            mMainActivityState.view().scrollToTop(PageKind.TODAY);
 
             // Force showing today's page. This is done with animation or immediately
             // depending on settings. In case of an actual resume action, we skip
@@ -260,19 +264,20 @@ public class Controller implements ShakerListener {
             final boolean isAppStartup = (mOnAppResumeCount == 1);
             final boolean actionAllowsAnimation = (resumeAction.isNone() || resumeAction == MainActivityResumeAction.ONLY_RESET_PAGE);
             final boolean doAnimation = isAppStartup
-                    && mApp.prefTracker().getStartupAnimationPreference() && actionAllowsAnimation;
+                    && mMainActivityState.prefTracker().getStartupAnimationPreference()
+                    && actionAllowsAnimation;
             if (doAnimation) {
                 // Show initial animation
-                mApp.view().setCurrentPage(PageKind.TOMOROW, -1);
-                mApp.view().getRootView().postDelayed(new Runnable() {
+                mMainActivityState.view().setCurrentPage(PageKind.TOMOROW, -1);
+                mMainActivityState.view().getRootView().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mApp.view().setCurrentPage(PageKind.TODAY, 800);
+                        mMainActivityState.view().setCurrentPage(PageKind.TODAY, 800);
                     }
                 }, 500);
             } else {
                 // No animation. Jump directly to Today.
-                mApp.view().setCurrentPage(PageKind.TODAY, 0);
+                mMainActivityState.view().setCurrentPage(PageKind.TODAY, 0);
             }
         }
 
@@ -307,15 +312,16 @@ public class Controller implements ShakerListener {
      * Called when main activity is resumed. It updates the shaker state based on current settings.
      */
     private final void resumeShaker() {
-        if (mApp.prefTracker().getShakerEnabledPreference()) {
+        if (mMainActivityState.prefTracker().getShakerEnabledPreference()) {
             final boolean installShaker = (mOptionalShaker == null);
             if (installShaker) {
-                mOptionalShaker = new ShakeImpl(mApp.context(), this);
+                mOptionalShaker = new ShakeImpl(mMainActivityState.context(), this);
             }
-            final boolean shakerSupported = mOptionalShaker.resume(mApp.prefTracker()
+            final boolean shakerSupported = mOptionalShaker.resume(mMainActivityState.prefTracker()
                     .getShakerSensitivityPreference());
             if (installShaker && !shakerSupported) {
-                mApp.services().toast(mApp.str(R.string.shaking_service_not_available));
+                mMainActivityState.services().toast(
+                        mMainActivityState.str(R.string.shaking_service_not_available));
             }
         } else {
             if (mOptionalShaker != null) {
@@ -328,42 +334,50 @@ public class Controller implements ShakerListener {
     /** Populate given model with new user's sample tasks. */
     private final void populateModelWithSampleTasks(AppModel model) {
         // Today's page
-        model.appendItem(PageKind.TODAY, new ItemModel(mApp.str(R.string.sample_tast_text_11),
-                false, false, ItemColor.NONE));
-        model.appendItem(PageKind.TODAY, new ItemModel(mApp.str(R.string.sample_tast_text_12),
-                false, false, ItemColor.NONE));
-        model.appendItem(PageKind.TODAY, new ItemModel(mApp.str(R.string.sample_tast_text_13),
-                false, false, ItemColor.NONE));
-        model.appendItem(PageKind.TODAY, new ItemModel(mApp.str(R.string.sample_tast_text_14),
-                false, false, ItemColor.RED));
-        model.appendItem(PageKind.TODAY, new ItemModel(mApp.str(R.string.sample_tast_text_15),
-                false, false, ItemColor.BLUE));
-        model.appendItem(PageKind.TODAY, new ItemModel(mApp.str(R.string.sample_tast_text_16),
-                false, false, ItemColor.NONE));
+        model.appendItem(PageKind.TODAY,
+                new ItemModel(mMainActivityState.str(R.string.sample_tast_text_11), false, false,
+                        ItemColor.NONE));
+        model.appendItem(PageKind.TODAY,
+                new ItemModel(mMainActivityState.str(R.string.sample_tast_text_12), false, false,
+                        ItemColor.NONE));
+        model.appendItem(PageKind.TODAY,
+                new ItemModel(mMainActivityState.str(R.string.sample_tast_text_13), false, false,
+                        ItemColor.NONE));
+        model.appendItem(PageKind.TODAY,
+                new ItemModel(mMainActivityState.str(R.string.sample_tast_text_14), false, false,
+                        ItemColor.RED));
+        model.appendItem(PageKind.TODAY,
+                new ItemModel(mMainActivityState.str(R.string.sample_tast_text_15), false, false,
+                        ItemColor.BLUE));
+        model.appendItem(PageKind.TODAY,
+                new ItemModel(mMainActivityState.str(R.string.sample_tast_text_16), false, false,
+                        ItemColor.NONE));
 
         // Tommorow's page
-        model.appendItem(PageKind.TOMOROW, new ItemModel(mApp.str(R.string.sample_tast_text_21),
-                false, false, ItemColor.NONE));
+        model.appendItem(PageKind.TOMOROW,
+                new ItemModel(mMainActivityState.str(R.string.sample_tast_text_21), false, false,
+                        ItemColor.NONE));
     }
 
     /** Update date and if needed push model items from Tomorow to Today. */
     private void maybeHandleDateChange() {
         // Sample and cache the current date.
-        mApp.dateTracker().updateDate();
+        mMainActivityState.dateTracker().updateDate();
 
         // TODO: filter out redundant view date changes? (do not update unless date changed)
-        mApp.view().onDateChange();
+        mMainActivityState.view().onDateChange();
 
         // A quick check for the normal case where the last push was today.
-        final String modelPushDateStamp = mApp.model().getLastPushDateStamp();
-        final String trackerTodayDateStamp = mApp.dateTracker().getDateStampString();
+        final String modelPushDateStamp = mMainActivityState.model().getLastPushDateStamp();
+        final String trackerTodayDateStamp = mMainActivityState.dateTracker().getDateStampString();
         if (trackerTodayDateStamp.equals(modelPushDateStamp)) {
             return;
         }
 
         // Determine if to expire all locks
-        final PushScope pushScope = mApp.dateTracker().computePushScope(modelPushDateStamp,
-                mApp.prefTracker().reader().getLockExpierationPeriodPreference());
+        final PushScope pushScope = mMainActivityState.dateTracker().computePushScope(
+                modelPushDateStamp,
+                mMainActivityState.prefTracker().reader().getLockExpierationPeriodPreference());
 
         if (pushScope == PushScope.NONE) {
             // Not expected because of the quick check above
@@ -372,22 +386,24 @@ public class Controller implements ShakerListener {
                     trackerTodayDateStamp);
         } else {
             final boolean expireAllLocks = (pushScope == PushScope.ALL);
-            final boolean deleteCompletedItems = mApp.prefTracker().reader()
+            final boolean deleteCompletedItems = mMainActivityState.prefTracker().reader()
                     .getAutoDailyCleanupPreference();
             LogUtil.info("Model push scope: %s, auto_cleanup=%s", pushScope, deleteCompletedItems);
-            mApp.model().pushToToday(expireAllLocks, deleteCompletedItems);
+            mMainActivityState.model().pushToToday(expireAllLocks, deleteCompletedItems);
             // Not bothering to test if anything changed. Always updating. This happens only once a
             // day.
-            mApp.model().clearAllUndo();
-            mApp.view().updatePages();
+            mMainActivityState.model().clearAllUndo();
+            mMainActivityState.view().updatePages();
         }
 
-        mApp.model().setLastPushDateStamp(mApp.dateTracker().getDateStampString());
+        mMainActivityState.model().setLastPushDateStamp(
+                mMainActivityState.dateTracker().getDateStampString());
     }
 
     /** Show the popup menu for a given item. Item is assumed to be already visible. */
     private final void showItemMenu(PageKind pageKind, int itemIndex) {
-        final ItemModelReadOnly item = mApp.model().getItemReadOnly(pageKind, itemIndex);
+        final ItemModelReadOnly item = mMainActivityState.model().getItemReadOnly(pageKind,
+                itemIndex);
 
         // Done vs ToDo based on item isCompleted status.
         final QuickActionItem doneAction = item.isCompleted() ? mQuickActionCache.getToDoAction()
@@ -411,8 +427,8 @@ public class Controller implements ShakerListener {
             deleteAction
         };
 
-        mApp.view().setItemViewHighlight(pageKind, itemIndex, true);
-        mApp.view().showItemMenu(pageKind, itemIndex, actions,
+        mMainActivityState.view().setItemViewHighlight(pageKind, itemIndex, true);
+        mMainActivityState.view().showItemMenu(pageKind, itemIndex, actions,
                 QuickActionsCache.DISMISS_WITH_NO_SELECTION_ID);
     }
 
@@ -424,7 +440,7 @@ public class Controller implements ShakerListener {
         }
 
         // Clear the item-highlighted state when the menu was shown.
-        mApp.view().setItemViewHighlight(pageKind, itemIndex, false);
+        mMainActivityState.view().setItemViewHighlight(pageKind, itemIndex, false);
 
         // Handle the action
         switch (actionId) {
@@ -433,47 +449,54 @@ public class Controller implements ShakerListener {
             }
 
             case QuickActionsCache.DONE_ACTION_ID: {
-                mApp.services().maybePlayApplauseSoundClip(AudioManager.FX_KEY_CLICK, false);
-                final ItemModel item = mApp.model().getItemForMutation(pageKind, itemIndex);
+                mMainActivityState.services().maybePlayApplauseSoundClip(AudioManager.FX_KEY_CLICK,
+                        false);
+                final ItemModel item = mMainActivityState.model().getItemForMutation(pageKind,
+                        itemIndex);
                 item.setIsCompleted(true);
                 // NOTE(tal): we assume that the color flag is not needed once an item is completed.
                 // This is a usability heuristic. Not required otherwise.
                 item.setColor(ItemColor.NONE);
-                mApp.view().updatePage(pageKind);
+                mMainActivityState.view().updatePage(pageKind);
                 maybeAutosortPageWithItemOfInterest(pageKind, itemIndex);
                 return;
             }
 
             case QuickActionsCache.TODO_ACTION_ID: {
-                mApp.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
-                final ItemModel item = mApp.model().getItemForMutation(pageKind, itemIndex);
+                mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
+                final ItemModel item = mMainActivityState.model().getItemForMutation(pageKind,
+                        itemIndex);
                 item.setIsCompleted(false);
                 // mApp.view().updateSingleItemView(pageKind, itemIndex);
-                mApp.view().updatePage(pageKind);
+                mMainActivityState.view().updatePage(pageKind);
                 maybeAutosortPageWithItemOfInterest(pageKind, itemIndex);
                 return;
             }
 
             // Edit
             case QuickActionsCache.EDIT_ACTION_ID: {
-                mApp.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
-                final ItemModel item = mApp.model().getItemForMutation(pageKind, itemIndex);
-                ItemTextEditor.startEditor(mApp, mApp.str(R.string.editor_title_Edit_Task),
-                        item.getText(), item.getColor(), new ItemTextEditor.ItemEditorListener() {
+                mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
+                final ItemModel item = mMainActivityState.model().getItemForMutation(pageKind,
+                        itemIndex);
+                ItemTextEditor.startEditor(mMainActivityState,
+                        mMainActivityState.str(R.string.editor_title_Edit_Task), item.getText(),
+                        item.getColor(), new ItemTextEditor.ItemEditorListener() {
                             @Override
                             public void onDismiss(String finalString, ItemColor finalColor) {
                                 // NOTE: at this point, finalString is also cleaned of leading or
                                 // trailing
                                 if (finalString.length() == 0) {
                                     startItemDeletionWithAnination(pageKind, itemIndex);
-                                    if (mApp.prefTracker().getVerboseMessagesEnabledPreference()) {
-                                        mApp.services().toast(R.string.editor_Empty_task_deleted);
+                                    if (mMainActivityState.prefTracker()
+                                            .getVerboseMessagesEnabledPreference()) {
+                                        mMainActivityState.services().toast(
+                                                R.string.editor_Empty_task_deleted);
                                     }
                                 } else {
                                     item.setText(finalString);
                                     item.setColor(finalColor);
-                                    mApp.model().setDirty();
-                                    mApp.view().updatePage(pageKind);
+                                    mMainActivityState.model().setDirty();
+                                    mMainActivityState.view().updatePage(pageKind);
                                     // Highlight the modified item for a short time, to provide
                                     // the user with an indication of the modified item.
                                     briefItemHighlight(pageKind, itemIndex, 700);
@@ -485,18 +508,20 @@ public class Controller implements ShakerListener {
 
             case QuickActionsCache.LOCK_ACTION_ID:
             case QuickActionsCache.UNLOCK_ACTION_ID: {
-                mApp.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_STANDARD, false);
+                mMainActivityState.services().maybePlayStockSound(
+                        AudioManager.FX_KEYPRESS_STANDARD, false);
 
-                final ItemModel item = mApp.model().getItemForMutation(pageKind, itemIndex);
+                final ItemModel item = mMainActivityState.model().getItemForMutation(pageKind,
+                        itemIndex);
                 item.setIsLocked(actionId == QuickActionsCache.LOCK_ACTION_ID);
                 // mApp.view().updateSingleItemView(pageKind, itemIndex);
-                mApp.view().updatePage(pageKind);
+                mMainActivityState.view().updatePage(pageKind);
                 // If lock and in Today page, we also move it to the Tomorrow page, with an
                 // animation.
                 if (pageKind == PageKind.TODAY && actionId == QuickActionsCache.LOCK_ACTION_ID) {
                     // We do a short delay before the animation to let the use see the icon change
                     // to lock before the item is moved to the other page.
-                    mApp.view().startItemAnimation(pageKind, itemIndex,
+                    mMainActivityState.view().startItemAnimation(pageKind, itemIndex,
                             AppView.ItemAnimationType.MOVING_ITEM_TO_OTHER_PAGE, 200,
                             new Runnable() {
                                 @Override
@@ -511,7 +536,8 @@ public class Controller implements ShakerListener {
             }
 
             case QuickActionsCache.DELETE_ACTION_ID: {
-                mApp.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_DELETE, false);
+                mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_DELETE,
+                        false);
                 startItemDeletionWithAnination(pageKind, itemIndex);
                 return;
             }
@@ -525,47 +551,49 @@ public class Controller implements ShakerListener {
      * the page view is then updated.
      */
     private final void startItemDeletionWithAnination(final PageKind pageKind, final int itemIndex) {
-        mApp.view().startItemAnimation(pageKind, itemIndex,
+        mMainActivityState.view().startItemAnimation(pageKind, itemIndex,
                 AppView.ItemAnimationType.DELETING_ITEM, 0, new Runnable() {
                     @Override
                     public void run() {
                         // This runs at the end of the animation.
-                        mApp.model().removeItemWithUndo(pageKind, itemIndex);
-                        mApp.view().updatePage(pageKind);
+                        mMainActivityState.model().removeItemWithUndo(pageKind, itemIndex);
+                        mMainActivityState.view().updatePage(pageKind);
                     }
                 });
     }
 
     /** Highlight the given item for a brief time. The item is assumed to already be visible. */
     private final void briefItemHighlight(final PageKind pageKind, final int itemIndex, int millis) {
-        mApp.view().setItemViewHighlight(pageKind, itemIndex, true);
-        mApp.view().getRootView().postDelayed(new Runnable() {
+        mMainActivityState.view().setItemViewHighlight(pageKind, itemIndex, true);
+        mMainActivityState.view().getRootView().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mApp.view().setItemViewHighlight(pageKind, itemIndex, false);
+                mMainActivityState.view().setItemViewHighlight(pageKind, itemIndex, false);
             }
         }, millis);
     }
 
     /** Called by the app view when the user clicks on the Undo button. */
     public final void onUndoButton(PageKind pageKind) {
-        mApp.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_RETURN, false);
-        final int itemRestored = mApp.model().applyUndo(pageKind);
+        mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_RETURN, false);
+        final int itemRestored = mMainActivityState.model().applyUndo(pageKind);
         maybeAutoSortPage(pageKind, false, false);
-        mApp.view().updatePage(pageKind);
+        mMainActivityState.view().updatePage(pageKind);
         if (itemRestored == 1) {
-            mApp.services().toast(R.string.undo_Restored_one_deleted_task);
+            mMainActivityState.services().toast(R.string.undo_Restored_one_deleted_task);
         } else {
-            mApp.services().toast(R.string.undo_Restored_d_deleted_tasks, itemRestored);
+            mMainActivityState.services().toast(R.string.undo_Restored_d_deleted_tasks,
+                    itemRestored);
         }
     }
 
     /** Called by the app view when the user clicks on the Add Item button. */
     public final void onAddItemByTextButton(final PageKind pageKind) {
         clearPageUndo(pageKind);
-        mApp.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
-        ItemTextEditor.startEditor(mApp, mApp.str(R.string.editor_title_New_Task), "",
-                ItemColor.NONE, new ItemTextEditor.ItemEditorListener() {
+        mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
+        ItemTextEditor.startEditor(mMainActivityState,
+                mMainActivityState.str(R.string.editor_title_New_Task), "", ItemColor.NONE,
+                new ItemTextEditor.ItemEditorListener() {
                     @Override
                     public void onDismiss(String finalString, ItemColor finalColor) {
                         maybeAddNewItem(finalString, finalColor, pageKind, true);
@@ -574,9 +602,10 @@ public class Controller implements ShakerListener {
     }
 
     public final void onAddItemByVoiceButton(final PageKind pageKind) {
-        mApp.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
+        mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
         mInSubActivity = true;
-        ItemVoiceEditor.startVoiceEditor(mApp.mainActivity(), VOICE_RECOGNITION_REQUEST_CODE);
+        ItemVoiceEditor.startVoiceEditor(mMainActivityState.mainActivity(),
+                VOICE_RECOGNITION_REQUEST_CODE);
     }
 
     /** Add a new task from text editor or voice recognition. */
@@ -589,7 +618,7 @@ public class Controller implements ShakerListener {
 
         // Look for special string to enable debug mode.
         if (cleanedValue.equals(DEBUG_MODE_TASK_CODE)) {
-            mApp.debugController().setDebugMode(true);
+            mMainActivityState.debugController().setDebugMode(true);
             // Do not add the item.
             return;
         }
@@ -600,13 +629,13 @@ public class Controller implements ShakerListener {
 
         ItemModel item = new ItemModel(cleanedValue, false, false, color);
 
-        mApp.model().insertItem(pageKind, 0, item);
-        mApp.view().updatePage(pageKind);
-        mApp.view().scrollToTop(pageKind);
+        mMainActivityState.model().insertItem(pageKind, 0, item);
+        mMainActivityState.view().updatePage(pageKind);
+        mMainActivityState.view().scrollToTop(pageKind);
 
         // We perform the highlight only after the view has been
         // stabilized from the scroll (since item views are reused during the scroll).
-        mApp.view().getRootView().post(new Runnable() {
+        mMainActivityState.view().getRootView().post(new Runnable() {
             @Override
             public void run() {
                 briefItemHighlight(pageKind, 0, 700);
@@ -620,10 +649,12 @@ public class Controller implements ShakerListener {
         final AppModel newModel;
         try {
             final Uri uri = resumeIntent.getData();
-            final InputStream in = mApp.context().getContentResolver().openInputStream(uri);
+            final InputStream in = mMainActivityState.context().getContentResolver()
+                    .openInputStream(uri);
             FileReadResult readResult = FileUtil.readFileToString(in, uri.toString());
             if (!readResult.outcome.isOk()) {
-                mApp.services().toast(R.string.backup_restore_Failed_to_read_backup_file);
+                mMainActivityState.services().toast(
+                        R.string.backup_restore_Failed_to_read_backup_file);
                 return;
             }
             // TODO: test that the file size is reasonable
@@ -633,7 +664,8 @@ public class Controller implements ShakerListener {
             ModelDeserialization.deserializeModel(newModel, resultMetadata, readResult.content);
         } catch (Throwable e) {
             LogUtil.error(e, "Error while trying to restore data");
-            mApp.services().toast(R.string.backup_restore_Error_loading_the_backup_file);
+            mMainActivityState.services().toast(
+                    R.string.backup_restore_Error_loading_the_backup_file);
             return;
         }
 
@@ -644,29 +676,29 @@ public class Controller implements ShakerListener {
             }
         };
 
-        RestoreBackupDialog
-                .startDialog(mApp, listener, mApp.model().projectedImportStats(newModel));
+        RestoreBackupDialog.startDialog(mMainActivityState, listener, mMainActivityState.model()
+                .projectedImportStats(newModel));
     }
 
     private final void onRestoreBackupFromFileConfirm(Action action, AppModel newModel) {
         switch (action) {
             case REPLACE:
-                mApp.model().restoreBackup(newModel);
-                mApp.services().toast(R.string.backup_restore_Task_list_replaced);
+                mMainActivityState.model().restoreBackup(newModel);
+                mMainActivityState.services().toast(R.string.backup_restore_Task_list_replaced);
                 break;
             case MERGE:
-                mApp.model().mergeFrom(newModel);
-                mApp.services().toast(R.string.backup_restore_Task_list_merged);
+                mMainActivityState.model().mergeFrom(newModel);
+                mMainActivityState.services().toast(R.string.backup_restore_Task_list_merged);
                 break;
             case CANCEL:
             default:
-                mApp.services().toast(R.string.backup_restore_Task_list_not_changed);
+                mMainActivityState.services().toast(R.string.backup_restore_Task_list_not_changed);
                 // Do nothing
                 return;
         }
 
         maybeAutoSortPages(false, false);
-        mApp.view().updatePages();
+        mMainActivityState.view().updatePages();
     }
 
     public final void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -690,14 +722,15 @@ public class Controller implements ShakerListener {
             return;
         }
 
-        ItemVoiceEditor.startSelectionDialog(mApp.context(), intent, new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-                final TextView itemTextView = (TextView) arg1;
-                maybeAddNewItem(itemTextView.getText().toString(), ItemColor.NONE, mApp.view()
-                        .getCurrentPage(), true);
-            }
-        });
+        ItemVoiceEditor.startSelectionDialog(mMainActivityState.context(), intent,
+                new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+                        final TextView itemTextView = (TextView) arg1;
+                        maybeAddNewItem(itemTextView.getText().toString(), ItemColor.NONE,
+                                mMainActivityState.view().getCurrentPage(), true);
+                    }
+                });
     }
 
     /** Called by the app view when the user click or long press the clean page button. */
@@ -705,33 +738,35 @@ public class Controller implements ShakerListener {
         final boolean deleteCompletedItems = isLongPress;
 
         // NOTE: reusing mTempSummary.
-        mApp.model().organizePageWithUndo(pageKind, deleteCompletedItems, -1, mTempSummary);
+        mMainActivityState.model().organizePageWithUndo(pageKind, deleteCompletedItems, -1,
+                mTempSummary);
 
-        mApp.services().maybePlayStockSound(
+        mMainActivityState.services().maybePlayStockSound(
                 (mTempSummary.completedItemsDeleted > 0) ? AudioManager.FX_KEYPRESS_DELETE
                         : AudioManager.FX_KEY_CLICK, false);
 
-        mApp.view().updatePage(pageKind);
+        mMainActivityState.view().updatePage(pageKind);
 
         // Display optional message to the user
         @Nullable
         final String message = constructPageCleanMessage(mTempSummary);
         if (message != null) {
-            mApp.services().toast(message);
+            mMainActivityState.services().toast(message);
         }
     }
 
     /** Called from shake detector. */
     public final void onShake() {
         // If we have open dialogs ignore this shake event.
-        if (mApp.popupsTracker().count() > 0) {
+        if (mMainActivityState.popupsTracker().count() > 0) {
             LogUtil.info("Shake ignored (dialog opened)");
             return;
         }
 
         // Handle the shake event
-        final PageKind currentPage = mApp.view().getCurrentPage();
-        final ShakerAction action = mApp.prefTracker().reader().getShakerActionPreference();
+        final PageKind currentPage = mMainActivityState.view().getCurrentPage();
+        final ShakerAction action = mMainActivityState.prefTracker().reader()
+                .getShakerActionPreference();
         switch (action) {
             case NEW_ITEM_BY_TEXT:
                 onAddItemByTextButton(currentPage);
@@ -746,10 +781,10 @@ public class Controller implements ShakerListener {
                 // if (!mApp.pref().getVerboseMessagesEnabledPreference()) {
                 // mApp.services().toast("Shake action: quit");
                 // }
-                mApp.mainActivity().finish();
+                mMainActivityState.mainActivity().finish();
                 break;
             default:
-                mApp.services().toast("Unknown action: " + action);
+                mMainActivityState.services().toast("Unknown action: " + action);
         }
     }
 
@@ -761,16 +796,16 @@ public class Controller implements ShakerListener {
      */
     @Nullable
     private final String constructPageCleanMessage(OrganizePageSummary summary) {
-        if (!mApp.prefTracker().getVerboseMessagesEnabledPreference()) {
+        if (!mMainActivityState.prefTracker().getVerboseMessagesEnabledPreference()) {
             return null;
         }
 
         // Deleted at least one completed tasks
         if (summary.completedItemsDeleted > 0) {
             if (summary.completedItemsDeleted == 1) {
-                return mApp.str(R.string.organize_outcome_Deleted_one_completed_task);
+                return mMainActivityState.str(R.string.organize_outcome_Deleted_one_completed_task);
             }
-            return mApp.str(R.string.organize_outcome_Deleted_d_completed_tasks,
+            return mMainActivityState.str(R.string.organize_outcome_Deleted_d_completed_tasks,
                     summary.completedItemsDeleted);
         }
 
@@ -778,13 +813,13 @@ public class Controller implements ShakerListener {
         if (summary.orderChanged) {
             // Here when not deleted but reordered
             if (summary.completedItemsFound == 0) {
-                return mApp.str(R.string.organize_outcome_Tasks_reordered);
+                return mMainActivityState.str(R.string.organize_outcome_Tasks_reordered);
             }
             if (summary.completedItemsFound == 1) {
-                return mApp
+                return mMainActivityState
                         .str(R.string.organize_outcome_Tasks_reordered_Long_press_to_delete_one_completed_task);
             }
-            return mApp
+            return mMainActivityState
                     .str(R.string.organize_outcome_Tasks_reordered_Long_press_to_delete_d_completed_tasks,
                             summary.completedItemsFound);
         }
@@ -793,15 +828,15 @@ public class Controller implements ShakerListener {
         if (summary.completedItemsFound > 0) {
             // Here if found completed items.
             if (summary.completedItemsFound == 1) {
-                return mApp
+                return mMainActivityState
                         .str(R.string.organize_outcome_Page_already_organized_Long_press_to_delete_one_completed_task);
             }
-            return mApp
+            return mMainActivityState
                     .str(R.string.organize_outcome_Page_already_organized_Long_press_to_delete_d_completed_tasks,
                             summary.completedItemsFound);
         }
 
-        return mApp.str(R.string.organize_outcome_Page_already_organized);
+        return mMainActivityState.str(R.string.organize_outcome_Page_already_organized);
     }
 
     /** Called by the framework when the user makes a main menu selection. */
@@ -817,7 +852,7 @@ public class Controller implements ShakerListener {
                 startPopupMessageSubActivity(MessageKind.ABOUT);
                 break;
             case DEBUG:
-                mApp.debugController().startMainDialog();
+                mMainActivityState.debugController().startMainDialog();
                 break;
             default:
                 throw new RuntimeException("Unknown main menu action id: " + entry);
@@ -828,9 +863,9 @@ public class Controller implements ShakerListener {
     public final boolean onBackButton() {
         // If the current page is not today, we still the back key event and switch back to the
         // today page. Otherwise we use the default back behavior.
-        final PageKind currentPage = mApp.view().getCurrentPage();
+        final PageKind currentPage = mMainActivityState.view().getCurrentPage();
         if (currentPage != PageKind.TODAY) {
-            mApp.view().setCurrentPage(PageKind.TODAY, -1);
+            mMainActivityState.view().setCurrentPage(PageKind.TODAY, -1);
             return true;
         }
         return false;
@@ -846,38 +881,38 @@ public class Controller implements ShakerListener {
 
         switch (id) {
             case PAGE_ICON_SET:
-                mApp.view().onPageIconSetPreferenceChange();
+                mMainActivityState.view().onPageIconSetPreferenceChange();
                 break;
 
             case PAGE_ITEM_FONT:
             case PAGE_ITEM_FONT_SIZE:
             case PAGE_ITEM_ACTIVE_TEXT_COLOR:
             case PAGE_ITEM_COMPLETED_TEXT_COLOR:
-                mApp.view().onPageItemFontVariationPreferenceChange();
+                mMainActivityState.view().onPageItemFontVariationPreferenceChange();
                 break;
 
             case PAGE_BACKGROUND_PAPER:
             case PAGE_PAPER_COLOR:
             case PAGE_BACKGROUND_SOLID_COLOR:
-                mApp.view().onPageBackgroundPreferenceChange();
+                mMainActivityState.view().onPageBackgroundPreferenceChange();
                 break;
 
             case PAGE_TITLE_FONT:
             case PAGE_TITLE_FONT_SIZE:
             case PAGE_TITLE_TODAY_COLOR:
             case PAGE_TITLE_TOMORROW_COLOR:
-                mApp.view().onPageTitlePreferenceChange();
+                mMainActivityState.view().onPageTitlePreferenceChange();
                 break;
 
             case PAGE_ITEM_DIVIDER_COLOR:
-                mApp.view().onItemDividerColorPreferenceChange();
+                mMainActivityState.view().onItemDividerColorPreferenceChange();
                 break;
 
             case AUTO_SORT:
                 maybeAutoSortPages(true, true);
                 // If auto sort got enabled, this may affect the list widgets and thus
                 // we force widget updated. In the other direction it's not required.
-                flushModelChanges(mApp.prefTracker().getAutoSortPreference());
+                flushModelChanges(mMainActivityState.prefTracker().getAutoSortPreference());
                 break;
 
             case SOUND_ENABLED:
@@ -936,12 +971,13 @@ public class Controller implements ShakerListener {
     /** Inform backup manager about change in persisted model data of app settings */
     private final void onBackupDataChange() {
         LogUtil.info("Backup data changed");
-        mApp.services().backupManager().dataChanged();
+        mMainActivityState.services().backupManager().dataChanged();
     }
 
     /** Force a widget update with the current */
     private final void updateAllWidgets() {
-        BaseWidgetProvider.updateAllWidgetsFromModel(mApp.context(), mApp.model());
+        BaseWidgetProvider.updateAllWidgetsFromModel(mMainActivityState.context(),
+                mMainActivityState.model());
     }
 
     /** Called by the main activity when it is created. */
@@ -960,37 +996,37 @@ public class Controller implements ShakerListener {
             case NEW_USER:
                 // At this point we don't want to perist the model, we will do it
                 // in the resume method after it will be populated with sample data.
-                mApp.model().setClean();
+                mMainActivityState.model().setClean();
                 mPopulateNewUserSampleDataOnResume = true;
                 break;
             case NEW_VERSION_ANNOUNCE:
                 // Mark the model for writing to avoid this what's up splash the next time.
-                mApp.model().setDirty();
+                mMainActivityState.model().setDirty();
                 startPopupMessageSubActivity(MessageKind.WHATS_NEW);
                 break;
             case MODEL_DATA_ERROR:
-                mApp.model().clear();
-                mApp.services().toast(
-                        mApp.str(R.string.launch_error_Error_loading_task_list) + " ("
-                                + startupKind.toString().toLowerCase() + ")");
+                mMainActivityState.model().clear();
+                mMainActivityState.services().toast(
+                        mMainActivityState.str(R.string.launch_error_Error_loading_task_list)
+                                + " (" + startupKind.toString().toLowerCase() + ")");
             default:
                 LogUtil.error("Unknown startup message type: ", startupKind);
         }
     }
 
     private final void startPopupMessageSubActivity(MessageKind messageKind) {
-        startSubActivity(PopupMessageActivity.intentFor(mApp.context(), messageKind));
+        startSubActivity(PopupMessageActivity.intentFor(mMainActivityState.context(), messageKind));
     }
 
     private final void startSubActivity(Class<? extends Activity> cls) {
-        final Intent intent = new Intent(mApp.context(), cls);
+        final Intent intent = new Intent(mMainActivityState.context(), cls);
         startSubActivity(intent);
     }
 
     private final void startSubActivity(Intent intent) {
         // TODO: should we assert or print an error message that mInSubActivity is false here?
         mInSubActivity = true;
-        mApp.context().startActivity(intent);
+        mMainActivityState.context().startActivity(intent);
     }
 
     /** Called by the main activity when it is destroyed. */
@@ -999,21 +1035,22 @@ public class Controller implements ShakerListener {
 
     /** Clear undo buffer of given model page. */
     private final void clearPageUndo(PageKind pageKind) {
-        mApp.model().clearPageUndo(pageKind);
-        mApp.view().updateUndoButton(pageKind);
+        mMainActivityState.model().clearPageUndo(pageKind);
+        mMainActivityState.view().updateUndoButton(pageKind);
     }
 
     private final boolean maybeAutoSortPage(PageKind pageKind, boolean updateViewIfSorted,
             boolean showMessageIfSorted) {
-        if (mApp.prefTracker().getAutoSortPreference()) {
+        if (mMainActivityState.prefTracker().getAutoSortPreference()) {
             // NOTE: reusing temp summary mmeber.
-            mApp.model().organizePageWithUndo(pageKind, false, -1, mTempSummary);
+            mMainActivityState.model().organizePageWithUndo(pageKind, false, -1, mTempSummary);
             if (mTempSummary.orderChanged) {
                 if (updateViewIfSorted) {
-                    mApp.view().updatePage(pageKind);
+                    mMainActivityState.view().updatePage(pageKind);
                 }
-                if (showMessageIfSorted && mApp.prefTracker().getVerboseMessagesEnabledPreference()) {
-                    mApp.services().toast(R.string.Auto_sorted);
+                if (showMessageIfSorted
+                        && mMainActivityState.prefTracker().getVerboseMessagesEnabledPreference()) {
+                    mMainActivityState.services().toast(R.string.Auto_sorted);
                 }
                 return true;
             }
@@ -1028,8 +1065,9 @@ public class Controller implements ShakerListener {
         final boolean sorted = sorted1 || sorted2;
         // NOTE: suppressing message if showing a sub activity (e.g. SettingActivity).
         if (sorted && showMessageIfSorted
-                && mApp.prefTracker().getVerboseMessagesEnabledPreference() && !mInSubActivity) {
-            mApp.services().toast(R.string.Auto_sorted);
+                && mMainActivityState.prefTracker().getVerboseMessagesEnabledPreference()
+                && !mInSubActivity) {
+            mMainActivityState.services().toast(R.string.Auto_sorted);
         }
         return sorted;
     }
@@ -1041,25 +1079,26 @@ public class Controller implements ShakerListener {
      */
     private final void maybeAutosortPageWithItemOfInterest(final PageKind pageKind,
             final int itemOfInteresttOriginalIndex) {
-        if (!mApp.prefTracker().getAutoSortPreference() || mApp.model().isPageSorted(pageKind)) {
+        if (!mMainActivityState.prefTracker().getAutoSortPreference()
+                || mMainActivityState.model().isPageSorted(pageKind)) {
             return;
         }
 
-        mApp.view().startItemAnimation(pageKind, itemOfInteresttOriginalIndex,
+        mMainActivityState.view().startItemAnimation(pageKind, itemOfInteresttOriginalIndex,
                 ItemAnimationType.SORTING_ITEM, 0, new Runnable() {
                     @Override
                     public void run() {
                         // NOTE: reusing temp summary member
-                        mApp.model().organizePageWithUndo(pageKind, false,
+                        mMainActivityState.model().organizePageWithUndo(pageKind, false,
                                 itemOfInteresttOriginalIndex, mTempSummary);
-                        mApp.view().updatePage(pageKind);
-                        if (mApp.prefTracker().getVerboseMessagesEnabledPreference()) {
-                            mApp.services().toast(R.string.Auto_sorted);
+                        mMainActivityState.view().updatePage(pageKind);
+                        if (mMainActivityState.prefTracker().getVerboseMessagesEnabledPreference()) {
+                            mMainActivityState.services().toast(R.string.Auto_sorted);
                         }
                         if (mTempSummary.itemOfInterestNewIndex >= 0) {
                             // After the animation, briefly highlight the item at the new
                             // location.
-                            mApp.view().getRootView().post(new Runnable() {
+                            mMainActivityState.view().getRootView().post(new Runnable() {
                                 @Override
                                 public void run() {
                                     briefItemHighlight(pageKind,

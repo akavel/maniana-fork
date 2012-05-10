@@ -91,12 +91,12 @@ public class ModelPersistence {
         }
     }
 
-    public static final void writeModelFile(MainActivityState app, AppModel model,
+    public static final void writeModelFile(MainActivityState mainActivityState, AppModel model,
             PersistenceMetadata metadata) {
         LogUtil.info("Saving model to file: " + DATA_FILE_NAME);
         final String json = ModelSerialization.serializeModel(model, metadata);
         synchronized (sDataFileLock) {
-            FileUtil.writeStringToFile(app.context(), json, DATA_FILE_NAME, Context.MODE_PRIVATE);
+            FileUtil.writeStringToFile(mainActivityState.context(), json, DATA_FILE_NAME, Context.MODE_PRIVATE);
         }
         // Model reflects persisted state.
         model.setClean();

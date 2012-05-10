@@ -249,11 +249,11 @@ public class ItemListView extends ListView {
      * Setup app related context. Ideally would pass this to the constructor but the constructor is
      * called from the page layout XML inflater so we don't have access to its parameters.
      * 
-     * @param app the app context.
+     * @param mainActivityState the app context.
      * @param adapter adapter to the underlying PageModel item list.
      */
-    public final void setApp(MainActivityState app, ItemListViewAdapter adapter) {
-        this.mainActivityStte = checkNotNull(app);
+    public final void setApp(MainActivityState mainActivityState, ItemListViewAdapter adapter) {
+        this.mainActivityStte = checkNotNull(mainActivityState);
         this.mAdapter = checkNotNull(adapter);
         super.setAdapter(adapter);
     }

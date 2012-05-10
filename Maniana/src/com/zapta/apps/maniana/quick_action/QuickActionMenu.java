@@ -51,7 +51,7 @@ import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
 @ActivityScope
 public class QuickActionMenu implements OnDismissListener, TrackablePopup {
 
-    private final MainActivityState mApp;
+    private final MainActivityState mMainActivityState;
 
     /** The window that contains the menu's top view. */
     private final PopupWindow mMenuWindow;
@@ -75,9 +75,9 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
      * @param mContext Context
      * @param orientation Layout orientation, can be vartical or horizontal
      */
-    public QuickActionMenu(MainActivityState app, OnActionItemOutcomeListener outcomeListener) {
-        mApp = app;
-        mMenuWindow = new PopupWindow(app.context());
+    public QuickActionMenu(MainActivityState mainActivityState, OnActionItemOutcomeListener outcomeListener) {
+        mMainActivityState = mainActivityState;
+        mMenuWindow = new PopupWindow(mainActivityState.context());
 
         mMenuWindow.setTouchInterceptor(new OnTouchListener() {
             @Override
@@ -92,7 +92,7 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
 
         mOutcomeListener = checkNotNull(outcomeListener);
 
-        mTopView = (ViewGroup) mApp.services().layoutInflater()
+        mTopView = (ViewGroup) mMainActivityState.services().layoutInflater()
                 .inflate(R.layout.quick_action_menu, null);
 
         mItemContainerView = (ViewGroup) mTopView.findViewById(R.id.itemsContainer);
@@ -121,7 +121,7 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
         actionItems.add(actionItem);
 
         // TODO: rename this to action_wrapper here and in the layout.
-        final View wrapperView = mApp.services().layoutInflater()
+        final View wrapperView = mMainActivityState.services().layoutInflater()
                 .inflate(R.layout.quick_action_item, null);
 
         final ImageView imageView = (ImageView) wrapperView
@@ -159,7 +159,7 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
 
         // If not first, add seperator before it.
         if (mItemContainerView.getChildCount() > 0) {
-            final View separator = mApp.services().layoutInflater()
+            final View separator = mMainActivityState.services().layoutInflater()
                     .inflate(R.layout.quick_action_item_separator, null);
             // TODO: move this configuration to the XML
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -209,7 +209,7 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
         mTopView.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
         final int rootHeight = mTopView.getMeasuredHeight();
-        final int screenHeight = mApp.services().windowManager().getDefaultDisplay().getHeight();
+        final int screenHeight = mMainActivityState.services().windowManager().getDefaultDisplay().getHeight();
 
         // Arrow position is slightly to the right of the left upper/lower cornet.
         // TODO: define const.

@@ -63,8 +63,8 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
     private ItemColor mItemColor;
 
     /** Private constructor. Use startEditor() to create and launch an editor. */
-    private ItemTextEditor(final MainActivityState mainActivityState, String title, String initialText,
-            ItemColor initialItemColor, ItemEditorListener listener) {
+    private ItemTextEditor(final MainActivityState mainActivityState, String title,
+            String initialText, ItemColor initialItemColor, ItemEditorListener listener) {
         // TODO: reorder and organize the statements below for better reliability.
         super(mainActivityState.context());
         mMainState = mainActivityState;
@@ -81,7 +81,8 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
         // Set text and style. Always using non completed variation, even if the
         // item is completed.
         mEditTextView.setText(initialText);
-        mainActivityState.prefTracker().getPageItemFontVariation().apply(mEditTextView, false, false);
+        mainActivityState.prefTracker().getPageItemFontVariation()
+                .apply(mEditTextView, false, false);
 
         // EditorEventAdapter eventAdapter = new EditorEventAdapter();
         setOnDismissListener(new OnDismissListener() {
@@ -115,7 +116,7 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
                 handleColorClicked();
             }
         });
-        
+
         updateColorView();
 
         // TODO: why this setting does not work when done in the layout XML?
@@ -179,16 +180,16 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
     /**
      * Show an item editor.
      * 
-     * @param app app context.
+     * @param mainActivityState mainActivityState context.
      * @param title title to display in the editor.
      * @param initialText initial edited item text
      * @param listener listener to callback on changes and on end.
      */
-    public static void startEditor(final MainActivityState app, String title, String initialText,
-            ItemColor initialItemColor, final ItemEditorListener listener) {
-        final ItemTextEditor dialog = new ItemTextEditor(app, title, initialText, initialItemColor,
-                listener);
-        app.popupsTracker().track(dialog);
+    public static void startEditor(final MainActivityState mainActivityState, String title,
+            String initialText, ItemColor initialItemColor, final ItemEditorListener listener) {
+        final ItemTextEditor dialog = new ItemTextEditor(mainActivityState, title, initialText,
+                initialItemColor, listener);
+        mainActivityState.popupsTracker().track(dialog);
         dialog.show();
     }
 }

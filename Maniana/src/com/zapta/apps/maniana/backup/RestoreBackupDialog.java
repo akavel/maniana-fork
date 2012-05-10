@@ -27,6 +27,7 @@ import android.view.Window;
 import android.webkit.WebView;
 
 import com.zapta.apps.maniana.R;
+import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
 import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.model.AppModel.ProjectedImportStats;
@@ -41,6 +42,7 @@ import com.zapta.apps.maniana.util.TextUtil;
  * 
  * @author Tal Dayan
  */
+@MainActivityScope
 public class RestoreBackupDialog extends Dialog implements TrackablePopup {
 
     public static enum Action {
@@ -54,27 +56,27 @@ public class RestoreBackupDialog extends Dialog implements TrackablePopup {
         void onSelection(Action action);
     }
 
-    private final MainActivityState mApp;
+    private final MainActivityState mMainActivityState;
 
     private final RestoreBackupDialogListener mListener;
 
     /** Private constructor. Use startDialog() to create and launch a dialog. */
-    private RestoreBackupDialog(final MainActivityState app, RestoreBackupDialogListener listener,
-            Map<String, Object> macroValues) {
-        super(app.context());
-        mApp = app;
+    private RestoreBackupDialog(final MainActivityState mainActivityState,
+            RestoreBackupDialogListener listener, Map<String, Object> macroValues) {
+        super(mainActivityState.context());
+        mMainActivityState = mainActivityState;
         mListener = listener;
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.backup_restore_dialog_layout);
-        setOwnerActivity(app.mainActivity());
+        setOwnerActivity(mainActivityState.mainActivity());
 
         getWindow().setGravity(Gravity.CENTER);
 
         final WebView webView = (WebView) findViewById(R.id.backup_restore_web_view);
 
         final String assetFilePath = "forms/backup_restore_dialog.html";
-        final FileReadResult fileReadResult = FileUtil.readFileToString(mApp.context(),
-                assetFilePath, true);
+        final FileReadResult fileReadResult = FileUtil.readFileToString(
+                mMainActivityState.context(), assetFilePath, true);
 
         // TODO: handle this more gracefully?
         check(fileReadResult.outcome == FileReadOutcome.READ_OK,
@@ -104,7 +106,7 @@ public class RestoreBackupDialog extends Dialog implements TrackablePopup {
         super.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                mApp.popupsTracker().untrack(RestoreBackupDialog.this);
+                mMainActivityState.popupsTracker().untrack(RestoreBackupDialog.this);
             }
         });
 
@@ -128,7 +130,7 @@ public class RestoreBackupDialog extends Dialog implements TrackablePopup {
         }
     }
 
-    public static void startDialog(final MainActivityState app,
+    public static void startDialog(final MainActivityState mainActivityState,
             final RestoreBackupDialogListener listener, ProjectedImportStats stats) {
 
         // NOTE: macro names matches those in the html asset file.
@@ -142,17 +144,17 @@ public class RestoreBackupDialog extends Dialog implements TrackablePopup {
         macroValues.put("replace-add", stats.replaceAdd);
         macroValues.put("replace-total", stats.replaceKeep + stats.replaceAdd);
 
-        macroValues.put("str_title", app.str(R.string.backup_restore_dialog_title));
-        macroValues.put("str_sub_title", app.str(R.string.backup_restore_dialog_sub_title));
-        macroValues.put("str_merge", app.str(R.string.backup_restore_dialog_Merge));
-        macroValues.put("str_replace", app.str(R.string.backup_restore_dialog_Replace));
-        macroValues.put("str_keep", app.str(R.string.backup_restore_dialog_Keep));
-        macroValues.put("str_delete", app.str(R.string.backup_restore_dialog_Delete));
-        macroValues.put("str_add", app.str(R.string.backup_restore_dialog_Add));
-        macroValues.put("str_total", app.str(R.string.backup_restore_dialog_Total));
+        macroValues.put("str_title", mainActivityState.str(R.string.backup_restore_dialog_title));
+        macroValues.put("str_sub_title", mainActivityState.str(R.string.backup_restore_dialog_sub_title));
+        macroValues.put("str_merge", mainActivityState.str(R.string.backup_restore_dialog_Merge));
+        macroValues.put("str_replace", mainActivityState.str(R.string.backup_restore_dialog_Replace));
+        macroValues.put("str_keep", mainActivityState.str(R.string.backup_restore_dialog_Keep));
+        macroValues.put("str_delete", mainActivityState.str(R.string.backup_restore_dialog_Delete));
+        macroValues.put("str_add", mainActivityState.str(R.string.backup_restore_dialog_Add));
+        macroValues.put("str_total", mainActivityState.str(R.string.backup_restore_dialog_Total));
 
-        final RestoreBackupDialog dialog = new RestoreBackupDialog(app, listener, macroValues);
-        app.popupsTracker().track(dialog);
+        final RestoreBackupDialog dialog = new RestoreBackupDialog(mainActivityState, listener, macroValues);
+        mainActivityState.popupsTracker().track(dialog);
         dialog.show();
     }
 }

@@ -113,11 +113,11 @@ public class PageView extends FrameLayout {
 
     private final View mPaperColorView;
 
-    public PageView(MainActivityState app, PageKind pageKind) {
-        super(checkNotNull(app.context()));
-        mMainActivityState = app;
+    public PageView(MainActivityState mainActivityState, PageKind pageKind) {
+        super(checkNotNull(mainActivityState.context()));
+        mMainActivityState = mainActivityState;
         mPageKind = pageKind;
-        mDensity = DisplayUtil.getDensity(app.context());
+        mDensity = DisplayUtil.getDensity(mainActivityState.context());
 
         mMainActivityState.services().layoutInflater().inflate(R.layout.page_layout, this);
 
