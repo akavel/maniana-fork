@@ -80,14 +80,7 @@ public class AppModel {
     /** Get the model of given page. */
     @VisibleForTesting
     final PageModel getPageModel(PageKind pageKind) {
-        switch (pageKind) {
-            case TODAY:
-                return mTodayPageModel;
-            case TOMOROW:
-                return mTomorrowPageMode;
-            default:
-                throw new RuntimeException("Unknown page kind: " + pageKind);
-        }
+        return pageKind.isToday() ? mTodayPageModel : mTomorrowPageMode;
     }
 
     /** Get read only aspect of the item of given index in given page. */
@@ -106,7 +99,7 @@ public class AppModel {
     public final int getPageItemCount(PageKind pageKind) {
         return getPageModel(pageKind).itemCount();
     }
-    
+
     /** Get number of incomplete items in given page. */
     public final int getPagePendingItemCount(PageKind pageKind) {
         return getPageModel(pageKind).pendingItemCount();
@@ -205,10 +198,10 @@ public class AppModel {
         setDirty();
         return result;
     }
-    
+
     /**
-     * Copy cloned items from other model. All existing items are deleted. Dirty is set.
-     * Undo buffer and other model properties are not changed.
+     * Copy cloned items from other model. All existing items are deleted. Dirty is set. Undo buffer
+     * and other model properties are not changed.
      */
     public final void copyItemsFrom(AppModel otherModel) {
         setDirty();
@@ -302,8 +295,8 @@ public class AppModel {
 
     /**
      * Merge the items of the other model into this one. The other model is not modified. This
-     * operation is not symmetric (A.mergeFrom(B) != B.mergeFrom(A).
-     * Does not do item sorting. Caller need to invoke sorting if needed.
+     * operation is not symmetric (A.mergeFrom(B) != B.mergeFrom(A). Does not do item sorting.
+     * Caller need to invoke sorting if needed.
      */
     public final void mergeFrom(AppModel otherModel) {
         setDirty();
@@ -318,7 +311,7 @@ public class AppModel {
                 final ItemModelReadOnly otherItem = pageModel.getItem(i);
                 ItemReference existingOtherItemRef = otherItems.get(otherItem.getText());
                 if (existingOtherItemRef != null) {
-                    // Other model has multiple items with this text. Keep merging the 
+                    // Other model has multiple items with this text. Keep merging the
                     // properties, keeping only a single copy.
                     ItemModel replacementItem = new ItemModel();
                     replacementItem.copyFrom(existingOtherItemRef.itemModel);
@@ -343,7 +336,7 @@ public class AppModel {
                     // NOTE: of this model has multiple copies of this item, only the first
                     // one will have its properties merged since we remove the other from
                     // the map. Alternatively we could keep it there marked as 'do-not-insert'
-                    // and merging the properties with all the copies in this model. It is 
+                    // and merging the properties with all the copies in this model. It is
                     // not clear what will be more intuitive.
                     //
                     item.mergePropertiesFrom(otherItemRef.itemModel);
@@ -362,7 +355,7 @@ public class AppModel {
                             .getColor()));
         }
     }
-    
+
     // TODO: move to somewhere else?
     public static class ProjectedImportStats {
         public int mergeDelete = 0;
@@ -370,29 +363,29 @@ public class AppModel {
         public int mergeAdd = 0;
         public int replaceDelete = 0;
         public int replaceKeep = 0;
-        public int replaceAdd = 0;  
-        
+        public int replaceAdd = 0;
+
         public final void clear() {
             mergeDelete = 0;
             mergeKeep = 0;
             mergeAdd = 0;
             replaceDelete = 0;
             replaceKeep = 0;
-            replaceAdd = 0;  
+            replaceAdd = 0;
         }
     }
-    
+
     public final ProjectedImportStats projectedImportStats(AppModel otherModel) {
-       ProjectedImportStats result = new ProjectedImportStats();
-        
+        ProjectedImportStats result = new ProjectedImportStats();
+
         Map<String, Integer> thisMultiset = itemTextMultiset();
         Map<String, Integer> otherMultiset = otherModel.itemTextMultiset();
-        
+
         // Compute merge stats
-        // NOTE: mergeDelete is always zero for merge oepration.       
+        // NOTE: mergeDelete is always zero for merge oepration.
         for (Integer count : thisMultiset.values()) {
             result.mergeKeep += count;
-        }        
+        }
         for (String text : otherMultiset.keySet()) {
             if (!thisMultiset.containsKey(text)) {
                 // NOTE: we add excactly one, even if the other model contains
@@ -400,31 +393,30 @@ public class AppModel {
                 result.mergeAdd++;
             }
         }
-        
+
         // Compute replace stats
         Set<String> textSet = new HashSet<String>();
         textSet.addAll(thisMultiset.keySet());
-        textSet.addAll(otherMultiset.keySet());        
-        for (String text :  textSet) {   
+        textSet.addAll(otherMultiset.keySet());
+        for (String text : textSet) {
             final Integer thisValue = thisMultiset.get(text);
             final Integer otherValue = otherMultiset.get(text);
-            
+
             final int thisCount = (thisValue == null) ? 0 : thisValue;
-            final int otherCount = (otherValue == null) ? 0 : otherValue; 
-            
+            final int otherCount = (otherValue == null) ? 0 : otherValue;
+
             if (thisCount < otherCount) {
-              result.replaceKeep += thisCount;
-              result.replaceAdd += (otherCount - thisCount);
+                result.replaceKeep += thisCount;
+                result.replaceAdd += (otherCount - thisCount);
             } else {
                 result.replaceKeep += otherCount;
-                result.replaceDelete += (thisCount - otherCount);    
+                result.replaceDelete += (thisCount - otherCount);
             }
         }
-        
+
         return result;
     }
-    
-    
+
     /** Return a multiset of the text string of all items. */
     private final Map<String, Integer> itemTextMultiset() {
         Map<String, Integer> result = new HashMap<String, Integer>();
@@ -435,7 +427,7 @@ public class AppModel {
                 final Integer previousCount = result.get(item.getText());
                 result.put(item.getText(), (previousCount == null) ? 1 : previousCount + 1);
             }
-        }        
+        }
         return result;
     }
 }
