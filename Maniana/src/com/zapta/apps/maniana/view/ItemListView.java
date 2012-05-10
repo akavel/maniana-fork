@@ -889,17 +889,6 @@ public class ItemListView extends ListView {
         return 0;
     }
 
-    /** Updated view of given item to reflect ModelItem change. Assumes the view is visible. */
-    public void updateSingleItemView(int itemIndex) {
-        @Nullable
-        final ItemView itemView = getItemViewIfVisible(itemIndex);
-        // NOTE: this should always be non null but handling gracefully to avoid a
-        // force close.
-        if (itemView != null) {
-            itemView.updateFromItemModel(mAdapter.getItem(itemIndex));
-        }
-    }
-
     /** Update all views to reflect change in item font preferences. */
     public final void onPageItemFontVariationPreferenceChange() {
         // This causes this list view to call the adapter.getView() for each of

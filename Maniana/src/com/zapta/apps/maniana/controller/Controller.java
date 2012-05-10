@@ -126,7 +126,7 @@ public class Controller implements ShakerListener {
         mApp.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_SPACEBAR, false);
         final ItemModel item = mApp.model().getItemForMutation(pageKind, itemIndex);
         item.setColor(item.getColor().nextCyclicColor());
-        mApp.view().updateSingleItemView(pageKind, itemIndex);
+        mApp.view().updatePage(pageKind);
     }
 
     /** Called by the view when user clicks on item's arrow/lock area */
@@ -180,7 +180,7 @@ public class Controller implements ShakerListener {
         // of the destination by 1. Despite that, we don't compensate for it as this acieve a more
         // intuitive behavior and allow to move an item to the end of the list.
         mApp.model().insertItem(pageKind, destinationItemIndex, itemModel);
-        mApp.view().upadatePage(pageKind);
+        mApp.view().updatePage(pageKind);
         mApp.view().getRootView().post(new Runnable() {
             @Override
             public void run() {
@@ -221,7 +221,8 @@ public class Controller implements ShakerListener {
     }
 
     /** Called when the main activity is resumed, including after app creation. */
-    public final void onMainActivityResume(MainActivityResumeAction resumeAction, @Nullable Intent resumeIntent) {
+    public final void onMainActivityResume(MainActivityResumeAction resumeAction,
+            @Nullable Intent resumeIntent) {
         // This may leave undo items in case we cleanup completed tasks.
         maybeHandleDateChange();
 
@@ -258,8 +259,8 @@ public class Controller implements ShakerListener {
             // the animation to save user's time.
             final boolean isAppStartup = (mOnAppResumeCount == 1);
             final boolean actionAllowsAnimation = (resumeAction.isNone() || resumeAction == MainActivityResumeAction.ONLY_RESET_PAGE);
-            final boolean doAnimation = isAppStartup && mApp.prefTracker().getStartupAnimationPreference()
-                    && actionAllowsAnimation;
+            final boolean doAnimation = isAppStartup
+                    && mApp.prefTracker().getStartupAnimationPreference() && actionAllowsAnimation;
             if (doAnimation) {
                 // Show initial animation
                 mApp.view().setCurrentPage(PageKind.TOMOROW, -1);
@@ -371,7 +372,8 @@ public class Controller implements ShakerListener {
                     trackerTodayDateStamp);
         } else {
             final boolean expireAllLocks = (pushScope == PushScope.ALL);
-            final boolean deleteCompletedItems = mApp.prefTracker().reader().getAutoDailyCleanupPreference();
+            final boolean deleteCompletedItems = mApp.prefTracker().reader()
+                    .getAutoDailyCleanupPreference();
             LogUtil.info("Model push scope: %s, auto_cleanup=%s", pushScope, deleteCompletedItems);
             mApp.model().pushToToday(expireAllLocks, deleteCompletedItems);
             // Not bothering to test if anything changed. Always updating. This happens only once a
@@ -437,7 +439,7 @@ public class Controller implements ShakerListener {
                 // NOTE(tal): we assume that the color flag is not needed once an item is completed.
                 // This is a usability heuristic. Not required otherwise.
                 item.setColor(ItemColor.NONE);
-                mApp.view().updateSingleItemView(pageKind, itemIndex);
+                mApp.view().updatePage(pageKind);
                 maybeAutosortPageWithItemOfInterest(pageKind, itemIndex);
                 return;
             }
@@ -446,7 +448,8 @@ public class Controller implements ShakerListener {
                 mApp.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
                 final ItemModel item = mApp.model().getItemForMutation(pageKind, itemIndex);
                 item.setIsCompleted(false);
-                mApp.view().updateSingleItemView(pageKind, itemIndex);
+                // mApp.view().updateSingleItemView(pageKind, itemIndex);
+                mApp.view().updatePage(pageKind);
                 maybeAutosortPageWithItemOfInterest(pageKind, itemIndex);
                 return;
             }
@@ -470,7 +473,7 @@ public class Controller implements ShakerListener {
                                     item.setText(finalString);
                                     item.setColor(finalColor);
                                     mApp.model().setDirty();
-                                    mApp.view().updateSingleItemView(pageKind, itemIndex);
+                                    mApp.view().updatePage(pageKind);
                                     // Highlight the modified item for a short time, to provide
                                     // the user with an indication of the modified item.
                                     briefItemHighlight(pageKind, itemIndex, 700);
@@ -486,7 +489,8 @@ public class Controller implements ShakerListener {
 
                 final ItemModel item = mApp.model().getItemForMutation(pageKind, itemIndex);
                 item.setIsLocked(actionId == QuickActionsCache.LOCK_ACTION_ID);
-                mApp.view().updateSingleItemView(pageKind, itemIndex);
+                // mApp.view().updateSingleItemView(pageKind, itemIndex);
+                mApp.view().updatePage(pageKind);
                 // If lock and in Today page, we also move it to the Tomorrow page, with an
                 // animation.
                 if (pageKind == PageKind.TODAY && actionId == QuickActionsCache.LOCK_ACTION_ID) {
@@ -527,7 +531,7 @@ public class Controller implements ShakerListener {
                     public void run() {
                         // This runs at the end of the animation.
                         mApp.model().removeItemWithUndo(pageKind, itemIndex);
-                        mApp.view().upadatePage(pageKind);
+                        mApp.view().updatePage(pageKind);
                     }
                 });
     }
@@ -548,7 +552,7 @@ public class Controller implements ShakerListener {
         mApp.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_RETURN, false);
         final int itemRestored = mApp.model().applyUndo(pageKind);
         maybeAutoSortPage(pageKind, false, false);
-        mApp.view().upadatePage(pageKind);
+        mApp.view().updatePage(pageKind);
         if (itemRestored == 1) {
             mApp.services().toast(R.string.undo_Restored_one_deleted_task);
         } else {
@@ -597,7 +601,7 @@ public class Controller implements ShakerListener {
         ItemModel item = new ItemModel(cleanedValue, false, false, color);
 
         mApp.model().insertItem(pageKind, 0, item);
-        mApp.view().upadatePage(pageKind);
+        mApp.view().updatePage(pageKind);
         mApp.view().scrollToTop(pageKind);
 
         // We perform the highlight only after the view has been
@@ -707,7 +711,7 @@ public class Controller implements ShakerListener {
                 (mTempSummary.completedItemsDeleted > 0) ? AudioManager.FX_KEYPRESS_DELETE
                         : AudioManager.FX_KEY_CLICK, false);
 
-        mApp.view().upadatePage(pageKind);
+        mApp.view().updatePage(pageKind);
 
         // Display optional message to the user
         @Nullable
@@ -1006,7 +1010,7 @@ public class Controller implements ShakerListener {
             mApp.model().organizePageWithUndo(pageKind, false, -1, mTempSummary);
             if (mTempSummary.orderChanged) {
                 if (updateViewIfSorted) {
-                    mApp.view().upadatePage(pageKind);
+                    mApp.view().updatePage(pageKind);
                 }
                 if (showMessageIfSorted && mApp.prefTracker().getVerboseMessagesEnabledPreference()) {
                     mApp.services().toast(R.string.Auto_sorted);
@@ -1023,8 +1027,8 @@ public class Controller implements ShakerListener {
         final boolean sorted2 = maybeAutoSortPage(PageKind.TOMOROW, updateViewIfSorted, false);
         final boolean sorted = sorted1 || sorted2;
         // NOTE: suppressing message if showing a sub activity (e.g. SettingActivity).
-        if (sorted && showMessageIfSorted && mApp.prefTracker().getVerboseMessagesEnabledPreference()
-                && !mInSubActivity) {
+        if (sorted && showMessageIfSorted
+                && mApp.prefTracker().getVerboseMessagesEnabledPreference() && !mInSubActivity) {
             mApp.services().toast(R.string.Auto_sorted);
         }
         return sorted;
@@ -1048,7 +1052,7 @@ public class Controller implements ShakerListener {
                         // NOTE: reusing temp summary member
                         mApp.model().organizePageWithUndo(pageKind, false,
                                 itemOfInteresttOriginalIndex, mTempSummary);
-                        mApp.view().upadatePage(pageKind);
+                        mApp.view().updatePage(pageKind);
                         if (mApp.prefTracker().getVerboseMessagesEnabledPreference()) {
                             mApp.services().toast(R.string.Auto_sorted);
                         }

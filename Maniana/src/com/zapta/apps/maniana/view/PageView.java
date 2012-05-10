@@ -357,14 +357,6 @@ public class PageView extends FrameLayout {
         mItemListView.getAdapter().notifyDataSetChanged();
     }
 
-    /**
-     * Update just a single item view to reflect the model state. More efficient than
-     * upadateAllItemViews.
-     */
-    public final void updateSingleItemView(int itemIndex) {
-        mItemListView.updateSingleItemView(itemIndex);
-    }
-
     /** Update undo button bases on the current model state. */
     public final void updateUndoButton() {
         final boolean hasUndo = mMainActivityState.model().pageHasUndo(mPageKind);

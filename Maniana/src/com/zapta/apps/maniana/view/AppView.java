@@ -114,16 +114,12 @@ public class AppView {
         getPageView(pageKind).showItemMenu(itemIndex, actions, dismissActionId);
     }
 
-    public final void updateSingleItemView(PageKind pageKind, int itemIndex) {
-        getPageView(pageKind).updateSingleItemView(itemIndex);
-    }
-
     public final void updatePages() {
-        upadatePage(PageKind.TODAY);
-        upadatePage(PageKind.TOMOROW);
+        updatePage(PageKind.TODAY);
+        updatePage(PageKind.TOMOROW);
     }
 
-    public final void upadatePage(PageKind pageKind) {
+    public final void updatePage(PageKind pageKind) {
         final PageView pageView = getPageView(pageKind);
         pageView.updateAllItemViews();
         pageView.updateUndoButton();
