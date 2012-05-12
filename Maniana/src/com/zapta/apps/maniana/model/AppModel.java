@@ -293,6 +293,8 @@ public class AppModel {
         }
     }
 
+    private final static String TODO = "Updated merge to use item ids";
+    
     /**
      * Merge the items of the other model into this one. The other model is not modified. This
      * operation is not symmetric (A.mergeFrom(B) != B.mergeFrom(A). Does not do item sorting.
@@ -313,8 +315,7 @@ public class AppModel {
                 if (existingOtherItemRef != null) {
                     // Other model has multiple items with this text. Keep merging the
                     // properties, keeping only a single copy.
-                    ItemModel replacementItem = new ItemModel();
-                    replacementItem.copyFrom(existingOtherItemRef.itemModel);
+                    final ItemModel replacementItem = new ItemModel(existingOtherItemRef.itemModel);
                     replacementItem.mergePropertiesFrom(otherItem);
                     existingOtherItemRef.itemModel = replacementItem;
                 } else {
@@ -345,14 +346,16 @@ public class AppModel {
             }
         }
 
-        // TODO: sort to preserve other items order and to be deterministic
+        // TODO: sort to preserve other items order and be deterministic
 
         for (ItemReference otherRef : otherItems.values()) {
             final ItemModelReadOnly otherItem = otherRef.itemModel;
-            mTodayPageModel.insertItem(
-                    0,
-                    new ItemModel(otherItem.getText(), otherItem.isCompleted(), false, otherItem
-                            .getColor()));
+            final ItemModel newItem = new ItemModel(otherItem);
+            // Today page cannot have locked items
+            if (newItem.isLocked()) {
+              newItem.setIsLocked(false);
+            }
+            mTodayPageModel.insertItem(0, newItem);
         }
     }
 

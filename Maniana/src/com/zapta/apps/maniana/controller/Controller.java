@@ -60,6 +60,7 @@ import com.zapta.apps.maniana.settings.ShakerAction;
 import com.zapta.apps.maniana.util.AttachmentUtil;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult;
+import com.zapta.apps.maniana.util.IdGenerator;
 import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.NotificationUtil;
 import com.zapta.apps.maniana.view.AppView;
@@ -334,29 +335,35 @@ public class Controller implements ShakerListener {
     /** Populate given model with new user's sample tasks. */
     private final void populateModelWithSampleTasks(AppModel model) {
         // Today's page
-        model.appendItem(PageKind.TODAY,
-                new ItemModel(mMainActivityState.str(R.string.sample_tast_text_11), false, false,
-                        ItemColor.NONE));
-        model.appendItem(PageKind.TODAY,
-                new ItemModel(mMainActivityState.str(R.string.sample_tast_text_12), false, false,
-                        ItemColor.NONE));
-        model.appendItem(PageKind.TODAY,
-                new ItemModel(mMainActivityState.str(R.string.sample_tast_text_13), false, false,
-                        ItemColor.NONE));
-        model.appendItem(PageKind.TODAY,
-                new ItemModel(mMainActivityState.str(R.string.sample_tast_text_14), false, false,
-                        ItemColor.RED));
-        model.appendItem(PageKind.TODAY,
-                new ItemModel(mMainActivityState.str(R.string.sample_tast_text_15), false, false,
-                        ItemColor.BLUE));
-        model.appendItem(PageKind.TODAY,
-                new ItemModel(mMainActivityState.str(R.string.sample_tast_text_16), false, false,
-                        ItemColor.NONE));
+        final long ts = System.currentTimeMillis();
+        model.appendItem(
+                PageKind.TODAY,
+                new ItemModel(ts, IdGenerator.getFreshId(), mMainActivityState
+                        .str(R.string.sample_tast_text_11), false, false, ItemColor.NONE));
+        model.appendItem(
+                PageKind.TODAY,
+                new ItemModel(ts, IdGenerator.getFreshId(), mMainActivityState
+                        .str(R.string.sample_tast_text_12), false, false, ItemColor.NONE));
+        model.appendItem(
+                PageKind.TODAY,
+                new ItemModel(ts, IdGenerator.getFreshId(), mMainActivityState
+                        .str(R.string.sample_tast_text_13), false, false, ItemColor.NONE));
+        model.appendItem(
+                PageKind.TODAY,
+                new ItemModel(ts, IdGenerator.getFreshId(), mMainActivityState
+                        .str(R.string.sample_tast_text_14), false, false, ItemColor.RED));
+        model.appendItem(
+                PageKind.TODAY,
+                new ItemModel(ts, IdGenerator.getFreshId(), mMainActivityState
+                        .str(R.string.sample_tast_text_15), false, false, ItemColor.BLUE));
+        model.appendItem(
+                PageKind.TODAY,
+                new ItemModel(ts, IdGenerator.getFreshId(), mMainActivityState
+                        .str(R.string.sample_tast_text_16), false, false, ItemColor.NONE));
 
         // Tommorow's page
-        model.appendItem(PageKind.TOMOROW,
-                new ItemModel(mMainActivityState.str(R.string.sample_tast_text_21), false, false,
-                        ItemColor.NONE));
+        model.appendItem(PageKind.TOMOROW, new ItemModel(ts, IdGenerator.getFreshId(),
+                mMainActivityState.str(R.string.sample_tast_text_21), false, false, ItemColor.NONE));
     }
 
     /** Update date and if needed push model items from Tomorow to Today. */
@@ -627,7 +634,7 @@ public class Controller implements ShakerListener {
             cleanedValue = cleanedValue.substring(0, 1).toUpperCase() + cleanedValue.substring(1);
         }
 
-        ItemModel item = new ItemModel(cleanedValue, false, false, color);
+        ItemModel item = new ItemModel(System.currentTimeMillis(), IdGenerator.getFreshId(), cleanedValue, false, false, color);
 
         mMainActivityState.model().insertItem(pageKind, 0, item);
         mMainActivityState.view().updatePage(pageKind);

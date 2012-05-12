@@ -23,6 +23,7 @@ import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.model.ItemColor;
 import com.zapta.apps.maniana.model.ItemModel;
 import com.zapta.apps.maniana.model.PageKind;
+import com.zapta.apps.maniana.util.IdGenerator;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**
@@ -93,15 +94,21 @@ public class ModelDeserialization implements FieldNames {
 
     /** Deserialize a single item */
     private static final ItemModel modelItemFromJson(JSONObject jsonItem) throws JSONException {
-        final ItemModel result = new ItemModel();
-        result.setText(jsonItem.getString(FIELD_TEXT));
-        result.setIsCompleted(jsonItem.optBoolean(FIELD_DONE));
-        result.setIsLocked(jsonItem.optBoolean(FIELD_LOCKED));
+        final String optId = jsonItem.optString(FIELD_ID, null);
+        final String id = (optId == null) ? IdGenerator.getFreshId() : optId;
+
+        final long optUpdateTime = jsonItem.optLong(FIELD_UPDATE_TIME);
+        final long updateTime = (optUpdateTime == 0) ? System.currentTimeMillis() : optUpdateTime;
+
+        final String text = jsonItem.getString(FIELD_TEXT);
+        final boolean isCompleted = jsonItem.optBoolean(FIELD_DONE);
+        final boolean isLocked = jsonItem.optBoolean(FIELD_LOCKED);
+
         final String optColorKey = jsonItem.optString(FIELD_COLOR, null);
-        if (optColorKey != null) {
-            result.setColor(ItemColor.fromKey(optColorKey, ItemColor.NONE));
-        }
-        return result;
+        final ItemColor color = (optColorKey == null) ? ItemColor.NONE : ItemColor.fromKey(
+                optColorKey, ItemColor.NONE);
+
+        return new ItemModel(updateTime, id, text, isCompleted, isLocked, color);
     }
 
 }

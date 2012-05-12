@@ -38,8 +38,9 @@ public class AppModelTest extends TestCase {
         super.setUp();
         mItems = new ItemModel[10];
         mModel = new AppModel();
+        final long ts = 1234567;
         for (int i = 0; i < 10; i++) {
-            mItems[i] = new ItemModel("Item" + i, false, false, ItemColor.NONE);
+            mItems[i] = new ItemModel(ts, "id-" + i, "Item" + i, false, false, ItemColor.NONE);
             final PageKind pageKind = i < 5 ? PageKind.TODAY : PageKind.TOMOROW;
             mModel.appendItem(pageKind, mItems[i]);
         }
@@ -156,16 +157,25 @@ public class AppModelTest extends TestCase {
 
     public void testProjectedImportStats() {
         final AppModel model1 = new AppModel();
-        model1.appendItem(PageKind.TODAY, new ItemModel("aaa", false, false, ItemColor.GREEN));
-        model1.appendItem(PageKind.TODAY, new ItemModel("bbb", true, false, ItemColor.RED));
-        model1.appendItem(PageKind.TOMOROW, new ItemModel("ccc", false, true, ItemColor.NONE));
+        final long ts = 1234567;
+        model1.appendItem(PageKind.TODAY, new ItemModel(ts, "id-a", "aaa", false, false,
+                ItemColor.GREEN));
+        model1.appendItem(PageKind.TODAY, new ItemModel(ts, "id-b", "bbb", true, false,
+                ItemColor.RED));
+        model1.appendItem(PageKind.TOMOROW, new ItemModel(ts, "id-c", "ccc", false, true,
+                ItemColor.NONE));
 
         final AppModel model2 = new AppModel();
-        model2.appendItem(PageKind.TODAY, new ItemModel("aaa", true, false, ItemColor.NONE));
-        model2.appendItem(PageKind.TODAY, new ItemModel("ccc", true, false, ItemColor.BLUE));
-        model2.appendItem(PageKind.TODAY, new ItemModel("xxx", false, false, ItemColor.RED));
-        model2.appendItem(PageKind.TOMOROW, new ItemModel("yyy", false, true, ItemColor.NONE));
-        model2.appendItem(PageKind.TOMOROW, new ItemModel("aaa", false, true, ItemColor.NONE));
+        model2.appendItem(PageKind.TODAY, new ItemModel(ts, "id-a", "aaa", true, false,
+                ItemColor.NONE));
+        model2.appendItem(PageKind.TODAY, new ItemModel(ts, "id-c", "ccc", true, false,
+                ItemColor.BLUE));
+        model2.appendItem(PageKind.TODAY, new ItemModel(ts, "id-x", "xxx", false, false,
+                ItemColor.RED));
+        model2.appendItem(PageKind.TOMOROW, new ItemModel(ts, "id-y", "yyy", false, true,
+                ItemColor.NONE));
+        model2.appendItem(PageKind.TOMOROW, new ItemModel(ts, "id-a", "aaa", false, true,
+                ItemColor.NONE));
 
         final ProjectedImportStats actual = model1.projectedImportStats(model2);
         assertEquals(3, actual.mergeKeep);
@@ -179,16 +189,25 @@ public class AppModelTest extends TestCase {
 
     public void testMergeFrom() {
         final AppModel model1 = new AppModel();
-        model1.appendItem(PageKind.TODAY, new ItemModel("aaa", false, false, ItemColor.GREEN));
-        model1.appendItem(PageKind.TODAY, new ItemModel("bbb", true, false, ItemColor.RED));
-        model1.appendItem(PageKind.TOMOROW, new ItemModel("ccc", false, true, ItemColor.NONE));
+        final long ts = 1234567;
+        model1.appendItem(PageKind.TODAY, new ItemModel(ts, "id-a", "aaa", false, false,
+                ItemColor.GREEN));
+        model1.appendItem(PageKind.TODAY, new ItemModel(ts, "id-b", "bbb", true, false,
+                ItemColor.RED));
+        model1.appendItem(PageKind.TOMOROW, new ItemModel(ts, "id-c", "ccc", false, true,
+                ItemColor.NONE));
 
         final AppModel model2 = new AppModel();
-        model2.appendItem(PageKind.TODAY, new ItemModel("aaa", true, false, ItemColor.NONE));
-        model2.appendItem(PageKind.TODAY, new ItemModel("ccc", true, false, ItemColor.BLUE));
-        model2.appendItem(PageKind.TODAY, new ItemModel("xxx", false, false, ItemColor.RED));
-        model2.appendItem(PageKind.TOMOROW, new ItemModel("yyy", false, true, ItemColor.NONE));
-        model2.appendItem(PageKind.TOMOROW, new ItemModel("aaa", false, true, ItemColor.NONE));
+        model2.appendItem(PageKind.TODAY, new ItemModel(ts, "id-a", "aaa", true, false,
+                ItemColor.NONE));
+        model2.appendItem(PageKind.TODAY, new ItemModel(ts, "id-c", "ccc", true, false,
+                ItemColor.BLUE));
+        model2.appendItem(PageKind.TODAY, new ItemModel(ts, "id-x", "xxx", false, false,
+                ItemColor.RED));
+        model2.appendItem(PageKind.TOMOROW, new ItemModel(ts, "id-y", "yyy", false, true,
+                ItemColor.NONE));
+        model2.appendItem(PageKind.TOMOROW, new ItemModel(ts, "id-a", "aaa", false, true,
+                ItemColor.NONE));
 
         model1.mergeFrom(model2);
         dumpModel(model1);

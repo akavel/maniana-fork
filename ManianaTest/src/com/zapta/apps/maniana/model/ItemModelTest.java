@@ -38,15 +38,22 @@ public class ItemModelTest extends TestCase {
         }
     }
 
+    final static long ts = 1234567;
+
     private static final MergeTestCase MERGE_TEST_CASES[] = {
-        new MergeTestCase(new ItemModel("a", false, false, ItemColor.BLUE), new ItemModel("a",
-                true, true, ItemColor.RED), new ItemModel("a", false, false, ItemColor.RED)),
-        new MergeTestCase(new ItemModel("a", true, true, ItemColor.RED), new ItemModel("a", true,
-                true, ItemColor.BLUE), new ItemModel("a", true, true, ItemColor.RED)),
-        new MergeTestCase(new ItemModel("a", false, false, ItemColor.NONE), new ItemModel("a",
-                false, false, ItemColor.BLUE), new ItemModel("a", false, false, ItemColor.BLUE)),
-        new MergeTestCase(new ItemModel("a", false, false, ItemColor.NONE), new ItemModel("a",
-                false, false, ItemColor.NONE), new ItemModel("a", false, false, ItemColor.NONE)),
+
+        new MergeTestCase(new ItemModel(ts, "id11", "a", false, false, ItemColor.BLUE),
+                new ItemModel(ts, "id12", "a", true, true, ItemColor.RED), new ItemModel(ts,
+                        "id13", "a", false, false, ItemColor.RED)),
+        new MergeTestCase(new ItemModel(ts, "id21", "a", true, true, ItemColor.RED), new ItemModel(
+                ts, "id22", "a", true, true, ItemColor.BLUE), new ItemModel(ts, "id23", "a", true,
+                true, ItemColor.RED)),
+        new MergeTestCase(new ItemModel(ts, "id31", "a", false, false, ItemColor.NONE),
+                new ItemModel(ts, "id32", "a", false, false, ItemColor.BLUE), new ItemModel(ts,
+                        "id33", "a", false, false, ItemColor.BLUE)),
+        new MergeTestCase(new ItemModel(ts, "id41", "a", false, false, ItemColor.NONE),
+                new ItemModel(ts, "id42", "a", false, false, ItemColor.NONE), new ItemModel(ts,
+                        "id43", "a", false, false, ItemColor.NONE)),
     };
 
     public void testMergePropertiesFrom() {

@@ -26,6 +26,11 @@ public interface ItemModelReadOnly {
 
     /** Number of groups by which items are sorted. */
     public static final int SORTING_GROUPS = 4;
+    
+    /** System time in millis since epoch. */
+    long getUpdateTime();
+    
+    String getId();
 
     String getText();
 

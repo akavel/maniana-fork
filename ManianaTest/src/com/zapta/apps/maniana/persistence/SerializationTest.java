@@ -57,12 +57,14 @@ public class SerializationTest extends TestCase {
 
     private AppModel createFakeModel() {
         final AppModel model = new AppModel();
+        final long ts = 1234567;
         for (int i = 0; i < 12; i++) {
             final PageKind pageKind = (i < 5) ? PageKind.TODAY : PageKind.TOMOROW;
             final boolean isCompleted = (i & 0x1) != 0;
             final boolean isLocked = pageKind.isTomorrow() && ((i & 0x2) != 0);
             final ItemColor itemColor = ItemColor.values()[i % ItemColor.values().length];
-            final ItemModel item = new ItemModel("Item" + i, isCompleted, isLocked, itemColor);
+            final ItemModel item = new ItemModel(ts, "id1", "Item" + i, isCompleted, isLocked,
+                    itemColor);
             model.appendItem(pageKind, item);
         }
         model.setDirty();
@@ -87,9 +89,9 @@ public class SerializationTest extends TestCase {
             e.printStackTrace();
             fail(e.getLocalizedMessage());
         }
-        
+
         final AppModel expectedModel = createFakeModel();
-        
+
         for (PageKind pageKind : PageKind.values()) {
             final int n = expectedModel.getPageItemCount(pageKind);
             assertEquals(n, actualModel.getPageItemCount(pageKind));
@@ -101,10 +103,10 @@ public class SerializationTest extends TestCase {
                 assertEquals(expectedItem.isLocked(), actualItem.isLocked());
                 assertEquals(expectedItem.getColor(), actualItem.getColor());
             }
-        }       
+        }
         assertEquals(expectedModel.getLastPushDateStamp(), actualModel.getLastPushDateStamp());
 
         assertEquals(123, actualMetadata.writerVersionCode);
-        assertEquals("version-x.y.z", actualMetadata.writerVersionName);    
+        assertEquals("version-x.y.z", actualMetadata.writerVersionName);
     }
 }

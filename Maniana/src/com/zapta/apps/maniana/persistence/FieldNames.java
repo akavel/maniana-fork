@@ -16,23 +16,24 @@ package com.zapta.apps.maniana.persistence;
 
 import com.zapta.apps.maniana.annotations.ApplicationScope;
 
-/** 
+/**
  * Field names used in the serialization.
  * 
  * @author Tal Dayan
  */
 @ApplicationScope
 public interface FieldNames {
-    
+
     // WARNINNG: changing these value may break comparability with old data files.
-    
+
     static String FIELD_FORMAT = "format";
     static String FIELD_MODEL = "model";
     static String FIELD_METADATA = "metadata";
     static String FIELD_LAST_PUSH_DATE = "last_push_date";
     static String FIELD_TODAY = "today";
-    // NOTE: do not correct the value's spelling. This will break compatability.
-    static String FIELD_TOMOROW = "tomorow";
+    static String FIELD_TOMOROW = "tomorow"; // preserving typo for backward compatibility
+    static String FIELD_UPDATE_TIME = "utime";
+    static String FIELD_ID = "id";
     static String FIELD_TEXT = "text";
     static String FIELD_DONE = "done";
     static String FIELD_LOCKED = "locked";

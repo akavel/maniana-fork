@@ -76,6 +76,8 @@ public class ModelSerialization implements FieldNames {
     /** Serialzie one item */
     private static final JSONObject itemToJson(ItemModelReadOnly itemModel) throws JSONException {
         final JSONObject result = new JSONObject();
+        result.put(FIELD_UPDATE_TIME, itemModel.getUpdateTime());
+        result.put(FIELD_ID, itemModel.getId());
         result.put(FIELD_TEXT, itemModel.getText());
         if (itemModel.isCompleted()) {
             result.put(FIELD_DONE, itemModel.isCompleted());

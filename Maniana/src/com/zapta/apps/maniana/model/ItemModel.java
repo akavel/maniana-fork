@@ -23,6 +23,12 @@ import com.zapta.apps.maniana.annotations.ApplicationScope;
  */
 @ApplicationScope
 public class ItemModel implements ItemModelReadOnly {
+    
+    /** Globally unique id for this item. Survives item mutations and sync. */
+    private String mId;
+    
+    /** System time in millis at the time of creation or last mutation. */
+    private long mUpdateTime;
 
     /** The item text. */
     private String mText;
@@ -36,16 +42,10 @@ public class ItemModel implements ItemModelReadOnly {
     /** The item color. */
     private ItemColor mColor;
 
-    /** Default constructor. */
-    public ItemModel() {
-        mText = "";
-        mIsCompleted = false;
-        mIsLocked = false;
-        mColor = ItemColor.NONE;
-    }
-
     /** Constructor with initial values. */
-    public ItemModel(String text, boolean isCompleted, boolean isLocked, ItemColor color) {
+    public ItemModel(long updateTime, String id, String text, boolean isCompleted, boolean isLocked, ItemColor color) {
+        mUpdateTime = updateTime;
+        mId = id;
         mText = text;
         mIsCompleted = isCompleted;
         mIsLocked = isLocked;
@@ -59,10 +59,22 @@ public class ItemModel implements ItemModelReadOnly {
 
     /** Set to same values as other item. */
     public final void copyFrom(ItemModelReadOnly other) {
+        mUpdateTime = other.getUpdateTime();
+        mId = other.getId();
         mText = other.getText();
         mIsCompleted = other.isCompleted();
         mIsLocked = other.isLocked();
         mColor = other.getColor();
+    }
+    
+    @Override
+    public final long getUpdateTime() {
+        return mUpdateTime;
+    }
+    
+    @Override
+    public final String getId() {
+        return mId;
     }
 
     @Override
