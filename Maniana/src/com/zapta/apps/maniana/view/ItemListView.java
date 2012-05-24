@@ -21,6 +21,7 @@ import javax.annotation.Nullable;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.os.Message;
@@ -76,7 +77,7 @@ public class ItemListView extends ListView {
     private boolean mPedningDragScrollTick = false;
 
     /** Provided access to main activity components. */
-    private MainActivityState mainActivityStte;
+    private MainActivityState mainActivityState;
 
     /** Adapter to the underlying model page item list. */
     private ItemListViewAdapter mAdapter;
@@ -253,7 +254,7 @@ public class ItemListView extends ListView {
      * @param adapter adapter to the underlying PageModel item list.
      */
     public final void setApp(MainActivityState mainActivityState, ItemListViewAdapter adapter) {
-        this.mainActivityStte = checkNotNull(mainActivityState);
+        this.mainActivityState = checkNotNull(mainActivityState);
         this.mAdapter = checkNotNull(adapter);
         super.setAdapter(adapter);
     }
@@ -419,7 +420,8 @@ public class ItemListView extends ListView {
                     mDragedItemImageViewWindowParams.x = 0;
                     mDragedItemImageViewWindowParams.y = eventYInListView - mPressPointInItemViewY
                             + mListViewOffsetInScreenY;
-                    mainActivityStte.services()
+                    mainActivityState
+                            .services()
                             .windowManager()
                             .updateViewLayout(mDragedItemImageView,
                                     mDragedItemImageViewWindowParams);
@@ -455,15 +457,15 @@ public class ItemListView extends ListView {
                 if (cachedLastState == State.DOWN_STABLE && action == MotionEvent.ACTION_UP) {
                     switch (cachedPressedItemArea) {
                         case COLOR:
-                            mainActivityStte.controller().onItemColorClick(mAdapter.pageKind(),
+                            mainActivityState.controller().onItemColorClick(mAdapter.pageKind(),
                                     cachedPressDownItemIndex);
                             break;
                         case TEXT:
-                            mainActivityStte.controller().onItemTextClick(mAdapter.pageKind(),
+                            mainActivityState.controller().onItemTextClick(mAdapter.pageKind(),
                                     cachedPressDownItemIndex);
                             break;
                         case BUTTON:
-                            mainActivityStte.controller().onItemArrowClick(mAdapter.pageKind(),
+                            mainActivityState.controller().onItemArrowClick(mAdapter.pageKind(),
                                     cachedPressDownItemIndex);
                             break;
                         default:
@@ -477,7 +479,7 @@ public class ItemListView extends ListView {
                         && cachedDragCurrentHighlightedItemIndex >= 0
                         && cachedDragCurrentHighlightedItemIndex < getCount()
                         && cachedDragCurrentHighlightedItemIndex != cachedPressDownItemIndex) {
-                    mainActivityStte.controller().onItemMoveInPage(mAdapter.pageKind(),
+                    mainActivityState.controller().onItemMoveInPage(mAdapter.pageKind(),
                             cachedPressDownItemIndex, cachedDragCurrentHighlightedItemIndex);
                     return OnTouchEventOutcome.CALL_SUPER;
                 }
@@ -556,23 +558,37 @@ public class ItemListView extends ListView {
         mListViewOffsetInScreenX = mPressPointInScreenX - eventXInListView;
         mListViewOffsetInScreenY = mPressPointInScreenY - eventYInListView;
 
-        itemView.setDrawingCacheEnabled(true);
-        mDragBitmap = Bitmap.createBitmap(itemView.getDrawingCache());
- 
+        // NOTE: see http://code.google.com/p/maniana/issues/detail?id=102 for user
+        // reported null pointer exception here.
+        //
+        // itemView.setDrawingCacheEnabled(true);
+        // mDragBitmap = Bitmap.createBitmap(itemView.getDrawingCache());
+        // itemView.setDrawingCacheEnabled(false);
+        //
+        // NOTE: fix based on suggestion here http://tinyurl.com/7yranvj
+        mDragBitmap = Bitmap.createBitmap(itemView.getWidth(), itemView.getHeight(),
+                Bitmap.Config.ARGB_8888);
+        final Canvas canvas = new Canvas(mDragBitmap);
+        itemView.draw(canvas);
+
         // NOTE: creating the bitmap above may clear view internal 'invalidated' bit
         // and may cause it to show incorrect content. This takes care of it by
-        // foring it to be invalidated. The problem occurs only once evern 20 or so
+        // forcing it to be invalidated. The problem occurs only once every 20 or so
         // times so make sure you know what you are doing if you modify this.
         //
-        // TODO: deffer the bitmap snapshot to the point when the user actually
+        // NOTE: Since we changed the way we create the bitmap above from using
+        // the internal cache to explicit canvas, it is possible that this is not
+        // required anymore. Need to consult AP.
+        //
+        // TODO: defer the bitmap snapshot to the point when the user actually
         // starts to drag (long press). No need to do it if just scrolling or
         // clicking.
         //
-        // TODO: instead of using the bitmap from the actual item view, create a 
+        // TODO: instead of using the bitmap from the actual item view, create a
         // temporary view by calling the adapter. This view will be independent of
-        // of the display. It is safe to pass this ItemListViewer to the adatper
+        // of the display. It is safe to pass this ItemListViewer to the adapter
         // so it creates the temp view with the layout params of this ItemListView.
-        // This is the approach recomanded by A.P.
+        // This is the approach recommended by AP.
         //
         itemView.invalidate();
 
@@ -640,8 +656,8 @@ public class ItemListView extends ListView {
         if (LogUtil.DEBUG_LEVEL >= 3) {
             LogUtil.debug("down to drag");
         }
-        mainActivityStte.services().vibrateForLongPress();
-        mainActivityStte.services().windowManager()
+        mainActivityState.services().vibrateForLongPress();
+        mainActivityState.services().windowManager()
                 .addView(mDragedItemImageView, mDragedItemImageViewWindowParams);
         setState(State.DOWN_DRAG);
 
@@ -661,15 +677,15 @@ public class ItemListView extends ListView {
     /** Display item menu on top of given item */
     public void showItemMenu(final int itemIndex, QuickActionItem actions[],
             final int dismissActionId) {
-        final QuickActionMenu quickActionMenu = new QuickActionMenu(mainActivityStte,
+        final QuickActionMenu quickActionMenu = new QuickActionMenu(mainActivityState,
                 new OnActionItemOutcomeListener() {
                     @Override
                     public void onOutcome(QuickActionMenu source, QuickActionItem actionItem) {
-                        mainActivityStte.popupsTracker().untrack(source);
+                        mainActivityState.popupsTracker().untrack(source);
                         final int actionId = (actionItem != null) ? actionItem.getActionId()
                                 : dismissActionId;
-                        mainActivityStte.controller().onItemMenuSelection(mAdapter.pageKind(), itemIndex,
-                                actionId);
+                        mainActivityState.controller().onItemMenuSelection(mAdapter.pageKind(),
+                                itemIndex, actionId);
                     }
                 });
 
@@ -681,7 +697,7 @@ public class ItemListView extends ListView {
         final ItemView itemView = getItemViewIfVisible(itemIndex);
         // NOTE: this should always be non null but handling gracefully to avoid a forced close.
         if (itemView != null) {
-            mainActivityStte.popupsTracker().track(quickActionMenu);
+            mainActivityState.popupsTracker().track(quickActionMenu);
             quickActionMenu.show(itemView);
         }
     }
@@ -710,7 +726,7 @@ public class ItemListView extends ListView {
 
                 if (mState == State.DOWN_DRAG) {
                     mDragedItemImageView.setVisibility(GONE);
-                    mainActivityStte.services().windowManager().removeView(mDragedItemImageView);
+                    mainActivityState.services().windowManager().removeView(mDragedItemImageView);
                     updateViewsHighlight(-1);
                 }
 
