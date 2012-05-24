@@ -44,11 +44,9 @@
     <string name="backup_restore_dialog_sub_title">Task summary</string>
 
     <!-- Notification -->
-    <string name="notification_title">Maniana To Do List</string>
-    <string name="notification_content_single_task">Tap to review one active task</string>
-    <string name="notification_content_d_tasks">Tap to review %d active tasks</string>
-    <string name="notification_ticker_single_task">Maniana has one active task</string>
-    <string name="notification_ticker_d_tasks">Maniana has %d active tasks</string>
+    <string name="notification_title_single_task">Maniana has one active task</string>
+    <string name="notification_title_d_tasks">Maniana has %d active tasks</string>
+    <string name="notification_content">Tap to review tasks</string> 
 
     <!-- Page operations -->
     <string name="Auto_sorted">Auto sorted</string>

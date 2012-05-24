@@ -31,11 +31,8 @@
   <string name="backup_restore_dialog_Total">トータル</string>
   <string name="backup_restore_dialog_title">マニャーナにタスクをインポート</string>
   <string name="backup_restore_dialog_sub_title">タスクの一覧</string>
-  <string name="notification_title">マニャナのリスト</string>
-  <string name="notification_content_single_task">1 つのアクティブなタスクを確認するをタップします。</string>
-  <string name="notification_content_d_tasks">%d個のアクティブなタスクを確認するをタップします。</string>
-  <string name="notification_ticker_single_task">マニャナは 1 つのアクティブなタスクがあります。</string>
-  <string name="notification_ticker_d_tasks">マニャナは %d のアクティブなタスクがあります。</string>
+  <string name="notification_title_single_task">マニャナは 1 つのアクティブなタスクがあります。</string>
+  <string name="notification_title_d_tasks">マニャナは %d のアクティブなタスクがあります。</string>
   <string name="Auto_sorted">自動並べ替え</string>
   <string name="page_title_Today">今日</string>
   <string name="page_title_Maniana">マニャナ</string>

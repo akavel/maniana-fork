@@ -48,22 +48,20 @@ public class NotificationUtil {
         // TODO: set this to midnight.
         final long when = System.currentTimeMillis();
 
-        final String ticker = (pendingItemsCount == 1) ? context
-                .getString(R.string.notification_ticker_single_task) : context.getString(
-                R.string.notification_ticker_d_tasks, pendingItemsCount);
+        final String title = (pendingItemsCount == 1) ? context
+                .getString(R.string.notification_title_single_task) : context.getString(
+                R.string.notification_title_d_tasks, pendingItemsCount);
 
+        // NOTE: we use title also as the temporary ticker string.
         final Notification notification = new Notification(R.drawable.app_notification_icon,
-                ticker, when);
+                title, when);
 
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
         notification.flags |= Notification.FLAG_ONLY_ALERT_ONCE;
         notification.number = pendingItemsCount;
+                       
+        final String content = context.getString(R.string.notification_content);
 
-        final String title = context.getString(R.string.notification_title);
-        
-        final String content = (pendingItemsCount == 1) ? context
-                .getString(R.string.notification_content_single_task) : context.getString(
-                R.string.notification_content_d_tasks, pendingItemsCount);
                         
         final Intent notificationIntent = new Intent(context, MainActivity.class);
         final PendingIntent pendingItent = PendingIntent.getActivity(context, 0,

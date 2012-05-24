@@ -31,11 +31,8 @@
   <string name="backup_restore_dialog_Total">Totale</string>
   <string name="backup_restore_dialog_title">Importare le attività in Maniana\"?\"</string>
   <string name="backup_restore_dialog_sub_title">Sommario delle attività</string>
-  <string name="notification_title">Maniana To Do List</string>
-  <string name="notification_content_single_task">Tocca per rivedere una attività</string>
-  <string name="notification_content_d_tasks">Tocca per rivedere %d attività</string>
-  <string name="notification_ticker_single_task">Maniana ha una attività</string>
-  <string name="notification_ticker_d_tasks">Maniana ha %d attività</string>
+  <string name="notification_title_single_task">Maniana ha una attività</string>
+  <string name="notification_title_d_tasks">Maniana ha %d attività</string>
   <string name="Auto_sorted">Rordinati automaticamente</string>
   <string name="page_title_Today">Oggi</string>
   <string name="page_title_Maniana">Domani</string>
