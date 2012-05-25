@@ -293,8 +293,6 @@ public class AppModel {
         }
     }
 
-    private final static String TODO = "Updated merge to use item ids";
-    
     /**
      * Merge the items of the other model into this one. The other model is not modified. This
      * operation is not symmetric (A.mergeFrom(B) != B.mergeFrom(A). Does not do item sorting.

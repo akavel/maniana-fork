@@ -44,9 +44,9 @@
     <string name="backup_restore_dialog_sub_title">Task summary</string>
 
     <!-- Notification -->
-    <string name="notification_title_single_task">Maniana has one active task</string>
-    <string name="notification_title_d_tasks">Maniana has %d active tasks</string>
-    <string name="notification_content">Tap to review tasks</string> 
+    <string name="notification_title_single_task">You have one active task</string>
+    <string name="notification_title_d_tasks">You have %d active tasks</string>
+    <string name="notification_content">Tap to open Maniana</string> 
 
     <!-- Page operations -->
     <string name="Auto_sorted">Auto sorted</string>
@@ -70,7 +70,7 @@
     <!-- Widget -->
     <string name="widget_Maniana_data_not_found">Maniana data not found</string>
     <string name="widget_no_tasks">no tasks</string>
-    <string name="widget_no_active_tasks">no active_tasks</string>
+    <string name="widget_no_active_tasks">no active tasks</string>
 
     <!-- Color Picker -->
     <string name="color_picker_Press_on_a_color_below_to_apply_it">Press on a color below to apply it</string>
@@ -124,7 +124,10 @@
     <string name="settings_detailed_messages_summary_off">Disabled (expert mode)</string>
     <string name="settings_auto_sort_title">Auto Task Sort</string>
     <string name="settings_auto_sort_summary_on">Forcing task order (pending before completed before locked)</string>
-    <string name="settings_auto_sort_summary_off">Allowing arbitrary task order</string>
+    <string name="settings_auto_sort_summary_off">Allowing arbitrary task order</string>  
+    <string name="settings_add_to_top_title">Add To Top</string>
+    <string name="settings_add_to_top_summary_on">New tasks are added at list top</string>
+    <string name="settings_add_to_top_summary_off">New tasks are added at list bottom</string>   
     <string name="settings_daily_cleanup_title">Daily Task Cleanup</string>
     <string name="settings_daily_cleanup_summary_on">Deleting completed tasks every midnight</string>
     <string name="settings_daily_cleanup_summary_off">Daily deletion of completed tasks is disabled</string>

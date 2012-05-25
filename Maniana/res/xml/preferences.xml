@@ -37,6 +37,12 @@
             android:summaryOff="@string/settings_auto_sort_summary_off"
             android:summaryOn="@string/settings_auto_sort_summary_on"
             android:title="@string/settings_auto_sort_title" />
+         <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="prefAddToTopKey"
+            android:summaryOff="@string/settings_add_to_top_summary_off"
+            android:summaryOn="@string/settings_add_to_top_summary_on"
+            android:title="@string/settings_add_to_top_title" />
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="prefAutoDailyCleanupKey"

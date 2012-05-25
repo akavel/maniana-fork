@@ -205,6 +205,7 @@ public class SettingsActivity extends PreferenceActivity implements
         // We lookup also the preferences we don't use here to assert that the code and the xml
         // key strings match.
         findPreference(PreferenceKind.AUTO_SORT);
+        findPreference(PreferenceKind.ADD_TO_TOP);
         findPreference(PreferenceKind.AUTO_DAILY_CLEANUP);
         findPreference(PreferenceKind.DAILY_NOTIFICATION);
         findPreference(PreferenceKind.WIDGET_SINGLE_LINE);

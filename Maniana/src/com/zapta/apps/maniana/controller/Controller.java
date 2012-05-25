@@ -170,7 +170,7 @@ public class Controller implements ShakerListener {
         // The item is inserted at the top of the other page. Scroll there so it is visible
         // if the user flips to the other page.
         // NOTE(tal): This must be done after updateAlLPages(), otherwise it is ignored.
-        mMainActivityState.view().scrollToTop(otherPageKind);
+        mMainActivityState.view().scrollToItem(otherPageKind, 0);
     }
 
     /** Called by the view when the user drag an item within the page */
@@ -256,8 +256,8 @@ public class Controller implements ShakerListener {
 
         if (!preserveView) {
             // Force both pages to be scrolled to top. More intuitive this way.
-            mMainActivityState.view().scrollToTop(PageKind.TOMOROW);
-            mMainActivityState.view().scrollToTop(PageKind.TODAY);
+            mMainActivityState.view().scrollToItem(PageKind.TOMOROW, 0);
+            mMainActivityState.view().scrollToItem(PageKind.TODAY, 0);
 
             // Force showing today's page. This is done with animation or immediately
             // depending on settings. In case of an actual resume action, we skip
@@ -636,18 +636,46 @@ public class Controller implements ShakerListener {
 
         ItemModel item = new ItemModel(System.currentTimeMillis(), IdGenerator.getFreshId(), cleanedValue, false, false, color);
 
-        mMainActivityState.model().insertItem(pageKind, 0, item);
+        final int insertionIndex = newItemInsertionIndex(pageKind);  
+        mMainActivityState.model().insertItem(pageKind, insertionIndex, item);
         mMainActivityState.view().updatePage(pageKind);
-        mMainActivityState.view().scrollToTop(pageKind);
+        mMainActivityState.view().scrollToItem(pageKind, insertionIndex);
 
         // We perform the highlight only after the view has been
         // stabilized from the scroll (since item views are reused during the scroll).
         mMainActivityState.view().getRootView().post(new Runnable() {
             @Override
             public void run() {
-                briefItemHighlight(pageKind, 0, 700);
+                briefItemHighlight(pageKind, insertionIndex, 700);
             }
         });
+    }
+    
+    // Return the insertion index of a new item. The new item is assumed to be
+    // non locked and non completed. The returned index complies with add-to-top
+    // and auto-sort preference settings.
+    private final int newItemInsertionIndex(PageKind pageKind) {
+        // If adding at top, always adding at index 0.
+        if (mMainActivityState.prefTracker().getAddToTopPreference()) {
+            return 0;
+        }
+        
+        // If adding at bottom and no sorting then adding at n.
+        final int n = mMainActivityState.model().getPageItemCount(pageKind);
+        if (!mMainActivityState.prefTracker().getAutoSortPreference()) {
+            return n;
+        }
+        
+        // Here when adding at bottom and using auto sort. Scan from the end and skip
+        // all completed and locked items.
+        int i;
+        for (i = n-1; i >= 0; i--) {
+          final ItemModelReadOnly item = mMainActivityState.model().getItemReadOnly(pageKind, i);   
+          if (!item.isCompleted() && !item.isLocked()) {
+              break;
+          }
+        }
+        return i + 1;
     }
 
     /** Handle the case where the app is responding to a restore from file action. */
@@ -922,6 +950,7 @@ public class Controller implements ShakerListener {
                 flushModelChanges(mMainActivityState.prefTracker().getAutoSortPreference());
                 break;
 
+            case ADD_TO_TOP:
             case SOUND_ENABLED:
             case APPLAUSE_LEVEL:
             case DAILY_NOTIFICATION:

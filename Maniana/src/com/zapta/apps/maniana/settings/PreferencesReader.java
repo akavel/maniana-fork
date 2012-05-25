@@ -220,6 +220,10 @@ public class PreferencesReader implements PreferenceConstants {
         return mSharedPreferences.getBoolean(PreferenceKind.AUTO_SORT.getKey(), DEFAULT_AUTO_SORT);
     }
 
+    public final boolean getAddToTopPreference() {
+        return mSharedPreferences.getBoolean(PreferenceKind.ADD_TO_TOP.getKey(), DEFAULT_ADD_TO_TOP);
+    }
+
     public final boolean getAutoDailyCleanupPreference() {
         return mSharedPreferences.getBoolean(PreferenceKind.AUTO_DAILY_CLEANUP.getKey(),
                 DEFAULT_AUTO_DAILY_CLEANUP);

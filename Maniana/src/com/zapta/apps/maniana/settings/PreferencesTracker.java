@@ -48,6 +48,7 @@ public class PreferencesTracker {
     private boolean mCachedStartupAnimationPreference;
     private boolean mCachedVerboseMessagesPreference;
     private boolean mCachedAutoSortPreference;
+    private boolean mCachedAddToTopPreference;
 
     private boolean mCachedShakerEnabledPreference;
     private int mCachedShakerSensitivityPreference;
@@ -83,6 +84,7 @@ public class PreferencesTracker {
         updateCachedAllowSoundsPreference();
         updateCachedApplauseLevelPreference();
         updateCachedAutoSortPreference();
+        updateCachedAddToTopPreference();
         updateCachedShakerEnabledPreference();
         updateCachedShakerSensitivityPreference();
         updateCachedPageIconSetPreference();
@@ -157,9 +159,17 @@ public class PreferencesTracker {
     private final void updateCachedAutoSortPreference() {
         mCachedAutoSortPreference = mPreferencesReader.getAutoSortPreference();
     }
-
+    
     public final boolean getAutoSortPreference() {
         return mCachedAutoSortPreference;
+    }
+    
+    private final void updateCachedAddToTopPreference() {
+        mCachedAddToTopPreference = mPreferencesReader.getAddToTopPreference();
+    }
+
+    public final boolean getAddToTopPreference() {
+        return mCachedAddToTopPreference;
     }
 
     private final void updateCachedShakerEnabledPreference() {
@@ -327,6 +337,9 @@ public class PreferencesTracker {
             // Behavior
             case AUTO_SORT:
                 updateCachedAutoSortPreference();
+                break;
+            case ADD_TO_TOP:
+                updateCachedAddToTopPreference();
                 break;
             case AUTO_DAILY_CLEANUP:
             case LOCK_PERIOD:

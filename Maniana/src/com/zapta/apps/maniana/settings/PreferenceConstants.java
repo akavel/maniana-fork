@@ -31,6 +31,7 @@ public interface PreferenceConstants {
     public static final boolean DEFAULT_STARTUP_ANIMATION = true;
     public static final boolean DEFAULT_VERBOSE_MESSAGES = true;
     public static final boolean DEFAULT_AUTO_SORT = true;
+    public static final boolean DEFAULT_ADD_TO_TOP = true;
     public static final boolean DEFAULT_AUTO_DAILY_CLEANUP = true;
     public static final boolean DEFAULT_DAILY_NOTIFICATION = false;
     public static final LockExpirationPeriod DEFAULT_LOCK_PERIOD = LockExpirationPeriod.NEVER;

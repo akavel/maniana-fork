@@ -321,9 +321,9 @@ public class PageView extends FrameLayout {
         }
     }
 
-    /** Make the first item visible. */
-    public void scrollToTop() {
-        mItemListView.scrollToTop();
+    /** Make the given item visible. */
+    public void scrollToItem(int itemIndex) {
+        mItemListView.scrollToItem(itemIndex);
     }
 
     /** Turn item view highlight on/off. */

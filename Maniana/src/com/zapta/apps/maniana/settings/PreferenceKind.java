@@ -44,6 +44,7 @@ public enum PreferenceKind implements KeyedEnum {
     STARTUP_ANIMATION("prefStartupAnimationKey"),
     VERBOSE_MESSAGES("prefVerboseMessagesKey"),
     AUTO_SORT("prefAutoSortKey"),
+    ADD_TO_TOP("prefAddToTopKey"),
     AUTO_DAILY_CLEANUP("prefAutoDailyCleanupKey"),
     DAILY_NOTIFICATION("prefDailyNotificationKey"),
     LOCK_PERIOD("prefLockPeriodKey"),

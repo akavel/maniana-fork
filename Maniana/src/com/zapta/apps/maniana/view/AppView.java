@@ -174,7 +174,7 @@ public class AppView {
         return (mCurrentPageIndex == 0) ? PageKind.TODAY : PageKind.TOMOROW;
     }
 
-    public void scrollToTop(PageKind pageKind) {
-        getPageView(pageKind).scrollToTop();
+    public void scrollToItem(PageKind pageKind, int itemIndex) {
+        getPageView(pageKind).scrollToItem(itemIndex);
     }
 }

@@ -811,9 +811,16 @@ public class ItemListView extends ListView {
         return result;
     }
 
-    /** Scroll to top of page. */
-    public void scrollToTop() {
-        setSelection(0);
+    /** Scroll show given item index. Ok to have out of bound index. */
+    public void scrollToItem(int itemIndex) {
+        final int n = getChildCount();
+        if (n == 0) {
+            // Nothing to scroll
+            return;
+        }
+        // Clip to [0..n).
+        final int actualItemIndex = Math.max(0, Math.min(n-1, itemIndex));
+        setSelection(actualItemIndex);
     }
 
     /**
