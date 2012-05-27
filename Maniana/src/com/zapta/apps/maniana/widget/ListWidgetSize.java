@@ -88,14 +88,17 @@ public class ListWidgetSize {
     static final ListWidgetSize LIST_WIDGET_SIZE5 = new ListWidgetSize(ListWidgetProvider5.class,
             4, 4, R.id.widget_list_bitmap_4x4_portrait, R.id.widget_list_bitmap_4x4_landscape);
 
- 
+    static final ListWidgetSize LIST_WIDGET_SIZE6 = new ListWidgetSize(ListWidgetProvider6.class,
+            3, 3, R.id.widget_list_bitmap_3x3_portrait, R.id.widget_list_bitmap_3x3_landscape);
+
     /** List of all list widget sizes. */
     static final ListWidgetSize[] LIST_WIDGET_SIZES = new ListWidgetSize[] {
         LIST_WIDGET_SIZE1,
         LIST_WIDGET_SIZE2,
         LIST_WIDGET_SIZE3,
         LIST_WIDGET_SIZE4,
-        LIST_WIDGET_SIZE5
+        LIST_WIDGET_SIZE5,
+        LIST_WIDGET_SIZE6
     };
 
     /** The actual concrete provider class for this widget size. */

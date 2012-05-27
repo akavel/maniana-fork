@@ -90,6 +90,20 @@
                 android:layout_width="@dimen/list_widget_width_4x_landscape"
                 android:layout_height="@dimen/list_widget_height_x4_landscape"
                 android:background="#00000000" />
+            
+              <ImageView
+                android:id="@+id/widget_list_bitmap_3x3_portrait"
+                style="@style/ListWidgetPortraitBitmap"
+                android:layout_width="@dimen/list_widget_width_3x_portrait"
+                android:layout_height="@dimen/list_widget_height_x3_portrait"
+                android:background="#00000000" />
+
+            <ImageView
+                android:id="@+id/widget_list_bitmap_3x3_landscape"
+                style="@style/ListWidgetLandscapeBitmap"
+                android:layout_width="@dimen/list_widget_width_3x_landscape"
+                android:layout_height="@dimen/list_widget_height_x3_landscape"
+                android:background="#00000000" />
         </LinearLayout>
 
         <LinearLayout

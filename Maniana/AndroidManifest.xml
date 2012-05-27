@@ -12,10 +12,10 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
+        android:name=".main.MyApp"
         android:backupAgent=".backup.AppBackupHelper"
         android:icon="@drawable/app_icon"
-        android:label="@string/translated_app_name" 
-        android:name=".main.MyApp">
+        android:label="@string/translated_app_name" >
         <meta-data
             android:name="com.google.android.backup.api_key"
             android:value="AEdPqrEAAAAIuy5K_Vn8AGynwe5lz1SxJqwTxbg5gnd4bb3hPg" />
@@ -113,6 +113,17 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_list_info_size_5" />
+        </receiver>
+        <receiver
+            android:name=".widget.ListWidgetProvider6"
+            android:label="@string/widget_name_list_3x3" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_list_info_size_6" />
         </receiver>
         <receiver
             android:name=".widget.IconWidgetProvider"
