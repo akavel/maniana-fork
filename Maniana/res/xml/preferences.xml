@@ -33,44 +33,11 @@
             android:summaryOn="@string/settings_detailed_messages_summary_on"
             android:title="@string/settings_detailed_messages_title" />
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="prefAutoSortKey"
-            android:summaryOff="@string/settings_auto_sort_summary_off"
-            android:summaryOn="@string/settings_auto_sort_summary_on"
-            android:title="@string/settings_auto_sort_title" />
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="prefAddToTopKey"
-            android:summaryOff="@string/settings_add_to_top_summary_off"
-            android:summaryOn="@string/settings_add_to_top_summary_on"
-            android:title="@string/settings_add_to_top_title" />
-
-        <com.zapta.apps.maniana.settings.ItemColorPreference
-            android:defaultValue="none"
-            android:key="prefDefaultItemColorKey"
-            android:summary="@string/settings_default_item_color_summary"
-            android:title="@string/settings_default_item_color_title" />
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="prefAutoDailyCleanupKey"
-            android:summaryOff="@string/settings_daily_cleanup_summary_off"
-            android:summaryOn="@string/settings_daily_cleanup_summary_on"
-            android:title="@string/settings_daily_cleanup_title" />
-        <CheckBoxPreference
             android:defaultValue="false"
             android:key="prefDailyNotificationKey"
             android:summaryOff="@string/settings_daily_notification_summary_off"
             android:summaryOn="@string/settings_daily_notification_summary_on"
             android:title="@string/settings_daily_notification_title" />
-
-        <ListPreference
-            android:defaultValue="never"
-            android:entries="@array/lockPeriodNames"
-            android:entryValues="@array/lockPeriodValues"
-            android:key="prefLockPeriodKey"
-            android:summary="@string/place_holder"
-            android:title="@string/settings_lock_expiration_title" />
 
         <PreferenceScreen
             android:summary="@string/settings_section_shaker_summary"
@@ -101,6 +68,41 @@
                 android:summary="@string/place_holder"
                 android:title="@string/settings_shaker_action_title" />
         </PreferenceScreen>
+    </PreferenceScreen>
+    <PreferenceScreen android:title="@string/settings_section_name_Tasks" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="prefAutoSortKey"
+            android:summaryOff="@string/settings_auto_sort_summary_off"
+            android:summaryOn="@string/settings_auto_sort_summary_on"
+            android:title="@string/settings_auto_sort_title" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="prefAddToTopKey"
+            android:summaryOff="@string/settings_add_to_top_summary_off"
+            android:summaryOn="@string/settings_add_to_top_summary_on"
+            android:title="@string/settings_add_to_top_title" />
+
+        <com.zapta.apps.maniana.settings.ItemColorPreference
+            android:defaultValue="none"
+            android:key="prefDefaultItemColorKey"
+            android:summary="@string/settings_default_item_color_summary"
+            android:title="@string/settings_default_item_color_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="prefAutoDailyCleanupKey"
+            android:summaryOff="@string/settings_daily_cleanup_summary_off"
+            android:summaryOn="@string/settings_daily_cleanup_summary_on"
+            android:title="@string/settings_daily_cleanup_title" />
+
+        <ListPreference
+            android:defaultValue="never"
+            android:entries="@array/lockPeriodNames"
+            android:entryValues="@array/lockPeriodValues"
+            android:key="prefLockPeriodKey"
+            android:summary="@string/place_holder"
+            android:title="@string/settings_lock_expiration_title" />
     </PreferenceScreen>
     <PreferenceScreen
         android:key="prefPagesScreenKey"

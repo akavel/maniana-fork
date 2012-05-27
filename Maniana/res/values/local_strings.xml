@@ -128,6 +128,12 @@
     <string name="settings_detailed_messages_title">Detailed Messages</string>
     <string name="settings_detailed_messages_summary_on">Enabled (trainee mode)</string>
     <string name="settings_detailed_messages_summary_off">Disabled (expert mode)</string>
+    <string name="settings_daily_notification_title">Daily Notification</string>
+    <string name="settings_daily_notification_summary_on">Will notify daily if having active tasks</string>
+    <string name="settings_daily_notification_summary_off">Daily notification is off</string>
+     
+    <!-- Settings/Tasks -->
+    <string name="settings_section_name_Tasks">Tasks</string>
     <string name="settings_auto_sort_title">Auto Task Sort</string>
     <string name="settings_auto_sort_summary_on">Forcing task order (pending before completed before locked)</string>
     <string name="settings_auto_sort_summary_off">Allowing arbitrary task order</string>  
@@ -139,14 +145,11 @@
     <string name="settings_daily_cleanup_title">Daily Task Cleanup</string>
     <string name="settings_daily_cleanup_summary_on">Deleting completed tasks every midnight</string>
     <string name="settings_daily_cleanup_summary_off">Daily deletion of completed tasks is disabled</string>
-    <string name="settings_daily_notification_title">Daily Notification</string>
-    <string name="settings_daily_notification_summary_on">Will notify daily if having active tasks</string>
-    <string name="settings_daily_notification_summary_off">Daily notification is off</string>
     <string name="settings_lock_expiration_title">Lock Expiration</string>
     <string name="settings_lock_expiration_name_once_a_week">Once a week</string>
     <string name="settings_lock_expiration_name_once_a_month">Once a month</string>
     <string name="settings_lock_expiration_name_never">Never</string>
-
+ 
     <!-- Settings/Shaker -->
     <string name="settings_section_name_Shaker">Shaking Action</string>
     <string name="settings_section_shaker_summary">Click to set shaking action</string>
