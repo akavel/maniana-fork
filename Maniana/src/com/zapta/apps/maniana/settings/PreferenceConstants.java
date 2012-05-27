@@ -15,6 +15,7 @@
 package com.zapta.apps.maniana.settings;
 
 import com.zapta.apps.maniana.annotations.ApplicationScope;
+import com.zapta.apps.maniana.model.ItemColor;
 
 /**
  * Default preference values. All values should match the default values in Preferences.xml
@@ -32,6 +33,7 @@ public interface PreferenceConstants {
     public static final boolean DEFAULT_VERBOSE_MESSAGES = true;
     public static final boolean DEFAULT_AUTO_SORT = true;
     public static final boolean DEFAULT_ADD_TO_TOP = true;
+    public static final ItemColor DEFAULT_DEFAULT_ITEM_COLOR = ItemColor.NONE;
     public static final boolean DEFAULT_AUTO_DAILY_CLEANUP = true;
     public static final boolean DEFAULT_DAILY_NOTIFICATION = false;
     public static final LockExpirationPeriod DEFAULT_LOCK_PERIOD = LockExpirationPeriod.NEVER;

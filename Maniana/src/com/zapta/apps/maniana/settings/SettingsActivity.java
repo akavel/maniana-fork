@@ -206,6 +206,7 @@ public class SettingsActivity extends PreferenceActivity implements
         // key strings match.
         findPreference(PreferenceKind.AUTO_SORT);
         findPreference(PreferenceKind.ADD_TO_TOP);
+        findPreference(PreferenceKind.DEFAULT_ITEM_COLOR);
         findPreference(PreferenceKind.AUTO_DAILY_CLEANUP);
         findPreference(PreferenceKind.DAILY_NOTIFICATION);
         findPreference(PreferenceKind.WIDGET_SINGLE_LINE);

@@ -15,6 +15,7 @@
 package com.zapta.apps.maniana.settings;
 
 import com.zapta.apps.maniana.annotations.ApplicationScope;
+import com.zapta.apps.maniana.model.ItemColor;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -222,6 +223,12 @@ public class PreferencesReader implements PreferenceConstants {
 
     public final boolean getAddToTopPreference() {
         return mSharedPreferences.getBoolean(PreferenceKind.ADD_TO_TOP.getKey(), DEFAULT_ADD_TO_TOP);
+    }
+    
+    public final ItemColor getDefaultItemColorPreference() {
+        final String key = mSharedPreferences.getString(PreferenceKind.DEFAULT_ITEM_COLOR.getKey(),
+                DEFAULT_DEFAULT_ITEM_COLOR.getKey());
+        return ItemColor.fromKey(key, DEFAULT_DEFAULT_ITEM_COLOR);
     }
 
     public final boolean getAutoDailyCleanupPreference() {

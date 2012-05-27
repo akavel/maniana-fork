@@ -119,8 +119,7 @@ public class ColorPickerPreference
 
         // TAL: required starting from API 14
         widgetFrameView.setVisibility(View.VISIBLE);
-        
-        // TAL: enable this condition after increasing the app target API to >= 14.      
+           
         boolean preApi14 = android.os.Build.VERSION.SDK_INT < 14;
         
         final int rightPaddingDip = preApi14 ? 8 : 5;

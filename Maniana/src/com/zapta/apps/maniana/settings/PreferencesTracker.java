@@ -20,10 +20,14 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 
 import com.zapta.apps.maniana.annotations.MainActivityScope;
+import com.zapta.apps.maniana.model.ItemColor;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**
- * Manages the app preferences (settings).
+ * Cache frequently used settings. 
+ * 
+ * TODO: simplify this class by removing settings that are not used often. These
+ * settings will be read directly from the preferences reader.
  * 
  * @author Tal Dayan
  */
@@ -49,6 +53,7 @@ public class PreferencesTracker {
     private boolean mCachedVerboseMessagesPreference;
     private boolean mCachedAutoSortPreference;
     private boolean mCachedAddToTopPreference;
+    private ItemColor mCachedDefaultItemColorPreference;
 
     private boolean mCachedShakerEnabledPreference;
     private int mCachedShakerSensitivityPreference;
@@ -85,6 +90,7 @@ public class PreferencesTracker {
         updateCachedApplauseLevelPreference();
         updateCachedAutoSortPreference();
         updateCachedAddToTopPreference();
+        updateCachedDefaultItemColorPreference();
         updateCachedShakerEnabledPreference();
         updateCachedShakerSensitivityPreference();
         updateCachedPageIconSetPreference();
@@ -170,6 +176,14 @@ public class PreferencesTracker {
 
     public final boolean getAddToTopPreference() {
         return mCachedAddToTopPreference;
+    }
+    
+    private final void updateCachedDefaultItemColorPreference() {
+        mCachedDefaultItemColorPreference = mPreferencesReader.getDefaultItemColorPreference();
+    }
+
+    public final ItemColor getDefaultItemColorPreference() {
+        return mCachedDefaultItemColorPreference;
     }
 
     private final void updateCachedShakerEnabledPreference() {
@@ -340,6 +354,9 @@ public class PreferencesTracker {
                 break;
             case ADD_TO_TOP:
                 updateCachedAddToTopPreference();
+                break;
+            case DEFAULT_ITEM_COLOR:
+                updateCachedDefaultItemColorPreference();
                 break;
             case AUTO_DAILY_CLEANUP:
             case LOCK_PERIOD:

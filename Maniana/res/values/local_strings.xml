@@ -44,8 +44,8 @@
     <string name="backup_restore_dialog_sub_title">Task summary</string>
 
     <!-- Notification -->
-    <string name="notification_title_single_task">You have one active task</string>
-    <string name="notification_title_d_tasks">You have %d active tasks</string>
+    <string name="notification_title_single_task">You have one pending task</string>
+    <string name="notification_title_d_tasks">You have %d pending tasks</string>
     <string name="notification_content">Tap to open Maniana</string> 
 
     <!-- Page operations -->
@@ -75,6 +75,12 @@
     <!-- Color Picker -->
     <string name="color_picker_Press_on_a_color_below_to_apply_it">Press on a color below to apply it</string>
     <string name="color_picker_Select_Color">Select Color</string>
+    
+    <!--  Item Color -->
+    <string name="item_color_none">None</string>
+    <string name="item_color_red">Red</string>
+    <string name="item_color_blue">Blue</string>
+    <string name="item_color_green">Green</string>
 
     <!-- Main Menu -->
     <string name="main_menu_Settings">Settings</string>
@@ -128,6 +134,8 @@
     <string name="settings_add_to_top_title">Add To Top</string>
     <string name="settings_add_to_top_summary_on">New tasks are added at list top</string>
     <string name="settings_add_to_top_summary_off">New tasks are added at list bottom</string>   
+    <string name="settings_default_item_color_title">Default Task Color</string>
+    <string name="settings_default_item_color_summary">Initial color of new tasks</string> 
     <string name="settings_daily_cleanup_title">Daily Task Cleanup</string>
     <string name="settings_daily_cleanup_summary_on">Deleting completed tasks every midnight</string>
     <string name="settings_daily_cleanup_summary_off">Daily deletion of completed tasks is disabled</string>

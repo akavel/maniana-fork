@@ -18,6 +18,7 @@ import javax.annotation.Nullable;
 
 import android.graphics.Color;
 
+import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.util.EnumUtil;
 import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
@@ -32,20 +33,24 @@ public enum ItemColor implements KeyedEnum {
     // Item order determines the color sequence the user gets when tapping the screen.
     // It also defines an decreasing order of importance between the non NONE colors
     // for item merging purposes.
-    NONE("none", Color.TRANSPARENT),
-    RED("red", 0xffff0000),
-    BLUE("blue", 0xff0077ff),
-    GREEN("green", 0xff00aa00);
+    NONE("none", Color.TRANSPARENT, R.string.item_color_none),
+    RED("red", 0xffff0000, R.string.item_color_red),
+    BLUE("blue", 0xff0077ff, R.string.item_color_blue),
+    GREEN("green", 0xff00aa00, R.string.item_color_green);
 
     /** The key used for serialization. Not user visible. Should be consistent. */
     private final String mKey;
 
     /** The android argb color of this enum value. */
     private final int mColor;
+    
+    /** Resource id with user friendly name of this color. */
+    public final int nameResourceId;
 
-    private ItemColor(String key, int color) {
+    private ItemColor(String key, int color, int nameResourceId) {
         mColor = color;
         mKey = key;
+        this.nameResourceId = nameResourceId;
     }
 
     /** Return value with given key, fallback value if not found. */
@@ -60,6 +65,7 @@ public enum ItemColor implements KeyedEnum {
         return ItemColor.values()[nextIndex];
     }
 
+    @Override
     public final String getKey() {
         return mKey;
     }

@@ -97,7 +97,6 @@ public class FontPreference extends DialogPreference implements DialogInterface.
             // color. So we don't mess with anything here.
             checkedTextView.setText(font.getName(mContext));
             checkedTextView.setTextSize(20 * font.scale);
-
             return view;
         }
     }

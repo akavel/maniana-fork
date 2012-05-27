@@ -336,30 +336,18 @@ public class Controller implements ShakerListener {
     private final void populateModelWithSampleTasks(AppModel model) {
         // Today's page
         final long ts = System.currentTimeMillis();
-        model.appendItem(
-                PageKind.TODAY,
-                new ItemModel(ts, IdGenerator.getFreshId(), mMainActivityState
-                        .str(R.string.sample_tast_text_11), false, false, ItemColor.NONE));
-        model.appendItem(
-                PageKind.TODAY,
-                new ItemModel(ts, IdGenerator.getFreshId(), mMainActivityState
-                        .str(R.string.sample_tast_text_12), false, false, ItemColor.NONE));
-        model.appendItem(
-                PageKind.TODAY,
-                new ItemModel(ts, IdGenerator.getFreshId(), mMainActivityState
-                        .str(R.string.sample_tast_text_13), false, false, ItemColor.NONE));
-        model.appendItem(
-                PageKind.TODAY,
-                new ItemModel(ts, IdGenerator.getFreshId(), mMainActivityState
-                        .str(R.string.sample_tast_text_14), false, false, ItemColor.RED));
-        model.appendItem(
-                PageKind.TODAY,
-                new ItemModel(ts, IdGenerator.getFreshId(), mMainActivityState
-                        .str(R.string.sample_tast_text_15), false, false, ItemColor.BLUE));
-        model.appendItem(
-                PageKind.TODAY,
-                new ItemModel(ts, IdGenerator.getFreshId(), mMainActivityState
-                        .str(R.string.sample_tast_text_16), false, false, ItemColor.NONE));
+        model.appendItem(PageKind.TODAY, new ItemModel(ts, IdGenerator.getFreshId(),
+                mMainActivityState.str(R.string.sample_tast_text_11), false, false, ItemColor.NONE));
+        model.appendItem(PageKind.TODAY, new ItemModel(ts, IdGenerator.getFreshId(),
+                mMainActivityState.str(R.string.sample_tast_text_12), false, false, ItemColor.NONE));
+        model.appendItem(PageKind.TODAY, new ItemModel(ts, IdGenerator.getFreshId(),
+                mMainActivityState.str(R.string.sample_tast_text_13), false, false, ItemColor.NONE));
+        model.appendItem(PageKind.TODAY, new ItemModel(ts, IdGenerator.getFreshId(),
+                mMainActivityState.str(R.string.sample_tast_text_14), false, false, ItemColor.RED));
+        model.appendItem(PageKind.TODAY, new ItemModel(ts, IdGenerator.getFreshId(),
+                mMainActivityState.str(R.string.sample_tast_text_15), false, false, ItemColor.BLUE));
+        model.appendItem(PageKind.TODAY, new ItemModel(ts, IdGenerator.getFreshId(),
+                mMainActivityState.str(R.string.sample_tast_text_16), false, false, ItemColor.NONE));
 
         // Tommorow's page
         model.appendItem(PageKind.TOMOROW, new ItemModel(ts, IdGenerator.getFreshId(),
@@ -598,14 +586,14 @@ public class Controller implements ShakerListener {
     public final void onAddItemByTextButton(final PageKind pageKind) {
         clearPageUndo(pageKind);
         mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
-        ItemTextEditor.startEditor(mMainActivityState,
-                mMainActivityState.str(R.string.editor_title_New_Task), "", ItemColor.NONE,
-                new ItemTextEditor.ItemEditorListener() {
-                    @Override
-                    public void onDismiss(String finalString, ItemColor finalColor) {
-                        maybeAddNewItem(finalString, finalColor, pageKind, true);
-                    }
-                });
+        ItemTextEditor.startEditor(mMainActivityState, mMainActivityState
+                .str(R.string.editor_title_New_Task), "", mMainActivityState.prefTracker()
+                .getDefaultItemColorPreference(), new ItemTextEditor.ItemEditorListener() {
+            @Override
+            public void onDismiss(String finalString, ItemColor finalColor) {
+                maybeAddNewItem(finalString, finalColor, pageKind, true);
+            }
+        });
     }
 
     public final void onAddItemByVoiceButton(final PageKind pageKind) {
@@ -634,9 +622,10 @@ public class Controller implements ShakerListener {
             cleanedValue = cleanedValue.substring(0, 1).toUpperCase() + cleanedValue.substring(1);
         }
 
-        ItemModel item = new ItemModel(System.currentTimeMillis(), IdGenerator.getFreshId(), cleanedValue, false, false, color);
+        ItemModel item = new ItemModel(System.currentTimeMillis(), IdGenerator.getFreshId(),
+                cleanedValue, false, false, color);
 
-        final int insertionIndex = newItemInsertionIndex(pageKind);  
+        final int insertionIndex = newItemInsertionIndex(pageKind);
         mMainActivityState.model().insertItem(pageKind, insertionIndex, item);
         mMainActivityState.view().updatePage(pageKind);
         mMainActivityState.view().scrollToItem(pageKind, insertionIndex);
@@ -650,7 +639,7 @@ public class Controller implements ShakerListener {
             }
         });
     }
-    
+
     // Return the insertion index of a new item. The new item is assumed to be
     // non locked and non completed. The returned index complies with add-to-top
     // and auto-sort preference settings.
@@ -659,21 +648,21 @@ public class Controller implements ShakerListener {
         if (mMainActivityState.prefTracker().getAddToTopPreference()) {
             return 0;
         }
-        
+
         // If adding at bottom and no sorting then adding at n.
         final int n = mMainActivityState.model().getPageItemCount(pageKind);
         if (!mMainActivityState.prefTracker().getAutoSortPreference()) {
             return n;
         }
-        
+
         // Here when adding at bottom and using auto sort. Scan from the end and skip
         // all completed and locked items.
         int i;
-        for (i = n-1; i >= 0; i--) {
-          final ItemModelReadOnly item = mMainActivityState.model().getItemReadOnly(pageKind, i);   
-          if (!item.isCompleted() && !item.isLocked()) {
-              break;
-          }
+        for (i = n - 1; i >= 0; i--) {
+            final ItemModelReadOnly item = mMainActivityState.model().getItemReadOnly(pageKind, i);
+            if (!item.isCompleted() && !item.isLocked()) {
+                break;
+            }
         }
         return i + 1;
     }
@@ -762,8 +751,9 @@ public class Controller implements ShakerListener {
                     @Override
                     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                         final TextView itemTextView = (TextView) arg1;
-                        maybeAddNewItem(itemTextView.getText().toString(), ItemColor.NONE,
-                                mMainActivityState.view().getCurrentPage(), true);
+                        maybeAddNewItem(itemTextView.getText().toString(), mMainActivityState
+                                .prefTracker().getDefaultItemColorPreference(), mMainActivityState
+                                .view().getCurrentPage(), true);
                     }
                 });
     }
@@ -951,6 +941,7 @@ public class Controller implements ShakerListener {
                 break;
 
             case ADD_TO_TOP:
+            case DEFAULT_ITEM_COLOR:
             case SOUND_ENABLED:
             case APPLAUSE_LEVEL:
             case DAILY_NOTIFICATION:
