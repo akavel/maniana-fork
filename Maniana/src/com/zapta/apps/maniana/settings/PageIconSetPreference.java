@@ -20,7 +20,6 @@ import javax.annotation.Nullable;
 
 import android.app.AlertDialog.Builder;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.TypedArray;
@@ -41,8 +40,7 @@ import com.zapta.apps.maniana.annotations.ActivityScope;
  * @author Tal Dayan
  */
 @ActivityScope
-public class PageIconSetPreference extends DialogPreference implements
-        DialogInterface.OnClickListener {
+public class PageIconSetPreference extends DialogPreference {
 
     private final PageIconSet mDefaultValue;
 
@@ -56,13 +54,13 @@ public class PageIconSetPreference extends DialogPreference implements
 
     public class IconSetAdapter extends BaseAdapter {
         final Context mContext;
-        
+
         @Nullable
         private final PageIconSet mSelectedIconSet;
 
         private final LayoutInflater mInflater;
 
-        public IconSetAdapter(Context context, PageIconSet selectedIconSet) {
+        public IconSetAdapter(Context context, @Nullable PageIconSet selectedIconSet) {
             this.mContext = context;
             this.mSelectedIconSet = selectedIconSet;
             this.mInflater = (LayoutInflater) getContext().getSystemService(

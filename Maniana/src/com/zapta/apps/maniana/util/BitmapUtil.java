@@ -14,16 +14,17 @@
 
 package com.zapta.apps.maniana.util;
 
-import com.zapta.apps.maniana.annotations.ApplicationScope;
-
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
+import android.graphics.Color;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+
+import com.zapta.apps.maniana.annotations.ApplicationScope;
 
 /**
  * @author Tal Dayan
@@ -56,5 +57,36 @@ public final class BitmapUtil {
         canvas.drawBitmap(src, 0, 0, paint);
 
         return output;
+    }
+    
+    /** All dimensions are in pixels */
+    private static Bitmap createColorSwatchBitmap(int width, int height, int borderWidth, int fillColor, int borderColor) {
+       final Bitmap bitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888);
+        final Canvas canvas = new Canvas(bitmap);     
+        if (borderWidth > 0) {
+            canvas.drawColor(borderColor);
+            canvas.clipRect(borderWidth, borderWidth, width - borderWidth, height - borderWidth);
+        }
+        canvas.drawColor(fillColor);
+        return bitmap;
+    }
+    
+    /** Move to PreferenceUtil */
+    public static Bitmap getPreferenceColorPreviewBitmap(int color, boolean isEnabled, float density) {
+        // Determine size in pixels
+        final int sizeDips = 30;
+        int d = (int) (density * sizeDips + 0.5f); 
+        
+        // Determine colors
+        int fillColor = color;
+        int borderColor = Color.GRAY;
+        if (!isEnabled) {
+            // Darken the colors if not enabled.
+            fillColor = ColorUtil.compositeColor(fillColor, 0xaa000000);
+            borderColor = ColorUtil.compositeColor(borderColor, 0xaa000000);
+        }
+        
+        // Construct the bitmap
+        return BitmapUtil.createColorSwatchBitmap(d,  d, 2, fillColor, borderColor);
     }
 }

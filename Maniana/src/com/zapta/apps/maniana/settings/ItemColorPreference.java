@@ -17,14 +17,14 @@
 package com.zapta.apps.maniana.settings;
 
 import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
+
+import javax.annotation.Nullable;
+
 import android.app.AlertDialog.Builder;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
-import android.graphics.Color;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -32,23 +32,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
-import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.TextView;
 
+import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.model.ItemColor;
-import com.zapta.apps.maniana.util.ColorUtil;
+import com.zapta.apps.maniana.util.BitmapUtil;
 import com.zapta.apps.maniana.util.DisplayUtil;
 
 /**
  * A preference type that allows a user to choose an ItemColor.
- * 
- * @author Tal Dayan
  * <p>
  * Based of ColorPickerPreference by Sergey Margaritov.
+ * 
+ * @author Tal Dayan
  */
-public class ItemColorPreference extends DialogPreference implements
-        DialogInterface.OnClickListener {
+public class ItemColorPreference extends DialogPreference {
     // View in the setting page, not the popup dialog.
     View mView;
 
@@ -61,9 +62,13 @@ public class ItemColorPreference extends DialogPreference implements
     public class ItemColorAdapter extends BaseAdapter {
         final Context mContext;
 
-        public ItemColorAdapter(Context mContext) {
+        @Nullable
+        private final ItemColor mSelectedItemColor;
+
+        public ItemColorAdapter(Context mContext, @Nullable ItemColor selectedItemColor) {
             super();
             this.mContext = mContext;
+            this.mSelectedItemColor = selectedItemColor;
         }
 
         @Override
@@ -90,15 +95,36 @@ public class ItemColorPreference extends DialogPreference implements
             if (view == null) {
                 final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(
                         Context.LAYOUT_INFLATER_SERVICE);
-                view = inflater.inflate(android.R.layout.select_dialog_singlechoice, parent, false);
+                view = inflater.inflate(R.layout.item_default_color_preference_row_layout, parent,
+                        false);
             }
 
-            final CheckedTextView checkedTextView = (CheckedTextView) view
-                    .findViewById(android.R.id.text1);
-
+            // Set color
             final ItemColor itemColor = ItemColor.values()[position];
-            checkedTextView.setText(mContext.getString(itemColor.nameResourceId));
-            checkedTextView.setBackgroundColor(itemColor.getColor(0xffe0e0e0));
+
+            final ImageView imageView = (ImageView) view
+                    .findViewById(R.id.item_default_color_preference_image);
+            imageView.setImageBitmap(BitmapUtil.getPreferenceColorPreviewBitmap(
+                    itemColor.getColor(0xffffffff), true, mDensity));
+
+            // Set text
+            final TextView textView = (TextView) view
+                    .findViewById(R.id.item_default_color_preference_text);
+            textView.setText(mContext.getString(itemColor.nameResourceId));
+
+            // Set radio button
+            final RadioButton radioButton = (RadioButton) view
+                    .findViewById(R.id.item_default_color_preference_radio_button);
+            radioButton.setChecked(itemColor == mSelectedItemColor);
+
+            // Set click action
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onItemColorClicked(itemColor);
+                }
+            });
+
             return view;
         }
     }
@@ -116,19 +142,9 @@ public class ItemColorPreference extends DialogPreference implements
     @Override
     protected void onPrepareDialogBuilder(Builder builder) {
         super.onPrepareDialogBuilder(builder);
-        final ItemColorAdapter adapter = new ItemColorAdapter(getContext());
-        builder.setSingleChoiceItems(adapter, mValue.ordinal(), this);
+        final ItemColorAdapter adapter = new ItemColorAdapter(getContext(), getValue());
+        builder.setAdapter(adapter, this);
         builder.setPositiveButton(null, null);
-    }
-
-    // Called from the popup dialog
-    @Override
-    public void onClick(DialogInterface dialog, int which) {
-        if (which >= 0 && which < Font.values().length) {
-            final ItemColor selectedItemColor = ItemColor.values()[which];
-            setValue(selectedItemColor);
-            dialog.dismiss();
-        }
     }
 
     @Override
@@ -176,6 +192,7 @@ public class ItemColorPreference extends DialogPreference implements
         setPreviewColor();
     }
 
+    // Set the color swatch with the current color in the settings screen.
     private void setPreviewColor() {
         if (mView == null) {
             return;
@@ -187,7 +204,7 @@ public class ItemColorPreference extends DialogPreference implements
             return;
         }
 
-        // TAL: required starting from API 14
+        // NOTE: required starting from API 14
         widgetFrameView.setVisibility(View.VISIBLE);
 
         boolean preApi14 = android.os.Build.VERSION.SDK_INT < 14;
@@ -204,39 +221,21 @@ public class ItemColorPreference extends DialogPreference implements
             widgetFrameView.removeViews(0, count);
         }
 
-        ImageView iView = new ImageView(getContext());
-        iView.setImageBitmap(getPreviewBitmap());
-        iView.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+        final ImageView imageView = new ImageView(getContext());
+        // TODO: do the same think in the general color preference, replacing the current
+        // bitmap creation code there.
+        final Bitmap colorPreviewBitmap = BitmapUtil.getPreferenceColorPreviewBitmap(getValue()
+                .getColor(0xffffffff), isEnabled(), mDensity);
+        imageView.setImageBitmap(colorPreviewBitmap);
+        imageView.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT));
 
-        widgetFrameView.addView(iView);
+        widgetFrameView.addView(imageView);
     }
 
-    /** TODO: simplify, use drawing method to setup the bitmap. */
-    private Bitmap getPreviewBitmap() {
-        int d = (int) (mDensity * 31); // 30dip
-        // If disabled we simulate a semi transparent black overlay.
-        // NOTE: could simplify compositeColor for the special case where argb2 is aa000000;
-        int baseColor = getValue().getColor(0xffffffff);
-        int color = isEnabled() ? baseColor : ColorUtil.compositeColor(baseColor, 0xaa000000);
-        Bitmap bm = Bitmap.createBitmap(d, d, Config.ARGB_8888);
-        // TODO: is w=d, h=d?
-        int w = bm.getWidth();
-        int h = bm.getHeight();
-        int c = color;
-        for (int i = 0; i < w; i++) {
-            // Iterate over a symmetry triangle. This saves color computations.
-            // TODO(tal): why not draw a rectangle and line frames instead?
-            for (int j = i; j < h; j++) {
-                // Frame or inside color
-                c = (i <= 1 || j <= 1 || i >= w - 2 || j >= h - 2) ? Color.GRAY : color;
-                bm.setPixel(i, j, c);
-                if (i != j) {
-                    bm.setPixel(j, i, c);
-                }
-            }
-        }
-
-        return bm;
+    /** Called when an item color is clicked in the list. */
+    private void onItemColorClicked(ItemColor selectedItemColor) {
+        setValue(selectedItemColor);
+        getDialog().dismiss();
     }
 }
