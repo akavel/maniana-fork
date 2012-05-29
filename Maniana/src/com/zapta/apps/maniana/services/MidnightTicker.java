@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.zapta.apps.maniana.widget;
+package com.zapta.apps.maniana.services;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -23,47 +23,52 @@ import android.text.format.Time;
 
 import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.util.LogUtil;
+import com.zapta.apps.maniana.widget.BaseWidgetProvider;
 
 /**
- * Provides midnight trigger for updating the widgets and issuing notifications.
+ * Provides a trigger shortly after midnight. Use to trigger widgets update, 
+ * notifications, etc.
+ * <p>
+ * TODO: have this receiver responding also to date or time zone change by user. Since they may
+ * also affect the widgets.
  * 
  * @author Tal Dayan
  */
-// TODO: have this receiver responding also to date or time zone change by user. Since they may
-// also affect the widgets.
 @ApplicationScope
-public class WidgetMidnightTicker extends BroadcastReceiver {
+public class MidnightTicker extends BroadcastReceiver {
 
     /** Should match AndroidManifest.xml. */
-    private static final String WIDGET_UPDATE_ACTION = "com.zapta.apps.maniana.widget.WIDGET_UPDATE_ACTION";
+    private static final String MIDNIGHT_TRIGGER_ACTION = "com.zapta.apps.maniana.MIDNIGHT_TRIGGER_ACTION";
 
     /** Trigger slightly after midnight to avoid truncation and timing errors, etc. */
     private static final int MIDNIGHT_MARGIN_MILLIS = 60000;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        LogUtil.info("WidgetMidnightTicker onRecieve: " + intent);
+        LogUtil.info("MidnightTicker onRecieve: " + intent);
+        
+        // Payload1: update widgets
         BaseWidgetProvider.updateAllWidgetsFromContext(context);
     }
 
     /**
-     * Schedule or reschedule midnight widget update.
+     * Schedule or reschedule midnight trigger.
      * 
      * Called from few hooks to make sure we still have a pending midnight alarm.
      */
-    public static final void scheduleMidnightUpdates(Context context) {
-        Intent intent = new Intent(WIDGET_UPDATE_ACTION);
+    public static final void scheduleMidnightTicker(Context context) {
+        Intent intent = new Intent(MIDNIGHT_TRIGGER_ACTION);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
         final long startTimeUtcMillis = utcMillisNextMidnight() + MIDNIGHT_MARGIN_MILLIS;
 
-        final AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        am.setRepeating(AlarmManager.RTC, startTimeUtcMillis, AlarmManager.INTERVAL_DAY,
+        final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC, startTimeUtcMillis, AlarmManager.INTERVAL_DAY,
                 pendingIntent);
     }
 
     /** Get time of next midnight in UTC millis. */
-    public static final long utcMillisNextMidnight() {
+    private static final long utcMillisNextMidnight() {
         Time t = new Time();
         t.setToNow();
         t.monthDay++;

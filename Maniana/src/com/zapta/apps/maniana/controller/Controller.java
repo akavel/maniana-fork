@@ -52,6 +52,7 @@ import com.zapta.apps.maniana.persistence.ModelDeserialization;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.persistence.PersistenceMetadata;
 import com.zapta.apps.maniana.quick_action.QuickActionItem;
+import com.zapta.apps.maniana.services.MidnightTicker;
 import com.zapta.apps.maniana.services.Shaker;
 import com.zapta.apps.maniana.services.Shaker.ShakerListener;
 import com.zapta.apps.maniana.services.ShakeImpl;
@@ -231,6 +232,9 @@ public class Controller implements ShakerListener {
         maybeHandleDateChange();
 
         NotificationUtil.clearPendingItemsNotification(mMainActivityState.context());
+        
+        // Keep the midnight ticker going, just in case.
+        MidnightTicker.scheduleMidnightTicker(mMainActivityState.context());
 
         ++mOnAppResumeCount;
 

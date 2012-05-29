@@ -137,10 +137,10 @@
                 android:resource="@xml/widget_icon_info" />
         </receiver>
         <receiver
-            android:name=".widget.WidgetMidnightTicker"
+            android:name=".services.MidnightTicker"
             android:enabled="true" >
             <intent-filter>
-                <action android:name="com.zapta.apps.maniana.widget.WIDGET_UPDATE_ACTION" />
+                <action android:name="com.zapta.apps.maniana.MIDNIGHT_TRIGGER_ACTION" />
             </intent-filter>
         </receiver>
         <receiver

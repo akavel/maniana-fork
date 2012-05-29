@@ -31,6 +31,7 @@ import com.zapta.apps.maniana.model.PushScope;
 import com.zapta.apps.maniana.notifications.NotificationUtil;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.persistence.ModelReadingResult;
+import com.zapta.apps.maniana.services.MidnightTicker;
 import com.zapta.apps.maniana.settings.LockExpirationPeriod;
 import com.zapta.apps.maniana.settings.PreferencesReader;
 
@@ -111,6 +112,6 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        WidgetMidnightTicker.scheduleMidnightUpdates(context);
+        MidnightTicker.scheduleMidnightTicker(context);
     }
 }
