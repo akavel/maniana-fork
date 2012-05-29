@@ -22,8 +22,9 @@ import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
 import com.zapta.apps.maniana.help.PopupMessageActivity.MessageKind;
 import com.zapta.apps.maniana.main.MainActivityState;
+import com.zapta.apps.maniana.notifications.NotificationSimulator;
+import com.zapta.apps.maniana.notifications.NotificationUtil;
 import com.zapta.apps.maniana.settings.PreferenceKind;
-import com.zapta.apps.maniana.util.NotificationUtil;
 import com.zapta.apps.maniana.view.IcsMainMenuDialog;
 
 /**
@@ -87,10 +88,14 @@ public class DebugController {
     private final void onDebugCommandNotification(DebugCommandNotification command) {
         switch (command) {
             case NOTIFICATION_SINGLE:
-                NotificationUtil.sendPendingItemsNotification(mMainActivityState.context(), 1);
+                NotificationUtil.sendPendingItemsNotification(mMainActivityState.context(), 1, true);
                 break;
             case NOTIFICATION_MULTI:
-                NotificationUtil.sendPendingItemsNotification(mMainActivityState.context(), 17);
+                NotificationUtil.sendPendingItemsNotification(mMainActivityState.context(), 17, true);
+                break;
+            case NOTIFICATION_DELAYED:
+                NotificationSimulator.scheduleDelayedNotificationSimulation(mMainActivityState.context(), 10);
+                mMainActivityState.services().toast("Notification scheduled in 10 secs");
                 break;
             case NOTIFICATION_CLEAR:
                 NotificationUtil.clearPendingItemsNotification(mMainActivityState.context());

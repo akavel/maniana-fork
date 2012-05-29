@@ -369,6 +369,7 @@ public class PreferencesTracker {
                 updateCachedStartupAnimationPreference();
                 break;
             case DAILY_NOTIFICATION:
+            case NOTIFICATION_LED:
                 // Do nothing
                 break;
 

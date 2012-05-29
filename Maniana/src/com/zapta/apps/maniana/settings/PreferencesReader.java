@@ -133,10 +133,14 @@ public class PreferencesReader implements PreferenceConstants {
                 DEFAULT_COMPLETED_ITEM_TEXT_COLOR);
     }
 
-    /** Read daily notification preference. */
     public final boolean getDailyNotificationPreference() {
         return mSharedPreferences.getBoolean(PreferenceKind.DAILY_NOTIFICATION.getKey(),
                 DEFAULT_DAILY_NOTIFICATION);
+    }
+    
+    public final boolean getNotificationLedPreference() {
+        return mSharedPreferences.getBoolean(PreferenceKind.NOTIFICATION_LED.getKey(),
+                DEFAULT_NOTIFICATION_LED);
     }
 
     public final LockExpirationPeriod getLockExpierationPeriodPreference() {

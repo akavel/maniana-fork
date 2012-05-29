@@ -28,11 +28,11 @@ import com.zapta.apps.maniana.model.ModelUtil;
 import com.zapta.apps.maniana.model.OrganizePageSummary;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.model.PushScope;
+import com.zapta.apps.maniana.notifications.NotificationUtil;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.persistence.ModelReadingResult;
 import com.zapta.apps.maniana.settings.LockExpirationPeriod;
 import com.zapta.apps.maniana.settings.PreferencesReader;
-import com.zapta.apps.maniana.util.NotificationUtil;
 
 /**
  * Base class widget providers.
@@ -99,7 +99,8 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
             if (prefReader.getDailyNotificationPreference()) {
                 final int pendingItemsCount = model.getPagePendingItemCount(PageKind.TODAY);
                 if (pendingItemsCount > 0) {
-                    NotificationUtil.sendPendingItemsNotification(context, pendingItemsCount);
+                    NotificationUtil.sendPendingItemsNotification(context, pendingItemsCount,
+                            prefReader.getNotificationLedPreference());
                 }
             }
         }

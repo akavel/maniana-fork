@@ -130,7 +130,10 @@
     <string name="settings_detailed_messages_summary_off">Disabled (expert mode)</string>
     <string name="settings_daily_notification_title">Daily Notification</string>
     <string name="settings_daily_notification_summary_on">Will notify daily if having active tasks</string>
-    <string name="settings_daily_notification_summary_off">Daily notification is off</string>
+    <string name="settings_daily_notification_summary_off">Daily notification is off</string>  
+    <string name="settings_notification_led_title">Notification LED</string>
+    <string name="settings_notification_led_summary_on">Will also activate notification LED (when available)</string>
+    <string name="settings_notification_led_summary_off">Will not activate notification LED</string>
      
     <!-- Settings/Tasks -->
     <string name="settings_section_name_Tasks">Tasks</string>

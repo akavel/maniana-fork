@@ -47,6 +47,7 @@ import com.zapta.apps.maniana.model.ItemModelReadOnly;
 import com.zapta.apps.maniana.model.OrganizePageSummary;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.model.PushScope;
+import com.zapta.apps.maniana.notifications.NotificationUtil;
 import com.zapta.apps.maniana.persistence.ModelDeserialization;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.persistence.PersistenceMetadata;
@@ -62,7 +63,6 @@ import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult;
 import com.zapta.apps.maniana.util.IdGenerator;
 import com.zapta.apps.maniana.util.LogUtil;
-import com.zapta.apps.maniana.util.NotificationUtil;
 import com.zapta.apps.maniana.view.AppView;
 import com.zapta.apps.maniana.view.AppView.ItemAnimationType;
 import com.zapta.apps.maniana.widget.BaseWidgetProvider;
@@ -945,6 +945,7 @@ public class Controller implements ShakerListener {
             case SOUND_ENABLED:
             case APPLAUSE_LEVEL:
             case DAILY_NOTIFICATION:
+            case NOTIFICATION_LED:
             case LOCK_PERIOD:
             case VERBOSE_MESSAGES:
             case STARTUP_ANIMATION:

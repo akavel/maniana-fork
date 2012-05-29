@@ -48,6 +48,7 @@ public enum PreferenceKind implements KeyedEnum {
     DEFAULT_ITEM_COLOR("prefDefaultItemColorKey"),
     AUTO_DAILY_CLEANUP("prefAutoDailyCleanupKey"),
     DAILY_NOTIFICATION("prefDailyNotificationKey"),
+    NOTIFICATION_LED("prefNotificationLedKey"),
     LOCK_PERIOD("prefLockPeriodKey"),
     
     // Shaker

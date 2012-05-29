@@ -25,6 +25,7 @@ import com.zapta.apps.maniana.annotations.MainActivityScope;
 public enum DebugCommandNotification implements DebugCommand {
     NOTIFICATION_SINGLE("Notification (1)"),
     NOTIFICATION_MULTI("Notification (17)"),
+    NOTIFICATION_DELAYED("Notification (in 10 secs)"),
     NOTIFICATION_CLEAR("Notification (clear)");
     
     private final String mText;

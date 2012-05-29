@@ -34,8 +34,8 @@ import com.zapta.apps.maniana.util.LogUtil;
 @ApplicationScope
 public class WidgetMidnightTicker extends BroadcastReceiver {
 
-    // Should match AndroidManifest.xml.
-    public static final String WIDGET_UPDATE_ACTION = "com.zapta.apps.maniana.widget.WIDGET_UPDATE_ACTION";
+    /** Should match AndroidManifest.xml. */
+    private static final String WIDGET_UPDATE_ACTION = "com.zapta.apps.maniana.widget.WIDGET_UPDATE_ACTION";
 
     /** Trigger slightly after midnight to avoid truncation and timing errors, etc. */
     private static final int MIDNIGHT_MARGIN_MILLIS = 60000;
