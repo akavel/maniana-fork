@@ -44,8 +44,8 @@
     <string name="backup_restore_dialog_sub_title">Task summary</string>
 
     <!-- Notification -->
-    <string name="notification_title_single_task">You have one pending task</string>
-    <string name="notification_title_d_tasks">You have %d pending tasks</string>
+    <string name="notification_title_single_task">You have one active task</string>
+    <string name="notification_title_d_tasks">You have %d active tasks</string>
     <string name="notification_content">Tap to open Maniana</string> 
 
     <!-- Page operations -->
@@ -138,7 +138,7 @@
     <!-- Settings/Tasks -->
     <string name="settings_section_name_Tasks">Tasks</string>
     <string name="settings_auto_sort_title">Auto Task Sort</string>
-    <string name="settings_auto_sort_summary_on">Forcing task order (pending before completed before locked)</string>
+    <string name="settings_auto_sort_summary_on">Forcing task order (active before completed before locked)</string>
     <string name="settings_auto_sort_summary_off">Allowing arbitrary task order</string>  
     <string name="settings_add_to_top_title">Add To Top</string>
     <string name="settings_add_to_top_summary_on">New tasks are added at list top</string>
@@ -237,7 +237,7 @@
     <string name="settings_font_selector_title">Font</string>
     <string name="settings_font_selector_summary">Using %s font</string>
     <string name="settings_task_color_title">Color</string>
-    <string name="settings_task_color_summary">Text color of pending tasks</string>
+    <string name="settings_task_color_summary">Text color of active tasks</string>
     <string name="settings_completed_task_color_title">Completed Task Color</string>
     <string name="settings_completed_task_color_summary">Text color of completed tasks</string>
     <string name="settings_paper_title">Paper</string>
