@@ -364,7 +364,6 @@ public class SettingsActivity extends PreferenceActivity implements
     }
 
     private final void onResetSettingsConfirmed() {
-
         Editor editor = getPreferenceScreen().getEditor();
         editor.clear();
 
@@ -392,8 +391,8 @@ public class SettingsActivity extends PreferenceActivity implements
         // here to false.
         editor.putBoolean(PreferenceKind.DAILY_NOTIFICATION.getKey(),
                 PreferenceConstants.DEFAULT_DAILY_NOTIFICATION);
-        editor.putBoolean(PreferenceKind.NOTIFICATION_LED.getKey(),
-                PreferenceConstants.DEFAULT_NOTIFICATION_LED);
+        //editor.putBoolean(PreferenceKind.NOTIFICATION_LED.getKey(),
+        //        PreferenceConstants.DEFAULT_NOTIFICATION_LED);
         editor.putBoolean(PreferenceKind.WIDGET_SHOW_COMPLETED_ITEMS.getKey(),
                 PreferenceConstants.DEFAULT_WIDGET_SHOW_COMPLETED_ITEMS);
         editor.putBoolean(PreferenceKind.WIDGET_SINGLE_LINE.getKey(),

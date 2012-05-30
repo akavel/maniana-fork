@@ -39,7 +39,7 @@
             android:summaryOn="@string/settings_daily_notification_summary_on"
             android:title="@string/settings_daily_notification_title" />
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:dependency="prefDailyNotificationKey"
             android:key="prefNotificationLedKey"
             android:summaryOff="@string/settings_notification_led_summary_off"

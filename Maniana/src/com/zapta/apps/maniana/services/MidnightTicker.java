@@ -57,6 +57,7 @@ public class MidnightTicker extends BroadcastReceiver {
      * Called from few hooks to make sure we still have a pending midnight alarm.
      */
     public static final void scheduleMidnightTicker(Context context) {
+        //LogUtil.debug("Scheduling midnight ticker");
         Intent intent = new Intent(MIDNIGHT_TRIGGER_ACTION);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
