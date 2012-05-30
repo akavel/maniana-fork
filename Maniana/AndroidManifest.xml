@@ -3,7 +3,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zapta.apps.maniana"
     android:versionCode="23"
-    android:versionName="1.01.23.rc1" >
+    android:versionName="1.01.23.d03" >
 
     <uses-sdk
         android:minSdkVersion="8"
