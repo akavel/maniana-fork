@@ -64,7 +64,7 @@ public class MidnightTicker extends BroadcastReceiver {
         final long startTimeUtcMillis = utcMillisNextMidnight() + MIDNIGHT_MARGIN_MILLIS;
 
         final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC, startTimeUtcMillis, AlarmManager.INTERVAL_DAY,
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTimeUtcMillis, AlarmManager.INTERVAL_DAY,
                 pendingIntent);
     }
 
