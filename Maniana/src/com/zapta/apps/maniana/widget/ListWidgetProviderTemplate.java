@@ -54,7 +54,14 @@ import com.zapta.apps.maniana.widget.ListWidgetSize.OrientationInfo;
 public class ListWidgetProviderTemplate {
 
     /** Will scale item text size down to this size in SP units. */
-    private static final int MIN_NORMALIZED_TEXT_SIZE = 10;                           ;
+    private static final int MIN_NORMALIZED_TEXT_SIZE = 10;                           
+    
+    // Per http://code.google.com/p/android/issues/detail?id=22493
+    // Should be called after setting a TextView text. solves the ICS problem
+    // where text view height does not shrink when a smaller text size is set.
+    private static final void HACK_TEXT_VIEW(TextView tv) {
+        tv.append("\uFEFF");
+    }
 
     @Nullable
     private final AppModel mModel;
@@ -64,7 +71,6 @@ public class ListWidgetProviderTemplate {
     private final View mBackgroundColorView;
     private final TextView mToolbarTitleTextView;
     private final LinearLayout mItemListView;
-    private final List<View> mItemViews;
     private final List<TextView> mItemTextViews;
     private final LayoutInflater mLayoutInflater;
 
@@ -103,7 +109,6 @@ public class ListWidgetProviderTemplate {
                 .findViewById(R.id.widget_list_template_toolbar_title);
         mItemListView = (LinearLayout) mTopView.findViewById(R.id.widget_list_template_item_list);
 
-        mItemViews = new ArrayList<View>();
         mItemTextViews = new ArrayList<TextView>();
 
         // Set template background. This can be the background solid color or the paper color.
@@ -327,6 +332,7 @@ public class ListWidgetProviderTemplate {
             final View colorView = itemView.findViewById(R.id.widget_item_color);
 
             textView.setText(item.getText());
+            HACK_TEXT_VIEW(textView);
             mFontVariationPreference.apply(textView, item.isCompleted(), true);
 
             // If color is NONE show a gray solid color to help visually
@@ -334,7 +340,6 @@ public class ListWidgetProviderTemplate {
             colorView.setBackgroundColor(item.getColor().getColor(0xff808080));
             mItemListView.addView(itemView);
 
-            mItemViews.add(itemView);
             mItemTextViews.add(textView);
         }
     }
@@ -353,12 +358,12 @@ public class ListWidgetProviderTemplate {
         // TODO: setup message text using widget font size preference?
         textView.setSingleLine(false);
         textView.setText(message);
+        HACK_TEXT_VIEW(textView);
         mFontVariationPreference.apply(textView, false, true);
         colorView.setVisibility(View.GONE);
 
         mItemListView.addView(itemView);
 
-        mItemViews.add(itemView);
         mItemTextViews.add(textView);
     }
 
@@ -386,6 +391,7 @@ public class ListWidgetProviderTemplate {
                 .findViewById(R.id.widget_list_template_toolbar_title);
         final String title = mContext.getString(R.string.page_title_Today);
         toolbarTitle.setText(title.toUpperCase());
+        HACK_TEXT_VIEW(toolbarTitle);
 
         // Show or hide toolbar background.
         if (mPaperPreference) {
