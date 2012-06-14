@@ -873,6 +873,12 @@ public class Controller implements ShakerListener {
         switch (entry) {
             case HELP:
                 startPopupMessageSubActivity(MessageKind.HELP);
+
+                // final String url = "http://maniana.googlecode.com/git/www/help/help.html";
+                // Intent i = new Intent(Intent.ACTION_VIEW);
+                // i.setData(Uri.parse(url));
+                // mMainActivityState.mainActivity().startActivity(i);
+
                 break;
             case SETTINGS:
                 startSubActivity(SettingsActivity.class);

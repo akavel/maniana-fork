@@ -63,17 +63,17 @@ public class PopupMessageActivity extends Activity {
         WHATS_NEW("help/whats_new", ".html", false, 0xff00ccff),
         BACKUP_RESTORE("help/restore_backup", ".html", false, 0xff0000ff);
 
-        private final String assetRelativeBaseName;
-        private final String assetExtension;
-        private final boolean isFullScreen;
-        private final int frameColor;
+        private final String mAssetRelativeBaseName;
+        private final String mAssetExtension;
+        private final boolean mIsFullScreen;
+        private final int mFrameColor;
 
         private MessageKind(String assetRelativeBaseName, String assetExtension,
                 boolean isFulLScreen, int frameColor) {
-            this.assetRelativeBaseName = assetRelativeBaseName;
-            this.assetExtension = assetExtension;
-            this.isFullScreen = isFulLScreen;
-            this.frameColor = frameColor;
+            this.mAssetRelativeBaseName = assetRelativeBaseName;
+            this.mAssetExtension = assetExtension;
+            this.mIsFullScreen = isFulLScreen;
+            this.mFrameColor = frameColor;
         }
     }
 
@@ -92,7 +92,7 @@ public class PopupMessageActivity extends Activity {
             return;
         }
 
-        if (messageKind.isFullScreen) {
+        if (messageKind.mIsFullScreen) {
             onCreateFullScreen(messageKind);
             return;
         }
@@ -101,7 +101,7 @@ public class PopupMessageActivity extends Activity {
     }
 
     private final void onCreateFullScreen(MessageKind messageKind) {
-        check(messageKind.isFullScreen, messageKind.toString());
+        check(messageKind.mIsFullScreen, messageKind.toString());
         setContentView(R.layout.message_full_screen_layout);
 
         final WebView webview = (WebView) findViewById(R.id.message_full_screen_webview);
@@ -110,7 +110,7 @@ public class PopupMessageActivity extends Activity {
     }
 
     private final void onCreateSmallLayout(MessageKind messageKind) {
-        check(!messageKind.isFullScreen, messageKind.toString());
+        check(!messageKind.mIsFullScreen, messageKind.toString());
         setContentView(R.layout.message_small_layout);
 
         // Set border color and size
@@ -120,7 +120,7 @@ public class PopupMessageActivity extends Activity {
 
         final float density = DisplayUtil.getDensity(this);
         final int strokeWidthPixels = (int) ((BORDER_WIDTH_DIP * density) + 0.5f);
-        gradientDrawable.setStroke(strokeWidthPixels, messageKind.frameColor);
+        gradientDrawable.setStroke(strokeWidthPixels, messageKind.mFrameColor);
 
         final WebView webview = (WebView) findViewById(R.id.message_small_webview);
 
@@ -143,12 +143,12 @@ public class PopupMessageActivity extends Activity {
         InputStream in = null;
         final String languageCode = getString(R.string.translation_language_code);
         if (!languageCode.equals("en")) {
-            filePath = messageKind.assetRelativeBaseName + "-" + languageCode
-                    + messageKind.assetExtension;
+            filePath = messageKind.mAssetRelativeBaseName + "-" + languageCode
+                    + messageKind.mAssetExtension;
             in = FileUtil.openAssert(this, filePath);
         }
         if (in == null) {
-            filePath = messageKind.assetRelativeBaseName + messageKind.assetExtension;
+            filePath = messageKind.mAssetRelativeBaseName + messageKind.mAssetExtension;
             in = FileUtil.openAssert(this, filePath);
         }
         final FileReadResult fileReadResult = FileUtil.readFileToString(in, filePath);
