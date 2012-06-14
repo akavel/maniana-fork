@@ -57,7 +57,6 @@ public class PopupMessageActivity extends Activity {
     private static final String INTENT_MESSAGE_KIND_KEY = "com.zapta.apps.maniana.messageKind";
 
     public static enum MessageKind {
-        HELP("help/help", ".html", true, 0),
         ABOUT("help/about", ".html", true, 0),
         NEW_USER("help/new_user_welcome", ".html", false, 0xff00bb00),
         WHATS_NEW("help/whats_new", ".html", false, 0xff00ccff),

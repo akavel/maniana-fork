@@ -872,12 +872,17 @@ public class Controller implements ShakerListener {
     public final void onMainMenuSelection(MainMenuEntry entry) {
         switch (entry) {
             case HELP:
-                startPopupMessageSubActivity(MessageKind.HELP);
-
+                // TODO: refactor to a get help url method in help package.
+                final String translationCode = mMainActivityState.str(R.string.translation_language_code);
+                final String fileSuffix = translationCode.equals("en") ? "" : ("-" + translationCode);
+                
+                //startPopupMessageSubActivity(MessageKind.HELP);
                 // final String url = "http://maniana.googlecode.com/git/www/help/help.html";
-                // Intent i = new Intent(Intent.ACTION_VIEW);
-                // i.setData(Uri.parse(url));
-                // mMainActivityState.mainActivity().startActivity(i);
+                // TODO(tal): add args with version number and name to allow future disambiguation of version
+                final String url = String.format("http://maniana.comoj.com/help/help%s.html", fileSuffix);
+                final Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                mMainActivityState.mainActivity().startActivity(intent);
 
                 break;
             case SETTINGS:
