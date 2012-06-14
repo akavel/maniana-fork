@@ -7,7 +7,7 @@
 # TODO: allow to override language list from command line
 
 # List of two letter codes of languages to update
-languages="it ja"
+languages="es it ja ru"
 
 # Definitions
 tmproot="/tmp"
@@ -47,6 +47,9 @@ function fetch() {
   # Normalize some country codes
   mv -v ${tmp}/es-ES ${tmp}/es
   check_last_cmd "Normalizing es-ES dir"
+
+  mv -v ${tmp}/pt-PT ${tmp}/pt
+  check_last_cmd "Normalizing pt-PT dir"
 
   ls -al ${tmp}
   check_last_cmd "Data ls"
