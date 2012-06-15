@@ -36,6 +36,7 @@ import com.zapta.apps.maniana.backup.RestoreBackupDialog.Action;
 import com.zapta.apps.maniana.backup.RestoreBackupDialog.RestoreBackupDialogListener;
 import com.zapta.apps.maniana.editors.ItemTextEditor;
 import com.zapta.apps.maniana.editors.ItemVoiceEditor;
+import com.zapta.apps.maniana.help.HelpUtil;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
 import com.zapta.apps.maniana.help.PopupMessageActivity.MessageKind;
 import com.zapta.apps.maniana.main.MainActivityState;
@@ -872,18 +873,8 @@ public class Controller implements ShakerListener {
     public final void onMainMenuSelection(MainMenuEntry entry) {
         switch (entry) {
             case HELP:
-                // TODO: refactor to a get help url method in help package.
-                final String translationCode = mMainActivityState.str(R.string.translation_language_code);
-                final String fileSuffix = translationCode.equals("en") ? "" : ("-" + translationCode);
-                
-                //startPopupMessageSubActivity(MessageKind.HELP);
-                // final String url = "http://maniana.googlecode.com/git/www/help/help.html";
-                // TODO(tal): add args with version number and name to allow future disambiguation of version
-                final String url = String.format("http://maniana.comoj.com/help/help%s.html", fileSuffix);
-                final Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(url));
-                mMainActivityState.mainActivity().startActivity(intent);
-
+                final Intent helpIntent = HelpUtil.helpPageIntent(mMainActivityState.context(), false);
+                mMainActivityState.mainActivity().startActivity(helpIntent);
                 break;
             case SETTINGS:
                 startSubActivity(SettingsActivity.class);

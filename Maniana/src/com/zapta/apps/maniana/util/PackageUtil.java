@@ -31,7 +31,7 @@ public final class PackageUtil {
     private PackageUtil() {
     }
 
-    /** Safe to call also from widget or from non main acitivties. */
+    /** Safe to call also from widget or from non main activities. */
     public static final PackageInfo getPackageInfo(Context context) {
         final PackageManager manager = context.getPackageManager();
         try {
