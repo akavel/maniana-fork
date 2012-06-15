@@ -19,6 +19,7 @@ import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 
 import com.zapta.apps.maniana.annotations.MainActivityScope;
+import com.zapta.apps.maniana.help.HelpUtil;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
 import com.zapta.apps.maniana.help.PopupMessageActivity.MessageKind;
 import com.zapta.apps.maniana.main.MainActivityState;
@@ -59,8 +60,12 @@ public class DebugController {
                 break;
             case NEW_USER:
                 mMainActivityState.context().startActivity(
-                        PopupMessageActivity.intentFor(mMainActivityState.context(), MessageKind.NEW_USER));
+                        PopupMessageActivity.intentFor(mMainActivityState.context(),
+                                MessageKind.NEW_USER));
                 break;
+            case HELP_PAGE_TEST:
+                mMainActivityState.mainActivity().startActivity(
+                        HelpUtil.helpPageIntent(mMainActivityState.context(), true));
             case ICS_MENU:
                 IcsMainMenuDialog.showMenu(mMainActivityState);
                 break;
@@ -76,7 +81,8 @@ public class DebugController {
     }
 
     private final void startNotificationDialog() {
-        DebugDialog.startDialog(mMainActivityState, "Debug Notifications", DebugCommandNotification.values(),
+        DebugDialog.startDialog(mMainActivityState, "Debug Notifications",
+                DebugCommandNotification.values(),
                 new DebugDialogListener<DebugCommandNotification>() {
                     @Override
                     public void onDebugCommand(DebugCommandNotification command) {
@@ -88,13 +94,16 @@ public class DebugController {
     private final void onDebugCommandNotification(DebugCommandNotification command) {
         switch (command) {
             case NOTIFICATION_SINGLE:
-                NotificationUtil.sendPendingItemsNotification(mMainActivityState.context(), 1, true);
+                NotificationUtil
+                        .sendPendingItemsNotification(mMainActivityState.context(), 1, true);
                 break;
             case NOTIFICATION_MULTI:
-                NotificationUtil.sendPendingItemsNotification(mMainActivityState.context(), 17, true);
+                NotificationUtil.sendPendingItemsNotification(mMainActivityState.context(), 17,
+                        true);
                 break;
             case NOTIFICATION_DELAYED:
-                NotificationSimulator.scheduleDelayedNotificationSimulation(mMainActivityState.context(), 10);
+                NotificationSimulator.scheduleDelayedNotificationSimulation(
+                        mMainActivityState.context(), 10);
                 mMainActivityState.services().toast("Notification scheduled in 10 secs");
                 break;
             case NOTIFICATION_CLEAR:
@@ -117,8 +126,8 @@ public class DebugController {
 
     /** Read the persisted debug mode flag value. */
     public final boolean isDebugMode() {
-        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mMainActivityState
-                .context());
+        SharedPreferences mSharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(mMainActivityState.context());
         return mSharedPreferences.getBoolean(PreferenceKind.DEBUG_MODE.getKey(), false);
     }
 }

@@ -25,6 +25,7 @@ import com.zapta.apps.maniana.annotations.MainActivityScope;
 public enum DebugCommandMain implements DebugCommand {
     NOTIFICATIONS("Notification..."),
     NEW_USER("New user message"),
+    HELP_PAGE_TEST("Help page (test)"),
     ICS_MENU("ICS menu"),
     ON_SHAKE("onShake()"),
     EXIT("Exit debug mode");
