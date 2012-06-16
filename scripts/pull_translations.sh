@@ -5,6 +5,9 @@
 #
 # TODO: convert file formats from DOS to unix 
 # TODO: allow to override language list from command line
+# TODO: force sourcein package creation before downloading.
+
+source ./bash_lib.sh
 
 # List of two letter codes of languages to update
 languages="es it ja ru"
@@ -13,17 +16,6 @@ languages="es it ja ru"
 tmproot="/tmp"
 tmp="${tmproot}/maniana_tmp"
 url="http://crowdin.net/download/project/maniana.zip"
-
-# Assert that the last command terminated with OK status
-function check_last_cmd() {
-  status=$?
-  if [ "$status" -ne "0" ]; then
-    echo "$1 failed (status: $status)"
-    echo "ABORTED"
-    exit 1
-  fi  
-  echo "$1 was ok"
-}
 
 function init() {
   # Create an empty temp working dir
@@ -60,10 +52,14 @@ function update() {
   do
     echo
     echo "--- Language: [${lang}]"
+
     cp -v ${tmp}/${lang}/local_strings.xml ../Maniana/res/values-${lang}/local_strings.xml
     check_last_cmd "Copying local_strings.xml"
   
-    for base_name in help new_user_welcome restore_backup whats_new
+    cp -v ${tmp}/${lang}/help-${lang}.html ../www/help/help-${lang}.html
+    check_last_cmd "Copying local_strings.xml"
+  
+    for base_name in new_user_welcome restore_backup whats_new
     do
       name="${base_name}-${lang}.html"
       cp -v ${tmp}/${lang}/${name} ../Maniana/assets/help/${name}

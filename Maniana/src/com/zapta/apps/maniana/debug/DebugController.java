@@ -66,6 +66,7 @@ public class DebugController {
             case HELP_PAGE_TEST:
                 mMainActivityState.mainActivity().startActivity(
                         HelpUtil.helpPageIntent(mMainActivityState.context(), true));
+                break;
             case ICS_MENU:
                 IcsMainMenuDialog.showMenu(mMainActivityState);
                 break;
