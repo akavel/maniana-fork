@@ -50,10 +50,10 @@ Seleccione una tarea para abrir el menú:
 <p class="figure"><img src="images/item_menu.png"/></p>
 <p>
 <table>
-<tr><td><img src="images/item_menu_completed.png" width="32" height="32"/></td><td>Toggle the task's done/todo status.</td></tr>
-<tr><td><img src="images/item_menu_edit.png" width="32" height="32"/></td><td>Edit the task's text.</td></tr>
-<tr><td><img src="images/item_menu_lock.png" width="32" height="32"/></td><td>Lock/Unlock the tasks. Locked tasks stay in the Maniana page until the lock expire.</td></tr>
-<tr><td><img src="images/item_menu_delete.png" width="32" height="32"/></td><td>Delete the task (undo available).</td></tr>
+<tr><td><img src="images/item_menu_completed.png" width="32" height="32"/></td><td>Alternar el estado de la tarea: Hecho/Proceder.</td></tr>
+<tr><td><img src="images/item_menu_edit.png" width="32" height="32"/></td><td>Editar el texto de la tarea.</td></tr>
+<tr><td><img src="images/item_menu_lock.png" width="32" height="32"/></td><td>Bloquear/Desbloquear tareas. Una Tarea Bloqueada se envía permanentemente a la página de Mañana hasta que se indique el Desbloqueo.</td></tr>
+<tr><td><img src="images/item_menu_delete.png" width="32" height="32"/></td><td>Eliminar la tarea (se puede recuperar).</td></tr>
 </table>
 
 <h2><a name="coloring">Colorear Tareas</a></h2>
@@ -62,7 +62,7 @@ Toque en el extremo izquierdo de una tarea para cambiar el color.
 <p>
 
 <h2><a name="ordering">Ordenar Tareas</a></h2>
-Long press on a task and drag it up/down.
+Mantenga presionada la tarea y arrastre hacia arriba/abajo.
 
 <h2><a name="widgets">Widgets</a></h2>
 Mañana incluye dos tipos de widgets que se pueden incrustar en la pantalla de inicio de tu teléfono:
@@ -88,59 +88,60 @@ La barra de herramientas en la parte superior del widget contiene iconos de acce
 <li><b>Animación de inicio</b> - animación de desplazamiento de página cuando se inicia la aplicación.</li>
 <li><b>Mensajes detallados</b> - habilita mensajes de respuesta detallados (para usuarios nuevos).</li>
 <li><b>Notificación diaria</b> - al habilitarla, Mañana genera una notificación de Android diaria de las tareas activas (si hubiere).</li>
-<li><b>Notificación de LED</b> - si esta marcada, además de las notificaciones diarias, también se notifica con el dispositivo LED. (si está disponible).</li>
-<li><b>Acción de agitación</b> - establece una acción predeterminada para Mañana, al agitar el dispositivo.</li>
+<li><b>Notificación por LED</b> - si esta marcada, además de las notificaciones diarias, también se notifica con el dispositivo LED. (si está disponible).</li>
+<li><b>Acción de sacudido</b> - establece una acción predeterminada para Mañana, al sacudir el dispositivo.</li>
 </ul>
 
 <h4>TAREAS</h4>
 <ul>
-<li><b>Auto Task Sort</b> - when checked, tasks are always ordered with pending tasks before completed tasks before locked tasks.</li>
-<li><b>Add To Top</b> - determines if new tasks are added to the top or bottom of the list.</li>
-<li><b>Default Task Color</b> - sets the initial color of new tasks.</li>
-<li><b>Daily Task Cleanup</b> - if checked, every night, all the completed tasks are deleted automatically.</li>
-<li><b>Lock Expiration</b> - sets locks automatic expiration (weekly, monthly or never).</li>
+<li><b>Orden Automático de Tareas</b> - si esta activada, las tareas se ordenan automáticamente: las activas antes de las completadas.</li>
+<li><b>Añadir al principio</b> - determina si se agregan nuevas tareas en la parte superior o inferior de la lista.</li>
+<li><b>Color predeterminado de tareas</b> - establece el color inicial de nuevas tareas.</li>
+<li><b>Limpieza de tareas diarias</b> - si está activada, cada medianoche, todas las tareas completadas se borran automáticamente.</li>
+<li><b>Bloqueo de Caducidad</b> - establece bloqueos caducidad automática (semanal, mensual o nunca).</li>
 </ul>
 
-<h4>PAGES</h4>
+<h4>PÁGINAS</h4>
 <ul>
-<li><b>Set By Theme</b> - click to select one of the predefined page appearances. You can then customize it using the settings below.</li>
-<li><b>Paper</b> - check to use paper background, uncheck for solid background color.</li>
-<li><b>Paper/Background Color</b> - selects paper or background color respectively (depends on Paper). Background color can be semi transparent if you like.</li>
-<li><b>Icons</b> - selects page icons.</li>
-<li><b>Task Divider Color</b> - selects color of lines between tasks (can be made transparent).</li>
-<li><b>Title Text</b> - selects font, size and color of page title text.</li>
-<li><b>Task Text</b> - select font, size and color of task text.</li>
+<li><b>Establecer por Tema</b> - permite seleccionar una de las apariencias de página predefinidas. Igualmente, puede utilizar la configuración para personalizar el Tema.</li>
+<li><b>Papel</b> - utilizar el papel como fondo, si esta desactivado, debe configurar el color de fondo sólido.</li>
+<li><b>Color de fondo</b> - selecciona el color de fondo o de papel respectivamente (depende de la opción papel). El color de fondo puede ser semi transparente si así lo desea.</li>
+<li><b>Iconos</b> - Selecciona el conjunto de iconos.</li>
+<li><b>Color del Separador de tareas</b> - selecciona el color de las líneas entre tareas (puede hacerse transparente).</li>
+<li><b>Texto del título</b> - selecciona la tipografía, el tamaño y el color del texto de título de página.</li>
+<li><b>Texto de tarea</b> - selecciona la tipografía, tamaño y color de texto de tareas.</li>
 </ul>
 
-<h4>LIST WIDGET</h4>
+<h4>WIDGET DE LISTA
+</h4>
 <ul>
-<li><b>Set By Theme</b> - click to select one of the predefined widget appearances. You can then customize it using the settings below.</li>
-<li><b>Paper</b> - check to use paper background, uncheck for solid background color.</li>
-<li><b>Paper/Background Color</b> - selects paper or background color respectively (depends on Paper). Background color can be semi transparent if you like.</li>
-<li><b>Show Toolbar</b> - if checked, the toolbar with the shortcut icons is displayed at the top of the list widget.</li>
-<li><b>Task Text</b> - selects task text font, size and color.</li>
+<li><b>Establecer por Tema</b> - permite seleccionar una de las apariencias de página predefinidas. Igualmente, puede utilizar la configuración para personalizar el Tema.</li>
+<li><b>Papel</b> - Utilizar fondo de papel, si esta desactivado, debe configurar el color de fondo sólido.</li>
+<li><b>Color de fondo</b> - selecciona el color de fondo o de papel respectivamente (depende de la opción papel). El color de fondo puede ser semi transparente si así lo desea.</li>
+<li><b>Mostrar la barra de herramientas</b> - si se activa, la barra de herramientas con los iconos de acceso directo se muestra en la parte superior del widget de lista.</li>
+<li><b>Texto de tarea</b> - selecciona color, tamaño y fuente del texto de tarea.</li>
 </ul>
 
-<h4>BACKUP (EXPERIMENTAL)</h4>
+<h4>COPIA DE SEGURIDAD (EXPERIMENTAL)</h4>
 <ul>
-<li><b>Your Gmail Address</b> - enter your Gmail address. Backup attachments will be email to this address.</li>
-<li><b>Do Backup</b> - click to perform task list backup. This entry is disabled until Gmail address is entered.</li>
-<li><b>Do Restore</b> - click for restore instructions.</li>
+<li><b>Tu correo de Gmail</b> - introduzca su dirección de correo de Gmail, para enviar las copias de seguridad de Mañana como un archivo adjunto al correo electrónico indicado.</li>
+<li><b>Copia de seguridad</b> - realizar copia de seguridad de la lista de tareas. Esta opción estará desactivada hasta que se introduzca la dirección de Gmail.</li>
+<li><b>Restaurar</b> - seleccione y siga las instrucciones de restauración.</li>
 </ul>
 
-<h4>MISCELLANEOUS</h4>
+<h4>VARIOS</h4>
 <ul>
-<li><b>Release Info</b> - click to see version and release information.</li>
-<li><b>Tell A Friend</b> - love Maniana? click to tell a friend about it.</li>
-<li><b>Send Us Feedback</b> - click to send Maniana developers feedback, requests, questions or suggestions.</li>
-<li><b>Reset All Settings</b> - click to restores default settings (after confirmation). Does not affect task data.</li>
+<li><b>Información de la versión</b> - seleccione para ver información sobre esta versión.</li>
+<li><b>Enviar a un Amigo</b> - recomiende Mañana a un amigo.</li>
+<li><b>Envíenos sus comentarios</b> - envíe comentarios, peticiones, preguntas o sugerencias a los desarrolladores de Mañana.</li>
+<li><b>Restablecer todos los ajustes</b> - restaurar la configuración original (previa confirmación). No afecta a los datos de tareas.</li>
 </ul>
-<h4>USING THE COLOR PICKER</h4>
+<h4>SELECTOR DE COLOR</h4>
 <p class="figure"><img src="images/color_picker.png"/></p>
-1. Select color.<br>
-2. Select shade.<br>
-3. Select transparency (if available).<br>
-4. Click to apply the color.
+1. Seleccionar el color.<br>
+2. Seleccionar matiz de color.<br>
+3. Seleccionar transparencia (si está disponible).<br>
+4. Aplicar el color.
 <div style="height: 2%;"/>
 </body>
 </html>
