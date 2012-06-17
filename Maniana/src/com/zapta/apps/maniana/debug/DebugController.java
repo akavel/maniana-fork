@@ -58,16 +58,10 @@ public class DebugController {
             case NOTIFICATIONS:
                 startNotificationDialog();
                 break;
-            case NEW_USER:
-                mMainActivityState.context().startActivity(
-                        PopupMessageActivity.intentFor(mMainActivityState.context(),
-                                MessageKind.NEW_USER));
+            case HTML_PAGES:
+                startHtmlDialog();
                 break;
-            case HELP_PAGE_TEST:
-                mMainActivityState.mainActivity().startActivity(
-                        HelpUtil.helpPageIntent(mMainActivityState.context(), true));
-                break;
-            case ICS_MENU:
+           case ICS_MENU:
                 IcsMainMenuDialog.showMenu(mMainActivityState);
                 break;
             case ON_SHAKE:
@@ -88,6 +82,16 @@ public class DebugController {
                     @Override
                     public void onDebugCommand(DebugCommandNotification command) {
                         onDebugCommandNotification(command);
+                    }
+                });
+    }
+
+    private final void startHtmlDialog() {
+        DebugDialog.startDialog(mMainActivityState, "HTML Pages", DebugCommandHtml.values(),
+                new DebugDialogListener<DebugCommandHtml>() {
+                    @Override
+                    public void onDebugCommand(DebugCommandHtml command) {
+                        onDebugCommandHtml(command);
                     }
                 });
     }
@@ -115,9 +119,41 @@ public class DebugController {
         }
     }
 
+    private final void onDebugCommandHtml(DebugCommandHtml command) {
+        switch (command) {
+            case HELP:
+                // TODO(tal): have a helper function and user everywhere
+                mMainActivityState.mainActivity().startActivity(
+                        HelpUtil.helpPageIntent(mMainActivityState.context(), false));
+                break;
+            case ABOUT:
+                mMainActivityState.context().startActivity(
+                        PopupMessageActivity.intentFor(mMainActivityState.context(),
+                                MessageKind.ABOUT));
+                break;
+            case NEW_USER:
+                mMainActivityState.context().startActivity(
+                        PopupMessageActivity.intentFor(mMainActivityState.context(),
+                                MessageKind.NEW_USER));
+                break;
+            case RESTORE_BACKUP:
+                mMainActivityState.context().startActivity(
+                        PopupMessageActivity.intentFor(mMainActivityState.context(),
+                                MessageKind.BACKUP_RESTORE));
+                break;
+            case WHATS_NEW:
+                mMainActivityState.context().startActivity(
+                        PopupMessageActivity.intentFor(mMainActivityState.context(),
+                                MessageKind.WHATS_NEW));
+                break;
+            default:
+                mMainActivityState.services().toast("Not implemented: " + command);
+        }
+    }
+
     /** Write a persisted debug mode flag value */
     public final void setDebugMode(boolean flag) {
-        mMainActivityState.services().toast("Debug mode: " + (flag ? "ON" : "OFF"));
+        mMainActivityState.services().toast(flag ? "Debug mode enabled (see Menu)" : "Debug mode disabled");
         final SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(mMainActivityState.context());
         final Editor editor = sharedPreferences.edit();

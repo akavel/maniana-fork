@@ -62,6 +62,7 @@ public class PopupMessageActivity extends Activity {
         WHATS_NEW("help/whats_new", ".html", false, 0xff00ccff),
         BACKUP_RESTORE("help/restore_backup", ".html", false, 0xff0000ff);
 
+        // TODO(tal): since all messages come from assets, have the names more asset specific.
         private final String mAssetRelativeBaseName;
         private final String mAssetExtension;
         private final boolean mIsFullScreen;

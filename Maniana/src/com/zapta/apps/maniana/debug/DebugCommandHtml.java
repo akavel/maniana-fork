@@ -17,21 +17,21 @@ package com.zapta.apps.maniana.debug;
 import com.zapta.apps.maniana.annotations.MainActivityScope;
 
 /**
- * Commands of the debug main dialog.
- * 
- * @author Tal Dayan
+ * Commands of debug html dialog.
+ *
+ * @author: Tal Dayan
  */
 @MainActivityScope
-public enum DebugCommandMain implements DebugCommand {
-    NOTIFICATIONS("Notification..."),
-    HTML_PAGES("HTML Pages"),
-    ICS_MENU("ICS menu"),
-    ON_SHAKE("onShake()"),
-    EXIT("Exit debug mode");
+public enum DebugCommandHtml implements DebugCommand {
+    HELP("Help"),
+    ABOUT("About"),
+    WHATS_NEW("What's New"),
+    NEW_USER("New User"),
+    RESTORE_BACKUP("Restore Backup");
     
     private final String mText;
     
-    private DebugCommandMain(String text) {
+    private DebugCommandHtml(String text) {
         this.mText = text;
     }
     
