@@ -3,12 +3,12 @@
 
     <style name="Animations" />
 
-    <style name="Animations.QuickActionAbove">
+    <style name="Animations.ItemMenuAbove">
         <item name="@android:windowEnterAnimation">@anim/qa_show_above</item>
         <item name="@android:windowExitAnimation">@anim/qa_dismiss_above</item>
     </style>
 
-    <style name="Animations.QuickActionBelow">
+    <style name="Animations.ItemMenuBelow">
         <item name="@android:windowEnterAnimation">@anim/qa_show_below</item>
         <item name="@android:windowExitAnimation">@anim/qa_dismiss_below</item>
     </style>

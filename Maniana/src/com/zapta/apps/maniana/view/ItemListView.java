@@ -38,10 +38,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.zapta.apps.maniana.annotations.MainActivityScope;
+import com.zapta.apps.maniana.item_menu.ItemMenuEntry;
+import com.zapta.apps.maniana.item_menu.ItemMenu;
+import com.zapta.apps.maniana.item_menu.ItemMenu.OnActionItemOutcomeListener;
 import com.zapta.apps.maniana.main.MainActivityState;
-import com.zapta.apps.maniana.quick_action.QuickActionItem;
-import com.zapta.apps.maniana.quick_action.QuickActionMenu;
-import com.zapta.apps.maniana.quick_action.QuickActionMenu.OnActionItemOutcomeListener;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**
@@ -675,12 +675,12 @@ public class ItemListView extends ListView {
     }
 
     /** Display item menu on top of given item */
-    public void showItemMenu(final int itemIndex, QuickActionItem actions[],
+    public void showItemMenu(final int itemIndex, ItemMenuEntry actions[],
             final int dismissActionId) {
-        final QuickActionMenu quickActionMenu = new QuickActionMenu(mainActivityState,
+        final ItemMenu itemMenu = new ItemMenu(mainActivityState,
                 new OnActionItemOutcomeListener() {
                     @Override
-                    public void onOutcome(QuickActionMenu source, QuickActionItem actionItem) {
+                    public void onOutcome(ItemMenu source, ItemMenuEntry actionItem) {
                         mainActivityState.popupsTracker().untrack(source);
                         final int actionId = (actionItem != null) ? actionItem.getActionId()
                                 : dismissActionId;
@@ -689,16 +689,16 @@ public class ItemListView extends ListView {
                     }
                 });
 
-        for (QuickActionItem action : actions) {
-            quickActionMenu.addActionItem(action);
+        for (ItemMenuEntry action : actions) {
+            itemMenu.addActionItem(action);
         }
 
         @Nullable
         final ItemView itemView = getItemViewIfVisible(itemIndex);
         // NOTE: this should always be non null but handling gracefully to avoid a forced close.
         if (itemView != null) {
-            mainActivityState.popupsTracker().track(quickActionMenu);
-            quickActionMenu.show(itemView);
+            mainActivityState.popupsTracker().track(itemMenu);
+            itemMenu.show(itemView);
         }
     }
 

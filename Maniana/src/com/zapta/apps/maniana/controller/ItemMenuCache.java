@@ -20,8 +20,8 @@ import android.content.Context;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.MainActivityScope;
+import com.zapta.apps.maniana.item_menu.ItemMenuEntry;
 import com.zapta.apps.maniana.main.MainActivityState;
-import com.zapta.apps.maniana.quick_action.QuickActionItem;
 
 /**
  * Cached provider for item quick action menu items.
@@ -29,7 +29,7 @@ import com.zapta.apps.maniana.quick_action.QuickActionItem;
  * @author Tal Dayan
  */
 @MainActivityScope
-public class QuickActionsCache {
+public class ItemMenuCache {
 
     public static final int DISMISS_WITH_NO_SELECTION_ID = 0;
     public static final int DONE_ACTION_ID = 1;
@@ -44,29 +44,29 @@ public class QuickActionsCache {
     private final Context mContext;
 
     @Nullable
-    private QuickActionItem mCachedActionDone;
+    private ItemMenuEntry mCachedActionDone;
 
     @Nullable
-    private QuickActionItem mCachedActionTodo;
+    private ItemMenuEntry mCachedActionTodo;
 
     @Nullable
-    private QuickActionItem mCachedActionEdit;
+    private ItemMenuEntry mCachedActionEdit;
 
     @Nullable
-    private QuickActionItem mCachedActionLock;
+    private ItemMenuEntry mCachedActionLock;
 
     @Nullable
-    private QuickActionItem mCachedActionUnlock;
+    private ItemMenuEntry mCachedActionUnlock;
 
     @Nullable
-    private QuickActionItem mCachedActionDelete;
+    private ItemMenuEntry mCachedActionDelete;
 
-    public QuickActionsCache(MainActivityState mainActivityState) {
+    public ItemMenuCache(MainActivityState mainActivityState) {
         mMainActivityState = mainActivityState;
         mContext = mainActivityState.context();
     }
 
-    public QuickActionItem getDoneAction() {
+    public ItemMenuEntry getDoneAction() {
         if (mCachedActionDone == null) {
             mCachedActionDone = newItem(DONE_ACTION_ID,
                     mMainActivityState.str(R.string.item_menu_Done), R.drawable.item_menu_done);
@@ -74,7 +74,7 @@ public class QuickActionsCache {
         return mCachedActionDone;
     }
 
-    public QuickActionItem getToDoAction() {
+    public ItemMenuEntry getToDoAction() {
         if (mCachedActionTodo == null) {
             mCachedActionTodo = newItem(TODO_ACTION_ID,
                     mMainActivityState.str(R.string.item_menu_To_Do), R.drawable.item_menu_todo);
@@ -82,7 +82,7 @@ public class QuickActionsCache {
         return mCachedActionTodo;
     }
 
-    public QuickActionItem getEditAction() {
+    public ItemMenuEntry getEditAction() {
         if (mCachedActionEdit == null) {
             mCachedActionEdit = newItem(EDIT_ACTION_ID,
                     mMainActivityState.str(R.string.item_menu_Edit), R.drawable.item_menu_edit);
@@ -90,7 +90,7 @@ public class QuickActionsCache {
         return mCachedActionEdit;
     }
 
-    public QuickActionItem getDeleteAction() {
+    public ItemMenuEntry getDeleteAction() {
         if (mCachedActionDelete == null) {
             mCachedActionDelete = newItem(DELETE_ACTION_ID,
                     mMainActivityState.str(R.string.item_menu_Delete), R.drawable.item_menu_delete);
@@ -98,7 +98,7 @@ public class QuickActionsCache {
         return mCachedActionDelete;
     }
 
-    public QuickActionItem getLockAction() {
+    public ItemMenuEntry getLockAction() {
         if (mCachedActionLock == null) {
             mCachedActionLock = newItem(LOCK_ACTION_ID,
                     mMainActivityState.str(R.string.item_menu_Lock), R.drawable.item_menu_lock);
@@ -106,7 +106,7 @@ public class QuickActionsCache {
         return mCachedActionLock;
     }
 
-    public QuickActionItem getUnlockAction() {
+    public ItemMenuEntry getUnlockAction() {
         if (mCachedActionUnlock == null) {
             mCachedActionUnlock = newItem(UNLOCK_ACTION_ID,
                     mMainActivityState.str(R.string.item_menu_Unlock), R.drawable.item_menu_unlock);
@@ -114,8 +114,8 @@ public class QuickActionsCache {
         return mCachedActionUnlock;
     }
 
-    private QuickActionItem newItem(int id, String label, int imageResourceId) {
-        return new QuickActionItem(id, label, mContext.getResources()
+    private ItemMenuEntry newItem(int id, String label, int imageResourceId) {
+        return new ItemMenuEntry(id, label, mContext.getResources()
                 .getDrawable(imageResourceId));
     }
 }

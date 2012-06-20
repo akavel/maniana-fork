@@ -12,19 +12,19 @@
  * the License.
  */
 
-package com.zapta.apps.maniana.quick_action;
+package com.zapta.apps.maniana.item_menu;
 
 import android.graphics.drawable.Drawable;
 
 import com.zapta.apps.maniana.annotations.ActivityScope;
 
 /**
- * Immutable representation of a quick action menu item.
+ * Immutable representation of an item menu entry.
  * 
  * @author Tal Dayan
  */
 @ActivityScope
-public class QuickActionItem {
+public class ItemMenuEntry {
 
     /** The icon to display. */
     private final Drawable mIcon;
@@ -35,7 +35,7 @@ public class QuickActionItem {
     /** The action id to return upon menu selection. */
     private final int mActionId;
 
-    public QuickActionItem(int actionId, String label, Drawable icon) {
+    public ItemMenuEntry(int actionId, String label, Drawable icon) {
         mActionId = actionId;
         mLabel = label;
         mIcon = icon;

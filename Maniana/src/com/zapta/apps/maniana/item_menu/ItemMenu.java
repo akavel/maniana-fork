@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.zapta.apps.maniana.quick_action;
+package com.zapta.apps.maniana.item_menu;
 
 import static com.zapta.apps.maniana.util.Assertions.check;
 import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
@@ -43,13 +43,13 @@ import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
 
 /**
- * Quick action popup menu.
+ * Item action popup menu.
  * 
  * @author Tal Dayan (adapted to Maniana) Based on example by Lorensius W. L. T
  *         <lorenz@londatiga.net>.
  */
 @ActivityScope
-public class QuickActionMenu implements OnDismissListener, TrackablePopup {
+public class ItemMenu implements OnDismissListener, TrackablePopup {
 
     private final MainActivityState mMainActivityState;
 
@@ -65,7 +65,7 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
 
     private final OnActionItemOutcomeListener mOutcomeListener;
 
-    private final List<QuickActionItem> actionItems = new ArrayList<QuickActionItem>();
+    private final List<ItemMenuEntry> actionItems = new ArrayList<ItemMenuEntry>();
 
     private boolean mActioWasSelected;
 
@@ -75,7 +75,7 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
      * @param mContext Context
      * @param orientation Layout orientation, can be vartical or horizontal
      */
-    public QuickActionMenu(MainActivityState mainActivityState, OnActionItemOutcomeListener outcomeListener) {
+    public ItemMenu(MainActivityState mainActivityState, OnActionItemOutcomeListener outcomeListener) {
         mMainActivityState = mainActivityState;
         mMenuWindow = new PopupWindow(mainActivityState.context());
 
@@ -93,7 +93,7 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
         mOutcomeListener = checkNotNull(outcomeListener);
 
         mTopView = (ViewGroup) mMainActivityState.services().layoutInflater()
-                .inflate(R.layout.quick_action_menu, null);
+                .inflate(R.layout.item_menu, null);
 
         mItemContainerView = (ViewGroup) mTopView.findViewById(R.id.itemsContainer);
 
@@ -110,25 +110,25 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
     /**
      * Get action item at given index
      */
-    public final QuickActionItem getActionItem(int index) {
+    public final ItemMenuEntry getActionItem(int index) {
         return actionItems.get(index);
     }
 
     /**
      * Add an action item to the end of the list.
      */
-    public final void addActionItem(final QuickActionItem actionItem) {
+    public final void addActionItem(final ItemMenuEntry actionItem) {
         actionItems.add(actionItem);
 
         // TODO: rename this to action_wrapper here and in the layout.
         final View wrapperView = mMainActivityState.services().layoutInflater()
-                .inflate(R.layout.quick_action_item, null);
+                .inflate(R.layout.item_menu_entry, null);
 
         final ImageView imageView = (ImageView) wrapperView
-                .findViewById(R.id.quick_action_item_icon);
+                .findViewById(R.id.item_menu_entry_icon);
         imageView.setImageDrawable(actionItem.getIcon());
 
-        final TextView textView = (TextView) wrapperView.findViewById(R.id.quick_action_item_text);
+        final TextView textView = (TextView) wrapperView.findViewById(R.id.item_menu_entry_text);
         textView.setText(actionItem.getLabel());
 
         // Set a listener to track touches and highlight pressed items.
@@ -136,7 +136,7 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    wrapperView.setBackgroundResource(R.drawable.quick_action_item_selected);
+                    wrapperView.setBackgroundResource(R.drawable.item_menu_entry_selected);
                 } else if (event.getAction() == MotionEvent.ACTION_CANCEL
                         || event.getAction() == MotionEvent.ACTION_UP || !wrapperView.isPressed()) {
                     wrapperView.setBackgroundColor(Color.TRANSPARENT);
@@ -148,7 +148,7 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
         wrapperView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOutcomeListener.onOutcome(QuickActionMenu.this, actionItem);
+                mOutcomeListener.onOutcome(ItemMenu.this, actionItem);
                 mActioWasSelected = true;
                 mMenuWindow.dismiss();
             }
@@ -160,7 +160,7 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
         // If not first, add seperator before it.
         if (mItemContainerView.getChildCount() > 0) {
             final View separator = mMainActivityState.services().layoutInflater()
-                    .inflate(R.layout.quick_action_item_separator, null);
+                    .inflate(R.layout.item_menu_separator, null);
             // TODO: move this configuration to the XML
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                     LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT);
@@ -240,8 +240,8 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
         }
 
         showArrow(((showAbove) ? R.id.arrow_down : R.id.arrow_up), arrowPos);
-        mMenuWindow.setAnimationStyle((showAbove) ? R.style.Animations_QuickActionAbove
-                : R.style.Animations_QuickActionBelow);
+        mMenuWindow.setAnimationStyle((showAbove) ? R.style.Animations_ItemMenuAbove
+                : R.style.Animations_ItemMenuBelow);
         mMenuWindow.showAtLocation(anchorView, Gravity.NO_GRAVITY, xPosPixels, yPosPixels);
     }
 
@@ -273,7 +273,7 @@ public class QuickActionMenu implements OnDismissListener, TrackablePopup {
 
     public interface OnActionItemOutcomeListener {
         /** Action item is null if dismissed with no selection. */
-        void onOutcome(QuickActionMenu source, /* @Nullable */QuickActionItem actionItem);
+        void onOutcome(ItemMenu source, /* @Nullable */ItemMenuEntry actionItem);
     }
 
     @Override

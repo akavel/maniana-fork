@@ -28,9 +28,9 @@ import android.widget.TextView;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.MainActivityScope;
+import com.zapta.apps.maniana.item_menu.ItemMenuEntry;
 import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.model.PageKind;
-import com.zapta.apps.maniana.quick_action.QuickActionItem;
 import com.zapta.apps.maniana.services.MainActivityServices;
 import com.zapta.apps.maniana.settings.Font;
 import com.zapta.apps.maniana.settings.PageIconSet;
@@ -343,7 +343,7 @@ public class PageView extends FrameLayout {
     }
 
     /** Popup an item menu for the given item. */
-    public void showItemMenu(final int itemIndex, QuickActionItem actions[],
+    public void showItemMenu(final int itemIndex, ItemMenuEntry actions[],
             final int dismissActionId) {
         mItemListView.showItemMenu(itemIndex, actions, dismissActionId);
     }

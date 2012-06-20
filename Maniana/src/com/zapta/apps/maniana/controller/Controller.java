@@ -39,6 +39,7 @@ import com.zapta.apps.maniana.editors.ItemVoiceEditor;
 import com.zapta.apps.maniana.help.HelpUtil;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
 import com.zapta.apps.maniana.help.PopupMessageActivity.MessageKind;
+import com.zapta.apps.maniana.item_menu.ItemMenuEntry;
 import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.main.MainActivityResumeAction;
 import com.zapta.apps.maniana.model.AppModel;
@@ -52,7 +53,6 @@ import com.zapta.apps.maniana.notifications.NotificationUtil;
 import com.zapta.apps.maniana.persistence.ModelDeserialization;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.persistence.PersistenceMetadata;
-import com.zapta.apps.maniana.quick_action.QuickActionItem;
 import com.zapta.apps.maniana.services.MidnightTicker;
 import com.zapta.apps.maniana.services.Shaker;
 import com.zapta.apps.maniana.services.Shaker.ShakerListener;
@@ -91,7 +91,7 @@ public class Controller implements ShakerListener {
     /** The app context. Provide access to the model, view and services. */
     private final MainActivityState mMainActivityState;
 
-    private final QuickActionsCache mQuickActionCache;
+    private final ItemMenuCache mItemMenuCache;
 
     /** Used to detect first app resume to trigger the startup animation. */
     private int mOnAppResumeCount = 0;
@@ -115,7 +115,7 @@ public class Controller implements ShakerListener {
 
     public Controller(MainActivityState mainActivityState) {
         mMainActivityState = mainActivityState;
-        mQuickActionCache = new QuickActionsCache(mainActivityState);
+        mItemMenuCache = new ItemMenuCache(mainActivityState);
     }
 
     /** Called by the view when user clicks on item's text area */
@@ -406,21 +406,21 @@ public class Controller implements ShakerListener {
                 itemIndex);
 
         // Done vs ToDo based on item isCompleted status.
-        final QuickActionItem doneAction = item.isCompleted() ? mQuickActionCache.getToDoAction()
-                : mQuickActionCache.getDoneAction();
+        final ItemMenuEntry doneAction = item.isCompleted() ? mItemMenuCache.getToDoAction()
+                : mItemMenuCache.getDoneAction();
 
         // Edit.
-        final QuickActionItem editAction = mQuickActionCache.getEditAction();
+        final ItemMenuEntry editAction = mItemMenuCache.getEditAction();
 
         // Lock vs Unlock based on item isLocked status.
-        final QuickActionItem lockAction = item.isLocked() ? mQuickActionCache.getUnlockAction()
-                : mQuickActionCache.getLockAction();
+        final ItemMenuEntry lockAction = item.isLocked() ? mItemMenuCache.getUnlockAction()
+                : mItemMenuCache.getLockAction();
 
         // Delete.
-        final QuickActionItem deleteAction = mQuickActionCache.getDeleteAction();
+        final ItemMenuEntry deleteAction = mItemMenuCache.getDeleteAction();
 
         // Action list
-        final QuickActionItem actions[] = {
+        final ItemMenuEntry actions[] = {
             doneAction,
             editAction,
             lockAction,
@@ -429,13 +429,13 @@ public class Controller implements ShakerListener {
 
         mMainActivityState.view().setItemViewHighlight(pageKind, itemIndex, true);
         mMainActivityState.view().showItemMenu(pageKind, itemIndex, actions,
-                QuickActionsCache.DISMISS_WITH_NO_SELECTION_ID);
+                ItemMenuCache.DISMISS_WITH_NO_SELECTION_ID);
     }
 
     /** Called when the user made a selection from an item popup menu. */
     public void onItemMenuSelection(final PageKind pageKind, final int itemIndex, int actionId) {
         // In case of dismissal with no selection we don't clear the undo buffer.
-        if (actionId != QuickActionsCache.DISMISS_WITH_NO_SELECTION_ID) {
+        if (actionId != ItemMenuCache.DISMISS_WITH_NO_SELECTION_ID) {
             clearPageUndo(pageKind);
         }
 
@@ -444,11 +444,11 @@ public class Controller implements ShakerListener {
 
         // Handle the action
         switch (actionId) {
-            case QuickActionsCache.DISMISS_WITH_NO_SELECTION_ID: {
+            case ItemMenuCache.DISMISS_WITH_NO_SELECTION_ID: {
                 return;
             }
 
-            case QuickActionsCache.DONE_ACTION_ID: {
+            case ItemMenuCache.DONE_ACTION_ID: {
                 mMainActivityState.services().maybePlayApplauseSoundClip(AudioManager.FX_KEY_CLICK,
                         false);
                 final ItemModel item = mMainActivityState.model().getItemForMutation(pageKind,
@@ -462,7 +462,7 @@ public class Controller implements ShakerListener {
                 return;
             }
 
-            case QuickActionsCache.TODO_ACTION_ID: {
+            case ItemMenuCache.TODO_ACTION_ID: {
                 mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
                 final ItemModel item = mMainActivityState.model().getItemForMutation(pageKind,
                         itemIndex);
@@ -474,7 +474,7 @@ public class Controller implements ShakerListener {
             }
 
             // Edit
-            case QuickActionsCache.EDIT_ACTION_ID: {
+            case ItemMenuCache.EDIT_ACTION_ID: {
                 mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
                 final ItemModel item = mMainActivityState.model().getItemForMutation(pageKind,
                         itemIndex);
@@ -506,19 +506,19 @@ public class Controller implements ShakerListener {
                 return;
             }
 
-            case QuickActionsCache.LOCK_ACTION_ID:
-            case QuickActionsCache.UNLOCK_ACTION_ID: {
+            case ItemMenuCache.LOCK_ACTION_ID:
+            case ItemMenuCache.UNLOCK_ACTION_ID: {
                 mMainActivityState.services().maybePlayStockSound(
                         AudioManager.FX_KEYPRESS_STANDARD, false);
 
                 final ItemModel item = mMainActivityState.model().getItemForMutation(pageKind,
                         itemIndex);
-                item.setIsLocked(actionId == QuickActionsCache.LOCK_ACTION_ID);
+                item.setIsLocked(actionId == ItemMenuCache.LOCK_ACTION_ID);
                 // mApp.view().updateSingleItemView(pageKind, itemIndex);
                 mMainActivityState.view().updatePage(pageKind);
                 // If lock and in Today page, we also move it to the Tomorrow page, with an
                 // animation.
-                if (pageKind == PageKind.TODAY && actionId == QuickActionsCache.LOCK_ACTION_ID) {
+                if (pageKind == PageKind.TODAY && actionId == ItemMenuCache.LOCK_ACTION_ID) {
                     // We do a short delay before the animation to let the use see the icon change
                     // to lock before the item is moved to the other page.
                     mMainActivityState.view().startItemAnimation(pageKind, itemIndex,
@@ -535,7 +535,7 @@ public class Controller implements ShakerListener {
                 return;
             }
 
-            case QuickActionsCache.DELETE_ACTION_ID: {
+            case ItemMenuCache.DELETE_ACTION_ID: {
                 mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_DELETE,
                         false);
                 startItemDeletionWithAnination(pageKind, itemIndex);

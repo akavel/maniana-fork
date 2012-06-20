@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dip"
-        android:background="@drawable/quick_action_menu_background"
+        android:background="@drawable/item_menu_background"
         android:orientation="horizontal"
         android:padding="10dip" />
 
@@ -16,7 +16,7 @@
         android:id="@+id/arrow_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/quick_action_arrow_up" />
+        android:src="@drawable/item_menu_arrow_up" />
 
     <ImageView
         android:id="@+id/arrow_down"
@@ -24,6 +24,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/itemsContainer"
         android:layout_marginTop="-4dip"
-        android:src="@drawable/quick_action_arrow_down" />
+        android:src="@drawable/item_menu_arrow_down" />
 
 </RelativeLayout>

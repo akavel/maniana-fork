@@ -21,9 +21,9 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 
 import com.zapta.apps.maniana.annotations.MainActivityScope;
+import com.zapta.apps.maniana.item_menu.ItemMenuEntry;
 import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.model.PageKind;
-import com.zapta.apps.maniana.quick_action.QuickActionItem;
 
 /**
  * A wrapper containing the entire view functioanlity.
@@ -109,7 +109,7 @@ public class AppView {
         getPageView(pageKind).setItemViewHighlight(itemIndex, isHighlight);
     }
 
-    public void showItemMenu(PageKind pageKind, final int itemIndex, QuickActionItem actions[],
+    public void showItemMenu(PageKind pageKind, final int itemIndex, ItemMenuEntry actions[],
             final int dismissActionId) {
         getPageView(pageKind).showItemMenu(itemIndex, actions, dismissActionId);
     }
