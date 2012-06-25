@@ -12,30 +12,28 @@
  * the License.
  */
 
-package com.zapta.apps.maniana.debug;
+package com.zapta.apps.maniana.menus;
 
+import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.MainActivityScope;
 
 /**
- * Commands of the debug main dialog.
+ * Main menu entries.
  * 
  * @author Tal Dayan
  */
 @MainActivityScope
-public enum DebugCommandMain implements DebugCommand {
-    NOTIFICATIONS("Notification..."),
-    HTML_PAGES("HTML Pages"),
-    ON_SHAKE("onShake()"),
-    EXIT("Exit debug mode");
-    
-    private final String mText;
-    
-    private DebugCommandMain(String text) {
-        this.mText = text;
-    }
-    
-    @Override
-    public String getText() {
-        return mText;
+public enum MainMenuEntry {
+    ABOUT(R.drawable.main_menu_about, R.string.main_menu_About),
+    HELP(R.drawable.main_menu_help, R.string.main_menu_Help),
+    SETTINGS(R.drawable.main_menu_settings, R.string.main_menu_Settings),
+    DEBUG(R.drawable.main_menu_debug, R.string.main_menu_debug);
+
+    public final int iconResourceId;
+    public final int textResourceId;
+
+    private MainMenuEntry(int iconResourceId, int textResourceId) {
+        this.iconResourceId = iconResourceId;
+        this.textResourceId = textResourceId;
     }
 }

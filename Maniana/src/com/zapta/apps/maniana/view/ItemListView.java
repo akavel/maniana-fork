@@ -38,10 +38,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.zapta.apps.maniana.annotations.MainActivityScope;
-import com.zapta.apps.maniana.item_menu.ItemMenuEntry;
-import com.zapta.apps.maniana.item_menu.ItemMenu;
-import com.zapta.apps.maniana.item_menu.ItemMenu.OnActionItemOutcomeListener;
 import com.zapta.apps.maniana.main.MainActivityState;
+import com.zapta.apps.maniana.menus.ItemMenu;
+import com.zapta.apps.maniana.menus.ItemMenuEntry;
+import com.zapta.apps.maniana.menus.ItemMenu.OnActionItemOutcomeListener;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**

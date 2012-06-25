@@ -20,8 +20,8 @@ import android.content.Context;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.MainActivityScope;
-import com.zapta.apps.maniana.item_menu.ItemMenuEntry;
 import com.zapta.apps.maniana.main.MainActivityState;
+import com.zapta.apps.maniana.menus.ItemMenuEntry;
 
 /**
  * Cached provider for item quick action menu items.

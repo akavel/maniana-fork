@@ -12,13 +12,15 @@
  * the License.
  */
 
-package com.zapta.apps.maniana.item_menu;
+package com.zapta.apps.maniana.menus;
 
 import static com.zapta.apps.maniana.util.Assertions.check;
 import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.Nullable;
 
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -38,7 +40,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zapta.apps.maniana.R;
-import com.zapta.apps.maniana.annotations.ActivityScope;
+import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
 
@@ -48,8 +50,13 @@ import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
  * @author Tal Dayan (adapted to Maniana) Based on example by Lorensius W. L. T
  *         <lorenz@londatiga.net>.
  */
-@ActivityScope
+@MainActivityScope
 public class ItemMenu implements OnDismissListener, TrackablePopup {
+    
+    public interface OnActionItemOutcomeListener {
+        /** Action item is null if dismissed with no selection. */
+        void onOutcome(ItemMenu source, @Nullable ItemMenuEntry actionItem);
+    }
 
     private final MainActivityState mMainActivityState;
 
@@ -95,7 +102,7 @@ public class ItemMenu implements OnDismissListener, TrackablePopup {
         mTopView = (ViewGroup) mMainActivityState.services().layoutInflater()
                 .inflate(R.layout.item_menu, null);
 
-        mItemContainerView = (ViewGroup) mTopView.findViewById(R.id.itemsContainer);
+        mItemContainerView = (ViewGroup) mTopView.findViewById(R.id.items_container);
 
         mDownArrowView = (ImageView) mTopView.findViewById(R.id.arrow_down);
         mUpArrowView = (ImageView) mTopView.findViewById(R.id.arrow_up);
@@ -106,7 +113,7 @@ public class ItemMenu implements OnDismissListener, TrackablePopup {
         mMenuWindow.setContentView(mTopView);
         mMenuWindow.setOnDismissListener(this);
     }
-
+    
     /**
      * Get action item at given index
      */
@@ -136,7 +143,7 @@ public class ItemMenu implements OnDismissListener, TrackablePopup {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    wrapperView.setBackgroundResource(R.drawable.item_menu_entry_selected);
+                    wrapperView.setBackgroundResource(R.drawable.popup_menu_entry_selected);
                 } else if (event.getAction() == MotionEvent.ACTION_CANCEL
                         || event.getAction() == MotionEvent.ACTION_UP || !wrapperView.isPressed()) {
                     wrapperView.setBackgroundColor(Color.TRANSPARENT);
@@ -269,11 +276,6 @@ public class ItemMenu implements OnDismissListener, TrackablePopup {
         if (!mActioWasSelected) {
             mOutcomeListener.onOutcome(this, null);
         }
-    }
-
-    public interface OnActionItemOutcomeListener {
-        /** Action item is null if dismissed with no selection. */
-        void onOutcome(ItemMenu source, /* @Nullable */ItemMenuEntry actionItem);
     }
 
     @Override

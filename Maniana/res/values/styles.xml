@@ -13,18 +13,6 @@
         <item name="@android:windowExitAnimation">@anim/qa_dismiss_below</item>
     </style>
 
-    <style name="Theme" parent="android:Theme" />
-
-    <!-- Used for animating ICS main menu. -->
-    <style name="IcsMainMenuStyle" parent="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
-        <item name="android:windowAnimationStyle">@style/IcsMainMenuAnimation</item>
-    </style>
-
-    <style name="IcsMainMenuAnimation">
-        <item name="android:windowEnterAnimation">@anim/ics_menu_in</item>
-        <item name="android:windowExitAnimation">@anim/ics_menu_out</item>
-    </style>
-
     <style name="ListWidgetPortraitBitmap">
         <item name="android:visibility">visible</item>
         <item name="android:padding">0dip</item>

@@ -12,18 +12,18 @@
  * the License.
  */
 
-package com.zapta.apps.maniana.item_menu;
+package com.zapta.apps.maniana.menus;
 
 import android.graphics.drawable.Drawable;
 
-import com.zapta.apps.maniana.annotations.ActivityScope;
+import com.zapta.apps.maniana.annotations.MainActivityScope;
 
 /**
  * Immutable representation of an item menu entry.
  * 
  * @author Tal Dayan
  */
-@ActivityScope
+@MainActivityScope
 public class ItemMenuEntry {
 
     /** The icon to display. */

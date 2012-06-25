@@ -26,7 +26,7 @@ import android.view.MenuItem;
 import android.view.Window;
 
 import com.zapta.apps.maniana.R;
-import com.zapta.apps.maniana.controller.MainMenuEntry;
+//import com.zapta.apps.maniana.controller.MainMenuEntry;
 import com.zapta.apps.maniana.controller.MainActivityStartupKind;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.persistence.ModelReadingResult;
@@ -147,20 +147,20 @@ public class MainActivity extends Activity {
         return super.onPrepareOptionsMenu(menu);
     }
 
-    /** Called by the framework when the user make a selection in the app main menu. */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        @Nullable
-        final MainMenuEntry mainMenuEntry = MainMenuEntry.byMainMenuId(item.getItemId());
-        
-        if (mainMenuEntry == null) {
-            LogUtil.error("Unknown option menu item id: " + item.getTitle());
-            return true;
-        }
-
-        mState.controller().onMainMenuSelection(mainMenuEntry);
-        return true;
-    }
+//    /** Called by the framework when the user make a selection in the app main menu. */
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        @Nullable
+//        final MainMenuEntry mainMenuEntry = MainMenuEntry.byMainMenuId(item.getItemId());
+//        
+//        if (mainMenuEntry == null) {
+//            LogUtil.error("Unknown option menu item id: " + item.getTitle());
+//            return true;
+//        }
+//
+//        mState.controller().onMainMenuSelection(mainMenuEntry);
+//        return true;
+//    }
 
     /** Called by the framework when this activity is paused. */
     @Override

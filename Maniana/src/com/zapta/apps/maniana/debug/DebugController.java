@@ -26,7 +26,7 @@ import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.notifications.NotificationSimulator;
 import com.zapta.apps.maniana.notifications.NotificationUtil;
 import com.zapta.apps.maniana.settings.PreferenceKind;
-import com.zapta.apps.maniana.view.IcsMainMenuDialog;
+//import com.zapta.apps.maniana.view.IcsMainMenuDialog;
 
 /**
  * Controller for the debug functionality.
@@ -60,9 +60,6 @@ public class DebugController {
                 break;
             case HTML_PAGES:
                 startHtmlDialog();
-                break;
-           case ICS_MENU:
-                IcsMainMenuDialog.showMenu(mMainActivityState);
                 break;
             case ON_SHAKE:
                 mMainActivityState.controller().onShake();

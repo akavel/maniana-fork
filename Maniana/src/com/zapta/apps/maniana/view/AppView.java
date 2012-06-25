@@ -21,8 +21,8 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 
 import com.zapta.apps.maniana.annotations.MainActivityScope;
-import com.zapta.apps.maniana.item_menu.ItemMenuEntry;
 import com.zapta.apps.maniana.main.MainActivityState;
+import com.zapta.apps.maniana.menus.ItemMenuEntry;
 import com.zapta.apps.maniana.model.PageKind;
 
 /**

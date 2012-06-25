@@ -5,4 +5,5 @@
     <string name="place_holder">(tbd)</string>
     <string name="right_arrow_character">→</string>
     <string name="down_arrow_character">↓</string>
+    <string name="main_menu_debug">Debug</string>
 </resources>

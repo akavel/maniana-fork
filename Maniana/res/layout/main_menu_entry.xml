@@ -1,0 +1,24 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="horizontal" >
+
+    <ImageView
+        android:id="@+id/main_menu_entry_icon"
+        android:layout_width="wrap_content"  
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/main_menu_entry_text"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_height="wrap_content"  
+        android:textSize="20sp"
+        android:layout_marginLeft="10dip"
+        android:gravity="center_vertical"
+        android:text="@string/place_holder"
+        android:textColor="#ffffffff" />
+
+</LinearLayout>

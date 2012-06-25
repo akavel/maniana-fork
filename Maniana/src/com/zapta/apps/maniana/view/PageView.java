@@ -28,8 +28,10 @@ import android.widget.TextView;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.MainActivityScope;
-import com.zapta.apps.maniana.item_menu.ItemMenuEntry;
 import com.zapta.apps.maniana.main.MainActivityState;
+import com.zapta.apps.maniana.menus.ItemMenuEntry;
+import com.zapta.apps.maniana.menus.MainMenu;
+import com.zapta.apps.maniana.menus.MainMenuEntry;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.services.MainActivityServices;
 import com.zapta.apps.maniana.settings.Font;
@@ -46,7 +48,7 @@ import com.zapta.apps.maniana.util.DisplayUtil;
 public class PageView extends FrameLayout {
 
     /** For testing only. */
-    private static final boolean FORCE_OVERFLOW_MENU_ON_ALL_DEVICES = false;
+   // private static final boolean FORCE_OVERFLOW_MENU_ON_ALL_DEVICES = false;
 
     /**
      * Candidates for day/date color. Selected by distance from background color with a slight
@@ -99,7 +101,7 @@ public class PageView extends FrameLayout {
 
     private final ImageButton mIcsMenuOverflowButtonView;
 
-    private final boolean mUsesIcsMenuOverflowButton;
+    //private final boolean mUsesIcsMenuOverflowButton;
 
     private final ImageButton mButtonUndoView;
     private final ImageButton mButtonAddByTextView;
@@ -136,8 +138,8 @@ public class PageView extends FrameLayout {
         mIcsMenuOverflowButtonView = (ImageButton) findViewById(R.id.page_ics_menu_overflow_button);
 
         // NOTE: could also use !ViewConfiguration.get(context).hasPermanentMenuKey();
-        mUsesIcsMenuOverflowButton = FORCE_OVERFLOW_MENU_ON_ALL_DEVICES
-                || (android.os.Build.VERSION.SDK_INT >= 11);
+//        mUsesIcsMenuOverflowButton = FORCE_OVERFLOW_MENU_ON_ALL_DEVICES
+//                || (android.os.Build.VERSION.SDK_INT >= 11);
 
         mDayTextView = (TextView) findViewById(R.id.page_day_text);
         mDateTextView = (TextView) findViewById(R.id.page_date_text);
@@ -157,17 +159,17 @@ public class PageView extends FrameLayout {
         final ItemListViewAdapter adapter = new ItemListViewAdapter(mMainActivityState, mPageKind);
         mItemListView.setApp(mMainActivityState, adapter);
 
-        if (mUsesIcsMenuOverflowButton) {
+        //if (mUsesIcsMenuOverflowButton) {
             mIcsMenuOverflowButtonView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onIcsMenuOverflowButtonClick();
                 }
             });
-        } else {
-            mIcsMenuOverflowButtonView.setVisibility(View.INVISIBLE);
-            mIcsMenuOverflowButtonView.setPadding(10, 0, 0, 0);
-        }
+//        } else {
+//            mIcsMenuOverflowButtonView.setVisibility(View.INVISIBLE);
+//            mIcsMenuOverflowButtonView.setPadding(10, 0, 0, 0);
+//        }
 
         updateUndoButton();
         mButtonUndoView.setOnClickListener(new OnClickListener() {
@@ -220,7 +222,17 @@ public class PageView extends FrameLayout {
     /** Called when the user clicks on the ics overflow menu button. */
     private final void onIcsMenuOverflowButtonClick() {
 
-        IcsMainMenuDialog.showMenu(mMainActivityState);
+        MainMenu mainMenu = new MainMenu(mMainActivityState, new MainMenu.OnActionItemOutcomeListener() {
+            @Override
+            public void onOutcome(MainMenu source, MainMenuEntry selectedEntry) {
+                // TODO Auto-generated method stub                
+            }            
+        });
+        
+        mainMenu.show(this, mIcsMenuOverflowButtonView);
+        // TODO: open main menu
+      //  new MainMenu(mainActivityState, outcomeListener)
+      //  IcsMainMenuDialog.showMenu(mMainActivityState);
 
     }
 
@@ -281,12 +293,13 @@ public class PageView extends FrameLayout {
         }
 
         // Update ICS menu overflow icon to have max contrast from the background
-        if (mUsesIcsMenuOverflowButton) {
+        //if (mUsesIcsMenuOverflowButton) 
+        {
             final int colorIndex = ColorUtil.selectFurthestColorIndex(baseBackgroundColor,
                     OVERFLOW_DRAWABLE_CANDIDATE_COLORS, 0.05f);
             final int resourceId = OVERFLOW_RESOURCES_CANDIDATE_IDS[colorIndex];
             mIcsMenuOverflowButtonView.setImageResource(resourceId);
-        }
+       } 
 
         // Update item list view highlight drawable to max contrast from page background
         {
