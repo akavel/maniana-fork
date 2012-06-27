@@ -4,11 +4,11 @@
 		android:fromXScale="0.3" android:toXScale="1.0"
 		android:fromYScale="0.3" android:toYScale="1.0"
 		android:pivotX="10%" android:pivotY="0%"
-			android:duration="@integer/item_menu_show_animation_millis_id"
+			android:duration="@integer/popup_menu_show_animation_millis_id"
 	/>
 	<alpha
 		android:interpolator="@android:anim/decelerate_interpolator"
 		android:fromAlpha="0.0" android:toAlpha="1.0"
-			android:duration="@integer/item_menu_show_animation_millis_id"
+			android:duration="@integer/popup_menu_show_animation_millis_id"
 	/>
 </set>

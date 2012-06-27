@@ -80,17 +80,16 @@ public class AppView {
             }
         });
     }
+    
+    /** Get the current page view */
+    private PageView getCurrentPageView() {
+        return getPageView(getCurrentPageKind());
+    }
+
 
     /** Get the page view of given kind. */
     private PageView getPageView(PageKind pageKind) {
-        switch (pageKind) {
-            case TODAY:
-                return mTodayPageView;
-            case TOMOROW:
-                return mTomorowPageView;
-            default:
-                throw new RuntimeException("Unknown page kind");
-        }
+        return pageKind.isToday() ? mTodayPageView : mTomorowPageView;
     }
 
     /** Get the root View of this app view. Used to display it in an activity. */
@@ -112,6 +111,10 @@ public class AppView {
     public void showItemMenu(PageKind pageKind, final int itemIndex, ItemMenuEntry actions[],
             final int dismissActionId) {
         getPageView(pageKind).showItemMenu(itemIndex, actions, dismissActionId);
+    }
+    
+    public void showMainMenu() {
+        getCurrentPageView().showMainMenu();
     }
 
     public final void updatePages() {
@@ -170,7 +173,7 @@ public class AppView {
         mViewPager.mForcedScrollDurationMillis = -1;
     }
 
-    public final PageKind getCurrentPage() {
+    public final PageKind getCurrentPageKind() {
         return (mCurrentPageIndex == 0) ? PageKind.TODAY : PageKind.TOMOROW;
     }
 

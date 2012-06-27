@@ -15,16 +15,11 @@
 package com.zapta.apps.maniana.menus;
 
 import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
-
-import javax.annotation.Nullable;
-
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -32,12 +27,12 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.main.MainActivityState;
+import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
 
 /**
@@ -48,10 +43,9 @@ import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
  */
 @MainActivityScope
 public class MainMenu implements OnDismissListener, TrackablePopup {
-    
+
     public interface OnActionItemOutcomeListener {
-        /** Action item is null if dismissed with no selection. */
-        void onOutcome(MainMenu source, @Nullable MainMenuEntry selectedEntry);
+        void onOutcome(MainMenu source, MainMenuEntry selectedEntry);
     }
 
     private final MainActivityState mMainActivityState;
@@ -62,15 +56,10 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
     private View mTopView;
 
     private ImageView mUpArrowView;
-    //private ImageView mDownArrowView;
 
     private ViewGroup mItemContainerView;
 
     private final OnActionItemOutcomeListener mOutcomeListener;
-
-    //private final List<ItemMenuEntry> actionItems = new ArrayList<ItemMenuEntry>();
-
-    private boolean mActioWasSelected;
 
     /**
      * Constructor allowing orientation override
@@ -85,6 +74,8 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
         mMenuWindow.setTouchInterceptor(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                // TODO: dismiss if outside of mItemContainsView.
+                LogUtil.debug("*** onTouch: %f, %f", event.getX(), event.getY());
                 if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
                     mMenuWindow.dismiss();
                     return true;
@@ -100,81 +91,65 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
 
         mItemContainerView = (ViewGroup) mTopView.findViewById(R.id.items_container);
 
-        //mDownArrowView = (ImageView) mTopView.findViewById(R.id.arrow_down);
         mUpArrowView = (ImageView) mTopView.findViewById(R.id.arrow_up);
-
-        mTopView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT));
 
         mMenuWindow.setContentView(mTopView);
         mMenuWindow.setOnDismissListener(this);
     }
-    
+
     /**
      * Get action item at given index
      */
     public final MainMenuEntry getActionItem(int index) {
         return MainMenuEntry.values()[index];
-        //return actionItems.get(index);
+        // return actionItems.get(index);
     }
 
     /**
      * Add an action item to the end of the list.
      */
     private final void addEntry(final MainMenuEntry entry) {
-        //actionItems.add(actionItem);
+        // actionItems.add(actionItem);
 
         // TODO: rename this to action_wrapper here and in the layout.
-        final View wrapperView = mMainActivityState.services().layoutInflater()
+        final View entryTopView = mMainActivityState.services().layoutInflater()
                 .inflate(R.layout.main_menu_entry, null);
 
-        final ImageView imageView = (ImageView) wrapperView
+        final ImageView imageView = (ImageView) entryTopView
                 .findViewById(R.id.main_menu_entry_icon);
         imageView.setImageResource(entry.iconResourceId);
 
-        final TextView textView = (TextView) wrapperView.findViewById(R.id.main_menu_entry_text);
+        final TextView textView = (TextView) entryTopView.findViewById(R.id.main_menu_entry_text);
         textView.setText(entry.textResourceId);
 
-//        // Set a listener to track touches and highlight pressed items.
-//        wrapperView.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//                    wrapperView.setBackgroundResource(R.drawable.popup_menu_entry_selected);
-//                } else if (event.getAction() == MotionEvent.ACTION_CANCEL
-//                        || event.getAction() == MotionEvent.ACTION_UP || !wrapperView.isPressed()) {
-//                    wrapperView.setBackgroundColor(Color.TRANSPARENT);
-//                }
-//                return false;
-//            }
-//        });
+        // Set a listener to track touches and highlight pressed items.
+        entryTopView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    // NOTE: this clears any padding set on the top view (in case it is set in xml).
+                    entryTopView.setBackgroundResource(R.drawable.popup_menu_entry_selected);
+                } else if (event.getAction() == MotionEvent.ACTION_CANCEL
+                        || event.getAction() == MotionEvent.ACTION_UP || !entryTopView.isPressed()) {
+                    entryTopView.setBackgroundResource(0);
+                }
+                return false;
+            }
+        });
 
-//        wrapperView.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mOutcomeListener.onOutcome(MainMenu.this, entry);
-//                mActioWasSelected = true;
-//                mMenuWindow.dismiss();
-//            }
-//        });
+        entryTopView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOutcomeListener.onOutcome(MainMenu.this, entry);
+                // mActioWasSelected = true;
+                mMenuWindow.dismiss();
+            }
+        });
 
-        wrapperView.setFocusable(true);
-        wrapperView.setClickable(true);
+        entryTopView.setFocusable(true);
+        entryTopView.setClickable(true);
 
-        // If not first, add seperator before it.
-        if (mItemContainerView.getChildCount() > 0) {
-            final View separator = mMainActivityState.services().layoutInflater()
-                    .inflate(R.layout.main_menu_separator, null);
-            // TODO: move this configuration to the XML
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                    LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-            separator.setLayoutParams(params);
-            separator.setPadding(0, 5, 0, 5);
-
-            mItemContainerView.addView(separator);
-        }
-
-        mItemContainerView.addView(wrapperView);
+        mItemContainerView.addView(entryTopView);
     }
 
     /**
@@ -183,7 +158,7 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
      * @param anchorView a view to which the action menu's arrow will point it.
      */
     public final void show(View parentView, View anchorView) {
-        
+
         for (MainMenuEntry entry : MainMenuEntry.values()) {
             addEntry(entry);
         }
@@ -201,8 +176,13 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
         mMenuWindow.setOutsideTouchable(true);
 
         mMenuWindow.setContentView(mTopView);
+        
+        // @@@ experimental
+//        mTopView.setFocusable(true);
+//        mTopView.setClickable(true);
+        //mTopView.set
 
-        mActioWasSelected = false;
+        // mActioWasSelected = false;
 
         final int[] anchorXYOnsScreen = new int[2];
 
@@ -214,8 +194,9 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
 
         mTopView.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
-        final int rootHeight = mTopView.getMeasuredHeight();
-        final int screenHeight = mMainActivityState.services().windowManager().getDefaultDisplay().getHeight();
+//        final int rootHeight = mTopView.getMeasuredHeight();
+        final int screenHeight = mMainActivityState.services().windowManager().getDefaultDisplay()
+                .getHeight();
 
         // Arrow position is slightly to the right of the left upper/lower cornet.
         // TODO: define const.
@@ -224,30 +205,25 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
 
         final int arrowPos = anchorRectOnScreen.left + xPosPixels;
 
-        int spaceAbove = anchorRectOnScreen.top;
+       // int spaceAbove = anchorRectOnScreen.top;
         int spaceBelow = screenHeight - anchorRectOnScreen.bottom;
-
-       // final boolean showAbove = spaceAbove >= rootHeight;
 
         // TODO: make a const or param.
         // TODO: scale by density?
-        final int ARROW_VERTICAL_OVERLAP = 15;
+        //final int ARROW_VERTICAL_OVERLAP = 15;
 
         final int yPosPixels;
 
-//        if (showAbove) {
-//            check(rootHeight <= spaceAbove);
-//            yPosPixels = anchorRectOnScreen.top - rootHeight + ARROW_VERTICAL_OVERLAP;
-//        } else {
-            yPosPixels = anchorRectOnScreen.bottom - ARROW_VERTICAL_OVERLAP;
-            if (rootHeight > spaceBelow) {
-                mItemContainerView.getLayoutParams().height = spaceBelow;
-           // }
-        }
+        yPosPixels = anchorRectOnScreen.bottom; // - ARROW_VERTICAL_OVERLAP;
+//        if (rootHeight > spaceBelow) {
+//            mItemContainerView.getLayoutParams().height = spaceBelow;
+//        }
+
+        // TODO: see if PopupWindow.showAsDropDown() helps here
 
         setArrow(arrowPos);
-        mMenuWindow.setAnimationStyle(
-                 R.style.Animations_ItemMenuBelow);
+        mMenuWindow.setAnimationStyle(R.style.Animations_MainMenu);
+        mMainActivityState.popupsTracker().track(this);
         mMenuWindow.showAtLocation(parentView, Gravity.NO_GRAVITY, xPosPixels, yPosPixels);
     }
 
@@ -259,31 +235,37 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
      */
     private final void setArrow(int requestedX) {
         // Decide which of the two up and down arrows will be shown and hidden respectivly.
-        //final View showArrow = (whichArrow == R.id.arrow_up) ? mUpArrowView : mDownArrowView;
-        //final View hideArrow = (whichArrow == R.id.arrow_up) ? mDownArrowView : mUpArrowView;
+        // final View showArrow = (whichArrow == R.id.arrow_up) ? mUpArrowView : mDownArrowView;
+        // final View hideArrow = (whichArrow == R.id.arrow_up) ? mDownArrowView : mUpArrowView;
 
         final int arrowWidth = mUpArrowView.getMeasuredWidth();
-        //showArrow.setVisibility(View.VISIBLE);
+        // showArrow.setVisibility(View.VISIBLE);
         ViewGroup.MarginLayoutParams param = (ViewGroup.MarginLayoutParams) mUpArrowView
                 .getLayoutParams();
         param.leftMargin = requestedX - arrowWidth / 2;
-       // hideArrow.setVisibility(View.INVISIBLE);
+        // hideArrow.setVisibility(View.INVISIBLE);
     }
 
+    /** Called when the window is dismissed. */
     @Override
     public final void onDismiss() {
-        if (!mActioWasSelected) {
-            mOutcomeListener.onOutcome(this, null);
+        mMainActivityState.popupsTracker().untrack(this);
+    }
+
+    public final boolean isShowing() {
+        return mMenuWindow.isShowing();
+    }
+
+    /** Public method to dismiss the menu. */
+    public final void dismiss() {
+        if (isShowing()) {
+            mMenuWindow.dismiss();
         }
     }
 
- 
+    /** Called by the popup tracker. */
     @Override
     public final void closeLeftOver() {
-        // NOTE: we don't bother here to early report the dismissal, as we do with the item editor,
-        // because the dismissal of this menu does not cause a mutation of the model.
-        if (mMenuWindow.isShowing()) {
-            mMenuWindow.dismiss();
-        }
+        dismiss();
     }
 }

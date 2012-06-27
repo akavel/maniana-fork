@@ -759,7 +759,7 @@ public class Controller implements ShakerListener {
                         final TextView itemTextView = (TextView) arg1;
                         maybeAddNewItem(itemTextView.getText().toString(), mMainActivityState
                                 .prefTracker().getDefaultItemColorPreference(), mMainActivityState
-                                .view().getCurrentPage(), true);
+                                .view().getCurrentPageKind(), true);
                     }
                 });
     }
@@ -795,7 +795,7 @@ public class Controller implements ShakerListener {
         }
 
         // Handle the shake event
-        final PageKind currentPage = mMainActivityState.view().getCurrentPage();
+        final PageKind currentPage = mMainActivityState.view().getCurrentPageKind();
         final ShakerAction action = mMainActivityState.prefTracker().reader()
                 .getShakerActionPreference();
         switch (action) {
@@ -869,6 +869,12 @@ public class Controller implements ShakerListener {
 
         return mMainActivityState.str(R.string.organize_outcome_Page_already_organized);
     }
+    
+    /** Called to show the main menu. */
+    public final boolean onMenuButton() {
+        mMainActivityState.view().showMainMenu();
+        return true;
+    }
 
     /** Called by the framework when the user makes a main menu selection. */
     public final void onMainMenuSelection(MainMenuEntry entry) {
@@ -895,7 +901,7 @@ public class Controller implements ShakerListener {
     public final boolean onBackButton() {
         // If the current page is not today, we still the back key event and switch back to the
         // today page. Otherwise we use the default back behavior.
-        final PageKind currentPage = mMainActivityState.view().getCurrentPage();
+        final PageKind currentPage = mMainActivityState.view().getCurrentPageKind();
         if (currentPage != PageKind.TODAY) {
             mMainActivityState.view().setCurrentPage(PageKind.TODAY, -1);
             return true;

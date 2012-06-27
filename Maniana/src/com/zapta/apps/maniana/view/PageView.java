@@ -71,8 +71,8 @@ public class PageView extends FrameLayout {
     };
 
     private static final int[] OVERFLOW_RESOURCES_CANDIDATE_IDS = new int[] {
-        R.drawable.ics_menu_overflow_button_version_1,
-        R.drawable.ics_menu_overflow_button_version_2
+        R.drawable.main_menu_button_version_1,
+        R.drawable.main_menu_button_version_2
     };
 
     private static final int[] ITEM_HIGHLIGHT_CANDIDATE_COLORS = new int[] {
@@ -99,7 +99,7 @@ public class PageView extends FrameLayout {
     private final View mPageTitleSection;
     private final View mPageTitleDivider;
 
-    private final ImageButton mIcsMenuOverflowButtonView;
+    private final ImageButton mMainMenuButtonView;
 
     //private final boolean mUsesIcsMenuOverflowButton;
 
@@ -114,6 +114,9 @@ public class PageView extends FrameLayout {
     private final TextView mPageTitleTextView;
 
     private final View mPaperColorView;
+    
+//    @Nullable
+//    private MainMenu mLastMainMenu = null;
 
     public PageView(MainActivityState mainActivityState, PageKind pageKind) {
         super(checkNotNull(mainActivityState.context()));
@@ -135,7 +138,7 @@ public class PageView extends FrameLayout {
 
         mButtonCleanView = (ImageButton) findViewById(R.id.page_clean_button);
 
-        mIcsMenuOverflowButtonView = (ImageButton) findViewById(R.id.page_ics_menu_overflow_button);
+        mMainMenuButtonView = (ImageButton) findViewById(R.id.page_main_menu_button);
 
         // NOTE: could also use !ViewConfiguration.get(context).hasPermanentMenuKey();
 //        mUsesIcsMenuOverflowButton = FORCE_OVERFLOW_MENU_ON_ALL_DEVICES
@@ -159,17 +162,12 @@ public class PageView extends FrameLayout {
         final ItemListViewAdapter adapter = new ItemListViewAdapter(mMainActivityState, mPageKind);
         mItemListView.setApp(mMainActivityState, adapter);
 
-        //if (mUsesIcsMenuOverflowButton) {
-            mIcsMenuOverflowButtonView.setOnClickListener(new OnClickListener() {
+            mMainMenuButtonView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onIcsMenuOverflowButtonClick();
+                    showMainMenu();
                 }
             });
-//        } else {
-//            mIcsMenuOverflowButtonView.setVisibility(View.INVISIBLE);
-//            mIcsMenuOverflowButtonView.setPadding(10, 0, 0, 0);
-//        }
 
         updateUndoButton();
         mButtonUndoView.setOnClickListener(new OnClickListener() {
@@ -219,21 +217,26 @@ public class PageView extends FrameLayout {
         onItemDividerColorPreferenceChange();
     }
 
-    /** Called when the user clicks on the ics overflow menu button. */
-    private final void onIcsMenuOverflowButtonClick() {
-
-        MainMenu mainMenu = new MainMenu(mMainActivityState, new MainMenu.OnActionItemOutcomeListener() {
+    void showMainMenu() {
+//        // Dismiss if currently showing
+//        if (mLastMainMenu != null && mLastMainMenu.isShowing()) {
+//            mLastMainMenu.dismiss();
+//            mLastMainMenu = null;
+//            return;
+//        }
+        
+        // Else, show. Note that we do not reuse the menu.
+        //
+        // NOTE: make the dismissed last main menu garbage collectible. Currently we 
+        // keep a reference here.
+        //
+        final MainMenu mainMenu = new MainMenu(mMainActivityState, new MainMenu.OnActionItemOutcomeListener() {
             @Override
             public void onOutcome(MainMenu source, MainMenuEntry selectedEntry) {
-                // TODO Auto-generated method stub                
+                mMainActivityState.controller().onMainMenuSelection(selectedEntry);              
             }            
-        });
-        
-        mainMenu.show(this, mIcsMenuOverflowButtonView);
-        // TODO: open main menu
-      //  new MainMenu(mainActivityState, outcomeListener)
-      //  IcsMainMenuDialog.showMenu(mMainActivityState);
-
+        });       
+        mainMenu.show(this, mMainMenuButtonView);
     }
 
     // TODO: currently the controller calls this even when there is not date change. Filter
@@ -298,7 +301,7 @@ public class PageView extends FrameLayout {
             final int colorIndex = ColorUtil.selectFurthestColorIndex(baseBackgroundColor,
                     OVERFLOW_DRAWABLE_CANDIDATE_COLORS, 0.05f);
             final int resourceId = OVERFLOW_RESOURCES_CANDIDATE_IDS[colorIndex];
-            mIcsMenuOverflowButtonView.setImageResource(resourceId);
+            mMainMenuButtonView.setImageResource(resourceId);
        } 
 
         // Update item list view highlight drawable to max contrast from page background

@@ -52,14 +52,14 @@
         </LinearLayout>
 
         <ImageButton
-            android:id="@+id/page_ics_menu_overflow_button"
+            android:id="@+id/page_main_menu_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:longClickable="false"
             android:paddingLeft="15dip"
             android:paddingRight="10dip"
-            android:src="@drawable/ics_menu_overflow_button_version_1" >
+            android:src="@drawable/main_menu_button_version_1" >
         </ImageButton>
     </LinearLayout>
 

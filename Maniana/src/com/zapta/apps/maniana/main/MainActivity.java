@@ -21,12 +21,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.Window;
 
-import com.zapta.apps.maniana.R;
-//import com.zapta.apps.maniana.controller.MainMenuEntry;
 import com.zapta.apps.maniana.controller.MainActivityStartupKind;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.persistence.ModelReadingResult;
@@ -125,27 +121,30 @@ public class MainActivity extends Activity {
     }
 
     /** Called by the framework once when user opened the app main menu the first time. */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // For the old style option menu
-        final MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return true;
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // For the old style option menu
+//        final MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.main_menu, menu);
+//        return true;
+//
+//        // NOTE: alternative implementation to use the ICS popup menu instead. We don't
+//        // use it because it shows the menu at the bottom of the screen far from the
+//        // menu overlow button (bad user experience)
+//        // IcsMainMenuDialog.showMenu(mApp);
+//        // return false;
+//    }
 
-        // NOTE: alternative implementation to use the ICS popup menu instead. We don't
-        // use it because it shows the menu at the bottom of the screen far from the
-        // menu overlow button (bad user experience)
-        // IcsMainMenuDialog.showMenu(mApp);
-        // return false;
-    }
-
-    /** Called each time before the menu is shown. */
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        final MenuItem debugItem = menu.findItem(R.id.main_menu_debug);
-        debugItem.setVisible(mState.debugController().isDebugMode());
-        return super.onPrepareOptionsMenu(menu);
-    }
+//    /** Called each time before the menu is shown. */
+//    @Override
+//    public boolean onPrepareOptionsMenu(Menu menu) {
+////        final MenuItem debugItem = menu.findItem(R.id.main_menu_debug);
+////        debugItem.setVisible(mState.debugController().isDebugMode());
+////        return super.onPrepareOptionsMenu(menu);
+//        LogUtil.debug("*** onPrepareOptionsMenu called");
+//        mState.controller().onMenuButton();
+//        return false;
+//    }
 
 //    /** Called by the framework when the user make a selection in the app main menu. */
 //    @Override
@@ -190,11 +189,29 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        LogUtil.debug("*** onKeyDown: %d", keyCode);
+        
         boolean eventHandled = false;
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            eventHandled = mState.controller().onBackButton();
+        
+        if (event.getRepeatCount() == 0) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_BACK:
+                    eventHandled = mState.controller().onBackButton();
+                    break;  
+                case KeyEvent.KEYCODE_MENU:
+                    eventHandled = mState.controller().onMenuButton();
+                    break;
+            }
         }
+
         return eventHandled || super.onKeyDown(keyCode, event);
+    }
+    
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        // TODO Auto-generated method stub
+        LogUtil.debug("*** dispatchKeyEvent: %d", event.getKeyCode());
+        return super.dispatchKeyEvent(event);
     }
 
     /** Delegates sub sctivities result to the controller. */

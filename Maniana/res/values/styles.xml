@@ -4,13 +4,18 @@
     <style name="Animations" />
 
     <style name="Animations.ItemMenuAbove">
-        <item name="@android:windowEnterAnimation">@anim/qa_show_above</item>
-        <item name="@android:windowExitAnimation">@anim/qa_dismiss_above</item>
+        <item name="@android:windowEnterAnimation">@anim/item_menu_show_above</item>
+        <item name="@android:windowExitAnimation">@anim/item_menu_dismiss_above</item>
     </style>
 
     <style name="Animations.ItemMenuBelow">
-        <item name="@android:windowEnterAnimation">@anim/qa_show_below</item>
-        <item name="@android:windowExitAnimation">@anim/qa_dismiss_below</item>
+        <item name="@android:windowEnterAnimation">@anim/item_menu_show_below</item>
+        <item name="@android:windowExitAnimation">@anim/item_menu_dismiss_below</item>
+    </style>
+
+    <style name="Animations.MainMenu">
+        <item name="@android:windowEnterAnimation">@anim/main_menu_show</item>
+        <item name="@android:windowExitAnimation">@anim/main_menu_dismiss</item>
     </style>
 
     <style name="ListWidgetPortraitBitmap">
