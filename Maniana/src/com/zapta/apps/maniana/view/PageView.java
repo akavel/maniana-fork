@@ -225,7 +225,7 @@ public class PageView extends FrameLayout {
                         mMainActivityState.controller().onMainMenuSelection(selectedEntry);
                     }
                 });
-        mainMenu.show(this, mMainMenuButtonView);
+        mainMenu.show(mMainMenuButtonView);
     }
 
     // TODO: currently the controller calls this even when there is not date change. Filter
