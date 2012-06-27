@@ -1,5 +1,0 @@
-- Improved stability (email us if you encounter problems on your device).
-- Added 3x3 list widget.
-- Added setting for default task color.
-- Added setting for LED notification.
-- Added setting to add new tasks at top/bottom of list.
