@@ -48,7 +48,7 @@ import com.zapta.apps.maniana.util.DisplayUtil;
 public class PageView extends FrameLayout {
 
     /** For testing only. */
-   // private static final boolean FORCE_OVERFLOW_MENU_ON_ALL_DEVICES = false;
+    // private static final boolean FORCE_OVERFLOW_MENU_ON_ALL_DEVICES = false;
 
     /**
      * Candidates for day/date color. Selected by distance from background color with a slight
@@ -101,7 +101,7 @@ public class PageView extends FrameLayout {
 
     private final ImageButton mMainMenuButtonView;
 
-    //private final boolean mUsesIcsMenuOverflowButton;
+    // private final boolean mUsesIcsMenuOverflowButton;
 
     private final ImageButton mButtonUndoView;
     private final ImageButton mButtonAddByTextView;
@@ -114,9 +114,9 @@ public class PageView extends FrameLayout {
     private final TextView mPageTitleTextView;
 
     private final View mPaperColorView;
-    
-//    @Nullable
-//    private MainMenu mLastMainMenu = null;
+
+    // @Nullable
+    // private MainMenu mLastMainMenu = null;
 
     public PageView(MainActivityState mainActivityState, PageKind pageKind) {
         super(checkNotNull(mainActivityState.context()));
@@ -141,8 +141,8 @@ public class PageView extends FrameLayout {
         mMainMenuButtonView = (ImageButton) findViewById(R.id.page_main_menu_button);
 
         // NOTE: could also use !ViewConfiguration.get(context).hasPermanentMenuKey();
-//        mUsesIcsMenuOverflowButton = FORCE_OVERFLOW_MENU_ON_ALL_DEVICES
-//                || (android.os.Build.VERSION.SDK_INT >= 11);
+        // mUsesIcsMenuOverflowButton = FORCE_OVERFLOW_MENU_ON_ALL_DEVICES
+        // || (android.os.Build.VERSION.SDK_INT >= 11);
 
         mDayTextView = (TextView) findViewById(R.id.page_day_text);
         mDateTextView = (TextView) findViewById(R.id.page_date_text);
@@ -162,12 +162,12 @@ public class PageView extends FrameLayout {
         final ItemListViewAdapter adapter = new ItemListViewAdapter(mMainActivityState, mPageKind);
         mItemListView.setApp(mMainActivityState, adapter);
 
-            mMainMenuButtonView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showMainMenu();
-                }
-            });
+        mMainMenuButtonView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMainMenu();
+            }
+        });
 
         updateUndoButton();
         mButtonUndoView.setOnClickListener(new OnClickListener() {
@@ -218,24 +218,13 @@ public class PageView extends FrameLayout {
     }
 
     void showMainMenu() {
-//        // Dismiss if currently showing
-//        if (mLastMainMenu != null && mLastMainMenu.isShowing()) {
-//            mLastMainMenu.dismiss();
-//            mLastMainMenu = null;
-//            return;
-//        }
-        
-        // Else, show. Note that we do not reuse the menu.
-        //
-        // NOTE: make the dismissed last main menu garbage collectible. Currently we 
-        // keep a reference here.
-        //
-        final MainMenu mainMenu = new MainMenu(mMainActivityState, new MainMenu.OnActionItemOutcomeListener() {
-            @Override
-            public void onOutcome(MainMenu source, MainMenuEntry selectedEntry) {
-                mMainActivityState.controller().onMainMenuSelection(selectedEntry);              
-            }            
-        });       
+        final MainMenu mainMenu = new MainMenu(mMainActivityState,
+                new MainMenu.OnActionItemOutcomeListener() {
+                    @Override
+                    public void onOutcome(MainMenu source, MainMenuEntry selectedEntry) {
+                        mMainActivityState.controller().onMainMenuSelection(selectedEntry);
+                    }
+                });
         mainMenu.show(this, mMainMenuButtonView);
     }
 
@@ -281,7 +270,8 @@ public class PageView extends FrameLayout {
             mPaperColorView.setBackgroundColor(ColorUtil.mapPaperColorPrefernce(paperColor));
             baseBackgroundColor = paperColor;
         } else {
-            final int backgroundColor = mMainActivityState.prefTracker().getPageBackgroundSolidColorPreference();
+            final int backgroundColor = mMainActivityState.prefTracker()
+                    .getPageBackgroundSolidColorPreference();
             setBackgroundColor(backgroundColor);
             mPaperColorView.setBackgroundColor(0x00000000);
             baseBackgroundColor = backgroundColor;
@@ -296,13 +286,13 @@ public class PageView extends FrameLayout {
         }
 
         // Update ICS menu overflow icon to have max contrast from the background
-        //if (mUsesIcsMenuOverflowButton) 
+        // if (mUsesIcsMenuOverflowButton)
         {
             final int colorIndex = ColorUtil.selectFurthestColorIndex(baseBackgroundColor,
                     OVERFLOW_DRAWABLE_CANDIDATE_COLORS, 0.05f);
             final int resourceId = OVERFLOW_RESOURCES_CANDIDATE_IDS[colorIndex];
             mMainMenuButtonView.setImageResource(resourceId);
-       } 
+        }
 
         // Update item list view highlight drawable to max contrast from page background
         {
@@ -314,11 +304,12 @@ public class PageView extends FrameLayout {
     }
 
     public final void onPageTitlePreferenceChange() {
-        mPageTitleTextView.setTextColor(mPageKind.isToday() ? mMainActivityState.prefTracker().getPageTitleTodayColor()
-                : mMainActivityState.prefTracker().getPageTitleTomorowColor());
+        mPageTitleTextView.setTextColor(mPageKind.isToday() ? mMainActivityState.prefTracker()
+                .getPageTitleTodayColor() : mMainActivityState.prefTracker()
+                .getPageTitleTomorowColor());
         final Font titleFont = mMainActivityState.prefTracker().getPageTitleFontPreference();
-        final float titleFontSizeSP = mMainActivityState.prefTracker().getPageTitleFontSizePreference()
-                * titleFont.scale;
+        final float titleFontSizeSP = mMainActivityState.prefTracker()
+                .getPageTitleFontSizePreference() * titleFont.scale;
         mPageTitleTextView.setTypeface(titleFont.getTypeface(mMainActivityState.context()));
         mPageTitleTextView.setTextSize(titleFontSizeSP);
 
@@ -359,8 +350,7 @@ public class PageView extends FrameLayout {
     }
 
     /** Popup an item menu for the given item. */
-    public void showItemMenu(final int itemIndex, ItemMenuEntry actions[],
-            final int dismissActionId) {
+    public void showItemMenu(final int itemIndex, ItemMenuEntry actions[], final int dismissActionId) {
         mItemListView.showItemMenu(itemIndex, actions, dismissActionId);
     }
 
@@ -381,7 +371,8 @@ public class PageView extends FrameLayout {
 
     /** Update item divider color on preference change */
     public final void onItemDividerColorPreferenceChange() {
-        final int dividerColor = mMainActivityState.prefTracker().getPageItemDividerColorPreference();
+        final int dividerColor = mMainActivityState.prefTracker()
+                .getPageItemDividerColorPreference();
 
         // The alpha at the edge is 25% of the center alpha
         final int endGradiantColor = (dividerColor & 0x00ffffff)

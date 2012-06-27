@@ -18,6 +18,7 @@ import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -171,18 +172,12 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
 
         mMenuWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         mMenuWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        
+        mMenuWindow.setContentView(mTopView);
+
         mMenuWindow.setTouchable(true);
         mMenuWindow.setFocusable(true);
         mMenuWindow.setOutsideTouchable(true);
-
-        mMenuWindow.setContentView(mTopView);
-        
-        // @@@ experimental
-//        mTopView.setFocusable(true);
-//        mTopView.setClickable(true);
-        //mTopView.set
-
-        // mActioWasSelected = false;
 
         final int[] anchorXYOnsScreen = new int[2];
 
@@ -193,6 +188,20 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
                         + anchorView.getHeight());
 
         mTopView.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        
+        // NOTE: without calling setFocusableInTouchMode(), the key listenter is not called.
+        mMenuWindow.getContentView().setFocusableInTouchMode(true);
+        mMenuWindow.getContentView().setOnKeyListener(new View.OnKeyListener() {        
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode ==  KeyEvent.KEYCODE_MENU && event.getRepeatCount() == 0 && event.getAction() == KeyEvent.ACTION_DOWN) {
+                  dismiss();
+                  return true;
+                }
+                 
+                return false;
+            }
+        });
 
 //        final int rootHeight = mTopView.getMeasuredHeight();
         final int screenHeight = mMainActivityState.services().windowManager().getDefaultDisplay()

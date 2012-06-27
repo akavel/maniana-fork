@@ -120,46 +120,6 @@ public class MainActivity extends Activity {
         mState.prefTracker().release();
     }
 
-    /** Called by the framework once when user opened the app main menu the first time. */
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // For the old style option menu
-//        final MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.main_menu, menu);
-//        return true;
-//
-//        // NOTE: alternative implementation to use the ICS popup menu instead. We don't
-//        // use it because it shows the menu at the bottom of the screen far from the
-//        // menu overlow button (bad user experience)
-//        // IcsMainMenuDialog.showMenu(mApp);
-//        // return false;
-//    }
-
-//    /** Called each time before the menu is shown. */
-//    @Override
-//    public boolean onPrepareOptionsMenu(Menu menu) {
-////        final MenuItem debugItem = menu.findItem(R.id.main_menu_debug);
-////        debugItem.setVisible(mState.debugController().isDebugMode());
-////        return super.onPrepareOptionsMenu(menu);
-//        LogUtil.debug("*** onPrepareOptionsMenu called");
-//        mState.controller().onMenuButton();
-//        return false;
-//    }
-
-//    /** Called by the framework when the user make a selection in the app main menu. */
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        @Nullable
-//        final MainMenuEntry mainMenuEntry = MainMenuEntry.byMainMenuId(item.getItemId());
-//        
-//        if (mainMenuEntry == null) {
-//            LogUtil.error("Unknown option menu item id: " + item.getTitle());
-//            return true;
-//        }
-//
-//        mState.controller().onMainMenuSelection(mainMenuEntry);
-//        return true;
-//    }
 
     /** Called by the framework when this activity is paused. */
     @Override
@@ -187,12 +147,10 @@ public class MainActivity extends Activity {
         mState.controller().onMainActivityResume(thisResumeAction, thisResumeIntent);
     }
 
+    // NOTE: this is not called when a popup menu is actie.
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        LogUtil.debug("*** onKeyDown: %d", keyCode);
-        
         boolean eventHandled = false;
-        
         if (event.getRepeatCount() == 0) {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
@@ -205,13 +163,6 @@ public class MainActivity extends Activity {
         }
 
         return eventHandled || super.onKeyDown(keyCode, event);
-    }
-    
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        // TODO Auto-generated method stub
-        LogUtil.debug("*** dispatchKeyEvent: %d", event.getKeyCode());
-        return super.dispatchKeyEvent(event);
     }
 
     /** Delegates sub sctivities result to the controller. */
