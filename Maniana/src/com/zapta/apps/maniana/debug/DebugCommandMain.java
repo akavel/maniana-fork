@@ -25,7 +25,6 @@ import com.zapta.apps.maniana.annotations.MainActivityScope;
 public enum DebugCommandMain implements DebugCommand {
     NOTIFICATIONS("Notification..."),
     HTML_PAGES("HTML Pages"),
-    ON_SHAKE("onShake()"),
     EXIT("Exit debug mode");
     
     private final String mText;

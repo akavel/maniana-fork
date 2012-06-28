@@ -15,9 +15,8 @@
 package com.zapta.apps.maniana.menus;
 
 import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
-import android.view.Gravity;
+import android.media.AudioManager;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -144,7 +143,7 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
         entryTopView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onEntrySelection(entry);
+                onMenuEntrySelected(entry);
             }
         });
 
@@ -154,11 +153,12 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
         mItemContainerView.addView(entryTopView);
     }
 
-    private final void onEntrySelection(final MainMenuEntry entry) {
+    private final void onMenuEntrySelected(final MainMenuEntry entry) {
+        mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
 
         mMenuWindow.dismiss();
 
-        // Short delay to let the dismiss animation play.
+        // Short delay (in ms) to let the dismiss animation play.
         mMainActivityState.view().getRootView().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -175,10 +175,10 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
     public final void show(View anchorView) {
 
         for (MainMenuEntry entry : MainMenuEntry.values()) {
-            addEntry(entry);
+            if (entry != MainMenuEntry.DEBUG || mMainActivityState.debugController().isDebugMode()) {
+                addEntry(entry);
+            }
         }
-
-        // checkNotNull(mTopView, "setContentView was not called with a view to display.");
 
         // Set transparent window background. This will clear the horizontal strips above and below
         // the menu defined by the two arrows.
@@ -187,8 +187,6 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
         mMenuWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         mMenuWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
 
-        // mMenuWindow.setContentView(mTopView);
-
         mMenuWindow.setTouchable(true);
         mMenuWindow.setFocusable(true);
         mMenuWindow.setOutsideTouchable(true);
@@ -196,9 +194,6 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
         mTopView.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
         // NOTE: without calling setFocusableInTouchMode(), the key listenter is not called.
-        //
-        // TODO: try to use mTopView instead of mMenuWindow.getContextView()
-        //
         mTopView.setFocusableInTouchMode(true);
         mTopView.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -213,64 +208,10 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
             }
         });
 
-        // -------------
-
-        // LogUtil.debug("*** topView: width = %d", mTopView.getMeasuredWidth());
-
-        final int menuWidth = mItemContainerView.getMeasuredWidth();
-        final int arrowWidth = mUpArrowView.getMeasuredWidth();
-
-        // // showArrow.setVisibility(View.VISIBLE);
-        // final ViewGroup.MarginLayoutParams param = (ViewGroup.MarginLayoutParams) mUpArrowView
-        // .getLayoutParams();
-        // param.leftMargin = menuWidth - arrowWidth;
-
-        // -------------------
-
-        // final int[] anchorXYOnsScreen = new int[2];
-        //
-        // anchorView.getLocationOnScreen(anchorXYOnsScreen);
-        //
-        // final Rect anchorRectOnScreen = new Rect(anchorXYOnsScreen[0], anchorXYOnsScreen[1],
-        // anchorXYOnsScreen[0] + anchorView.getWidth(), anchorXYOnsScreen[1]
-        // + anchorView.getHeight());
-        // ----------
-
-        // final int rootHeight = mTopView.getMeasuredHeight();
-        // final int screenHeight =
-        // mMainActivityState.services().windowManager().getDefaultDisplay()
-        // .getHeight();
-
-        // Arrow position is slightly to the right of the left upper/lower cornet.
-        // TODO: define const.
-        // TODO: scale by density?
-        // final int xPosPixels = 50;
-
-        final int xPosPixels = anchorView.getLeft();
-
-        // final int arrowPos = anchorRectOnScreen.left + xPosPixels;
-
-        // int spaceAbove = anchorRectOnScreen.top;
-        // int spaceBelow = screenHeight - anchorRectOnScreen.bottom;
-
-        // TODO: make a const or param.
-        // TODO: scale by density?
-        // final int ARROW_VERTICAL_OVERLAP = 15;
-
-        // final int yPosPixels = anchorRectOnScreen.bottom; // - ARROW_VERTICAL_OVERLAP;
-        // if (rootHeight > spaceBelow) {
-        // mItemContainerView.getLayoutParams().height = spaceBelow;
-        // }
-
-        // TODO: see if PopupWindow.showAsDropDown() helps here
-
-        // setArrow(arrowPos);
         mMenuWindow.setAnimationStyle(R.style.Animations_MainMenu);
         mMainActivityState.popupsTracker().track(this);
-        // mMenuWindow.showAtLocation(parentView, Gravity.NO_GRAVITY, xPosPixels, yPosPixels);
         mMenuWindow.showAsDropDown(anchorView, 0, 0);
     }
-
 
     /** Called when the window is dismissed. */
     @Override

@@ -61,9 +61,6 @@ public class DebugController {
             case HTML_PAGES:
                 startHtmlDialog();
                 break;
-            case ON_SHAKE:
-                mMainActivityState.controller().onShake();
-                break;
             case EXIT:
                 setDebugMode(false);
                 break;

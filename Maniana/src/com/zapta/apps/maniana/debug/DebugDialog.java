@@ -16,6 +16,7 @@ package com.zapta.apps.maniana.debug;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.media.AudioManager;
 
 import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.main.MainActivityState;
@@ -41,6 +42,7 @@ public class DebugDialog {
         builder.setTitle(title);
         builder.setItems(commandsText, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int itemIndex) {
+                mainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
                 final T command = commands[itemIndex];
                 listener.onDebugCommand(command);
             }
