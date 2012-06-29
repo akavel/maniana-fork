@@ -74,7 +74,7 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 // TODO: dismiss if outside of mItemContainsView.
-                LogUtil.debug("*** onTouch: %f, %f", event.getX(), event.getY());
+                //LogUtil.debug("*** onTouch: %f, %f, action=%d", event.getX(), event.getY(), event.getAction());
                 if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
                     mMenuWindow.dismiss();
                     return true;

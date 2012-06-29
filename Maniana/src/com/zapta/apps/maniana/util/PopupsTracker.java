@@ -45,6 +45,7 @@ public class PopupsTracker {
     public final void track(TrackablePopup popup) {
         check(!mClosingAllLeftOvers, "Closing popups");
         mTrackedPopups.add(popup);
+        // LogUtil.debug("*** Tracked: %d", mTrackedPopups.size());
     }
 
     /** Stop tracking a popup. Ignore silently if popup is not tracked. */
@@ -52,6 +53,7 @@ public class PopupsTracker {
         if (!mClosingAllLeftOvers) {
             mTrackedPopups.remove(popup);
         }
+        // LogUtil.debug("*** Untracked: %d", mTrackedPopups.size());
     }
     
     public final int count() {
