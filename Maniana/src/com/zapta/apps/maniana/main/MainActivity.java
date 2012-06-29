@@ -20,7 +20,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.Window;
 
 import com.zapta.apps.maniana.controller.MainActivityStartupKind;
@@ -120,7 +119,6 @@ public class MainActivity extends Activity {
         mState.prefTracker().release();
     }
 
-
     /** Called by the framework when this activity is paused. */
     @Override
     protected void onPause() {
@@ -155,7 +153,7 @@ public class MainActivity extends Activity {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_BACK:
                     eventHandled = mState.controller().onBackButton();
-                    break;  
+                    break;
                 case KeyEvent.KEYCODE_MENU:
                     eventHandled = mState.controller().onMenuButton();
                     break;

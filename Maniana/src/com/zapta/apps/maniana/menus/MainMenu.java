@@ -32,6 +32,7 @@ import android.widget.TextView;
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.main.MainActivityState;
+import com.zapta.apps.maniana.util.DisplayUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
 
@@ -54,8 +55,6 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
     private final PopupWindow mMenuWindow;
 
     private View mTopView;
-
-    private ImageView mUpArrowView;
 
     private ViewGroup mItemContainerView;
 
@@ -91,82 +90,13 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
 
         mItemContainerView = (ViewGroup) mTopView.findViewById(R.id.items_container);
 
-        mUpArrowView = (ImageView) mTopView.findViewById(R.id.arrow_up);
-
         mTopView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT));
 
         mMenuWindow.setContentView(mTopView);
         mMenuWindow.setOnDismissListener(this);
     }
-
-    /**
-     * Get action item at given index
-     */
-    public final MainMenuEntry getActionItem(int index) {
-        return MainMenuEntry.values()[index];
-        // return actionItems.get(index);
-    }
-
-    /**
-     * Add an action item to the end of the list.
-     */
-    private final void addEntry(final MainMenuEntry entry) {
-        // actionItems.add(actionItem);
-
-        // TODO: rename this to action_wrapper here and in the layout.
-        final View entryTopView = mMainActivityState.services().layoutInflater()
-                .inflate(R.layout.main_menu_entry, null);
-
-        final ImageView imageView = (ImageView) entryTopView
-                .findViewById(R.id.main_menu_entry_icon);
-        imageView.setImageResource(entry.iconResourceId);
-
-        final TextView textView = (TextView) entryTopView.findViewById(R.id.main_menu_entry_text);
-        textView.setText(entry.textResourceId);
-
-        // Set a listener to track touches and highlight pressed items.
-        entryTopView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    // NOTE: this clears any padding set on the top view (in case it is set in xml).
-                    entryTopView.setBackgroundResource(R.drawable.popup_menu_entry_selected);
-                } else if (event.getAction() == MotionEvent.ACTION_CANCEL
-                        || event.getAction() == MotionEvent.ACTION_UP || !entryTopView.isPressed()) {
-                    entryTopView.setBackgroundResource(0);
-                }
-                return false;
-            }
-        });
-
-        entryTopView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onMenuEntrySelected(entry);
-            }
-        });
-
-        entryTopView.setFocusable(true);
-        entryTopView.setClickable(true);
-
-        mItemContainerView.addView(entryTopView);
-    }
-
-    private final void onMenuEntrySelected(final MainMenuEntry entry) {
-        mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
-
-        mMenuWindow.dismiss();
-
-        // Short delay (in ms) to let the dismiss animation play.
-        mMainActivityState.view().getRootView().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mOutcomeListener.onOutcome(MainMenu.this, entry);
-            }
-        }, 200);
-    }
-
+    
     /**
      * Show the popup action menu over a given anchor view.
      * 
@@ -210,17 +140,88 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
 
         mMenuWindow.setAnimationStyle(R.style.Animations_MainMenu);
         mMainActivityState.popupsTracker().track(this);
-        mMenuWindow.showAsDropDown(anchorView, 0, 0);
+        // TODO: normalize dx, dy by density.
+        //
+        // NOTE: the large x offset is a workaround for the orientation change issue. To reproduce
+        // (with xoff param = 0):
+        // 1. While in portrait mode, open the main menu.
+        // 2. Rotate the phone to landsape orientation and observe the main menu.
+        //
+        // Actual behavior: the main menu is positioned too much to the left on the main
+        // menu button.
+        //
+        final float density = DisplayUtil.getDensity(mMainActivityState.context());
+        final int xOffset = (int)(1000 * density);
+        final int yOffset = (int)(-2 * density -0.5f);
+        mMenuWindow.showAsDropDown(anchorView, xOffset, yOffset);
+    }
+    
+    private final boolean isShowing() {
+        return mMenuWindow.isShowing();
+    }
+
+    /**
+     * Add an action item to the end of the list.
+     */
+    private final void addEntry(final MainMenuEntry entry) {
+        final View entryTopView = mMainActivityState.services().layoutInflater()
+                .inflate(R.layout.main_menu_entry, null);
+
+        final ImageView imageView = (ImageView) entryTopView
+                .findViewById(R.id.main_menu_entry_icon);
+        imageView.setImageResource(entry.iconResourceId);
+
+        final TextView textView = (TextView) entryTopView.findViewById(R.id.main_menu_entry_text);
+        textView.setText(entry.textResourceId);
+
+        // Set a listener to track touches and highlight pressed items.
+        entryTopView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    // NOTE: this clears any padding set on the top view (in case it is set in xml).
+                    entryTopView.setBackgroundResource(R.drawable.popup_menu_entry_selected);
+                } else if (event.getAction() == MotionEvent.ACTION_CANCEL
+                        || event.getAction() == MotionEvent.ACTION_UP || !entryTopView.isPressed()) {
+                    entryTopView.setBackgroundResource(0);
+                }
+                return false;
+            }
+        });
+
+        entryTopView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onMenuEntrySelected(entry);
+            }
+        });
+
+        entryTopView.setFocusable(true);
+        entryTopView.setClickable(true);
+
+        mItemContainerView.addView(entryTopView);
+    }
+
+    /** Called when a menu entry is clicked */
+    private final void onMenuEntrySelected(final MainMenuEntry entry) {
+        mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
+
+        mMenuWindow.dismiss();
+
+        // Short delay to let the dismiss animation complete.
+        final int animationTimeMillis = mMainActivityState.context().getResources().getInteger(R.integer.popup_menu_dismiss_animation_millis_id);
+        mMainActivityState.view().getRootView().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mOutcomeListener.onOutcome(MainMenu.this, entry);
+            }
+        }, animationTimeMillis);
     }
 
     /** Called when the window is dismissed. */
     @Override
     public final void onDismiss() {
         mMainActivityState.popupsTracker().untrack(this);
-    }
-
-    public final boolean isShowing() {
-        return mMenuWindow.isShowing();
     }
 
     /** Public method to dismiss the menu. */
