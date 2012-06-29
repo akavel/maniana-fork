@@ -45,6 +45,12 @@
             android:summaryOff="@string/settings_notification_led_summary_off"
             android:summaryOn="@string/settings_notification_led_summary_on"
             android:title="@string/settings_notification_led_title" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="prefCalendarLaunchKey"
+            android:summaryOff="@string/settings_calendar_launch_summary_off"
+            android:summaryOn="@string/settings_calendar_launch_summary_on"
+            android:title="@string/settings_calendar_launch_title" />
 
         <PreferenceScreen
             android:summary="@string/settings_section_shaker_summary"

@@ -43,20 +43,21 @@ public enum PreferenceKind implements KeyedEnum {
     // Behavior
     STARTUP_ANIMATION("prefStartupAnimationKey"),
     VERBOSE_MESSAGES("prefVerboseMessagesKey"),
+    DAILY_NOTIFICATION("prefDailyNotificationKey"),
+    NOTIFICATION_LED("prefNotificationLedKey"),
+    SHAKER_ENABLED("prefShakerEnableKey"),
+    CALENDAR_LAUNCH("prefCalendarLaunchKey"),
+    SHAKER_ACTION("prefShakerActionKey"),
+    SHAKER_SENSITIVITY("prefShakerForceKey"),
+    
+    // Tasks
     AUTO_SORT("prefAutoSortKey"),
     ADD_TO_TOP("prefAddToTopKey"),
     DEFAULT_ITEM_COLOR("prefDefaultItemColorKey"),
     AUTO_DAILY_CLEANUP("prefAutoDailyCleanupKey"),
-    DAILY_NOTIFICATION("prefDailyNotificationKey"),
-    NOTIFICATION_LED("prefNotificationLedKey"),
     LOCK_PERIOD("prefLockPeriodKey"),
-    
-    // Shaker
-    SHAKER_ENABLED("prefShakerEnableKey"),
-    SHAKER_ACTION("prefShakerActionKey"),
-    SHAKER_SENSITIVITY("prefShakerForceKey"),
 
-    // Page
+    // Pages
     PAGE_SELECT_THEME("prefPageSelectThemeKey"),
     PAGE_BACKGROUND_PAPER("prefPageBackgroundPaperKey"),
     PAGE_PAPER_COLOR("prefPagePaperColorKey"),

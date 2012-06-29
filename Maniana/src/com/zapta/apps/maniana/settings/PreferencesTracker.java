@@ -24,7 +24,7 @@ import com.zapta.apps.maniana.model.ItemColor;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**
- * Cache frequently used settings. 
+ * Provides a layer of caching on for some of PreferencesReader's preferences.
  * 
  * TODO: simplify this class by removing settings that are not used often. These
  * settings will be read directly from the preferences reader.

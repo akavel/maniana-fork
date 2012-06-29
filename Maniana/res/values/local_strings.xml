@@ -133,8 +133,11 @@
     <string name="settings_daily_notification_summary_off">Daily notification is off</string>  
     <string name="settings_notification_led_title">Notification LED</string>
     <string name="settings_notification_led_summary_on">Will also activate notification LED (when available)</string>
-    <string name="settings_notification_led_summary_off">Will not activate notification LED</string>
-     
+    <string name="settings_notification_led_summary_off">Will not activate notification LED</string> 
+    <string name="settings_calendar_launch_title">Google Calendar</string>
+    <string name="settings_calendar_launch_summary_on">Clicking on today\'s date launches Google Calendar</string>
+    <string name="settings_calendar_launch_summary_off">Clicking on today\'s date is ignored</string>
+            
     <!-- Settings/Tasks -->
     <string name="settings_section_name_Tasks">Tasks</string>
     <string name="settings_auto_sort_title">Auto Task Sort</string>

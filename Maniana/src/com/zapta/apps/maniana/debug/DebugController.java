@@ -26,7 +26,6 @@ import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.notifications.NotificationSimulator;
 import com.zapta.apps.maniana.notifications.NotificationUtil;
 import com.zapta.apps.maniana.settings.PreferenceKind;
-//import com.zapta.apps.maniana.view.IcsMainMenuDialog;
 
 /**
  * Controller for the debug functionality.
@@ -147,7 +146,8 @@ public class DebugController {
 
     /** Write a persisted debug mode flag value */
     public final void setDebugMode(boolean flag) {
-        mMainActivityState.services().toast(flag ? "Debug mode enabled (see Menu)" : "Debug mode disabled");
+        mMainActivityState.services().toast(
+                flag ? "Debug mode enabled (see Menu)" : "Debug mode disabled");
         final SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(mMainActivityState.context());
         final Editor editor = sharedPreferences.edit();

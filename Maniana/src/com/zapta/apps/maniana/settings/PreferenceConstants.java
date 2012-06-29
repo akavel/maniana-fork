@@ -37,6 +37,7 @@ public interface PreferenceConstants {
     public static final boolean DEFAULT_AUTO_DAILY_CLEANUP = true;
     public static final boolean DEFAULT_DAILY_NOTIFICATION = false;
     public static final boolean DEFAULT_NOTIFICATION_LED = true;
+    public static final boolean DEFAULT_CALENDAR_LAUNCH = true;
     public static final LockExpirationPeriod DEFAULT_LOCK_PERIOD = LockExpirationPeriod.NEVER;
     
     // Shaker

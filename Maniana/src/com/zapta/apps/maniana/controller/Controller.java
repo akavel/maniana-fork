@@ -876,6 +876,18 @@ public class Controller implements ShakerListener {
         return true;
     }
 
+    /** Called to launch the calendar */
+    public final void onCalendarLaunchClick() {
+        if (!mMainActivityState.prefReader().getCalendarLaunchPreference()) {
+            return;
+        }
+        mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
+        final Intent calendarIntent = new Intent();
+        calendarIntent.setClassName("com.android.calendar",
+                "com.android.calendar.AgendaActivity");
+        mMainActivityState.mainActivity().startActivity(calendarIntent);
+    }
+    
     /** Called by the framework when the user makes a main menu selection. */
     public final void onMainMenuSelection(MainMenuEntry entry) {
         switch (entry) {

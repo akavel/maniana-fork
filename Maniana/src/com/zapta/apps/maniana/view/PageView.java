@@ -101,22 +101,18 @@ public class PageView extends FrameLayout {
 
     private final ImageButton mMainMenuButtonView;
 
-    // private final boolean mUsesIcsMenuOverflowButton;
-
     private final ImageButton mButtonUndoView;
     private final ImageButton mButtonAddByTextView;
     private final ImageButton mButtonAddByVoiceView;
     private final ImageButton mButtonCleanView;
 
+    private final View mDateTimeSection;
     private final TextView mDayTextView;
     private final TextView mDateTextView;
 
     private final TextView mPageTitleTextView;
 
     private final View mPaperColorView;
-
-    // @Nullable
-    // private MainMenu mLastMainMenu = null;
 
     public PageView(MainActivityState mainActivityState, PageKind pageKind) {
         super(checkNotNull(mainActivityState.context()));
@@ -130,6 +126,8 @@ public class PageView extends FrameLayout {
 
         mPageTitleSection = findViewById(R.id.page_title_section);
         mPageTitleDivider = findViewById(R.id.page_title_divider);
+        
+        //mPageTitleSection.setOnClickListener(mCalendarLaunchListener);
 
         mButtonUndoView = (ImageButton) findViewById(R.id.page_undo_button);
         mButtonAddByTextView = (ImageButton) findViewById(R.id.page_add_by_text_button);
@@ -154,10 +152,17 @@ public class PageView extends FrameLayout {
                 : R.string.page_title_Maniana);
 
         // Tomorrow page does not display date
-        if (mPageKind.isTomorrow()) {
-            View dataTimeSection = findViewById(R.id.page_date_time_section);
-            dataTimeSection.setVisibility(View.GONE);
-        }
+        mDateTimeSection = findViewById(R.id.page_date_time_section);
+        if (mPageKind.isToday()) {
+            mDateTimeSection.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onCalendarLaunchClick();
+                }
+            });
+        } else {
+            mDateTimeSection.setVisibility(View.GONE);
+        }      
 
         final ItemListViewAdapter adapter = new ItemListViewAdapter(mMainActivityState, mPageKind);
         mItemListView.setApp(mMainActivityState, adapter);
@@ -237,6 +242,11 @@ public class PageView extends FrameLayout {
         mDateTextView.setText(mMainActivityState.dateTracker().getUserMonthDayString());
     }
 
+    /** Called when the user clicked on a calendar launch area. */
+    private final void onCalendarLaunchClick() {
+        mMainActivityState.controller().onCalendarLaunchClick();
+    }
+    
     public final void onPageItemFontVariationPreferenceChange() {
         mItemListView.onPageItemFontVariationPreferenceChange();
     }

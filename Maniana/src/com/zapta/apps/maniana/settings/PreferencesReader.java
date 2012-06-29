@@ -142,6 +142,11 @@ public class PreferencesReader implements PreferenceConstants {
         return mSharedPreferences.getBoolean(PreferenceKind.NOTIFICATION_LED.getKey(),
                 DEFAULT_NOTIFICATION_LED);
     }
+    
+    public final boolean getCalendarLaunchPreference() {
+        return mSharedPreferences.getBoolean(PreferenceKind.CALENDAR_LAUNCH.getKey(),
+                DEFAULT_CALENDAR_LAUNCH);
+    }
 
     public final LockExpirationPeriod getLockExpierationPeriodPreference() {
         final String key = mSharedPreferences.getString(PreferenceKind.LOCK_PERIOD.getKey(),
