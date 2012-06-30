@@ -21,6 +21,7 @@ import java.io.InputStream;
 import javax.annotation.Nullable;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -62,6 +63,7 @@ import com.zapta.apps.maniana.settings.PreferenceKind;
 import com.zapta.apps.maniana.settings.SettingsActivity;
 import com.zapta.apps.maniana.settings.ShakerAction;
 import com.zapta.apps.maniana.util.AttachmentUtil;
+import com.zapta.apps.maniana.util.CalendarUtil;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult;
 import com.zapta.apps.maniana.util.IdGenerator;
@@ -234,7 +236,7 @@ public class Controller implements ShakerListener {
         maybeHandleDateChange();
 
         NotificationUtil.clearPendingItemsNotification(mMainActivityState.context());
-        
+
         // Keep the midnight ticker going, just in case.
         MidnightTicker.scheduleMidnightTicker(mMainActivityState.context());
 
@@ -869,7 +871,7 @@ public class Controller implements ShakerListener {
 
         return mMainActivityState.str(R.string.organize_outcome_Page_already_organized);
     }
-    
+
     /** Called to show the main menu. */
     public final boolean onMenuButton() {
         mMainActivityState.view().showMainMenu();
@@ -878,21 +880,25 @@ public class Controller implements ShakerListener {
 
     /** Called to launch the calendar */
     public final void onCalendarLaunchClick() {
-        if (!mMainActivityState.prefReader().getCalendarLaunchPreference()) {
-            return;
+        if (mMainActivityState.prefReader().getCalendarLaunchPreference()) {
+            mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
+            if (!CalendarUtil.launchGoogleCalendar(mMainActivityState)) {
+                // NOTE: the protocol to launch the google calendar depend on the OS version.
+                // We include it in the error message to help with diagnostic. If needed
+                // more information, add a debug menu command to diagnose the calendar
+                // launching.
+                mMainActivityState.services().toast("Failed launching Google calendar (%d).",
+                        android.os.Build.VERSION.SDK_INT);
+            }
         }
-        mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
-        final Intent calendarIntent = new Intent();
-        calendarIntent.setClassName("com.android.calendar",
-                "com.android.calendar.AgendaActivity");
-        mMainActivityState.mainActivity().startActivity(calendarIntent);
     }
-    
+
     /** Called by the framework when the user makes a main menu selection. */
     public final void onMainMenuSelection(MainMenuEntry entry) {
         switch (entry) {
             case HELP:
-                final Intent helpIntent = HelpUtil.helpPageIntent(mMainActivityState.context(), false);
+                final Intent helpIntent = HelpUtil.helpPageIntent(mMainActivityState.context(),
+                        false);
                 mMainActivityState.mainActivity().startActivity(helpIntent);
                 break;
             case SETTINGS:
