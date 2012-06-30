@@ -71,6 +71,7 @@ public interface PreferenceConstants {
     public static final boolean DEFAULT_WIDGET_SHOW_COMPLETED_ITEMS = false;
     public static final int DEFAULT_WIDGET_ITEM_COMPLETED_TEXT_COLOR = 0xff888888;
     public static final boolean DEFAULT_WIDGET_SHOW_TOOLBAR = true;
+    public static final boolean DEFAULT_WIDGET_SHOW_DATE = false;
     public static final boolean DEFAULT_WIDGET_SINGLE_LINE = false;
     
     // Debug

@@ -48,7 +48,9 @@ public class MidnightTicker extends BroadcastReceiver {
         LogUtil.info("MidnightTicker onRecieve: " + intent);
         
         // Payload1: update widgets
-        BaseWidgetProvider.updateAllWidgetsFromContext(context);
+        final Time timeNow = new Time();
+        timeNow.setToNow();
+        BaseWidgetProvider.updateAllWidgetsFromContext(context, timeNow);
     }
 
     /**

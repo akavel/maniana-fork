@@ -25,6 +25,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.SystemClock;
+import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -65,11 +66,13 @@ public class ListWidgetProviderTemplate {
 
     @Nullable
     private final AppModel mModel;
+    private final Time mSometimeToday;
     private final Context mContext;
     private final float mDensity;
     private final LinearLayout mTopView;
     private final View mBackgroundColorView;
     private final TextView mToolbarTitleTextView;
+    private final TextView mToolbarDateTextView;
     private final LinearLayout mItemListView;
     private final List<TextView> mItemTextViews;
     private final LayoutInflater mLayoutInflater;
@@ -83,7 +86,7 @@ public class ListWidgetProviderTemplate {
     private final boolean mIncludeCompletedItemsPreference;
     private final boolean mSingleLinePreference;
 
-    public ListWidgetProviderTemplate(Context context, @Nullable AppModel model,
+    public ListWidgetProviderTemplate(Context context, @Nullable AppModel model, Time sometimeToday,
             boolean paperPreference, int backgroundColorPreference,
             boolean toolbarEanbledPreference, boolean includeCompletedItemsPreference,
             boolean singleLinePreference, ItemFontVariation fontVariationPreference,
@@ -91,6 +94,7 @@ public class ListWidgetProviderTemplate {
         mContext = context;
         mDensity = DisplayUtil.getDensity(context);
         mModel = model;
+        mSometimeToday = sometimeToday;
         mPaperPreference = paperPreference;
         mBackgroundColorPreference = backgroundColorPreference;
         mToolbarEanbledPreference = toolbarEanbledPreference;
@@ -107,6 +111,7 @@ public class ListWidgetProviderTemplate {
         mBackgroundColorView = mTopView.findViewById(R.id.widget_list_background_color);
         mToolbarTitleTextView = (TextView) mTopView
                 .findViewById(R.id.widget_list_template_toolbar_title);
+        mToolbarDateTextView = (TextView) mTopView.findViewById(R.id.widget_list_template_date);
         mItemListView = (LinearLayout) mTopView.findViewById(R.id.widget_list_template_item_list);
 
         mItemTextViews = new ArrayList<TextView>();
@@ -399,6 +404,14 @@ public class ListWidgetProviderTemplate {
         } else {
             templateToolbarView.setBackgroundResource(R.drawable.widget_toolbar_background);
         }
+        
+        // Set date.
+        // TODO: *** enable/disable based on preferences and widget width in dips
+        // TODO: *** set size based on toolbar/title size.
+        // TODO: *** user shorter format for smaller widgets.
+        // TODO: *** set text and background colors.
+        // TODO: *** make the date clickable based on preferences.
+        mToolbarDateTextView.setText(mSometimeToday.format("%a, %b, %d"));
 
         // The voice recognition button is shown only if this device supports voice recognition.
         if (MainActivityServices.isVoiceRecognitionSupported(mContext)) {

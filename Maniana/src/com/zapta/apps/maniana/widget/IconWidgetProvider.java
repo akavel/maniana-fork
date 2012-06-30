@@ -23,6 +23,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.text.format.Time;
 import android.widget.RemoteViews;
 
 import com.zapta.apps.maniana.R;
@@ -45,7 +46,9 @@ public class IconWidgetProvider extends BaseWidgetProvider {
     /** Called by the widget host. */
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        update(context, appWidgetManager, appWidgetIds, loadModelForWidgets(context));
+        final Time timeNow = new Time();
+        timeNow.setToNow();
+        update(context, appWidgetManager, appWidgetIds, loadModelForWidgets(context, timeNow));
     }
 
     /** Internal widget update method. */

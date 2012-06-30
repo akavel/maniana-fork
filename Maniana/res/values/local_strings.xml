@@ -46,7 +46,7 @@
     <!-- Notification -->
     <string name="notification_title_single_task">You have one active task</string>
     <string name="notification_title_d_tasks">You have %d active tasks</string>
-    <string name="notification_content">Tap to open Maniana</string> 
+    <string name="notification_content">Tap to open Maniana</string>
 
     <!-- Page operations -->
     <string name="Auto_sorted">Auto sorted</string>
@@ -75,8 +75,8 @@
     <!-- Color Picker -->
     <string name="color_picker_Press_on_a_color_below_to_apply_it">Press on a color below to apply it</string>
     <string name="color_picker_Select_Color">Select Color</string>
-    
-    <!--  Item Color -->
+
+    <!-- Item Color -->
     <string name="item_color_none">None</string>
     <string name="item_color_red">Red</string>
     <string name="item_color_blue">Blue</string>
@@ -130,24 +130,24 @@
     <string name="settings_detailed_messages_summary_off">Disabled (expert mode)</string>
     <string name="settings_daily_notification_title">Daily Notification</string>
     <string name="settings_daily_notification_summary_on">Will notify daily if having active tasks</string>
-    <string name="settings_daily_notification_summary_off">Daily notification is off</string>  
+    <string name="settings_daily_notification_summary_off">Daily notification is off</string>
     <string name="settings_notification_led_title">Notification LED</string>
     <string name="settings_notification_led_summary_on">Will also activate notification LED (when available)</string>
-    <string name="settings_notification_led_summary_off">Will not activate notification LED</string> 
+    <string name="settings_notification_led_summary_off">Will not activate notification LED</string>
     <string name="settings_calendar_launch_title">Google Calendar</string>
     <string name="settings_calendar_launch_summary_on">Clicking on today\'s date launches Google Calendar</string>
     <string name="settings_calendar_launch_summary_off">Clicking on today\'s date is ignored</string>
-            
+
     <!-- Settings/Tasks -->
     <string name="settings_section_name_Tasks">Tasks</string>
     <string name="settings_auto_sort_title">Auto Task Sort</string>
     <string name="settings_auto_sort_summary_on">Forcing task order (active before completed before locked)</string>
-    <string name="settings_auto_sort_summary_off">Allowing arbitrary task order</string>  
+    <string name="settings_auto_sort_summary_off">Allowing arbitrary task order</string>
     <string name="settings_add_to_top_title">Add To Top</string>
     <string name="settings_add_to_top_summary_on">New tasks are added at list top</string>
-    <string name="settings_add_to_top_summary_off">New tasks are added at list bottom</string>   
+    <string name="settings_add_to_top_summary_off">New tasks are added at list bottom</string>
     <string name="settings_default_item_color_title">Default Task Color</string>
-    <string name="settings_default_item_color_summary">Initial color of new tasks</string> 
+    <string name="settings_default_item_color_summary">Initial color of new tasks</string>
     <string name="settings_daily_cleanup_title">Daily Task Cleanup</string>
     <string name="settings_daily_cleanup_summary_on">Deleting completed tasks every midnight</string>
     <string name="settings_daily_cleanup_summary_off">Daily deletion of completed tasks is disabled</string>
@@ -155,7 +155,7 @@
     <string name="settings_lock_expiration_name_once_a_week">Once a week</string>
     <string name="settings_lock_expiration_name_once_a_month">Once a month</string>
     <string name="settings_lock_expiration_name_never">Never</string>
- 
+
     <!-- Settings/Shaker -->
     <string name="settings_section_name_Shaker">Shaking Action</string>
     <string name="settings_section_shaker_summary">Click to set shaking action</string>
@@ -199,6 +199,9 @@
     <string name="settings_widget_show_toolbar_title">Show Toolbar</string>
     <string name="settings_widget_show_toolbar_summary_on">Showing widget toolbar</string>
     <string name="settings_widget_show_toolbar_summary_off">Hiding widget toolbar</string>
+    <string name="settings_widget_show_date_title">Show Date</string>
+    <string name="settings_widget_show_date_summary_on">Showing today\'s date when toolbar has room</string>
+    <string name="settings_widget_show_date_summary_off">Not showing today\'s date</string>
 
     <!-- Settings/Widget/Task Text -->
     <string name="settings_widget_single_line_title">Single Line</string>

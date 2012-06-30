@@ -248,6 +248,13 @@
             android:summaryOff="@string/settings_widget_show_toolbar_summary_off"
             android:summaryOn="@string/settings_widget_show_toolbar_summary_on"
             android:title="@string/settings_widget_show_toolbar_title" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="prefWidgetShowToolbarKey"
+            android:key="prefWidgetShowDateKey"
+            android:summaryOff="@string/settings_widget_show_date_summary_off"
+            android:summaryOn="@string/settings_widget_show_date_summary_on"
+            android:title="@string/settings_widget_show_date_title" />
 
         <PreferenceScreen
             android:key="prefWidgetTaskTextScreenKey"

@@ -976,6 +976,7 @@ public class Controller implements ShakerListener {
             case SOUND_ENABLED:
             case APPLAUSE_LEVEL:
             case DAILY_NOTIFICATION:
+       
             case NOTIFICATION_LED:
             case LOCK_PERIOD:
             case VERBOSE_MESSAGES:
@@ -996,6 +997,9 @@ public class Controller implements ShakerListener {
                 // the controller is paused when setting is changed.
                 break;
 
+                // NOTE: calendar launch change triggers widget update in case the widget
+                // date display is enabled.
+            case CALENDAR_LAUNCH:
             case WIDGET_BACKGROUND_PAPER:
             case WIDGET_PAPER_COLOR:
             case WIDGET_BACKGROUND_COLOR:
@@ -1006,6 +1010,7 @@ public class Controller implements ShakerListener {
             case WIDGET_SHOW_COMPLETED_ITEMS:
             case WIDGET_ITEM_COMPLETED_TEXT_COLOR:
             case WIDGET_SHOW_TOOLBAR:
+            case WIDGET_SHOW_DATE:
             case WIDGET_SINGLE_LINE:
                 // NOTE: This covers the case where the user changes widget settings and presses the
                 // Home button immediately, going back to the widgets. The widget update at
@@ -1036,7 +1041,7 @@ public class Controller implements ShakerListener {
     /** Force a widget update with the current */
     private final void updateAllWidgets() {
         BaseWidgetProvider.updateAllWidgetsFromModel(mMainActivityState.context(),
-                mMainActivityState.model());
+                mMainActivityState.model(), mMainActivityState.dateTracker().sometimeToday());
     }
 
     /** Called by the main activity when it is created. */

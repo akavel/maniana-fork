@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:background="#00000000"
             android:longClickable="false"
-            android:paddingLeft="12dip"
+            android:paddingLeft="15dip"
             android:paddingRight="12dip"
             android:src="@drawable/main_menu_button_version_1" >
         </ImageButton>

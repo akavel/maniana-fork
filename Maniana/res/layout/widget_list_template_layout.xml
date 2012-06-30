@@ -36,6 +36,7 @@
                 android:textStyle="bold" />
 
             <LinearLayout
+                android:id="@+id/widget_list_template_icon_section"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -67,6 +68,20 @@
                     android:src="@drawable/widget_add_by_voice" >
                 </ImageButton>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/widget_list_template_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@id/widget_list_template_icon_section"
+                android:layout_toRightOf="@id/widget_list_template_toolbar_title"
+                android:background="#00000000"
+                android:text="@string/place_holder"
+                android:textSize="20sp"
+                android:textColor="#ff444444"
+                />
         </RelativeLayout>
 
         <LinearLayout

@@ -24,6 +24,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.text.format.Time;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -117,8 +118,10 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
      */
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        final Time timeNow = new Time();
+        timeNow.setToNow();
         update(context, appWidgetManager, listWidgetSize(), appWidgetIds,
-                loadModelForWidgets(context));
+                loadModelForWidgets(context, timeNow), timeNow);
     }
 
     /**
@@ -133,7 +136,8 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
      *        display an error message.
      */
     private static final void update(Context context, AppWidgetManager appWidgetManager,
-            ListWidgetSize listWidgetSize, int[] appWidgetIds, @Nullable AppModel model) {
+            ListWidgetSize listWidgetSize, int[] appWidgetIds, @Nullable AppModel model,
+            Time sometimeToday) {
 
         if (appWidgetIds.length == 0) {
             return;
@@ -142,22 +146,18 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final MyApp app = (MyApp) context.getApplicationContext();
         final PreferencesReader prefReader = app.preferencesReader();
 
-        final boolean paper = prefReader
-                .getWidgetBackgroundPaperPreference();
+        final boolean paper = prefReader.getWidgetBackgroundPaperPreference();
 
         final int templateBackgroundColor = templateBackgroundColor(prefReader, paper);
 
         final ItemFontVariation fontVariation = ItemFontVariation.newFromWidgetPreferences(context,
                 prefReader);
 
-        final boolean toolbarEanbled = prefReader
-                .getWidgetShowToolbarPreference();
+        final boolean toolbarEanbled = prefReader.getWidgetShowToolbarPreference();
 
-        final boolean includeCompletedItems = prefReader
-                .getWidgetShowCompletedItemsPreference();
+        final boolean includeCompletedItems = prefReader.getWidgetShowCompletedItemsPreference();
 
-        final boolean singleLine = prefReader
-                .getWidgetSingleLinePreference();
+        final boolean singleLine = prefReader.getWidgetSingleLinePreference();
 
         final boolean autoFit = prefReader.getWidgetAutoFitPreference();
 
@@ -166,8 +166,8 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         // remote view. This also increase the complexity and makes the widget more sensitive
         // to resizing.
         final ListWidgetProviderTemplate template = new ListWidgetProviderTemplate(context, model,
-                paper, templateBackgroundColor, toolbarEanbled, includeCompletedItems, singleLine,
-                fontVariation, autoFit);
+                sometimeToday, paper, templateBackgroundColor, toolbarEanbled,
+                includeCompletedItems, singleLine, fontVariation, autoFit);
 
         // Create the widget remote view
         final RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
@@ -194,8 +194,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         }
 
         // Using paper background.
-        return ColorUtil.mapPaperColorPrefernce(prefReader
-                .getWidgetPaperColorPreference());
+        return ColorUtil.mapPaperColorPrefernce(prefReader.getWidgetPaperColorPreference());
     }
 
     /** Set the image of a single orientation. */
@@ -296,7 +295,8 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
      * @param context app context.
      * @param model app model with task data. If null, widgets will show a warning message.
      */
-    public static void updateAllListWidgetsFromModel(Context context, @Nullable AppModel model) {
+    public static void updateAllListWidgetsFromModel(Context context, @Nullable AppModel model,
+            Time sometimeToday) {
         final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
         for (ListWidgetSize listWidgetSize : ListWidgetSize.LIST_WIDGET_SIZES) {
@@ -304,7 +304,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                     listWidgetSize.widgetProviderClass));
             // Update all widgets of this size, if any.
             if (widgetIds != null) {
-                update(context, appWidgetManager, listWidgetSize, widgetIds, model);
+                update(context, appWidgetManager, listWidgetSize, widgetIds, model, sometimeToday);
             }
         }
 

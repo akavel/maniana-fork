@@ -440,9 +440,11 @@ public class PreferencesTracker {
             case WIDGET_SHOW_COMPLETED_ITEMS:
             case WIDGET_ITEM_COMPLETED_TEXT_COLOR:
             case WIDGET_SHOW_TOOLBAR:
+            case WIDGET_SHOW_DATE:
             case WIDGET_SINGLE_LINE:
             case BACKUP_EMAIL:
             case DEBUG_MODE:
+            case CALENDAR_LAUNCH:
                 // These ones are not cached or used here. Just reported to controller to
                 // trigger the widget update and backup service.
                 break;

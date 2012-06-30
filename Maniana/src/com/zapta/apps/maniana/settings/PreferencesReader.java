@@ -204,6 +204,11 @@ public class PreferencesReader implements PreferenceConstants {
         return mSharedPreferences.getBoolean(PreferenceKind.WIDGET_SHOW_TOOLBAR.getKey(),
                 DEFAULT_WIDGET_SHOW_TOOLBAR);
     }
+    
+    public final boolean getWidgetShowDatePreference() {
+        return mSharedPreferences.getBoolean(PreferenceKind.WIDGET_SHOW_DATE.getKey(),
+                DEFAULT_WIDGET_SHOW_DATE);
+    }
 
     public final boolean getWidgetShowCompletedItemsPreference() {
         return mSharedPreferences.getBoolean(PreferenceKind.WIDGET_SHOW_COMPLETED_ITEMS.getKey(),

@@ -44,22 +44,22 @@ import com.zapta.apps.maniana.settings.PreferencesReader;
 public abstract class BaseWidgetProvider extends AppWidgetProvider {
 
     /** Model is already pushed and sorted according to current settings. */
-    public static void updateAllWidgetsFromModel(Context context, @Nullable AppModel model) {
+    public static void updateAllWidgetsFromModel(Context context, @Nullable AppModel model, Time sometimeToday) {
         // For testing only
         // NotificationUtil.sendPendingItemsNotification(context,
         // model.getPagePendingItemCount(PageKind.TODAY));
 
         IconWidgetProvider.updateAllIconWidgetsFromModel(context, model);
-        ListWidgetProvider.updateAllListWidgetsFromModel(context, model);
+        ListWidgetProvider.updateAllListWidgetsFromModel(context, model, sometimeToday);
     }
 
-    public static void updateAllWidgetsFromContext(Context context) {
-        updateAllWidgetsFromModel(context, loadModelForWidgets(context));
+    public static void updateAllWidgetsFromContext(Context context, Time timeNow) {
+        updateAllWidgetsFromModel(context, loadModelForWidgets(context, timeNow), timeNow);
     }
 
     /** Load model. Return null if error. The model is pushed and sorted based on current settings */
     @Nullable
-    protected static AppModel loadModelForWidgets(Context context) {
+    protected static AppModel loadModelForWidgets(Context context, Time timeNow) {
         // Load model
         final AppModel model = new AppModel();
         final ModelReadingResult modelLoadingResult = ModelPersistence
@@ -77,9 +77,6 @@ public abstract class BaseWidgetProvider extends AppWidgetProvider {
         final boolean includeCompletedItems = prefReader.getWidgetShowCompletedItemsPreference();
         final boolean sortItems = includeCompletedItems ? prefReader.getAutoSortPreference()
                 : false;
-
-        Time timeNow = new Time();
-        timeNow.setToNow();
 
         final PushScope pushScope = ModelUtil.computePushScope(model.getLastPushDateStamp(),
                 timeNow, lockExpirationPeriod);

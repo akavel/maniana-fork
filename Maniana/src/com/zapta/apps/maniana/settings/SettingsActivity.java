@@ -391,12 +391,12 @@ public class SettingsActivity extends PreferenceActivity implements
         // here to false.
         editor.putBoolean(PreferenceKind.DAILY_NOTIFICATION.getKey(),
                 PreferenceConstants.DEFAULT_DAILY_NOTIFICATION);
-        //editor.putBoolean(PreferenceKind.NOTIFICATION_LED.getKey(),
-        //        PreferenceConstants.DEFAULT_NOTIFICATION_LED);
         editor.putBoolean(PreferenceKind.WIDGET_SHOW_COMPLETED_ITEMS.getKey(),
                 PreferenceConstants.DEFAULT_WIDGET_SHOW_COMPLETED_ITEMS);
         editor.putBoolean(PreferenceKind.WIDGET_SINGLE_LINE.getKey(),
                 PreferenceConstants.DEFAULT_WIDGET_SINGLE_LINE);
+        editor.putBoolean(PreferenceKind.WIDGET_SHOW_DATE.getKey(),
+                PreferenceConstants.DEFAULT_WIDGET_SHOW_DATE);
         editor.putBoolean(PreferenceKind.SHAKER_ENABLED.getKey(),
                 PreferenceConstants.DEFAULT_SHAKER_ENABLED);
 

@@ -40,7 +40,7 @@ public class DateTracker {
     /** Caching of the last updated date. */
     private Time mCachedDate = new Time();
 
-    /** Used to avoid object instantiation. */
+    /** Temp variable. Used to avoid object instantiation. */
     private Time mTempTime = new Time();
 
     /** Caching of date stamp of mCachedDate. Not user visible. Persisted. */
@@ -59,6 +59,14 @@ public class DateTracker {
             mUserDayOfWeekString = mCachedDate.format("%A");
             mUserMonthDayString = mCachedDate.format("%b %d");
         }
+    }
+    
+    /** 
+     * Return an unspecified time that is guaranteed to be today. 
+     * Can change. Caller should not change. 
+     */
+    public final Time sometimeToday() {
+        return mCachedDate;
     }
 
     /** Get day of week string. User visible */
