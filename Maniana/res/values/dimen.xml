@@ -18,7 +18,7 @@
     <dimen name="list_widget_height_x1_portrait">92dip</dimen>
     <dimen name="list_widget_height_x2_portrait">186dip</dimen>
     <dimen name="list_widget_height_x3_portrait">286dip</dimen>
-    <dimen name="list_widget_height_x4_portrait">394dip</dimen>
+    <dimen name="list_widget_height_x4_portrait">380dip</dimen>
 
     <!-- Landscape Width -->
     <dimen name="list_widget_width_1x_landscape">112dip</dimen>
