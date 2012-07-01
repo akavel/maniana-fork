@@ -200,8 +200,8 @@
     <string name="settings_widget_show_toolbar_summary_on">Showing widget toolbar</string>
     <string name="settings_widget_show_toolbar_summary_off">Hiding widget toolbar</string>
     <string name="settings_widget_show_date_title">Show Date</string>
-    <string name="settings_widget_show_date_summary_on">Showing today\'s date when toolbar has room</string>
-    <string name="settings_widget_show_date_summary_off">Not showing today\'s date</string>
+    <string name="settings_widget_show_date_summary_on">Show today\'s date in widget title</string>
+    <string name="settings_widget_show_date_summary_off">Not showing date in widget title</string>
 
     <!-- Settings/Widget/Task Text -->
     <string name="settings_widget_single_line_title">Single Line</string>

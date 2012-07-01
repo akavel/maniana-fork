@@ -154,6 +154,8 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                 prefReader);
 
         final boolean toolbarEanbled = prefReader.getWidgetShowToolbarPreference();
+        
+        final boolean showDate = toolbarEanbled && prefReader.getWidgetShowDatePreference();
 
         final boolean includeCompletedItems = prefReader.getWidgetShowCompletedItemsPreference();
 
@@ -166,7 +168,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         // remote view. This also increase the complexity and makes the widget more sensitive
         // to resizing.
         final ListWidgetProviderTemplate template = new ListWidgetProviderTemplate(context, model,
-                sometimeToday, paper, templateBackgroundColor, toolbarEanbled,
+                sometimeToday, paper, templateBackgroundColor, toolbarEanbled, showDate, 
                 includeCompletedItems, singleLine, fontVariation, autoFit);
 
         // Create the widget remote view

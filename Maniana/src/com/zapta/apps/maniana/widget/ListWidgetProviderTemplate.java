@@ -55,13 +55,13 @@ import com.zapta.apps.maniana.widget.ListWidgetSize.OrientationInfo;
 public class ListWidgetProviderTemplate {
 
     /** Will scale item text size down to this size in SP units. */
-    private static final int MIN_NORMALIZED_TEXT_SIZE = 10;                           
-    
+    private static final int MIN_NORMALIZED_TEXT_SIZE = 10;
+
     // Per http://code.google.com/p/android/issues/detail?id=22493
     // Should be called after setting a TextView text. solves the ICS problem
     // where text view height does not shrink when a smaller text size is set.
-    private static final void HACK_TEXT_VIEW(TextView tv) {
-        tv.append("\uFEFF");
+    private static final void ICS_HACK_TEXT_VIEW(TextView textView) {
+        textView.append("\uFEFF");
     }
 
     @Nullable
@@ -71,8 +71,8 @@ public class ListWidgetProviderTemplate {
     private final float mDensity;
     private final LinearLayout mTopView;
     private final View mBackgroundColorView;
+    private final View mToolbarView;
     private final TextView mToolbarTitleTextView;
-    private final TextView mToolbarDateTextView;
     private final LinearLayout mItemListView;
     private final List<TextView> mItemTextViews;
     private final LayoutInflater mLayoutInflater;
@@ -83,14 +83,15 @@ public class ListWidgetProviderTemplate {
     private final boolean mPaperPreference;
     private final int mBackgroundColorPreference;
     private final boolean mToolbarEanbledPreference;
+    private final boolean mToolbarShowDatePreference;
     private final boolean mIncludeCompletedItemsPreference;
     private final boolean mSingleLinePreference;
 
-    public ListWidgetProviderTemplate(Context context, @Nullable AppModel model, Time sometimeToday,
-            boolean paperPreference, int backgroundColorPreference,
-            boolean toolbarEanbledPreference, boolean includeCompletedItemsPreference,
-            boolean singleLinePreference, ItemFontVariation fontVariationPreference,
-            boolean autoFitPreference) {
+    public ListWidgetProviderTemplate(Context context, @Nullable AppModel model,
+            Time sometimeToday, boolean paperPreference, int backgroundColorPreference,
+            boolean toolbarEanbledPreference, boolean toolbarShowDatePreference,
+            boolean includeCompletedItemsPreference, boolean singleLinePreference,
+            ItemFontVariation fontVariationPreference, boolean autoFitPreference) {
         mContext = context;
         mDensity = DisplayUtil.getDensity(context);
         mModel = model;
@@ -98,6 +99,7 @@ public class ListWidgetProviderTemplate {
         mPaperPreference = paperPreference;
         mBackgroundColorPreference = backgroundColorPreference;
         mToolbarEanbledPreference = toolbarEanbledPreference;
+        mToolbarShowDatePreference = toolbarShowDatePreference;
         mIncludeCompletedItemsPreference = includeCompletedItemsPreference;
         mSingleLinePreference = singleLinePreference;
         mFontVariationPreference = fontVariationPreference;
@@ -109,18 +111,15 @@ public class ListWidgetProviderTemplate {
         mTopView = (LinearLayout) mLayoutInflater.inflate(R.layout.widget_list_template_layout,
                 null);
         mBackgroundColorView = mTopView.findViewById(R.id.widget_list_background_color);
-        mToolbarTitleTextView = (TextView) mTopView
+        mToolbarView = mTopView.findViewById(R.id.widget_list_template_toolbar);
+        mToolbarTitleTextView = (TextView) mToolbarView
                 .findViewById(R.id.widget_list_template_toolbar_title);
-        mToolbarDateTextView = (TextView) mTopView.findViewById(R.id.widget_list_template_date);
         mItemListView = (LinearLayout) mTopView.findViewById(R.id.widget_list_template_item_list);
 
         mItemTextViews = new ArrayList<TextView>();
 
         // Set template background. This can be the background solid color or the paper color.
         mBackgroundColorView.setBackgroundColor(mBackgroundColorPreference);
-
-        // Does not set title size. This is done later.
-        setTemplateToolbar();
 
         // Set template view item list
         populateTemplateItemList();
@@ -132,6 +131,9 @@ public class ListWidgetProviderTemplate {
 
         final OrientationInfo orientationInfo = orientation.isPortrait ? listWidgetSize.portraitInfo
                 : listWidgetSize.landscapeInfo;
+
+        // Does not set title size. This is done later.
+        setToolbar(widgetWidthPixels / mDensity);
 
         final int shadowRightPixels = mPaperPreference ? paperBackground
                 .shadowRightPixels(widgetWidthPixels) : 0;
@@ -337,7 +339,7 @@ public class ListWidgetProviderTemplate {
             final View colorView = itemView.findViewById(R.id.widget_item_color);
 
             textView.setText(item.getText());
-            HACK_TEXT_VIEW(textView);
+            ICS_HACK_TEXT_VIEW(textView);
             mFontVariationPreference.apply(textView, item.isCompleted(), true);
 
             // If color is NONE show a gray solid color to help visually
@@ -363,7 +365,7 @@ public class ListWidgetProviderTemplate {
         // TODO: setup message text using widget font size preference?
         textView.setSingleLine(false);
         textView.setText(message);
-        HACK_TEXT_VIEW(textView);
+        ICS_HACK_TEXT_VIEW(textView);
         mFontVariationPreference.apply(textView, false, true);
         colorView.setVisibility(View.GONE);
 
@@ -377,47 +379,47 @@ public class ListWidgetProviderTemplate {
      * 
      * showToolbarBackground and titleSize are ignored if not toolbarEnabled. titleSize.
      */
-    private final void setTemplateToolbar() {
-        final View templateToolbarView = mTopView.findViewById(R.id.widget_list_template_toolbar);
-
-        final View templateAddTextByVoiceButton = templateToolbarView
-                .findViewById(R.id.widget_list_template_toolbar_add_by_voice);
-
+    private final void setToolbar(float widgetWitdhDips) {
         if (!mToolbarEanbledPreference) {
-            templateToolbarView.setVisibility(View.GONE);
+            mToolbarView.setVisibility(View.GONE);
             return;
         }
 
-        // Make the toolbar visible
-        templateToolbarView.setVisibility(View.VISIBLE);
-
-        // Set title in upper case format. We cannot do that in XML.
-        final TextView toolbarTitle = (TextView) templateToolbarView
-                .findViewById(R.id.widget_list_template_toolbar_title);
-        final String title = mContext.getString(R.string.page_title_Today);
-        toolbarTitle.setText(title.toUpperCase());
-        HACK_TEXT_VIEW(toolbarTitle);
+        mToolbarView.setVisibility(View.VISIBLE);
 
         // Show or hide toolbar background.
         if (mPaperPreference) {
-            templateToolbarView.setBackgroundColor(0x00000000);
+            mToolbarView.setBackgroundColor(0x00000000);
         } else {
-            templateToolbarView.setBackgroundResource(R.drawable.widget_toolbar_background);
+            mToolbarView.setBackgroundResource(R.drawable.widget_toolbar_background);
         }
-        
-        // Set date.
-        // TODO: *** enable/disable based on preferences and widget width in dips
-        // TODO: *** set size based on toolbar/title size.
-        // TODO: *** user shorter format for smaller widgets.
-        // TODO: *** set text and background colors.
-        // TODO: *** make the date clickable based on preferences.
-        mToolbarDateTextView.setText(mSometimeToday.format("%a, %b, %d"));
+
+        // Show title
+        mToolbarTitleTextView.setText(constructTitleText(widgetWitdhDips));
+        ICS_HACK_TEXT_VIEW(mToolbarTitleTextView);
 
         // The voice recognition button is shown only if this device supports voice recognition.
+        final View templateAddTextByVoiceButton = mToolbarView
+                .findViewById(R.id.widget_list_template_toolbar_add_by_voice);
         if (MainActivityServices.isVoiceRecognitionSupported(mContext)) {
             templateAddTextByVoiceButton.setVisibility(View.VISIBLE);
         } else {
             templateAddTextByVoiceButton.setVisibility(View.GONE);
         }
+    }
+
+    private final String constructTitleText(float widgetWitdhDips) {
+        // 'Today'
+        if (!mToolbarShowDatePreference) {
+            return mContext.getString(R.string.page_title_Today).toUpperCase();
+        }
+
+        // Short date
+        if (widgetWitdhDips < 170) {
+            return mSometimeToday.format("%b %d");
+        }
+
+        // Long date
+        return mSometimeToday.format("%a, %b %d");
     }
 }
