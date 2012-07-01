@@ -90,8 +90,8 @@
                 android:layout_width="@dimen/list_widget_width_4x_landscape"
                 android:layout_height="@dimen/list_widget_height_x4_landscape"
                 android:background="#00000000" />
-            
-              <ImageView
+
+            <ImageView
                 android:id="@+id/widget_list_bitmap_3x3_portrait"
                 style="@style/ListWidgetPortraitBitmap"
                 android:layout_width="@dimen/list_widget_width_3x_portrait"
@@ -109,10 +109,20 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="35dip"
+            android:layout_alignLeft="@id/widget_list_bitmaps"
             android:layout_alignRight="@id/widget_list_bitmaps"
             android:layout_alignTop="@id/widget_list_bitmaps"
-            android:paddingRight="3dip"
-            android:orientation="horizontal" >
+            android:background="#00000000"
+            android:orientation="horizontal"
+            android:paddingRight="3dip" >
+
+            <FrameLayout
+                android:id="@+id/widget_list_toolbar_title_overlay"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:background="#00000000" >
+            </FrameLayout>
 
             <FrameLayout
                 android:id="@+id/widget_list_toolbar_add_by_text_overlay"

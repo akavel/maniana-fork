@@ -37,6 +37,7 @@ import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.services.MainActivityServices;
 import com.zapta.apps.maniana.settings.ItemFontVariation;
 import com.zapta.apps.maniana.settings.PreferencesReader;
+import com.zapta.apps.maniana.util.CalendarUtil;
 import com.zapta.apps.maniana.util.ColorUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.Orientation;
@@ -156,6 +157,8 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final boolean toolbarEanbled = prefReader.getWidgetShowToolbarPreference();
         
         final boolean showDate = toolbarEanbled && prefReader.getWidgetShowDatePreference();
+        
+        final boolean titleClickLaunchesCalendar = showDate && prefReader.getCalendarLaunchPreference();
 
         final boolean includeCompletedItems = prefReader.getWidgetShowCompletedItemsPreference();
 
@@ -174,10 +177,10 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         // Create the widget remote view
         final RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
                 R.layout.widget_list_layout);
-        setOnClickLaunch(context, remoteViews, R.id.widget_list_bitmaps,
+        setOnClickLaunchMainActivity(context, remoteViews, R.id.widget_list_bitmaps,
                 MainActivityResumeAction.ONLY_RESET_PAGE);
 
-        setRemoteViewsToolbar(context, remoteViews, toolbarEanbled);
+        setRemoteViewsToolbar(context, remoteViews, toolbarEanbled, titleClickLaunchesCalendar);
 
         renderOneOrientation(context, remoteViews, template, listWidgetSize, Orientation.PORTRAIT,
                 paper);
@@ -251,12 +254,20 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
 
     /** Set/disable the toolbar click overlay in the remote views layout. */
     private static final void setRemoteViewsToolbar(Context context, RemoteViews remoteViews,
-            boolean toolbarEnabled) {
+            boolean toolbarEnabled, boolean titleClickLaunchesCalendar) {
+        
+        if (toolbarEnabled && titleClickLaunchesCalendar) {
+            final Intent intent = CalendarUtil.constructGoogleCalendarIntent();
+            final PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+            remoteViews.setOnClickPendingIntent(R.id.widget_list_toolbar_title_overlay, pendingIntent);
+        } 
+        
         // Set or disable the click overlay of the add-item-by-text button.
         if (toolbarEnabled) {
             remoteViews.setInt(R.id.widget_list_toolbar_add_by_text_overlay, "setVisibility",
                     View.VISIBLE);
-            setOnClickLaunch(context, remoteViews, R.id.widget_list_toolbar_add_by_text_overlay,
+            setOnClickLaunchMainActivity(context, remoteViews, R.id.widget_list_toolbar_add_by_text_overlay,
                     MainActivityResumeAction.ADD_NEW_ITEM_BY_TEXT);
         } else { // templateAddTextByVoiceButton.setVisibility(View.GONE);
             remoteViews.setInt(R.id.widget_list_toolbar_add_by_text_overlay, "setVisibility",
@@ -267,7 +278,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         if (toolbarEnabled && MainActivityServices.isVoiceRecognitionSupported(context)) {
             remoteViews.setInt(R.id.widget_list_toolbar_add_by_voice_overlay, "setVisibility",
                     View.VISIBLE);
-            setOnClickLaunch(context, remoteViews, R.id.widget_list_toolbar_add_by_voice_overlay,
+            setOnClickLaunchMainActivity(context, remoteViews, R.id.widget_list_toolbar_add_by_voice_overlay,
                     MainActivityResumeAction.ADD_NEW_ITEM_BY_VOICE);
         } else {
             remoteViews.setInt(R.id.widget_list_toolbar_add_by_voice_overlay, "setVisibility",
@@ -276,7 +287,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
     }
 
     /** Set onClick() action of given remote view element to launch the app. */
-    private static final void setOnClickLaunch(Context context, RemoteViews remoteViews,
+    private static final void setOnClickLaunchMainActivity(Context context, RemoteViews remoteViews,
             int viewId, MainActivityResumeAction resumeAction) {
         final Intent intent = new Intent(context, MainActivity.class);
         MainActivityResumeAction.setInIntent(intent, resumeAction);

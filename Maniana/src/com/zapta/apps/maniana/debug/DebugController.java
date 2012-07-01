@@ -116,26 +116,26 @@ public class DebugController {
         switch (command) {
             case HELP:
                 // TODO(tal): have a helper function and user everywhere
-                mMainActivityState.mainActivity().startActivity(
+                mMainActivityState.services().startActivity(
                         HelpUtil.helpPageIntent(mMainActivityState.context(), false));
                 break;
             case ABOUT:
-                mMainActivityState.context().startActivity(
+                mMainActivityState.services().startActivity(
                         PopupMessageActivity.intentFor(mMainActivityState.context(),
                                 MessageKind.ABOUT));
                 break;
             case NEW_USER:
-                mMainActivityState.context().startActivity(
+                mMainActivityState.services().startActivity(
                         PopupMessageActivity.intentFor(mMainActivityState.context(),
                                 MessageKind.NEW_USER));
                 break;
             case RESTORE_BACKUP:
-                mMainActivityState.context().startActivity(
+                mMainActivityState.services().startActivity(
                         PopupMessageActivity.intentFor(mMainActivityState.context(),
                                 MessageKind.BACKUP_RESTORE));
                 break;
             case WHATS_NEW:
-                mMainActivityState.context().startActivity(
+                mMainActivityState.services().startActivity(
                         PopupMessageActivity.intentFor(mMainActivityState.context(),
                                 MessageKind.WHATS_NEW));
                 break;

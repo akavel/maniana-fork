@@ -881,8 +881,9 @@ public class Controller implements ShakerListener {
     /** Called to launch the calendar */
     public final void onCalendarLaunchClick() {
         if (mMainActivityState.prefReader().getCalendarLaunchPreference()) {
-            mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
-            if (!CalendarUtil.launchGoogleCalendar(mMainActivityState)) {
+            mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);  
+            // TODO: should we use startSubActivity() here?
+            if (!mMainActivityState.services().startActivity(CalendarUtil.constructGoogleCalendarIntent())) {
                 // NOTE: the protocol to launch the google calendar depend on the OS version.
                 // We include it in the error message to help with diagnostic. If needed
                 // more information, add a debug menu command to diagnose the calendar
@@ -899,7 +900,7 @@ public class Controller implements ShakerListener {
             case HELP:
                 final Intent helpIntent = HelpUtil.helpPageIntent(mMainActivityState.context(),
                         false);
-                mMainActivityState.mainActivity().startActivity(helpIntent);
+                mMainActivityState.services().startActivity(helpIntent);
                 break;
             case SETTINGS:
                 startSubActivity(SettingsActivity.class);
@@ -1090,7 +1091,7 @@ public class Controller implements ShakerListener {
     private final void startSubActivity(Intent intent) {
         // TODO: should we assert or print an error message that mInSubActivity is false here?
         mInSubActivity = true;
-        mMainActivityState.context().startActivity(intent);
+        mMainActivityState.services().startActivity(intent);
     }
 
     /** Called by the main activity when it is destroyed. */

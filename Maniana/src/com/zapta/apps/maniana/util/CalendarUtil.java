@@ -18,7 +18,6 @@ import android.content.Intent;
 import android.net.Uri;
 
 import com.zapta.apps.maniana.annotations.MainActivityScope;
-import com.zapta.apps.maniana.main.MainActivityState;
 
 /**
  * Google Calendar related utility methods.
@@ -32,8 +31,9 @@ public final class CalendarUtil {
     private CalendarUtil() {
     }
 
-    /** Returned true if ok. */
-    public static boolean launchGoogleCalendar(MainActivityState mainActivityState) {
+    
+    /** Returned true if ok. Result depends on time now. Should not be cached for too long. */
+    public static Intent constructGoogleCalendarIntent() {
         final int OS_VERSION = android.os.Build.VERSION.SDK_INT;
 
         // Construct the intent
@@ -49,16 +49,6 @@ public final class CalendarUtil {
             intent.setData(Uri.parse(url));
         }
 
-        // TODO: add to main activity a method for safe launching of an intent. Returns
-        // a boolean instead of throwing an exception. Use everywhere.
-        //
-        // Try to launch
-        try {
-            mainActivityState.mainActivity().startActivity(intent);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        return intent;
     }
 }

@@ -258,4 +258,16 @@ public class MainActivityServices {
                 RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
         return activities.size() != 0;
     }
+    
+    // TODO: make sure all calls to startActivity() point here and not directly to main activity.
+    /** Return true if ok. */
+    public final boolean startActivity(Intent intent) {
+        try {
+            mMainActivityState.context().startActivity(intent);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
