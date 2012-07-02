@@ -41,6 +41,7 @@ import com.zapta.apps.maniana.settings.ItemFontVariation;
 import com.zapta.apps.maniana.util.BitmapUtil;
 import com.zapta.apps.maniana.util.DisplayUtil;
 import com.zapta.apps.maniana.util.FileUtil;
+import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.Orientation;
 import com.zapta.apps.maniana.widget.ListWidgetSize.OrientationInfo;
 
@@ -133,7 +134,12 @@ public class ListWidgetProviderTemplate {
                 : listWidgetSize.landscapeInfo;
 
         // Does not set title size. This is done later.
-        setToolbar(widgetWidthPixels / mDensity);
+        // TODO: refactor out to a method
+        final String titleText = mToolbarEanbledPreference ? (mToolbarShowDatePreference ? (mSometimeToday
+                .format(orientationInfo.dateFormat.format)) : mContext.getString(
+                R.string.page_title_Today).toUpperCase())
+                : null;
+        setToolbar(titleText);
 
         final int shadowRightPixels = mPaperPreference ? paperBackground
                 .shadowRightPixels(widgetWidthPixels) : 0;
@@ -144,8 +150,7 @@ public class ListWidgetProviderTemplate {
         // Set padding to match the drop shadow portion of paper background, if used.
         mTopView.setPadding(0, 0, shadowRightPixels, shadowBottomPixels);
 
-        resizeToFit(widgetWidthPixels, widgetHeightPixels, shadowBottomPixels, listWidgetSize,
-                orientation);
+        resizeToFit(widgetWidthPixels, widgetHeightPixels, shadowBottomPixels, orientationInfo);
 
         // NTOE: ARGB_4444 results in a smaller file than ARGB_8888 (e.g. 50K vs 150k)
         // but does not look as good.
@@ -186,7 +191,7 @@ public class ListWidgetProviderTemplate {
 
     // Resize the template in preparation for rendering.
     private final void resizeToFit(int widgetWidthPixels, int widgetHeightPixels,
-            int bottomPadding, ListWidgetSize listWidgetSize, Orientation orientation) {
+            int bottomPadding, OrientationInfo orientationInfo) {
         // DebugTimer timer = new DebugTimer();
 
         final int minItemTextSize = mAutoFitPreference ? MIN_NORMALIZED_TEXT_SIZE
@@ -194,7 +199,7 @@ public class ListWidgetProviderTemplate {
 
         setSingleLine(mSingleLinePreference);
         boolean fit = autoResizeText(widgetWidthPixels, widgetHeightPixels, minItemTextSize,
-                mFontVariationPreference.getTextSize());
+                mFontVariationPreference.getTextSize(), orientationInfo.maxTitleTextSizeSp);
 
         if (fit || !mAutoFitPreference) {
             // timer.report("Fit done");
@@ -204,7 +209,7 @@ public class ListWidgetProviderTemplate {
         if (!mSingleLinePreference) {
             setSingleLine(true);
             fit = autoResizeText(widgetWidthPixels, widgetHeightPixels, minItemTextSize,
-                    mFontVariationPreference.getTextSize());
+                    mFontVariationPreference.getTextSize(), orientationInfo.maxTitleTextSizeSp);
         }
 
         // timer.report("Fit done");
@@ -216,15 +221,15 @@ public class ListWidgetProviderTemplate {
      * TODO: consider to use binary search over text size range.
      */
     private final boolean autoResizeText(int widgetWidthPixels, int widgetHeightPixels,
-            int minItemTextSize, int maxItemTextSize) {
+            int minItemTextSize, int maxItemTextSize, int maxTitleTextSize) {
 
         // Try min, size, return if no fit.
-        if (!resizeText(widgetWidthPixels, widgetHeightPixels, minItemTextSize)) {
+        if (!resizeText(widgetWidthPixels, widgetHeightPixels, minItemTextSize, maxTitleTextSize)) {
             return false;
         }
 
         // Try the max size. Return if fits.
-        if (resizeText(widgetWidthPixels, widgetHeightPixels, maxItemTextSize)) {
+        if (resizeText(widgetWidthPixels, widgetHeightPixels, maxItemTextSize, maxTitleTextSize)) {
             return true;
         }
 
@@ -240,7 +245,7 @@ public class ListWidgetProviderTemplate {
                 // the current size than do one more resizing. We use a safe flaot
                 // comparison.
                 if (Math.abs(lowSize - currentSize) > 0.1f) {
-                    resizeText(widgetWidthPixels, widgetHeightPixels, lowSize);
+                    resizeText(widgetWidthPixels, widgetHeightPixels, lowSize, maxTitleTextSize);
                 }
                 return true;
             }
@@ -248,7 +253,7 @@ public class ListWidgetProviderTemplate {
             // Test mid size
             currentSize = (lowSize + highSize) / 2;
             final boolean currentSizeFits = resizeText(widgetWidthPixels, widgetHeightPixels,
-                    currentSize);
+                    currentSize, maxTitleTextSize);
             if (currentSizeFits) {
                 lowSize = currentSize;
             } else {
@@ -262,11 +267,12 @@ public class ListWidgetProviderTemplate {
      * a canvas.
      */
     private final boolean resizeText(int widgetWidthPixels, int widgetHeightPixels,
-            float itemTextSize) {
+            float itemTextSize, float maxTitleTextSize) {
         if (mToolbarEanbledPreference) {
-            final int toolbarTitleTextSize = WidgetUtil.titleTextSize(
-                    (int) (widgetHeightPixels * mDensity), itemTextSize);
-            mToolbarTitleTextView.setTextSize(toolbarTitleTextSize);
+            final float proposedTitleSize = itemTextSize * 0.8f;
+            final float titleSize = Math.max(ListWidgetSize.MAX_TITLE_TEXT_SIZE_SP,
+                    Math.min(proposedTitleSize, maxTitleTextSize));
+            mToolbarTitleTextView.setTextSize(titleSize);
         }
 
         for (TextView itemTextView : mItemTextViews) {
@@ -379,7 +385,7 @@ public class ListWidgetProviderTemplate {
      * 
      * showToolbarBackground and titleSize are ignored if not toolbarEnabled. titleSize.
      */
-    private final void setToolbar(float widgetWitdhDips) {
+    private final void setToolbar(String titleText) {
         if (!mToolbarEanbledPreference) {
             mToolbarView.setVisibility(View.GONE);
             return;
@@ -395,7 +401,7 @@ public class ListWidgetProviderTemplate {
         }
 
         // Show title
-        mToolbarTitleTextView.setText(constructTitleText(widgetWitdhDips));
+        mToolbarTitleTextView.setText(titleText);
         ICS_HACK_TEXT_VIEW(mToolbarTitleTextView);
 
         // The voice recognition button is shown only if this device supports voice recognition.
@@ -406,20 +412,5 @@ public class ListWidgetProviderTemplate {
         } else {
             templateAddTextByVoiceButton.setVisibility(View.GONE);
         }
-    }
-
-    private final String constructTitleText(float widgetWitdhDips) {
-        // 'Today'
-        if (!mToolbarShowDatePreference) {
-            return mContext.getString(R.string.page_title_Today).toUpperCase();
-        }
-
-        // Short date
-        if (widgetWitdhDips < 170) {
-            return mSometimeToday.format("%b %d");
-        }
-
-        // Long date
-        return mSometimeToday.format("%a, %b %d");
     }
 }

@@ -48,12 +48,4 @@ public abstract class WidgetUtil {
         }
         return result;
     }
-    
-    /** Compute the list widget TODAY title text size. */
-    public static int titleTextSize(int widgetHeightDips, float itemTextSize) {
-        // A monotonic function of text size and widget height that provides good results.
-        final int t = (int) (3.5f + (itemTextSize * 0.5f) + ((widgetHeightDips / 70.0f) * 0.5f));
-        // Clip on min/max
-        return Math.max(9, Math.min(22, t));
-    }
 }

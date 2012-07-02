@@ -16,6 +16,7 @@ package com.zapta.apps.maniana.widget;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.ApplicationScope;
+import com.zapta.apps.maniana.util.Orientation;
 
 /**
  * Descriptor of supported list widget sizes.
@@ -25,19 +26,36 @@ import com.zapta.apps.maniana.annotations.ApplicationScope;
 @ApplicationScope
 public class ListWidgetSize {
 
+   public static final int MAX_TITLE_TEXT_SIZE_SP = 11;
+    
+    public static enum WidgetDateFormat {
+        SHORT("%a, %b %d"),
+        MEDIUM("%A, %b %d"),
+        LONG("%A, %B %d");
+
+        public final String format;
+
+        private WidgetDateFormat(String format) {
+            this.format = format;
+        }
+    }
+
     static class OrientationInfo {
         public final int widthDipResourceId;
         public final int heightDipResourceId;
         public final int imageViewId;
         public final String imageFileName;
+        public final WidgetDateFormat dateFormat;
+        public final int maxTitleTextSizeSp;
 
         private OrientationInfo(int widthDipResourceId, int heightDipResourceId, int imageViewId,
-                String imageFileName) {
-            super();
+                String imageFileName, WidgetDateFormat dateFormat, int maxTitleTextSizeSp) {
             this.widthDipResourceId = widthDipResourceId;
             this.heightDipResourceId = heightDipResourceId;
             this.imageViewId = imageViewId;
             this.imageFileName = imageFileName;
+            this.dateFormat = dateFormat;
+            this.maxTitleTextSizeSp = maxTitleTextSizeSp;
         }
     }
 
@@ -71,6 +89,22 @@ public class ListWidgetSize {
         R.dimen.list_widget_height_x2_landscape,
         R.dimen.list_widget_height_x3_landscape,
         R.dimen.list_widget_height_x4_landscape
+    };
+
+    /** Max portrait title text size for widths [1..4] cells. */
+    private static final int MAX_TITLE_TEXT_SIZES_SP[] = new int[] {
+        10,
+        13,
+        20,
+        22
+    };
+
+    /** Date format for widths [1..4] cells. */
+    private static final WidgetDateFormat DATE_FORMAT[] = new WidgetDateFormat[] {
+        WidgetDateFormat.SHORT,
+        WidgetDateFormat.SHORT,
+        WidgetDateFormat.MEDIUM,
+        WidgetDateFormat.LONG,
     };
 
     static final ListWidgetSize LIST_WIDGET_SIZE1 = new ListWidgetSize(ListWidgetProvider1.class,
@@ -121,13 +155,18 @@ public class ListWidgetSize {
         this.widgetProviderClass = widgetProviderClass;
         this.widthCells = widthCells;
         this.heightCells = heightCells;
+        
+        final WidgetDateFormat dateFormat = DATE_FORMAT[widthCells - 1];
+        final int maxTitleTextSizeSp = MAX_TITLE_TEXT_SIZES_SP[widthCells - 1];
 
         this.portraitInfo = new OrientationInfo(PORTRAIT_WIDTHS[widthCells - 1],
                 PORTRAIT_HEIGHTS[heightCells - 1], portraitImageViewId, String.format(
-                        "list_widget_image_%dx%d_portrait.png", widthCells, heightCells));
+                        "list_widget_image_%dx%d_portrait.png", widthCells, heightCells),
+                dateFormat, maxTitleTextSizeSp);
 
         this.landscapeInfo = new OrientationInfo(LANDSCAPE_WIDTHS[widthCells - 1],
                 LANDSCAPE_HEIGHTS[heightCells - 1], landscapeImageViewId, String.format(
-                        "list_widget_image_%dx%d_landscape.png", widthCells, heightCells));
+                        "list_widget_image_%dx%d_landscape.png", widthCells, heightCells),
+                dateFormat, maxTitleTextSizeSp);
     }
 }
