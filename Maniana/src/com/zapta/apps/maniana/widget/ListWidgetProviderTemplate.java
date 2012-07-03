@@ -137,7 +137,7 @@ public class ListWidgetProviderTemplate {
         // TODO: refactor out to a method
         final String titleText = mToolbarEanbledPreference ? (mToolbarShowDatePreference ? (mSometimeToday
                 .format(orientationInfo.dateFormat.format)) : mContext.getString(
-                R.string.page_title_Today).toUpperCase())
+                R.string.page_title_Today)).toUpperCase()
                 : null;
         setToolbar(titleText);
 

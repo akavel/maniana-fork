@@ -29,6 +29,7 @@ public class ListWidgetSize {
    public static final int MAX_TITLE_TEXT_SIZE_SP = 11;
     
     public static enum WidgetDateFormat {
+        VERY_SHORT("%b %d"),
         SHORT("%a, %b %d"),
         MEDIUM("%A, %b %d"),
         LONG("%A, %B %d");
@@ -95,12 +96,19 @@ public class ListWidgetSize {
     private static final int MAX_TITLE_TEXT_SIZES_SP[] = new int[] {
         10,
         13,
-        20,
-        22
+        16,
+        18
     };
 
     /** Date format for widths [1..4] cells. */
-    private static final WidgetDateFormat DATE_FORMAT[] = new WidgetDateFormat[] {
+    private static final WidgetDateFormat PORTRAIT_DATE_FORMAT[] = new WidgetDateFormat[] {
+        WidgetDateFormat.VERY_SHORT,
+        WidgetDateFormat.VERY_SHORT,
+        WidgetDateFormat.MEDIUM,
+        WidgetDateFormat.LONG,
+    };
+    
+    private static final WidgetDateFormat LANDSCAPE_DATE_FORMAT[] = new WidgetDateFormat[] {
         WidgetDateFormat.SHORT,
         WidgetDateFormat.SHORT,
         WidgetDateFormat.MEDIUM,
@@ -156,17 +164,16 @@ public class ListWidgetSize {
         this.widthCells = widthCells;
         this.heightCells = heightCells;
         
-        final WidgetDateFormat dateFormat = DATE_FORMAT[widthCells - 1];
         final int maxTitleTextSizeSp = MAX_TITLE_TEXT_SIZES_SP[widthCells - 1];
 
         this.portraitInfo = new OrientationInfo(PORTRAIT_WIDTHS[widthCells - 1],
                 PORTRAIT_HEIGHTS[heightCells - 1], portraitImageViewId, String.format(
                         "list_widget_image_%dx%d_portrait.png", widthCells, heightCells),
-                dateFormat, maxTitleTextSizeSp);
+                        PORTRAIT_DATE_FORMAT[widthCells - 1], maxTitleTextSizeSp);
 
         this.landscapeInfo = new OrientationInfo(LANDSCAPE_WIDTHS[widthCells - 1],
                 LANDSCAPE_HEIGHTS[heightCells - 1], landscapeImageViewId, String.format(
                         "list_widget_image_%dx%d_landscape.png", widthCells, heightCells),
-                dateFormat, maxTitleTextSizeSp);
+                        LANDSCAPE_DATE_FORMAT[widthCells - 1], maxTitleTextSizeSp);
     }
 }
