@@ -29,8 +29,8 @@ public class ListWidgetSize {
    public static final int MAX_TITLE_TEXT_SIZE_SP = 11;
     
     public static enum WidgetDateFormat {
-        VERY_SHORT("%b %d"),
-        SHORT("%a, %b %d"),
+        // NOTE: no ',' to save space.
+        SHORT("%a %b %d"),
         MEDIUM("%A, %b %d"),
         LONG("%A, %B %d");
 
@@ -95,15 +95,15 @@ public class ListWidgetSize {
     /** Max portrait title text size for widths [1..4] cells. */
     private static final int MAX_TITLE_TEXT_SIZES_SP[] = new int[] {
         10,
-        13,
+        12,
         16,
         18
     };
 
     /** Date format for widths [1..4] cells. */
     private static final WidgetDateFormat PORTRAIT_DATE_FORMAT[] = new WidgetDateFormat[] {
-        WidgetDateFormat.VERY_SHORT,
-        WidgetDateFormat.VERY_SHORT,
+        WidgetDateFormat.SHORT,
+        WidgetDateFormat.SHORT,
         WidgetDateFormat.MEDIUM,
         WidgetDateFormat.LONG,
     };
