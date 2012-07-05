@@ -23,6 +23,7 @@ import android.view.KeyEvent;
 import android.view.Window;
 
 import com.zapta.apps.maniana.controller.MainActivityStartupKind;
+import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.persistence.ModelReadingResult;
 import com.zapta.apps.maniana.util.LogUtil;
@@ -34,7 +35,19 @@ import com.zapta.apps.maniana.util.LogUtil;
  */
 public class MainActivity extends Activity {
 
+    /** A light weight snapshot of the activity state transfered across orientation change. */
+    private static class RetainedState {
+        public final PageKind currentPageKind;
+
+        private RetainedState(PageKind currentPageKind) {
+            this.currentPageKind = currentPageKind;
+        }
+    }
+
     private MainActivityState mState;
+
+    @Nullable
+    private RetainedState mRetainedState;
 
     /** Used to pass resume action from onNewIntent() to onResume(). */
     private MainActivityResumeAction mResumeAction = MainActivityResumeAction.NONE;
@@ -47,6 +60,8 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mRetainedState = (RetainedState) getLastNonConfigurationInstance();
 
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -136,13 +151,27 @@ public class MainActivity extends Activity {
 
         // Get the action for this resume
         final Intent thisResumeIntent = mResumeIntent;
-        final MainActivityResumeAction thisResumeAction = mResumeAction;
+        final MainActivityResumeAction thisResumeAction;
+        // On ICS and above, orientation change result in the activity destroyed and recreated.
+        // In this case, use the retained state to preserve the original page.
+        if (mRetainedState != null) {
+            thisResumeAction = mRetainedState.currentPageKind.isTomorrow() ? MainActivityResumeAction.FORCE_TOMORROW_PAGE
+                    : MainActivityResumeAction.FORCE_TODAY_PAGE;
+        } else {
+            thisResumeAction = mResumeAction;
+        }
 
         mResumeIntent = null;
         mResumeAction = MainActivityResumeAction.NONE;
+        mRetainedState = null;
 
         // Inform the controller
         mState.controller().onMainActivityResume(thisResumeAction, thisResumeIntent);
+    }
+
+    @Override
+    public Object onRetainNonConfigurationInstance() {
+        return new RetainedState(mState.view().getCurrentPageKind());
     }
 
     // NOTE: this is not called when a popup menu is actie.

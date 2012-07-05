@@ -178,7 +178,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         final RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
                 R.layout.widget_list_layout);
         setOnClickLaunchMainActivity(context, remoteViews, R.id.widget_list_bitmaps,
-                MainActivityResumeAction.ONLY_RESET_PAGE);
+                MainActivityResumeAction.SHOW_TODAY_PAGE);
 
         setRemoteViewsToolbar(context, remoteViews, toolbarEanbled, titleClickLaunchesCalendar);
 

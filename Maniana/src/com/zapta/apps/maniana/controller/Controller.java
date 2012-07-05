@@ -21,7 +21,6 @@ import java.io.InputStream;
 import javax.annotation.Nullable;
 
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -40,8 +39,8 @@ import com.zapta.apps.maniana.editors.ItemVoiceEditor;
 import com.zapta.apps.maniana.help.HelpUtil;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
 import com.zapta.apps.maniana.help.PopupMessageActivity.MessageKind;
-import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.main.MainActivityResumeAction;
+import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.menus.ItemMenuEntry;
 import com.zapta.apps.maniana.menus.MainMenuEntry;
 import com.zapta.apps.maniana.model.AppModel;
@@ -56,9 +55,9 @@ import com.zapta.apps.maniana.persistence.ModelDeserialization;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.persistence.PersistenceMetadata;
 import com.zapta.apps.maniana.services.MidnightTicker;
+import com.zapta.apps.maniana.services.ShakeImpl;
 import com.zapta.apps.maniana.services.Shaker;
 import com.zapta.apps.maniana.services.Shaker.ShakerListener;
-import com.zapta.apps.maniana.services.ShakeImpl;
 import com.zapta.apps.maniana.settings.PreferenceKind;
 import com.zapta.apps.maniana.settings.SettingsActivity;
 import com.zapta.apps.maniana.settings.ShakerAction;
@@ -257,8 +256,8 @@ public class Controller implements ShakerListener {
         }
 
         // Typically we reset the view to default position (both pages are scrolled
-        // to the top, Today page is shown) when the app is resume. We preserve it only
-        // when it is resumed from a sub activity (e.g. settings or startup message)
+        // to the top, Today page is shown) when the app is resumed. We preserve the page and 
+        // scroll only when it is resumed from a sub activity (e.g. settings or startup message)
         // with no resume action.
         final boolean preserveView = mInSubActivity && resumeAction.isNone();
 
@@ -271,10 +270,8 @@ public class Controller implements ShakerListener {
             // depending on settings. In case of an actual resume action, we skip
             // the animation to save user's time.
             final boolean isAppStartup = (mOnAppResumeCount == 1);
-            final boolean actionAllowsAnimation = (resumeAction.isNone() || resumeAction == MainActivityResumeAction.ONLY_RESET_PAGE);
-            final boolean doAnimation = isAppStartup
-                    && mMainActivityState.prefTracker().getStartupAnimationPreference()
-                    && actionAllowsAnimation;
+            final boolean doAnimation = isAppStartup && resumeAction.allowsAnimations()
+                    && mMainActivityState.prefTracker().getStartupAnimationPreference();
             if (doAnimation) {
                 // Show initial animation
                 mMainActivityState.view().setCurrentPage(PageKind.TOMOROW, -1);
@@ -286,7 +283,8 @@ public class Controller implements ShakerListener {
                 }, 500);
             } else {
                 // No animation. Jump directly to Today.
-                mMainActivityState.view().setCurrentPage(PageKind.TODAY, 0);
+                mMainActivityState.view().setCurrentPage(
+                        resumeAction.isForceTomorowPage() ? PageKind.TOMOROW : PageKind.TODAY, 0);
             }
         }
 
@@ -309,7 +307,9 @@ public class Controller implements ShakerListener {
                 onRestoreBackupFromFileClick(resumeIntent);
                 break;
             case NONE:
-            case ONLY_RESET_PAGE:
+            case SHOW_TODAY_PAGE:
+            case FORCE_TODAY_PAGE:
+            case FORCE_TOMORROW_PAGE:
             default:
                 // Do nothing
         }
@@ -881,9 +881,10 @@ public class Controller implements ShakerListener {
     /** Called to launch the calendar */
     public final void onCalendarLaunchClick() {
         if (mMainActivityState.prefReader().getCalendarLaunchPreference()) {
-            mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);  
+            mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
             // TODO: should we use startSubActivity() here?
-            if (!mMainActivityState.services().startActivity(CalendarUtil.constructGoogleCalendarIntent())) {
+            if (!mMainActivityState.services().startActivity(
+                    CalendarUtil.constructGoogleCalendarIntent())) {
                 // NOTE: the protocol to launch the google calendar depend on the OS version.
                 // We include it in the error message to help with diagnostic. If needed
                 // more information, add a debug menu command to diagnose the calendar
@@ -977,7 +978,7 @@ public class Controller implements ShakerListener {
             case SOUND_ENABLED:
             case APPLAUSE_LEVEL:
             case DAILY_NOTIFICATION:
-       
+
             case NOTIFICATION_LED:
             case LOCK_PERIOD:
             case VERBOSE_MESSAGES:
@@ -998,8 +999,8 @@ public class Controller implements ShakerListener {
                 // the controller is paused when setting is changed.
                 break;
 
-                // NOTE: calendar launch change triggers widget update in case the widget
-                // date display is enabled.
+            // NOTE: calendar launch change triggers widget update in case the widget
+            // date display is enabled.
             case CALENDAR_LAUNCH:
             case WIDGET_BACKGROUND_PAPER:
             case WIDGET_PAPER_COLOR:

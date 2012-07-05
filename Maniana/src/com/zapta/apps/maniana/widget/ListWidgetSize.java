@@ -16,7 +16,6 @@ package com.zapta.apps.maniana.widget;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.ApplicationScope;
-import com.zapta.apps.maniana.util.Orientation;
 
 /**
  * Descriptor of supported list widget sizes.

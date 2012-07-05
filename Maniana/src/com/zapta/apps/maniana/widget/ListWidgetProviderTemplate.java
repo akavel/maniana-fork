@@ -41,7 +41,6 @@ import com.zapta.apps.maniana.settings.ItemFontVariation;
 import com.zapta.apps.maniana.util.BitmapUtil;
 import com.zapta.apps.maniana.util.DisplayUtil;
 import com.zapta.apps.maniana.util.FileUtil;
-import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.Orientation;
 import com.zapta.apps.maniana.widget.ListWidgetSize.OrientationInfo;
 

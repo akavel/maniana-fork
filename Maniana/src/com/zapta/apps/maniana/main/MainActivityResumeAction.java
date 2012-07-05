@@ -33,8 +33,12 @@ import com.zapta.apps.maniana.util.LogUtil;
 public enum MainActivityResumeAction {
     /** No action. */
     NONE,
-    /** Make today page visible. */
-    ONLY_RESET_PAGE,
+    /** Make today page visible. Allows animations.*/
+    SHOW_TODAY_PAGE,
+    /** Make today page visible. No animations.*/
+    FORCE_TODAY_PAGE,
+    /** Make tomorrow page visible. No animations. */
+    FORCE_TOMORROW_PAGE,
     /** Make today page visible and open text editor */
     ADD_NEW_ITEM_BY_TEXT,
     /** Make today page visible and open voice recognition */
@@ -46,10 +50,18 @@ public enum MainActivityResumeAction {
     private static final String RESUME_ACTION_KEY = "maniana_resume_action";
 
     /** Default action when action is not specified in the launch intent. */
-    private static final MainActivityResumeAction DEFAULT_ACTION = ONLY_RESET_PAGE;
+    private static final MainActivityResumeAction DEFAULT_ACTION = SHOW_TODAY_PAGE;
 
     public boolean isNone() {
         return this == NONE;
+    }
+    
+    public boolean isForceTomorowPage() {
+        return this == FORCE_TOMORROW_PAGE;
+    }
+    
+    public boolean allowsAnimations() {
+        return (this == NONE || this == SHOW_TODAY_PAGE);
     }
 
     /** Serialize a resume action in an intent. */
