@@ -170,8 +170,13 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    @Nullable
     public Object onRetainNonConfigurationInstance() {
-        return new RetainedState(mState.view().getCurrentPageKind());
+        // NOTE: Gingerbread handles orientation changes well, including preserving popups, as is.
+        // Later versions of Android restart the activity on orientation change and require explicit
+        // state retention.
+        return (android.os.Build.VERSION.SDK_INT < 13) ? null : new RetainedState(mState.view()
+                .getCurrentPageKind());
     }
 
     // NOTE: this is not called when a popup menu is actie.
