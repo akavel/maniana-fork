@@ -41,6 +41,8 @@ public class ColorPickerPreference
 	implements
 		Preference.OnPreferenceClickListener,
 		ColorPickerDialog.OnColorChangedListener {
+    
+    private static final boolean PRE_API_14 = android.os.Build.VERSION.SDK_INT < 14;
 
 	View mView;
 	int mDefaultValue = Color.BLACK;
@@ -120,9 +122,7 @@ public class ColorPickerPreference
         // TAL: required starting from API 14
         widgetFrameView.setVisibility(View.VISIBLE);
            
-        boolean preApi14 = android.os.Build.VERSION.SDK_INT < 14;
-        
-        final int rightPaddingDip = preApi14 ? 8 : 5;
+        final int rightPaddingDip = PRE_API_14 ? 8 : 5;
                         
         widgetFrameView.setPadding(
                           widgetFrameView.getPaddingLeft(),
@@ -152,7 +152,9 @@ public class ColorPickerPreference
     }
 
 	private Bitmap getPreviewBitmap() {
-		int d = (int) (mDensity * 31); //30dip
+	    // NOTE: on ICS and above we display a smaller color preview to match the 
+	    // general style.
+		int d = (int) (mDensity * (PRE_API_14 ? 31 : 22)); 
         // If disabled we simulate a semi transparent black overlay.
 		// NOTE: could simplify compositeColor for the special case where argb2 is aa000000;
 		int color = isEnabled() ? getValue() : ColorUtil.compositeColor(getValue(), 0xaa000000);

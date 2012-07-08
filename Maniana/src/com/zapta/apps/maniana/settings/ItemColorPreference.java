@@ -50,6 +50,8 @@ import com.zapta.apps.maniana.util.DisplayUtil;
  * @author Tal Dayan
  */
 public class ItemColorPreference extends DialogPreference {
+    private static final boolean PRE_API_14 = android.os.Build.VERSION.SDK_INT < 14;
+    
     // View in the setting page, not the popup dialog.
     View mView;
 
@@ -207,9 +209,9 @@ public class ItemColorPreference extends DialogPreference {
         // NOTE: required starting from API 14
         widgetFrameView.setVisibility(View.VISIBLE);
 
-        boolean preApi14 = android.os.Build.VERSION.SDK_INT < 14;
+        //boolean preApi14 = android.os.Build.VERSION.SDK_INT < 14;
 
-        final int rightPaddingDip = preApi14 ? 8 : 5;
+        final int rightPaddingDip = PRE_API_14 ? 8 : 5;
 
         widgetFrameView.setPadding(widgetFrameView.getPaddingLeft(),
                 widgetFrameView.getPaddingTop(), (int) (mDensity * rightPaddingDip),

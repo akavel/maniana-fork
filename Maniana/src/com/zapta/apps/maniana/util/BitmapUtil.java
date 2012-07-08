@@ -31,6 +31,7 @@ import com.zapta.apps.maniana.annotations.ApplicationScope;
  */
 @ApplicationScope
 public final class BitmapUtil {
+    private static final boolean PRE_API_14 = android.os.Build.VERSION.SDK_INT < 14;
 
     /** Do not instantiate */
     private BitmapUtil() {
@@ -74,7 +75,7 @@ public final class BitmapUtil {
     /** Move to PreferenceUtil */
     public static Bitmap getPreferenceColorPreviewBitmap(int color, boolean isEnabled, float density) {
         // Determine size in pixels
-        final int sizeDips = 30;
+        final int sizeDips = PRE_API_14 ? 31 : 22;
         int d = (int) (density * sizeDips + 0.5f); 
         
         // Determine colors
