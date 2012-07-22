@@ -124,14 +124,18 @@ public class PopupMessageActivity extends Activity {
 
         final WebView webview = (WebView) findViewById(R.id.message_small_webview);
 
+        // NOTE: this stooped working since Android 4.11. The onNewPicture() is not called anymore
+        // if the frame is invisible.
+        //
         // We enable the message view only after the html page got rendered. This avoids a flicker
         // as the views finalize their sizes.
-        frame.setVisibility(View.INVISIBLE);
-        webview.setPictureListener(new PictureListener() {
-            public void onNewPicture(WebView view, Picture picture) {
-                frame.setVisibility(View.VISIBLE);
-            }
-        });
+        //
+        // frame.setVisibility(View.INVISIBLE);
+        // webview.setPictureListener(new PictureListener() {
+        //    public void onNewPicture(WebView view, Picture picture) {
+        //        frame.setVisibility(View.VISIBLE);
+        //    }
+        // });
 
         displayFromAsset(webview, messageKind);
     }

@@ -33,7 +33,6 @@ import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.util.DisplayUtil;
-import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
 
 /**
