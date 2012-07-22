@@ -3,7 +3,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zapta.apps.maniana"
     android:versionCode="25"
-    android:versionName="1.01.25-d05" >
+    android:versionName="1.01.25-d06" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -20,9 +20,13 @@
             android:name="com.google.android.backup.api_key"
             android:value="AEdPqrEAAAAIuy5K_Vn8AGynwe5lz1SxJqwTxbg5gnd4bb3hPg" />
 
+        <!--
+        - NOTE: android:configChanges per 
+        - http://code.google.com/p/maniana/issues/attachmentText?id=132 
+        -->
         <activity
             android:name=".main.MainActivity"
-            android:configChanges="orientation"
+            android:configChanges="keyboard|keyboardHidden|orientation"
             android:label="@string/translated_app_name"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan" >
