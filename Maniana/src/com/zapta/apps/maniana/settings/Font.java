@@ -33,7 +33,14 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
  */
 @ApplicationScope
 public enum Font implements KeyedEnum {
-    // NOTE: keys are persisted in preferences. Do not modify.
+    // NOTE: font keys are persisted in preferences. Do not modify.
+    CURSIVE(
+            R.string.font_name_Cursive,
+            "cursive",
+            1.5f,
+            0.9f,
+            null,
+            "fonts/Vavont/Vavont-modified.ttf"),
     CASUAL(
             R.string.font_name_Casual,
             "casual",
@@ -41,13 +48,6 @@ public enum Font implements KeyedEnum {
             0.95f,
             null,
             "fonts/Daniel/Daniel-modified.ttf"),
-    CURSIVE(
-            R.string.font_name_Cursive,
-            "cursive",
-            1.4f,
-            0.9f,
-            null,
-            "fonts/Vavont/Vavont-modified.ttf"),
     ELEGANT(
             R.string.font_name_Elegant,
             "elegant",

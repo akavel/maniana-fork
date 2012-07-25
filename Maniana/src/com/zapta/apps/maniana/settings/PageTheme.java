@@ -55,7 +55,7 @@ public class PageTheme extends Thumbnail {
         new PageTheme(R.string.page_theme_name_notebook, R.drawable.page_theme4_preview, true, 0xfff0fff0, 0xffaaffff,
                 PageIconSet.PARTY, Font.SAN_SERIF, 30,
                 PreferenceConstants.DEFAULT_PAGE_TITLE_TODAY_COLOR,
-                PreferenceConstants.DEFAULT_PAGE_TITLE_TOMORROW_COLOR, Font.CASUAL, 16, 0xff111111,
+                PreferenceConstants.DEFAULT_PAGE_TITLE_TOMORROW_COLOR, Font.CURSIVE, 16, 0xff111111,
                 0xff555555, 0x30000000),
     };
 
