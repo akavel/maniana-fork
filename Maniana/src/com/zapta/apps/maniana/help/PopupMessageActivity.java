@@ -26,13 +26,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
-import android.graphics.Picture;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.webkit.WebView;
-import android.webkit.WebView.PictureListener;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.ActivityScope;
