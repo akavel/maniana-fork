@@ -94,7 +94,7 @@
     <string name="backup_email_message_subject">Maniana backup</string>
     <string name="backup_email_message_body_text1">This email message was sent by the Maniana To Do List Android app.</string>
     <string name="backup_email_message_body_text2">It contains an attachment file with a backup copy of the task list.</string>
-    <string name="backup_email_message_body_text3">To restore the task list, open this email message in an Android device where Maniana is installed and click on the Download button of the attachment.</string>
+    <string name="backup_email_message_body_text3">To restore the task list, open this email message in an Android device where Maniana is installed and click on the Download or Save/View buttons of the attachment.</string>
     <string name="backup_email_gmail_not_found_error">Gmail application not found</string>
     <string name="share_email_subject">Check out \"Maniana To Do List\"</string>
     <string name="share_email_body_text">Check out Maniana, a free fun and easy to use todo list app on the Android Market:</string>
