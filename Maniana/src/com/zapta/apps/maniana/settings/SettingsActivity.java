@@ -462,7 +462,13 @@ public class SettingsActivity extends PreferenceActivity implements
                 + getString(R.string.backup_email_message_body_text3));
 
         intent.setType("application/json");
-        final Uri fileUri = Uri.fromFile(new File("/mnt/sdcard/../.." + getFilesDir() + "/"
+        
+        // NOTE: gmail has string restrictions on the path prefix of an attachment file. We overcome
+        // it by starting with the expected prefix and going back to the file system root. The 
+        // prefix depends on the Android version.       
+        final String pathPrefix = (android.os.Build.VERSION.SDK_INT < 16) 
+                ? "/mnt/sdcard/../.." : "/storage/sdcard0/../..";                
+        final Uri fileUri = Uri.fromFile(new File(pathPrefix + getFilesDir() + "/"
                 + AttachmentUtil.BACKUP_ATTACHMENT_FILE_NAME));
         intent.putExtra(Intent.EXTRA_STREAM, fileUri);
 
