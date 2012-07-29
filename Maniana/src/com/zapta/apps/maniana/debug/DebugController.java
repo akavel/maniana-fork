@@ -43,7 +43,7 @@ public class DebugController {
 
     /** Call this one to allow the user to select a debug command. */
     public final void startMainDialog() {
-        DebugDialog.startDialog(mMainActivityState, "Debug", DebugCommandMain.values(),
+        DebugCommandDialog.startDialog(mMainActivityState, "Debug", DebugCommandMain.values(),
                 new DebugDialogListener<DebugCommandMain>() {
                     @Override
                     public void onDebugCommand(DebugCommandMain command) {
@@ -60,6 +60,9 @@ public class DebugController {
             case HTML_PAGES:
                 startHtmlDialog();
                 break;
+            case INFO:
+                DebugInfoDialog.startDialog(mMainActivityState);
+                break;
             case EXIT:
                 setDebugMode(false);
                 break;
@@ -69,7 +72,7 @@ public class DebugController {
     }
 
     private final void startNotificationDialog() {
-        DebugDialog.startDialog(mMainActivityState, "Debug Notifications",
+        DebugCommandDialog.startDialog(mMainActivityState, "Debug Notifications",
                 DebugCommandNotification.values(),
                 new DebugDialogListener<DebugCommandNotification>() {
                     @Override
@@ -80,7 +83,7 @@ public class DebugController {
     }
 
     private final void startHtmlDialog() {
-        DebugDialog.startDialog(mMainActivityState, "HTML Pages", DebugCommandHtml.values(),
+        DebugCommandDialog.startDialog(mMainActivityState, "HTML Pages", DebugCommandHtml.values(),
                 new DebugDialogListener<DebugCommandHtml>() {
                     @Override
                     public void onDebugCommand(DebugCommandHtml command) {

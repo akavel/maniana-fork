@@ -27,7 +27,7 @@ import com.zapta.apps.maniana.main.MainActivityState;
  * @author: Tal Dayan
  */
 @MainActivityScope
-public class DebugDialog {
+public class DebugCommandDialog {
 
     public static final <T extends DebugCommand> void startDialog(final MainActivityState mainActivityState, String title, 
             final T commands[], final DebugDialogListener<T> listener) {
