@@ -24,7 +24,6 @@ import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.services.MainActivityServices;
-import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
 
 /**
@@ -60,6 +59,7 @@ public class DebugInfoDialog extends Dialog implements TrackablePopup {
         }
     }
 
+    /** Launch a debug dialog with device info. */
     public static void startDialog(final MainActivityState mainActivityState) {
         final Display display = mainActivityState.services().windowManager().getDefaultDisplay();
         final boolean hasVoiceRecogintionService = MainActivityServices
@@ -80,8 +80,6 @@ public class DebugInfoDialog extends Dialog implements TrackablePopup {
         sb.append("</pre>\n</body>\n</html>\n");
 
         final String html = sb.toString();
-
-        LogUtil.debug(html);
 
         final DebugInfoDialog dialog = new DebugInfoDialog(mainActivityState, html);
         mainActivityState.popupsTracker().track(dialog);
