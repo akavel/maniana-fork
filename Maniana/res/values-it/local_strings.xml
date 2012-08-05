@@ -63,7 +63,7 @@
   <string name="backup_email_message_subject">Maniana backup</string>
   <string name="backup_email_message_body_text1">Questo messaggio di posta elettronica è stato inviato da Maniana To Do List Android app.</string>
   <string name="backup_email_message_body_text2">Contiene un file allegato con una copia di backup dell\'elenco delle attività.</string>
-  <string name="backup_email_message_body_text3">Per ripristinare l\'elenco delle attività, aprire il messaggio di posta elettronica in un dispositivo Android in cui è installato Maniana e fare clic sul pulsante Download dell\'allegato.</string>
+  <string name="backup_email_message_body_text3">To restore the task list, open this email message in an Android device where Maniana is installed and click on the Download or Save/View buttons of the attachment.</string>
   <string name="backup_email_gmail_not_found_error">Non ho trovato l\'applicazione Gmail</string>
   <string name="share_email_subject">Prova \"Maniana To Do List\"</string>
   <string name="share_email_body_text">Prova Maniana, una app gratuita divertente e facile per le liste attività su Android Market:</string>
@@ -99,6 +99,9 @@
   <string name="settings_notification_led_title">LED di notifica</string>
   <string name="settings_notification_led_summary_on">Attivare anche LED di notifica (se disponibile)</string>
   <string name="settings_notification_led_summary_off">Non attivare LED di notifica</string>
+  <string name="settings_calendar_launch_title">Google Calendar</string>
+  <string name="settings_calendar_launch_summary_on">Clicking on today\'s date launches Google Calendar</string>
+  <string name="settings_calendar_launch_summary_off">Clicking on today\'s date is ignored</string>
   <string name="settings_section_name_Tasks">Attività</string>
   <string name="settings_auto_sort_title">Auto-ordinamento</string>
   <string name="settings_auto_sort_summary_on">Ordinamento forzato (attive - complete - bloccate)</string>
@@ -147,6 +150,9 @@
   <string name="settings_widget_show_toolbar_title">Barra strumenti</string>
   <string name="settings_widget_show_toolbar_summary_on">Visualizza barra strumenti del widget</string>
   <string name="settings_widget_show_toolbar_summary_off">Nascondere barra strumenti del widget</string>
+  <string name="settings_widget_show_date_title">Show Date</string>
+  <string name="settings_widget_show_date_summary_on">Show today\'s date in widget title</string>
+  <string name="settings_widget_show_date_summary_off">Not showing date in widget title</string>
   <string name="settings_widget_single_line_title">Linea singola</string>
   <string name="settings_widget_single_line_summary_on">Limitare le attività a una singola linea</string>
   <string name="settings_widget_single_line_summary_off">Testo delle attività su più linee</string>

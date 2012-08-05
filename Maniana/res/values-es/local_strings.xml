@@ -63,7 +63,7 @@
   <string name="backup_email_message_subject">Copia de seguridad de Mañana</string>
   <string name="backup_email_message_body_text1">Este mensaje fue enviado por la aplicación Android: Mañana Lista de Tareas.</string>
   <string name="backup_email_message_body_text2">Contiene un archivo adjunto con la copia de seguridad de la lista de tareas.</string>
-  <string name="backup_email_message_body_text3">Para restaurar la lista de tareas, abra el mensaje de correo electrónico en el dispositivo Android donde esté instalado Mañana y haga clic en el botón Descargar del adjunto.</string>
+  <string name="backup_email_message_body_text3">To restore the task list, open this email message in an Android device where Maniana is installed and click on the Download or Save/View buttons of the attachment.</string>
   <string name="backup_email_gmail_not_found_error">No se encuentra la aplicación Gmail</string>
   <string name="share_email_subject">Echa un vistazo a \"Mañana Lista de Tareas\"</string>
   <string name="share_email_body_text">Echa un vistazo a Mañana, una aplicación de Lista de Tareas divertida, gratuita y fácil de utilizar. En el Android Market:</string>
@@ -99,6 +99,9 @@
   <string name="settings_notification_led_title">Notificación por LED</string>
   <string name="settings_notification_led_summary_on">También se activará la notificación mediante LED (si está disponible)</string>
   <string name="settings_notification_led_summary_off">No se activará la notificación mediante LED</string>
+  <string name="settings_calendar_launch_title">Google Calendar</string>
+  <string name="settings_calendar_launch_summary_on">Clicking on today\'s date launches Google Calendar</string>
+  <string name="settings_calendar_launch_summary_off">Clicking on today\'s date is ignored</string>
   <string name="settings_section_name_Tasks">Tareas</string>
   <string name="settings_auto_sort_title">Seleccionar un ajuste predefinido de página</string>
   <string name="settings_auto_sort_summary_on">Forzar orden de tareas (activo antes de completar o bloquear la tarea)</string>
@@ -147,6 +150,9 @@
   <string name="settings_widget_show_toolbar_title">Mostrar barra de herramientas</string>
   <string name="settings_widget_show_toolbar_summary_on">Mostrar barra de herramientas de widget</string>
   <string name="settings_widget_show_toolbar_summary_off">Ocultar barra de herramientas de widget</string>
+  <string name="settings_widget_show_date_title">Show Date</string>
+  <string name="settings_widget_show_date_summary_on">Show today\'s date in widget title</string>
+  <string name="settings_widget_show_date_summary_off">Not showing date in widget title</string>
   <string name="settings_widget_single_line_title">Una línea</string>
   <string name="settings_widget_single_line_summary_on">Limitar las tareas a una sola línea</string>
   <string name="settings_widget_single_line_summary_off">Resumir tareas largas en la segunda línea</string>

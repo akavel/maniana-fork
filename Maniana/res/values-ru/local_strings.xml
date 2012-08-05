@@ -63,7 +63,7 @@
   <string name="backup_email_message_subject">Резервная копия Maniana</string>
   <string name="backup_email_message_body_text1">Это сообщение электронной почты был послано приложением Maniana To Do List.</string>
   <string name="backup_email_message_body_text2">Оно содержит вложенный файл с резервной копией списка задач.</string>
-  <string name="backup_email_message_body_text3">Для восстановления списка задач откройте этот e-mail на Android-устройстве с установленной Maniana и нажмите кнопку «Скачать» во вложении.</string>
+  <string name="backup_email_message_body_text3">To restore the task list, open this email message in an Android device where Maniana is installed and click on the Download or Save/View buttons of the attachment.</string>
   <string name="backup_email_gmail_not_found_error">Приложение Gmail не найдено</string>
   <string name="share_email_subject">Попробуйте «Maniana To Do List»</string>
   <string name="share_email_body_text">Попробуйте Maniana, бесплатное, прикольное и лёгкое приложение для ведения списка задач на Google Play:</string>
@@ -99,6 +99,9 @@
   <string name="settings_notification_led_title">Уведомление сигналом светодиода</string>
   <string name="settings_notification_led_summary_on">Уведомление светодиодом будет по возможности включено</string>
   <string name="settings_notification_led_summary_off">Уведомление светодиодом будет выключено</string>
+  <string name="settings_calendar_launch_title">Google Calendar</string>
+  <string name="settings_calendar_launch_summary_on">Clicking on today\'s date launches Google Calendar</string>
+  <string name="settings_calendar_launch_summary_off">Clicking on today\'s date is ignored</string>
   <string name="settings_section_name_Tasks">Задания</string>
   <string name="settings_auto_sort_title">Автоматическая сортировка заданий</string>
   <string name="settings_auto_sort_summary_on">Принудительный порядок задач (текущие задачи перед заблокированными)</string>
@@ -147,6 +150,9 @@
   <string name="settings_widget_show_toolbar_title">Показывать панель инструментов</string>
   <string name="settings_widget_show_toolbar_summary_on">Панель инструментов виджета видна</string>
   <string name="settings_widget_show_toolbar_summary_off">Панель инструментов виджета скрыта</string>
+  <string name="settings_widget_show_date_title">Show Date</string>
+  <string name="settings_widget_show_date_summary_on">Show today\'s date in widget title</string>
+  <string name="settings_widget_show_date_summary_off">Not showing date in widget title</string>
   <string name="settings_widget_single_line_title">Одной строкой</string>
   <string name="settings_widget_single_line_summary_on">Задачи сжимаются до одной строки</string>
   <string name="settings_widget_single_line_summary_off">Длинные задачи переносятся на вторую строку</string>

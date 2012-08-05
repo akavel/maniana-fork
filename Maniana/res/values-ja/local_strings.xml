@@ -64,7 +64,7 @@
   <string name="backup_email_message_body_text1">このEメール メッセージは、 Android アプリのマニャナの To Do リスト
 より送信されました。</string>
   <string name="backup_email_message_body_text2">それには、タスク リストのバックアップ コピーのファイルを添付ファイルが含まれます。</string>
-  <string name="backup_email_message_body_text3">タスクリストを復元するにはマニャナがインストールされているアンドロイドのデバイスのEメールメッセージを開来添付のファイルをダウンロードのボタンを押してください。</string>
+  <string name="backup_email_message_body_text3">To restore the task list, open this email message in an Android device where Maniana is installed and click on the Download or Save/View buttons of the attachment.</string>
   <string name="backup_email_gmail_not_found_error">Gmail アプリケーションが見つかりません</string>
   <string name="share_email_subject">「マニャナの To Do リスト」をチェックしてください。</string>
   <string name="share_email_body_text">無料で楽しく使いやすいアンドロイドのアプリ\"マニャナ\"をどうぞお試しください。</string>
@@ -100,6 +100,9 @@
   <string name="settings_notification_led_title">通知 LED</string>
   <string name="settings_notification_led_summary_on">また通知 LED (使用可能時) をアクティブにします。</string>
   <string name="settings_notification_led_summary_off">通知 LED がアクティブ化されません。</string>
+  <string name="settings_calendar_launch_title">Google Calendar</string>
+  <string name="settings_calendar_launch_summary_on">Clicking on today\'s date launches Google Calendar</string>
+  <string name="settings_calendar_launch_summary_off">Clicking on today\'s date is ignored</string>
   <string name="settings_section_name_Tasks">タスク</string>
   <string name="settings_auto_sort_title">自動タスクの並べ替え</string>
   <string name="settings_auto_sort_summary_on">タスクの順序を強制する (アクティブ／完了／ロック）</string>
@@ -148,6 +151,9 @@
   <string name="settings_widget_show_toolbar_title">ツールバーを表示します。</string>
   <string name="settings_widget_show_toolbar_summary_on">ウィジェット ツールバーを表示する</string>
   <string name="settings_widget_show_toolbar_summary_off">ウィジェット ツールバーを表示しない</string>
+  <string name="settings_widget_show_date_title">Show Date</string>
+  <string name="settings_widget_show_date_summary_on">Show today\'s date in widget title</string>
+  <string name="settings_widget_show_date_summary_off">Not showing date in widget title</string>
   <string name="settings_widget_single_line_title">単一行</string>
   <string name="settings_widget_single_line_summary_on">タスクを 1 つの行を制限します。</string>
   <string name="settings_widget_single_line_summary_off">長いタスクを 2 番目の行の折り返し</string>
