@@ -2,6 +2,11 @@
 #
 # A script to patch the Android SDK library that contains ViewPager.java
 # Run each time upgrading to a newer version of the SDK.
+#
+# As of Aug 2012, the stock ViewPager class does not allow to control the
+# animation speed and results in a too fast stratup animation (the goal is
+# that the user will have a chance to notice the Tomorow page before 
+# scrolling horizontally to Today page).
 
 source ./bash_lib.sh
 
