@@ -34,30 +34,55 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 @ApplicationScope
 public enum Font implements KeyedEnum {
     // NOTE: font keys are persisted in preferences. Do not modify.
+    // @formatter:off
     CURSIVE(
-            R.string.font_name_Cursive,
-            "cursive",
-            1.5f,
-            0.9f,
-            null,
-            "fonts/Vavont/Vavont-modified.ttf"),
+        R.string.font_name_Cursive,
+        "cursive",
+        1.5f,
+        0.9f,
+        null,
+        "fonts/Vavont/Vavont-modified.ttf"),
+            
     CASUAL(
-            R.string.font_name_Casual,
-            "casual",
-            1.3f,
-            0.95f,
-            null,
-            "fonts/Daniel/Daniel-modified.ttf"),
+        R.string.font_name_Casual,
+        "casual",
+        1.3f,
+        0.95f,
+        null,
+        "fonts/Daniel/Daniel-modified.ttf"),
+            
     ELEGANT(
-            R.string.font_name_Elegant,
-            "elegant",
-            1.6f,
-            1.0f,
-            null,
-            "fonts/Pompiere/Pompiere-Regular-modified.ttf"),
-    SAN_SERIF(R.string.font_name_Sans_Serif, "sans", 1.2f, 1.1f, Typeface.SANS_SERIF, null),
-    SERIF(R.string.font_name_Serif, "serif", 1.2f, 1.1f, Typeface.SERIF, null),
-    IMPACT(R.string.font_name_Impact, "impact", 1.6f, 1.0f, null, "fonts/Damion/Damion-Regular.ttf");
+        R.string.font_name_Elegant,
+        "elegant",
+        1.6f,
+        1.0f,
+        null,
+        "fonts/Pompiere/Pompiere-Regular-modified.ttf"),
+            
+    SAN_SERIF(
+        R.string.font_name_Sans_Serif, 
+        "sans", 
+        1.2f, 
+        1.1f, 
+        Typeface.SANS_SERIF, 
+        null),
+            
+    SERIF(
+        R.string.font_name_Serif, 
+        "serif", 
+        1.2f, 
+        1.1f, 
+        Typeface.SERIF, 
+        null),
+    
+    IMPACT(
+        R.string.font_name_Impact, 
+        "impact", 
+        1.6f,  
+        1.0f,   
+        null, 
+        "fonts/Damion/Damion-Regular.ttf");
+    // @formatter:on
 
     /** User visible name. */
     private final int nameResourceId;
