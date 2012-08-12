@@ -189,7 +189,7 @@
             android:summary="@string/settings_section_task_text_summary"
             android:title="@string/settings_section_name_Task_Text" >
             <com.zapta.apps.maniana.settings.FontPreference
-                android:defaultValue="casual"
+                android:defaultValue="cursive"
                 android:key="prefItemFontKey"
                 android:title="@string/settings_font_selector_title"
                 maniana:summaryFormat="@string/settings_font_selector_summary" />
@@ -261,7 +261,7 @@
             android:summary="@string/settings_section_task_text_summary"
             android:title="@string/settings_section_name_Task_Text" >
             <com.zapta.apps.maniana.settings.FontPreference
-                android:defaultValue="casual"
+                android:defaultValue="cursive"
                 android:key="prefWidgetItemFontKey"
                 android:title="@string/settings_font_selector_title"
                 maniana:summaryFormat="@string/settings_font_selector_summary" />

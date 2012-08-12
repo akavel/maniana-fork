@@ -1,4 +1,0 @@
-Downloaded March 25 2012
-Licene is available at http://goodreasonblog.blogspot.com/p/fontery.html
-(license file is too big to include in the app package).
-

@@ -43,14 +43,6 @@ public enum Font implements KeyedEnum {
         null,
         "fonts/Vavont/Vavont-modified.ttf"),
             
-    CASUAL(
-        R.string.font_name_Casual,
-        "casual",
-        1.3f,
-        0.95f,
-        null,
-        "fonts/Daniel/Daniel-modified.ttf"),
-            
     ELEGANT(
         R.string.font_name_Elegant,
         "elegant",
