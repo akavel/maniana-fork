@@ -8,6 +8,8 @@
     <dimen name="icon_widget_label_top_margin">12dip</dimen>
     <dimen name="icon_widget_label_right_margin">0dip</dimen>
 
+    <dimen name="page_main_menu_left_padding">15dip</dimen>
+
     <!-- Portrait Width -->
     <dimen name="list_widget_width_1x_portrait">80dip</dimen>
     <dimen name="list_widget_width_2x_portrait">145dip</dimen>

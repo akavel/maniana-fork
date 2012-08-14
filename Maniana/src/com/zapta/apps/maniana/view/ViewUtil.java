@@ -41,4 +41,13 @@ public class ViewUtil {
                 return String.format("UNKNOWN(%d)", action);
         }
     }
+
+//    public static void setTextViewTopBottomPaddingFraction(TextView tv, float lineHeightFraction) {
+//        if (lineHeightFraction == 0) {
+//            return;
+//        }
+//        final int topBottomPaddingPixles = (int) (tv.getTextSize() * lineHeightFraction);
+//        tv.setPadding(tv.getPaddingLeft(), tv.getPaddingTop() + topBottomPaddingPixles,
+//                tv.getPaddingRight(), tv.getPaddingBottom() + topBottomPaddingPixles);
+//    }
 }

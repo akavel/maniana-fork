@@ -144,6 +144,11 @@ public class ItemView extends FrameLayout {
         final ItemFontVariation newItemFontVariation = mMainActivityState.prefTracker().getPageItemFontVariation();
         if (newItemFontVariation != mLastFontVariaton || isItemCompleted || mLastIsCompleted) {
             newItemFontVariation.apply(mExtendedTextView, isItemCompleted, true);
+            
+            // Add spacing above top line and below bottom line. This provides inter item spacing.
+            // TODO: define a const or integer resources.
+            // ViewUtil.setTextViewTopBottomPaddingFraction(mExtendedTextView, 0.0f);
+            
             mLastFontVariaton = newItemFontVariation;
             mLastIsCompleted = isItemCompleted;
         }
