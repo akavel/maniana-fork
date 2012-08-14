@@ -11,12 +11,12 @@
         android:id="@+id/widget_item_color"
         android:layout_width="6dip"
         android:layout_height="fill_parent"
-        android:layout_marginBottom="1dip"
+        android:layout_marginBottom="6dip"
         android:layout_marginLeft="1dip"
-        android:layout_marginTop="3dip" >
+        android:layout_marginTop="2dip" >
     </FrameLayout>
 
-    <TextView
+    <com.zapta.apps.maniana.view.ExtendedTextView
         android:id="@+id/widget_item_text_view"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -28,6 +28,6 @@
         android:scrollHorizontally="false"
         android:singleLine="true"
         android:textColor="@color/color_place_holder" >
-    </TextView>
+    </com.zapta.apps.maniana.view.ExtendedTextView>
 
 </LinearLayout>

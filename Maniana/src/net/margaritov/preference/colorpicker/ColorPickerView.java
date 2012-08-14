@@ -16,6 +16,8 @@
 
 package net.margaritov.preference.colorpicker;
 
+import com.zapta.apps.maniana.util.ViewUtil;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -167,6 +169,9 @@ public class ColorPickerView extends View {
 	}
 
 	private void init(){
+	    // Required for the ComposeShader to work. See comment below in this file.
+	    ViewUtil.disableHardwareAcceleration(this);
+	    
 		mDensity = getContext().getResources().getDisplayMetrics().density;
 		PALETTE_CIRCLE_TRACKER_RADIUS *= mDensity;
 		RECTANGLE_TRACKER_OFFSET *= mDensity;
@@ -263,6 +268,14 @@ public class ColorPickerView extends View {
 
 		mSatShader = new LinearGradient(rect.left, rect.top, rect.right, rect.top,
 				0xffffffff, rgb, TileMode.CLAMP);
+		
+		// NOTE: per the link below, hardware acceleration does not support ComposeShader with
+		// two sub shaders of the same type. For this reason, we disable hardware acceleration
+		// for this view (see above in this file). The Sympthoms were that in ICS, the color
+		// picker view did not have the vertical shade change from white to black.
+		//
+		// http://developer.android.com/guide/topics/graphics/hardware-accel.html
+		//
 		Shader mShader = mJustHSNoV 
 		        ? mSatShader
 		        : new ComposeShader(mValShader, mSatShader, PorterDuff.Mode.MULTIPLY);

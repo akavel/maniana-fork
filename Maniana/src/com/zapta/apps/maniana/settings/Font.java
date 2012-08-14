@@ -39,7 +39,8 @@ public enum Font implements KeyedEnum {
         R.string.font_name_Cursive,
         "cursive",
         1.5f,
-        0.9f,
+        0.75f,
+        0.4f,
         null,
         "fonts/Vavont/Vavont-modified.ttf"),
             
@@ -48,6 +49,7 @@ public enum Font implements KeyedEnum {
         "elegant",
         1.6f,
         1.0f,
+        0.0f,
         null,
         "fonts/Pompiere/Pompiere-Regular-modified.ttf"),
             
@@ -56,6 +58,7 @@ public enum Font implements KeyedEnum {
         "sans", 
         1.2f, 
         1.1f, 
+        0.0f,
         Typeface.SANS_SERIF, 
         null),
             
@@ -64,6 +67,7 @@ public enum Font implements KeyedEnum {
         "serif", 
         1.2f, 
         1.1f, 
+        0.0f,
         Typeface.SERIF, 
         null),
     
@@ -71,7 +75,8 @@ public enum Font implements KeyedEnum {
         R.string.font_name_Impact, 
         "impact", 
         1.6f,  
-        1.0f,   
+        0.7f, 
+        0.3f,
         null, 
         "fonts/Damion/Damion-Regular.ttf");
     // @formatter:on
@@ -89,6 +94,7 @@ public enum Font implements KeyedEnum {
     public final float scale;
 
     public final float lineSpacingMultipler;
+    public final float lastLineExtraSpacingFraction;
 
     /** The standard typeface of null if this is an custom font. */
     @Nullable
@@ -99,11 +105,13 @@ public enum Font implements KeyedEnum {
     final String mAssetFilePath;
 
     private Font(int nameResourceId, String key, float scale, float lineSpacingMultipler,
-            @Nullable Typeface sysTypeface, @Nullable String assertFilePath) {
+            float lastLineExtraSpacingFraction, @Nullable Typeface sysTypeface,
+            @Nullable String assertFilePath) {
         this.nameResourceId = nameResourceId;
         this.mKey = key;
         this.scale = scale;
         this.lineSpacingMultipler = lineSpacingMultipler;
+        this.lastLineExtraSpacingFraction = lastLineExtraSpacingFraction;
         this.mSysTypeface = sysTypeface;
         this.mAssetFilePath = assertFilePath;
 

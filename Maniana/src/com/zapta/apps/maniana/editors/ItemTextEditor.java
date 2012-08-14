@@ -22,13 +22,13 @@ import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.EditText;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.model.ItemColor;
 import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
+import com.zapta.apps.maniana.view.ExtendedEditText;
 
 //import android.content.DialogInterface.OnDismissListener;
 
@@ -52,7 +52,7 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
     private final ItemEditorListener mListener;
 
     /** The text edit field of the dialog. */
-    private final EditText mEditTextView;
+    private final ExtendedEditText mExtendedEditTextView;
 
     /** The view whose background is used to display the color */
     private final View mColorView;
@@ -75,14 +75,15 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
         setOwnerActivity(mainActivityState.mainActivity());
 
         // Get sub views
-        mEditTextView = (EditText) findViewById(R.id.editor_text);
+        mExtendedEditTextView = (ExtendedEditText) findViewById(R.id.editor_text);
         mColorView = findViewById(R.id.editor_color);
 
         // Set text and style. Always using non completed variation, even if the
         // item is completed.
-        mEditTextView.setText(initialText);
+        mExtendedEditTextView.setText(initialText);
+        
         mainActivityState.prefTracker().getPageItemFontVariation()
-                .apply(mEditTextView, false, false);
+                .apply(mExtendedEditTextView, false, false);
 
         // EditorEventAdapter eventAdapter = new EditorEventAdapter();
         setOnDismissListener(new OnDismissListener() {
@@ -92,7 +93,7 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
             }
         });
 
-        mEditTextView.addTextChangedListener(new TextWatcher() {
+        mExtendedEditTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable arg0) {
                 handleTextChanged();
@@ -120,13 +121,13 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
         updateColorView();
 
         // TODO: why this setting does not work when done in the layout XML?
-        mEditTextView.setHorizontallyScrolling(false);
-        mEditTextView.setSingleLine(false);
-        mEditTextView.setMinLines(3);
-        mEditTextView.setMaxLines(5);
+        mExtendedEditTextView.setHorizontallyScrolling(false);
+        mExtendedEditTextView.setSingleLine(false);
+        mExtendedEditTextView.setMinLines(3);
+        mExtendedEditTextView.setMaxLines(5);
 
         // Position cursor at the end of the text
-        mEditTextView.setSelection(initialText.length());
+        mExtendedEditTextView.setSelection(initialText.length());
 
         // TODO: this does not open automatically the keyaobrd when in landscape mode.
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -137,17 +138,17 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
         mMainState.popupsTracker().untrack(this);
         // If not already reported during the close leftover.
         if (!dismissAlreadyReported) {
-            mListener.onDismiss(mEditTextView.getText().toString(), mItemColor);
+            mListener.onDismiss(mExtendedEditTextView.getText().toString(), mItemColor);
         }
     }
 
     /** Called when text field value changes. */
     private final void handleTextChanged() {
-        final String value = mEditTextView.getText().toString();
+        final String value = mExtendedEditTextView.getText().toString();
         // We detect the Enter key by the '\n' char it inserts.
         if (value.contains("\n")) {
             final String cleanedValue = value.replace("\n", "").trim();
-            mEditTextView.setText(cleanedValue);
+            mExtendedEditTextView.setText(cleanedValue);
             // This will trigger the handleOnDismiss above that will call the listener of this
             // editor.
             dismiss();
@@ -172,7 +173,7 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
             // UI thread will get to handle the queued event. The controller rely on the fact that
             // the editor was dismissed and any pending new item text was submitted to the model.
             dismissAlreadyReported = true;
-            mListener.onDismiss(mEditTextView.getText().toString(), mItemColor);
+            mListener.onDismiss(mExtendedEditTextView.getText().toString(), mItemColor);
             dismiss();
         }
     }

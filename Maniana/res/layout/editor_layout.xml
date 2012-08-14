@@ -22,7 +22,7 @@
         </FrameLayout>
     </FrameLayout>
 
-    <EditText
+    <com.zapta.apps.maniana.view.ExtendedEditText
         android:id="@+id/editor_text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

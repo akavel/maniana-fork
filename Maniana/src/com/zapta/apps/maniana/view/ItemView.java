@@ -24,7 +24,6 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.MainActivityScope;
@@ -48,7 +47,7 @@ public class ItemView extends FrameLayout {
     private final View mColorView;
 
     /** The sub view that contains the text. */
-    private final TextView mTextView;
+    private final ExtendedTextView mExtendedTextView;
 
     /** The sub view that contains the button (arrow, lock, etc). */
     private final ImageView mArrowView;
@@ -75,7 +74,7 @@ public class ItemView extends FrameLayout {
 
         mColorView = findViewById(R.id.page_item_color);
 
-        mTextView = (TextView) findViewById(R.id.page_item_text);
+        mExtendedTextView = (ExtendedTextView) findViewById(R.id.page_item_text);
 
         mArrowView = (ImageView) findViewById(R.id.page_item_arrow);
 
@@ -136,7 +135,7 @@ public class ItemView extends FrameLayout {
 
     public final void updateFromItemModel(ItemModelReadOnly item) {
         updateItemButton(item.isLocked());
-        mTextView.setText(item.getText());
+        mExtendedTextView.setText(item.getText());
         mColorView.setBackgroundColor(item.getColor().getColor(0x00000000));
         updateFont(item.isCompleted());
     }
@@ -144,7 +143,7 @@ public class ItemView extends FrameLayout {
     private final void updateFont(boolean isItemCompleted) {
         final ItemFontVariation newItemFontVariation = mMainActivityState.prefTracker().getPageItemFontVariation();
         if (newItemFontVariation != mLastFontVariaton || isItemCompleted || mLastIsCompleted) {
-            newItemFontVariation.apply(mTextView, isItemCompleted, true);
+            newItemFontVariation.apply(mExtendedTextView, isItemCompleted, true);
             mLastFontVariaton = newItemFontVariation;
             mLastIsCompleted = isItemCompleted;
         }

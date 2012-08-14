@@ -42,6 +42,7 @@ import com.zapta.apps.maniana.util.BitmapUtil;
 import com.zapta.apps.maniana.util.DisplayUtil;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.Orientation;
+import com.zapta.apps.maniana.view.ExtendedTextView;
 import com.zapta.apps.maniana.widget.ListWidgetSize.OrientationInfo;
 
 /**
@@ -340,19 +341,19 @@ public class ListWidgetProviderTemplate {
         for (ItemModelReadOnly item : items) {
             final LinearLayout itemView = (LinearLayout) mLayoutInflater.inflate(
                     R.layout.widget_list_template_item_layout, null);
-            final TextView textView = (TextView) itemView.findViewById(R.id.widget_item_text_view);
+            final ExtendedTextView extendedTextView = (ExtendedTextView) itemView.findViewById(R.id.widget_item_text_view);
             final View colorView = itemView.findViewById(R.id.widget_item_color);
 
-            textView.setText(item.getText());
-            ICS_HACK_TEXT_VIEW(textView);
-            mFontVariationPreference.apply(textView, item.isCompleted(), true);
+            extendedTextView.setText(item.getText());
+            ICS_HACK_TEXT_VIEW(extendedTextView);
+            mFontVariationPreference.apply(extendedTextView, item.isCompleted(), true);
 
             // If color is NONE show a gray solid color to help visually
             // grouping item text lines.
             colorView.setBackgroundColor(item.getColor().getColor(0xff808080));
             mItemListView.addView(itemView);
 
-            mItemTextViews.add(textView);
+            mItemTextViews.add(extendedTextView);
         }
     }
 
@@ -364,19 +365,19 @@ public class ListWidgetProviderTemplate {
 
         final LinearLayout itemView = (LinearLayout) mLayoutInflater.inflate(
                 R.layout.widget_list_template_item_layout, null);
-        final TextView textView = (TextView) itemView.findViewById(R.id.widget_item_text_view);
+        final ExtendedTextView extendedTextView = (ExtendedTextView) itemView.findViewById(R.id.widget_item_text_view);
         final View colorView = itemView.findViewById(R.id.widget_item_color);
 
         // TODO: setup message text using widget font size preference?
-        textView.setSingleLine(false);
-        textView.setText(message);
-        ICS_HACK_TEXT_VIEW(textView);
-        mFontVariationPreference.apply(textView, false, true);
+        extendedTextView.setSingleLine(false);
+        extendedTextView.setText(message);
+        ICS_HACK_TEXT_VIEW(extendedTextView);
+        mFontVariationPreference.apply(extendedTextView, false, true);
         colorView.setVisibility(View.GONE);
 
         mItemListView.addView(itemView);
 
-        mItemTextViews.add(textView);
+        mItemTextViews.add(extendedTextView);
     }
 
     /**

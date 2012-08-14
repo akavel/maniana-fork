@@ -15,6 +15,8 @@
 package com.zapta.apps.maniana.settings;
 
 import com.zapta.apps.maniana.annotations.ApplicationScope;
+import com.zapta.apps.maniana.view.ExtendedEditText;
+import com.zapta.apps.maniana.view.ExtendedTextView;
 
 import android.content.Context;
 import android.graphics.Paint;
@@ -31,13 +33,13 @@ import android.widget.TextView;
  */
 @ApplicationScope
 public class ItemFontVariation {
-    
+
     private final Typeface mTypeFace;
     private final int mColor;
     private final int mColorCompleted;
     private final int mTextSize;
     private final float mLineSpacingMultiplier;
-    private final int mTopBottomPadding;
+    private final float mLastLineExtraSpacingFraction;
 
     /**
      * Construct a new variation.
@@ -47,33 +49,44 @@ public class ItemFontVariation {
      * @param colorCompleted the text color for completed items.
      * @param textSize the text size.
      * @param lineSpacingMultiplier The line spacing multiplier to use.
-     * @param topBottomPadding padding (in dip) at top and bottom of text.
+     * @param lastLineExtraSpacingFraction extra spacing, in fraction of line height, to add to last
+     *        line. Used to avoid truncation if line spacing multiplier is smaller than 1.
      */
     private ItemFontVariation(Typeface typeFace, int color, int colorCompleted, int textSize,
-            float lineSpacingMultiplier, int topBottomPadding) {
+            float lineSpacingMultiplier, float lastLineExtraSpacingFraction) {
         this.mTypeFace = typeFace;
         this.mColor = color;
         this.mColorCompleted = colorCompleted;
         this.mTextSize = textSize;
-        this.mTopBottomPadding = topBottomPadding;
         this.mLineSpacingMultiplier = lineSpacingMultiplier;
+        this.mLastLineExtraSpacingFraction = lastLineExtraSpacingFraction;
+    }
+
+    public void apply(ExtendedTextView extendedTextView, boolean isCompleted, boolean applyAlsoColor) {
+        applyCommon(extendedTextView, isCompleted, applyAlsoColor);
+        extendedTextView.setLastLineExtraSpacingFraction(mLastLineExtraSpacingFraction);
+    }
+
+    public void apply(ExtendedEditText extendedEditText, boolean isCompleted, boolean applyAlsoColor) {
+        applyCommon(extendedEditText, isCompleted, applyAlsoColor);
+        extendedEditText.setLastLineExtraSpacingFraction(mLastLineExtraSpacingFraction);
     }
 
     /**
-     * Apply this font variation to given text view.
+     * Apply this font variation to given text/edit view. setLastLineExtraSpacingFraction()
+     * is done latter by the caller.
      * 
      * @param textView the item's text view.
      * @param isCompleted true if the item is completed.
+     * @param applyAlsoColor determines if color should be set.
      */
-    public void apply(TextView textView, boolean isCompleted, boolean applyAlsoColor) {
+    private void applyCommon(TextView textView, boolean isCompleted, boolean applyAlsoColor) {
         textView.setTypeface(mTypeFace);
         if (applyAlsoColor) {
             textView.setTextColor(isCompleted ? mColorCompleted : mColor);
         }
         textView.setTextSize(mTextSize);
         textView.setLineSpacing(0.0f, mLineSpacingMultiplier);
-        textView.setPadding(textView.getPaddingLeft(), mTopBottomPadding,
-                textView.getPaddingRight(), mTopBottomPadding);
 
         if (isCompleted) {
             textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -91,26 +104,23 @@ public class ItemFontVariation {
         final int rawFontSize = prefTracker.getItemFontSizePreference();
         final int fontSize = (int) (rawFontSize * font.scale);
 
-        // TODO: normalize '10' by device density?
-        return new ItemFontVariation(font.getTypeface(context), color, completedColor,
-                fontSize, font.lineSpacingMultipler, 10);
+        return new ItemFontVariation(font.getTypeface(context), color, completedColor, fontSize,
+                font.lineSpacingMultipler, font.lastLineExtraSpacingFraction);
     }
-    
+
     public static final ItemFontVariation newFromWidgetPreferences(Context context,
             PreferencesReader prefReader) {
-        final Font font = prefReader
-                .getWidgetFontPreference();
+        final Font font = prefReader.getWidgetFontPreference();
         final int color = prefReader.getWidgetTextColorPreference();
         final int completedColor = prefReader.getWidgetCompletedTextColorPreference();
 
-        final int rawFontSize = prefReader
-                .getWidgetItemFontSizePreference();
+        final int rawFontSize = prefReader.getWidgetItemFontSizePreference();
         final int fontSize = (int) (rawFontSize * font.scale);
 
         return new ItemFontVariation(font.getTypeface(context), color, completedColor, fontSize,
-                font.lineSpacingMultipler, 0);
+                font.lineSpacingMultipler, font.lastLineExtraSpacingFraction);
     }
-    
+
     public final int getTextSize() {
         return mTextSize;
     }

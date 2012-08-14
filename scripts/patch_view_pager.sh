@@ -10,15 +10,10 @@
 
 source ./bash_lib.sh
 
-# List of two letter codes of languages to update
-#languages="es it ja ru"
-
 # Definitions
 sdk="${HOME}/util/android-sdk-macosx"
 tmproot="/tmp"
 tmp="${tmproot}/maniana_tmp"
-
-#url="http://crowdin.net/download/project/maniana.zip"
 
 function init() {
   # Create an empty temp working dir
@@ -62,7 +57,9 @@ function patch_source() {
   check_last_cmd "Copying ViewPager.java"
 
   echo
-  echo "WANRING: maust diff merge ViewPager.java manuall"
+  echo "WANRING: must diff merge ViewPager.java manuall..."
+
+  sleep 3 
   echo
 
   git difftool ../Maniana/src/android/support/v4/view/ViewPager.java
