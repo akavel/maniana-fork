@@ -98,27 +98,32 @@ public class ItemFontVariation {
     public static final ItemFontVariation newFromPagePreferences(Context context,
             PreferencesTracker prefTracker) {
         final Font font = prefTracker.getItemFontPreference();
+        final FontSpec fontSpec = font.getSpec(context);
+        
         final int color = prefTracker.getPageItemActiveTextColorPreference();
         final int completedColor = prefTracker.getPageItemCompletedTextColorPreference();
 
         final int rawFontSize = prefTracker.getItemFontSizePreference();
-        final int fontSize = (int) (rawFontSize * font.scale);
+        final int fontSize = (int) (rawFontSize * fontSpec.scale);
 
-        return new ItemFontVariation(font.getTypeface(context), color, completedColor, fontSize,
-                font.lineSpacingMultipler, font.lastLineExtraSpacingFraction);
+       
+        return new ItemFontVariation(fontSpec.typeface, color, completedColor, fontSize,
+                fontSpec.lineSpacingMultipler, fontSpec.lastLineExtraSpacingFraction);
     }
 
     public static final ItemFontVariation newFromWidgetPreferences(Context context,
             PreferencesReader prefReader) {
         final Font font = prefReader.getWidgetFontPreference();
+        final FontSpec fontSpec = font.getSpec(context);
+        
         final int color = prefReader.getWidgetTextColorPreference();
         final int completedColor = prefReader.getWidgetCompletedTextColorPreference();
 
         final int rawFontSize = prefReader.getWidgetItemFontSizePreference();
-        final int fontSize = (int) (rawFontSize * font.scale);
+        final int fontSize = (int) (rawFontSize * fontSpec.scale);
 
-        return new ItemFontVariation(font.getTypeface(context), color, completedColor, fontSize,
-                font.lineSpacingMultipler, font.lastLineExtraSpacingFraction);
+        return new ItemFontVariation(fontSpec.typeface, color, completedColor, fontSize,
+                fontSpec.lineSpacingMultipler, fontSpec.lastLineExtraSpacingFraction);
     }
 
     public final int getTextSize() {

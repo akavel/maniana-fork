@@ -89,14 +89,15 @@ public class FontPreference extends DialogPreference implements DialogInterface.
             final CheckedTextView checkedTextView = (CheckedTextView) view
                     .findViewById(android.R.id.text1);
             final Font font = Font.values()[position];
-            checkedTextView.setTypeface(font.getTypeface(getContext()));
+            final FontSpec fontSpec = font.getSpec(getContext());
+            checkedTextView.setTypeface(fontSpec.typeface);
 
             // If you want to make the selected item having different foreground or background
             // color, be aware of themes. In some of them your foreground color may be the
             // background
             // color. So we don't mess with anything here.
             checkedTextView.setText(font.getName(mContext));
-            checkedTextView.setTextSize(20 * font.scale);
+            checkedTextView.setTextSize(20 * fontSpec.scale);
             return view;
         }
     }

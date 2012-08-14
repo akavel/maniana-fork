@@ -14,8 +14,6 @@
 
 package com.zapta.apps.maniana.settings;
 
-import static com.zapta.apps.maniana.util.Assertions.check;
-
 import javax.annotation.Nullable;
 
 import android.content.Context;
@@ -34,52 +32,11 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
 @ApplicationScope
 public enum Font implements KeyedEnum {
     // NOTE: font keys are persisted in preferences. Do not modify.
-    // @formatter:off
-    CURSIVE(
-        R.string.font_name_Cursive,
-        "cursive",
-        1.5f,
-        0.75f,
-        0.4f,
-        null,
-        "fonts/Vavont/Vavont-modified.ttf"),
-            
-    ELEGANT(
-        R.string.font_name_Elegant,
-        "elegant",
-        1.6f,
-        1.0f,
-        0.0f,
-        null,
-        "fonts/Pompiere/Pompiere-Regular-modified.ttf"),
-            
-    SAN_SERIF(
-        R.string.font_name_Sans_Serif, 
-        "sans", 
-        1.2f, 
-        1.1f, 
-        0.0f,
-        Typeface.SANS_SERIF, 
-        null),
-            
-    SERIF(
-        R.string.font_name_Serif, 
-        "serif", 
-        1.2f, 
-        1.1f, 
-        0.0f,
-        Typeface.SERIF, 
-        null),
-    
-    IMPACT(
-        R.string.font_name_Impact, 
-        "impact", 
-        1.6f,  
-        0.7f, 
-        0.3f,
-        null, 
-        "fonts/Damion/Damion-Regular.ttf");
-    // @formatter:on
+    CURSIVE(R.string.font_name_Cursive, "cursive"),
+    ELEGANT(R.string.font_name_Elegant, "elegant"),
+    SAN_SERIF(R.string.font_name_Sans_Serif, "sans"),
+    SERIF(R.string.font_name_Serif, "serif"),
+    IMPACT(R.string.font_name_Impact, "impact");
 
     /** User visible name. */
     private final int nameResourceId;
@@ -90,33 +47,12 @@ public enum Font implements KeyedEnum {
      */
     private final String mKey;
 
-    /** Relative scale to normalize size among font types. */
-    public final float scale;
+    /** Set at runtime, from context. Depends on language, configuration, etc. */
+    private FontSpec fontSpec = null;
 
-    public final float lineSpacingMultipler;
-    public final float lastLineExtraSpacingFraction;
-
-    /** The standard typeface of null if this is an custom font. */
-    @Nullable
-    private final Typeface mSysTypeface;
-
-    /** Asset font file path or null if this is standard font. */
-    @Nullable
-    final String mAssetFilePath;
-
-    private Font(int nameResourceId, String key, float scale, float lineSpacingMultipler,
-            float lastLineExtraSpacingFraction, @Nullable Typeface sysTypeface,
-            @Nullable String assertFilePath) {
+    private Font(int nameResourceId, String key) {
         this.nameResourceId = nameResourceId;
         this.mKey = key;
-        this.scale = scale;
-        this.lineSpacingMultipler = lineSpacingMultipler;
-        this.lastLineExtraSpacingFraction = lastLineExtraSpacingFraction;
-        this.mSysTypeface = sysTypeface;
-        this.mAssetFilePath = assertFilePath;
-
-        // Exactly one of the two should be non null.
-        check((mSysTypeface == null) != (mAssetFilePath == null));
     }
 
     @Override
@@ -134,11 +70,39 @@ public enum Font implements KeyedEnum {
         return EnumUtil.fromKey(key, Font.values(), fallBack);
     }
 
-    public final Typeface getTypeface(Context context) {
-        // TODO: is it ok to mix typefaces between contexts?
-        if (mSysTypeface != null) {
-            return mSysTypeface;
+    /** Return spec is stable throughout the lifetime of the app. */
+    public final synchronized FontSpec getSpec(Context context) {
+        if (fontSpec == null) {
+            fontSpec = constructFontSpec(context);
         }
-        return Typeface.createFromAsset(context.getAssets(), mAssetFilePath);
+        return fontSpec;
     }
+
+    private final FontSpec constructFontSpec(Context context) {
+        switch (this) {
+            case CURSIVE:
+                return new FontSpec(context, "fonts/Vavont/Vavont-modified.ttf", 1.5f, 0.75f, 0.4f);
+            case ELEGANT:
+                return new FontSpec(context, "fonts/Pompiere/Pompiere-Regular-modified.ttf", 1.6f,
+                        1.0f, 0.0f);
+            case SAN_SERIF:
+                return new FontSpec(Typeface.SANS_SERIF, 1.2f, 1.1f, 0.0f);
+            case SERIF:
+                return new FontSpec(Typeface.SERIF, 1.2f, 1.1f, 0.0f);
+            case IMPACT:
+                final String translationCode = context
+                        .getString(R.string.translation_language_code);
+                // TODO: generalize this typeface selection
+                if ("ru".equals(translationCode)) {
+                    final Typeface typeface = Typeface.create(Typeface.SERIF, Typeface.BOLD_ITALIC);
+                    return new FontSpec(typeface, 1.2f, 1.1f, 0.0f);
+                } else {
+                    return new FontSpec(context, "fonts/Damion/Damion-Regular.ttf", 1.6f, 0.7f,
+                            0.3f);
+                }
+            default:
+                throw new RuntimeException("Unknown font: " + this);
+        }
+    }
+
 }
