@@ -11,7 +11,7 @@
         android:id="@+id/editor_color_click"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:background="#ffffffff"
+        android:background="#00000000"
         android:paddingRight="10dip" >
 
         <FrameLayout
@@ -26,11 +26,10 @@
         android:id="@+id/editor_text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
+       
         android:gravity="top"
         android:inputType="textCapSentences|textImeMultiLine"
         android:paddingLeft="0dip"
-        android:paddingRight="10dip"
-        android:textColor="#000000" />
+        android:paddingRight="10dip"/>
 
 </LinearLayout>
