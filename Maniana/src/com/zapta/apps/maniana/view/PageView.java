@@ -35,7 +35,7 @@ import com.zapta.apps.maniana.menus.MainMenuEntry;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.services.MainActivityServices;
 import com.zapta.apps.maniana.settings.Font;
-import com.zapta.apps.maniana.settings.FontSpec;
+import com.zapta.apps.maniana.settings.TypefaceSpec;
 import com.zapta.apps.maniana.settings.PageIconSet;
 import com.zapta.apps.maniana.util.ColorUtil;
 import com.zapta.apps.maniana.util.DisplayUtil;
@@ -319,7 +319,7 @@ public class PageView extends FrameLayout {
                 .getPageTitleTodayColor() : mMainActivityState.prefTracker()
                 .getPageTitleTomorowColor());
         final Font titleFont = mMainActivityState.prefTracker().getPageTitleFontPreference();
-        final FontSpec titleFontSpec = titleFont.getSpec(mMainActivityState.context());
+        final TypefaceSpec titleFontSpec = titleFont.getTypefaceSpec(mMainActivityState.context());
         final float titleFontSizeSP = mMainActivityState.prefTracker()
                 .getPageTitleFontSizePreference() * titleFontSpec.scale;
         mPageTitleTextView.setTypeface(titleFontSpec.typeface);

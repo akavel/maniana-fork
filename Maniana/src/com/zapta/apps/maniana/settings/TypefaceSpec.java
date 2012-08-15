@@ -20,12 +20,12 @@ import android.graphics.Typeface;
 import com.zapta.apps.maniana.annotations.ApplicationScope;
 
 /**
- * Immutable parameters of a font.
+ * Immutable parameters of a typeface mapped to a font.
  * 
  * @author Tal Dayan
  */
 @ApplicationScope
-public class FontSpec {
+public class TypefaceSpec {
 
     public final Typeface typeface;
 
@@ -36,7 +36,7 @@ public class FontSpec {
     public final float lastLineExtraSpacingFraction;
 
     /** Construct from typeface. */
-    public FontSpec(Typeface typeface, float scale, float lineSpacingMultipler,
+    public TypefaceSpec(Typeface typeface, float scale, float lineSpacingMultipler,
             float lastLineExtraSpacingFraction) {
         this.typeface = typeface;
         this.scale = scale;
@@ -45,7 +45,7 @@ public class FontSpec {
     }
 
     /** Construct from asset font file. */
-    public FontSpec(Context context, String assetFilePath, float scale, float lineSpacingMultipler,
+    public TypefaceSpec(Context context, String assetFilePath, float scale, float lineSpacingMultipler,
             float lastLineExtraSpacingFraction) {
         this(Typeface.createFromAsset(context.getAssets(), assetFilePath), scale,
                 lineSpacingMultipler, lastLineExtraSpacingFraction);

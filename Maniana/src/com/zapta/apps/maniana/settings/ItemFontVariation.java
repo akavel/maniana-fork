@@ -98,7 +98,7 @@ public class ItemFontVariation {
     public static final ItemFontVariation newFromPagePreferences(Context context,
             PreferencesTracker prefTracker) {
         final Font font = prefTracker.getItemFontPreference();
-        final FontSpec fontSpec = font.getSpec(context);
+        final TypefaceSpec fontSpec = font.getTypefaceSpec(context);
         
         final int color = prefTracker.getPageItemActiveTextColorPreference();
         final int completedColor = prefTracker.getPageItemCompletedTextColorPreference();
@@ -114,7 +114,7 @@ public class ItemFontVariation {
     public static final ItemFontVariation newFromWidgetPreferences(Context context,
             PreferencesReader prefReader) {
         final Font font = prefReader.getWidgetFontPreference();
-        final FontSpec fontSpec = font.getSpec(context);
+        final TypefaceSpec fontSpec = font.getTypefaceSpec(context);
         
         final int color = prefReader.getWidgetTextColorPreference();
         final int completedColor = prefReader.getWidgetCompletedTextColorPreference();
