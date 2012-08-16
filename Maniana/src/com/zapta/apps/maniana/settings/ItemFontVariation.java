@@ -20,7 +20,6 @@ import com.zapta.apps.maniana.view.ExtendedTextView;
 
 import android.content.Context;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.widget.TextView;
 
 /**
@@ -33,60 +32,53 @@ import android.widget.TextView;
  */
 @ApplicationScope
 public class ItemFontVariation {
-
-    private final Typeface mTypeFace;
+    private final TypefaceSpec mTypefaceSpec;
     private final int mColor;
     private final int mColorCompleted;
     private final int mTextSize;
-    private final float mLineSpacingMultiplier;
-    private final float mLastLineExtraSpacingFraction;
 
     /**
      * Construct a new variation.
      * 
-     * @param typeFace the typeface t use
+     * @param typefaceSpec a TypefaceSpec.
      * @param color the text color for non completed items.
      * @param colorCompleted the text color for completed items.
      * @param textSize the text size.
-     * @param lineSpacingMultiplier The line spacing multiplier to use.
-     * @param lastLineExtraSpacingFraction extra spacing, in fraction of line height, to add to last
-     *        line. Used to avoid truncation if line spacing multiplier is smaller than 1.
      */
-    private ItemFontVariation(Typeface typeFace, int color, int colorCompleted, int textSize,
-            float lineSpacingMultiplier, float lastLineExtraSpacingFraction) {
-        this.mTypeFace = typeFace;
+    private ItemFontVariation(TypefaceSpec typefaceSpec, int color, int colorCompleted, int textSize) {
+        this.mTypefaceSpec = typefaceSpec;
         this.mColor = color;
         this.mColorCompleted = colorCompleted;
         this.mTextSize = textSize;
-        this.mLineSpacingMultiplier = lineSpacingMultiplier;
-        this.mLastLineExtraSpacingFraction = lastLineExtraSpacingFraction;
     }
 
     public void apply(ExtendedTextView extendedTextView, boolean isCompleted, boolean applyAlsoColor) {
         applyCommon(extendedTextView, isCompleted, applyAlsoColor);
-        extendedTextView.setLastLineExtraSpacingFraction(mLastLineExtraSpacingFraction);
+        extendedTextView.setExtraSpacingFractions(mTypefaceSpec.topExtraSpacingFraction,
+                mTypefaceSpec.bottomExtraSpacingFraction);
     }
 
     public void apply(ExtendedEditText extendedEditText, boolean isCompleted, boolean applyAlsoColor) {
         applyCommon(extendedEditText, isCompleted, applyAlsoColor);
-        extendedEditText.setLastLineExtraSpacingFraction(mLastLineExtraSpacingFraction);
+        extendedEditText.setExtraSpacingFractions(mTypefaceSpec.topExtraSpacingFraction,
+                mTypefaceSpec.bottomExtraSpacingFraction);
     }
 
     /**
-     * Apply this font variation to given text/edit view. setLastLineExtraSpacingFraction()
-     * is done latter by the caller.
+     * Apply this font variation to given text/edit view. setLastLineExtraSpacingFraction() is done
+     * latter by the caller.
      * 
      * @param textView the item's text view.
      * @param isCompleted true if the item is completed.
      * @param applyAlsoColor determines if color should be set.
      */
     private void applyCommon(TextView textView, boolean isCompleted, boolean applyAlsoColor) {
-        textView.setTypeface(mTypeFace);
+        textView.setTypeface(mTypefaceSpec.typeface);
         if (applyAlsoColor) {
             textView.setTextColor(isCompleted ? mColorCompleted : mColor);
         }
         textView.setTextSize(mTextSize);
-        textView.setLineSpacing(0.0f, mLineSpacingMultiplier);
+        textView.setLineSpacing(0.0f, mTypefaceSpec.lineSpacingMultipler);
 
         if (isCompleted) {
             textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -99,31 +91,28 @@ public class ItemFontVariation {
             PreferencesTracker prefTracker) {
         final Font font = prefTracker.getItemFontPreference();
         final TypefaceSpec fontSpec = font.getTypefaceSpec(context);
-        
+
         final int color = prefTracker.getPageItemActiveTextColorPreference();
         final int completedColor = prefTracker.getPageItemCompletedTextColorPreference();
 
         final int rawFontSize = prefTracker.getItemFontSizePreference();
         final int fontSize = (int) (rawFontSize * fontSpec.scale);
 
-       
-        return new ItemFontVariation(fontSpec.typeface, color, completedColor, fontSize,
-                fontSpec.lineSpacingMultipler, fontSpec.lastLineExtraSpacingFraction);
+        return new ItemFontVariation(fontSpec, color, completedColor, fontSize);
     }
 
     public static final ItemFontVariation newFromWidgetPreferences(Context context,
             PreferencesReader prefReader) {
         final Font font = prefReader.getWidgetFontPreference();
         final TypefaceSpec fontSpec = font.getTypefaceSpec(context);
-        
+
         final int color = prefReader.getWidgetTextColorPreference();
         final int completedColor = prefReader.getWidgetCompletedTextColorPreference();
 
         final int rawFontSize = prefReader.getWidgetItemFontSizePreference();
         final int fontSize = (int) (rawFontSize * fontSpec.scale);
 
-        return new ItemFontVariation(fontSpec.typeface, color, completedColor, fontSize,
-                fontSpec.lineSpacingMultipler, fontSpec.lastLineExtraSpacingFraction);
+        return new ItemFontVariation(fontSpec, color, completedColor, fontSize);
     }
 
     public final int getTextSize() {

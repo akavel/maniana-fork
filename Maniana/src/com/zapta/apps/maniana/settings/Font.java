@@ -103,24 +103,24 @@ public enum Font implements KeyedEnum {
     private final TypefaceSpec loadTypeface(Context context) {
         switch (this) {
             case CURSIVE:
-                return new TypefaceSpec(context, "fonts/Vavont/Vavont-modified.ttf", 1.5f, 0.75f, 0.4f);
+                return new TypefaceSpec(context, "fonts/Vavont/Vavont-modified.ttf", 1.5f, 0.75f, 0.0f, 0.4f);
             case ELEGANT:
                 return new TypefaceSpec(context, "fonts/Pompiere/Pompiere-Regular-modified.ttf", 1.6f,
-                        1.0f, 0.0f);
+                        1.0f, 0.0f, 0.0f);
             case SAN_SERIF:
-                return new TypefaceSpec(Typeface.SANS_SERIF, 1.2f, 1.1f, 0.0f);
+                return new TypefaceSpec(Typeface.SANS_SERIF, 1.2f, 1.1f, 0.0f, 0.0f);
             case SERIF:
-                return new TypefaceSpec(Typeface.SERIF, 1.2f, 1.1f, 0.0f);
+                return new TypefaceSpec(Typeface.SERIF, 1.2f, 1.1f, 0.0f, 0.0f);
             case IMPACT:
                 final String translationCode = context
                         .getString(R.string.translation_language_code);
                 // TODO: generalize this typeface selection
                 if ("ru".equals(translationCode)) {
                     final Typeface typeface = Typeface.create(Typeface.SERIF, Typeface.BOLD_ITALIC);
-                    return new TypefaceSpec(typeface, 1.2f, 1.1f, 0.0f);
+                    return new TypefaceSpec(typeface, 1.2f, 1.1f, 0.2f, 0.2f);
                 } else {
                     return new TypefaceSpec(context, "fonts/Damion/Damion-Regular.ttf", 1.6f, 0.7f,
-                            0.3f);
+                           0.0f, 0.3f);
                 }
             default:
                 throw new RuntimeException("Unknown font: " + this);

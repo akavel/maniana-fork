@@ -20,7 +20,7 @@ import android.graphics.Typeface;
 import com.zapta.apps.maniana.annotations.ApplicationScope;
 
 /**
- * Immutable parameters of a typeface mapped to a font.
+ * Immutable parameters of a typeface that is mapped to a font.
  * 
  * @author Tal Dayan
  */
@@ -33,21 +33,28 @@ public class TypefaceSpec {
     public final float scale;
 
     public final float lineSpacingMultipler;
-    public final float lastLineExtraSpacingFraction;
+    
+    /** Extra space above first line. Fraction of text height. */
+    public final float topExtraSpacingFraction;
+    
+    /** Extra space below last line. Fraction of text height. */
+    public final float bottomExtraSpacingFraction;
 
     /** Construct from typeface. */
     public TypefaceSpec(Typeface typeface, float scale, float lineSpacingMultipler,
-            float lastLineExtraSpacingFraction) {
+            float topExtraSpacingFraction, float bottomExtraSpacingFraction) {
         this.typeface = typeface;
         this.scale = scale;
         this.lineSpacingMultipler = lineSpacingMultipler;
-        this.lastLineExtraSpacingFraction = lastLineExtraSpacingFraction;
+        this.topExtraSpacingFraction = topExtraSpacingFraction;
+        this.bottomExtraSpacingFraction = bottomExtraSpacingFraction;
     }
 
     /** Construct from asset font file. */
-    public TypefaceSpec(Context context, String assetFilePath, float scale, float lineSpacingMultipler,
-            float lastLineExtraSpacingFraction) {
+    public TypefaceSpec(Context context, String assetFilePath, float scale,
+            float lineSpacingMultipler, float topExtraSpacingFraction,
+            float bottomExtraSpacingFraction) {
         this(Typeface.createFromAsset(context.getAssets(), assetFilePath), scale,
-                lineSpacingMultipler, lastLineExtraSpacingFraction);
+                lineSpacingMultipler, topExtraSpacingFraction, bottomExtraSpacingFraction);
     }
 }

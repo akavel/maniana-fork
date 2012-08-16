@@ -15,7 +15,7 @@
         android:paddingBottom="@dimen/place_holder_dip"
         android:paddingTop="@dimen/place_holder_dip" >
 
-        <TextView
+        <com.zapta.apps.maniana.view.ExtendedTextView
             android:id="@+id/page_title_text"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
@@ -25,8 +25,7 @@
             android:paddingRight="10dip"
             android:paddingTop="0dip"
             android:text="@string/place_holder"
-            android:textSize="55dip" >
-        </TextView>
+            android:textSize="55dip" />
 
         <LinearLayout
             android:id="@+id/page_date_time_section"

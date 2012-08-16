@@ -19,6 +19,7 @@ import static com.zapta.apps.maniana.util.Assertions.checkNotNull;
 
 import javax.annotation.Nullable;
 
+import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.view.View;
@@ -45,6 +46,7 @@ import com.zapta.apps.maniana.util.DisplayUtil;
  * 
  * @author Tal Dayan
  */
+@SuppressLint("ViewConstructor")
 @MainActivityScope
 public class PageView extends FrameLayout {
 
@@ -111,7 +113,7 @@ public class PageView extends FrameLayout {
     private final TextView mDayTextView;
     private final TextView mDateTextView;
 
-    private final TextView mPageTitleTextView;
+    private final ExtendedTextView mPageTitleTextView;
 
     private final View mPaperColorView;
 
@@ -127,8 +129,8 @@ public class PageView extends FrameLayout {
 
         mPageTitleSection = findViewById(R.id.page_title_section);
         mPageTitleDivider = findViewById(R.id.page_title_divider);
-        
-        //mPageTitleSection.setOnClickListener(mCalendarLaunchListener);
+
+        // mPageTitleSection.setOnClickListener(mCalendarLaunchListener);
 
         mButtonUndoView = (ImageButton) findViewById(R.id.page_undo_button);
         mButtonAddByTextView = (ImageButton) findViewById(R.id.page_add_by_text_button);
@@ -147,7 +149,7 @@ public class PageView extends FrameLayout {
         mDateTextView = (TextView) findViewById(R.id.page_date_text);
 
         mItemListView = (ItemListView) findViewById(R.id.page_item_list);
-        mPageTitleTextView = (TextView) findViewById(R.id.page_title_text);
+        mPageTitleTextView = (ExtendedTextView) findViewById(R.id.page_title_text);
 
         mPageTitleTextView.setText(mPageKind.isToday() ? R.string.page_title_Today
                 : R.string.page_title_Maniana);
@@ -163,7 +165,7 @@ public class PageView extends FrameLayout {
             });
         } else {
             mDateTimeSection.setVisibility(View.GONE);
-        }      
+        }
 
         final ItemListViewAdapter adapter = new ItemListViewAdapter(mMainActivityState, mPageKind);
         mItemListView.setApp(mMainActivityState, adapter);
@@ -247,7 +249,7 @@ public class PageView extends FrameLayout {
     private final void onCalendarLaunchClick() {
         mMainActivityState.controller().onCalendarLaunchClick();
     }
-    
+
     public final void onPageItemFontVariationPreferenceChange() {
         mItemListView.onPageItemFontVariationPreferenceChange();
     }
@@ -323,6 +325,8 @@ public class PageView extends FrameLayout {
         final float titleFontSizeSP = mMainActivityState.prefTracker()
                 .getPageTitleFontSizePreference() * titleFontSpec.scale;
         mPageTitleTextView.setTypeface(titleFontSpec.typeface);
+        mPageTitleTextView.setExtraSpacingFractions(titleFontSpec.topExtraSpacingFraction,
+                titleFontSpec.bottomExtraSpacingFraction);
         mPageTitleTextView.setTextSize(titleFontSizeSP);
 
         // Match vertical padding to title text size

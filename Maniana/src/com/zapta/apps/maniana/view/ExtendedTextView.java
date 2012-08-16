@@ -15,6 +15,7 @@
 package com.zapta.apps.maniana.view;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
@@ -25,7 +26,8 @@ import android.widget.TextView;
  */
 public class ExtendedTextView extends TextView {
 
-    private float mLastLineExtraSpacingFraction = 0.0f;
+    private float mTopExtraSpacingFraction = 0.0f;
+    private float mBottomExtraSpacingFraction = 0.0f;
 
     public ExtendedTextView(Context context) {
         super(context);
@@ -46,16 +48,32 @@ public class ExtendedTextView extends TextView {
      * @param lastLineHeightExtensionFraction the extra extension as a fraction of line height.
      *        Default value is 0.0f for no extension.
      */
-    public void setLastLineExtraSpacingFraction(float lastLineExtraSpacingFraction) {
+    public void setExtraSpacingFractions(float topExtraSpacingFraction,
+            float bottomExtraSpacingFraction) {
         // TODO: exact comparisons of floats. Is is safe?
-        if (mLastLineExtraSpacingFraction != lastLineExtraSpacingFraction) {
-            mLastLineExtraSpacingFraction = lastLineExtraSpacingFraction;
+        if (mTopExtraSpacingFraction != topExtraSpacingFraction
+                || mBottomExtraSpacingFraction != bottomExtraSpacingFraction) {
+            mTopExtraSpacingFraction = topExtraSpacingFraction;
+            mBottomExtraSpacingFraction = bottomExtraSpacingFraction;
             invalidate();
         }
     }
 
-    public float getLastLineExtraSpacingFraction() {
-        return mLastLineExtraSpacingFraction;
+    @Override
+    protected void onDraw(Canvas canvas) {
+        final boolean translate = (mTopExtraSpacingFraction != 0);
+
+        if (translate) {
+            final int topExtraSpacingPixels = (int) (getTextSize() * mTopExtraSpacingFraction);
+            canvas.save();
+            canvas.translate(0, topExtraSpacingPixels);
+        }
+
+        super.onDraw(canvas);
+
+        if (translate) {
+            canvas.restore();
+        }
     }
 
     /**
@@ -65,10 +83,10 @@ public class ExtendedTextView extends TextView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         // TODO: exact comparisons of floats. Is is safe?
-        if (mLastLineExtraSpacingFraction != 0) {
-            final int extraHeightPixels = (int) (getTextSize() * mLastLineExtraSpacingFraction);
+        final float extraSpacingFraction = mTopExtraSpacingFraction + mBottomExtraSpacingFraction;
+        if (extraSpacingFraction != 0) {
+            final int extraHeightPixels = (int) (getTextSize() * extraSpacingFraction);
             setMeasuredDimension(getMeasuredWidth(), getMeasuredHeight() + extraHeightPixels);
         }
     }
-
 }
