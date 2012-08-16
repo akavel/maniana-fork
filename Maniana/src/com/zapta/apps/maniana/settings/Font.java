@@ -23,9 +23,12 @@ import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.util.EnumUtil;
 import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
+import com.zapta.apps.maniana.util.LogUtil;
 
 /**
  * Represents possible values of Font preference.
+ * <p>
+ * TODO: cleanup the typeface caching mechanism. Kind of hacky at the moment.
  * 
  * @author Tal Dayan
  */
@@ -47,8 +50,10 @@ public enum Font implements KeyedEnum {
      */
     private final String mKey;
 
-    /** Set at runtime, from context. Depends on language, configuration, etc. */
-    private TypefaceSpec typefaceSpec = null;
+    /** 
+     * Set at runtime, from context. Depends on language, configuration, etc. 
+     */
+    private TypefaceSpec cachedTypefaceSpec = null;
 
     private Font(int nameResourceId, String key) {
         this.nameResourceId = nameResourceId;
@@ -69,16 +74,33 @@ public enum Font implements KeyedEnum {
     public final static Font fromKey(String key, @Nullable Font fallBack) {
         return EnumUtil.fromKey(key, Font.values(), fallBack);
     }
-
-    /** Return spec is stable throughout the lifetime of the app. */
-    public final synchronized TypefaceSpec getTypefaceSpec(Context context) {
-        if (typefaceSpec == null) {
-            typefaceSpec = constructTypefaceSpec(context);
-        }
-        return typefaceSpec;
+    
+    /**
+     * Called on a config change (e.g. language change) that may affect font to typeface spec
+     * mapping.
+     */
+    public final static void onConfigChanged() {
+        LogUtil.info("Font.onConfigChanged() called.");
+        // Currently only IMPACT may be affected by config change.
+        IMPACT.clearCachedTypeface();
     }
 
-    private final TypefaceSpec constructTypefaceSpec(Context context) {
+    /** 
+     * Returned typeface spec may change after a configuration change (e.g. Android
+     * language change.
+     */
+    public final synchronized TypefaceSpec getTypefaceSpec(Context context) {
+        if (cachedTypefaceSpec == null) {
+            cachedTypefaceSpec = loadTypeface(context);
+        }
+        return cachedTypefaceSpec;
+    }
+    
+    private final synchronized  void clearCachedTypeface() {
+        cachedTypefaceSpec = null;       
+    }
+
+    private final TypefaceSpec loadTypeface(Context context) {
         switch (this) {
             case CURSIVE:
                 return new TypefaceSpec(context, "fonts/Vavont/Vavont-modified.ttf", 1.5f, 0.75f, 0.4f);
@@ -104,5 +126,4 @@ public enum Font implements KeyedEnum {
                 throw new RuntimeException("Unknown font: " + this);
         }
     }
-
 }

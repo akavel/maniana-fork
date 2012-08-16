@@ -26,6 +26,7 @@ import com.zapta.apps.maniana.controller.MainActivityStartupKind;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.persistence.ModelPersistence;
 import com.zapta.apps.maniana.persistence.ModelReadingResult;
+import com.zapta.apps.maniana.settings.Font;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**
@@ -60,6 +61,9 @@ public class MainActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // TODO: This is a hack. Move an an actual config change listener in Application class.
+        Font.onConfigChanged();
 
         mRetainedState = (RetainedState) getLastNonConfigurationInstance();
 
