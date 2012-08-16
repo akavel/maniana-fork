@@ -31,6 +31,8 @@ public class ListWidgetSize {
         // NOTE: no ',' to save space.
         SHORT("%a %b %d"),
         MEDIUM("%A, %b %d"),
+
+        // NOTE: currently not used.
         LONG("%A, %B %d");
 
         public final String format;
@@ -104,14 +106,14 @@ public class ListWidgetSize {
         WidgetDateFormat.SHORT,
         WidgetDateFormat.SHORT,
         WidgetDateFormat.MEDIUM,
-        WidgetDateFormat.LONG,
+        WidgetDateFormat.MEDIUM, // was LONG
     };
     
     private static final WidgetDateFormat LANDSCAPE_DATE_FORMAT[] = new WidgetDateFormat[] {
         WidgetDateFormat.SHORT,
         WidgetDateFormat.SHORT,
         WidgetDateFormat.MEDIUM,
-        WidgetDateFormat.LONG,
+        WidgetDateFormat.MEDIUM, // was LONG
     };
 
     static final ListWidgetSize LIST_WIDGET_SIZE1 = new ListWidgetSize(ListWidgetProvider1.class,
