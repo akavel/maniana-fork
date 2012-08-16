@@ -42,6 +42,8 @@ import com.zapta.apps.maniana.view.ExtendedEditText;
  */
 @MainActivityScope
 public class ItemTextEditor extends Dialog implements TrackablePopup {
+    
+    private static final boolean PRE_API_11 = android.os.Build.VERSION.SDK_INT < 11;
 
     public interface ItemEditorListener {
         void onDismiss(String finalText, ItemColor finalColor);
@@ -82,6 +84,16 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
         // item is completed.
         mExtendedEditTextView.setText(initialText);
         
+        // For API 11+ these values come from the default theme. For holo, 
+        // this will be white text on dark gray background. This makes sure the text
+        // cursor is at at color visible over the background.:w
+        if (PRE_API_11) {
+            final View topView = findViewById(R.id.editor_top);
+            topView.setBackgroundColor(0xffffffff);            
+            mExtendedEditTextView.setBackgroundColor(0xffffffff);
+            mExtendedEditTextView.setTextColor(0xff000000);            
+        }
+        
         mainActivityState.prefTracker().getPageItemFontVariation()
                 .apply(mExtendedEditTextView, false, false);
 
@@ -110,8 +122,7 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
 
         getWindow().setGravity(Gravity.TOP);
 
-        final View colorClickView = findViewById(R.id.editor_color_click);
-        colorClickView.setOnClickListener(new View.OnClickListener() {
+        mColorView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleColorClicked();
