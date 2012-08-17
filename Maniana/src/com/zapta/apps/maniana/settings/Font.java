@@ -103,7 +103,7 @@ public enum Font implements KeyedEnum {
     private final TypefaceSpec loadTypeface(Context context) {
         switch (this) {
             case CURSIVE:
-                return new TypefaceSpec(context, "fonts/Vavont/Vavont-modified.ttf", 1.5f, 0.75f, 0.0f, 0.4f);
+                return new TypefaceSpec(context, "fonts/Vavont/Vavont-modified.ttf", 1.5f, 0.75f, -0.1f, 0.5f);
             case ELEGANT:
                 return new TypefaceSpec(context, "fonts/Pompiere/Pompiere-Regular-modified.ttf", 1.6f,
                         1.0f, 0.0f, 0.0f);

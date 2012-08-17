@@ -4,16 +4,15 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    android:orientation="horizontal"
-    android:paddingBottom="1dip" >
+    android:orientation="horizontal" >
 
     <FrameLayout
         android:id="@+id/widget_item_color"
         android:layout_width="6dip"
         android:layout_height="fill_parent"
-        android:layout_marginBottom="8dip"
+        android:layout_marginBottom="12dip"
         android:layout_marginLeft="1dip"
-        android:layout_marginTop="4dip" >
+        android:layout_marginTop="2dip" >
     </FrameLayout>
 
     <com.zapta.apps.maniana.view.ExtendedTextView
@@ -22,7 +21,6 @@
         android:layout_height="fill_parent"
         android:background="@android:color/transparent"
         android:ellipsize="end"
-        android:lineSpacingMultiplier="0.95"
         android:paddingLeft="7dip"
         android:paddingRight="5dip"
         android:scrollHorizontally="false"
