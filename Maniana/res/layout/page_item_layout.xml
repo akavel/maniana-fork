@@ -9,9 +9,9 @@
         android:id="@+id/page_item_color"
         android:layout_width="6dip"
         android:layout_height="fill_parent"
-        android:layout_marginBottom="7dip"
+        android:layout_marginBottom="10dip"
         android:layout_marginLeft="1dip"
-        android:layout_marginTop="2dip"
+        android:layout_marginTop="5dip"
         android:background="#ff8080ff" >
     </FrameLayout>
 
@@ -29,8 +29,8 @@
             android:background="@android:color/transparent"
             android:paddingLeft="7dip"
             android:paddingRight="5dip"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
             android:scrollHorizontally="false" >
         </com.zapta.apps.maniana.view.ExtendedTextView>
 

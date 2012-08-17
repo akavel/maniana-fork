@@ -120,7 +120,7 @@ public enum Font implements KeyedEnum {
                     return new TypefaceSpec(typeface, 1.2f, 1.1f, 0.2f, 0.2f);
                 } else {
                     return new TypefaceSpec(context, "fonts/Damion/Damion-Regular.ttf", 1.6f, 0.7f,
-                           0.0f, 0.3f);
+                           0.0f, 0.1f);
                 }
             default:
                 throw new RuntimeException("Unknown font: " + this);

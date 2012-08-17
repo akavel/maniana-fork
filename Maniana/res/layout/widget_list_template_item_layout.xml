@@ -11,9 +11,9 @@
         android:id="@+id/widget_item_color"
         android:layout_width="6dip"
         android:layout_height="fill_parent"
-        android:layout_marginBottom="6dip"
+        android:layout_marginBottom="8dip"
         android:layout_marginLeft="1dip"
-        android:layout_marginTop="2dip" >
+        android:layout_marginTop="4dip" >
     </FrameLayout>
 
     <com.zapta.apps.maniana.view.ExtendedTextView
