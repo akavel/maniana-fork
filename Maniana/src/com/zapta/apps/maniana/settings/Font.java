@@ -50,8 +50,8 @@ public enum Font implements KeyedEnum {
      */
     private final String mKey;
 
-    /** 
-     * Set at runtime, from context. Depends on language, configuration, etc. 
+    /**
+     * Set at runtime, from context. Depends on language, configuration, etc.
      */
     private TypefaceSpec cachedTypefaceSpec = null;
 
@@ -74,7 +74,7 @@ public enum Font implements KeyedEnum {
     public final static Font fromKey(String key, @Nullable Font fallBack) {
         return EnumUtil.fromKey(key, Font.values(), fallBack);
     }
-    
+
     /**
      * Called on a config change (e.g. language change) that may affect font to typeface spec
      * mapping.
@@ -85,9 +85,8 @@ public enum Font implements KeyedEnum {
         IMPACT.clearCachedTypeface();
     }
 
-    /** 
-     * Returned typeface spec may change after a configuration change (e.g. Android
-     * language change.
+    /**
+     * Returned typeface spec may change after a configuration change (e.g. Android language change.
      */
     public final synchronized TypefaceSpec getTypefaceSpec(Context context) {
         if (cachedTypefaceSpec == null) {
@@ -95,33 +94,44 @@ public enum Font implements KeyedEnum {
         }
         return cachedTypefaceSpec;
     }
-    
-    private final synchronized  void clearCachedTypeface() {
-        cachedTypefaceSpec = null;       
+
+    private final synchronized void clearCachedTypeface() {
+        cachedTypefaceSpec = null;
     }
 
     private final TypefaceSpec loadTypeface(Context context) {
+        final String translationCode = context.getString(R.string.translation_language_code);
+        final boolean usesCyrillic = "ru".equals(translationCode);
+
         switch (this) {
             case CURSIVE:
-                return new TypefaceSpec(context, "fonts/Vavont/Vavont-modified.ttf", 1.5f, 0.75f, -0.25f, 0.55f);
+                return new TypefaceSpec(context, "fonts/Vavont/Vavont-modified.ttf", 1.5f, 0.75f,
+                        -0.25f, 0.55f);
+                
             case ELEGANT:
-                return new TypefaceSpec(context, "fonts/Pompiere/Pompiere-Regular-modified.ttf", 1.6f,
-                        1.0f, 0.0f, 0.0f);
+                // Pompiere-Regular-modified does not contains Cyrillic fonts.
+                if (usesCyrillic) {
+                    final Typeface typeface = Typeface.create(Typeface.SERIF, Typeface.ITALIC);
+                    return new TypefaceSpec(typeface, 1.2f, 1.1f, 0.05f, 0.25f);
+                }
+                return new TypefaceSpec(context, "fonts/Pompiere/Pompiere-Regular-modified.ttf",
+                        1.6f, 1.0f, 0.1f, 0.1f);
+                
             case SAN_SERIF:
-                return new TypefaceSpec(Typeface.SANS_SERIF, 1.2f, 1.1f, 0.0f, 0.0f);
+                return new TypefaceSpec(Typeface.SANS_SERIF, 1.2f, 1.1f, 0.05f, 0.25f);
+                
             case SERIF:
-                return new TypefaceSpec(Typeface.SERIF, 1.2f, 1.1f, 0.0f, 0.0f);
+                return new TypefaceSpec(Typeface.SERIF, 1.2f, 1.1f, 0.05f, 0.25f);
+                
             case IMPACT:
-                final String translationCode = context
-                        .getString(R.string.translation_language_code);
-                // TODO: generalize this typeface selection
-                if ("ru".equals(translationCode)) {
+                // Damion-Regular does not contains Cyrillic fonts.
+                if (usesCyrillic) {
                     final Typeface typeface = Typeface.create(Typeface.SERIF, Typeface.BOLD_ITALIC);
                     return new TypefaceSpec(typeface, 1.2f, 1.1f, 0.2f, 0.2f);
-                } else {
-                    return new TypefaceSpec(context, "fonts/Damion/Damion-Regular.ttf", 1.6f, 0.7f,
-                           0.0f, 0.1f);
                 }
+                return new TypefaceSpec(context, "fonts/Damion/Damion-Regular.ttf", 1.6f, 0.7f,
+                        0.0f, 0.1f);
+                
             default:
                 throw new RuntimeException("Unknown font: " + this);
         }
