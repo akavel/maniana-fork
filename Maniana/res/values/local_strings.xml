@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--
+    * Strings in this files are translated to localized languages. Translation 
+    * is managed by Crowdin.net at http://crowdin.net/project/maniana. The translation
+    * of this and other files are pulled by crowdin.net using the script pull_translations.sh.
+    -->
+
     <!-- General -->
     <string name="translation_language_name">English</string>
     <string name="translated_app_name">Maniana</string>
