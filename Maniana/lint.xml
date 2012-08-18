@@ -12,6 +12,7 @@
     <issue id="IconMissingDensityFolder" severity="informational" />
     <issue id="TypographyEllipsis" severity="ignore" />
     <issue id="UseCompoundDrawables">
+        <ignore path="res/layout/main_menu_entry.xml" />
         <ignore path="res/layout/thumbnail_selector_item_layout.xml" />
     </issue>
 </lint>

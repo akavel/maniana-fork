@@ -166,6 +166,8 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
         final View entryTopView = mMainActivityState.services().layoutInflater()
                 .inflate(R.layout.main_menu_entry, null);
 
+        final View highlightView = entryTopView.findViewById(R.id.main_menu_entry_highlight);
+        
         final ImageView imageView = (ImageView) entryTopView
                 .findViewById(R.id.main_menu_entry_icon);
         imageView.setImageResource(entry.iconResourceId);
@@ -179,10 +181,10 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     // NOTE: this clears any padding set on the top view (in case it is set in xml).
-                    entryTopView.setBackgroundResource(R.drawable.popup_menu_entry_selected);
+                    highlightView.setBackgroundResource(R.drawable.popup_menu_entry_selected);
                 } else if (event.getAction() == MotionEvent.ACTION_CANCEL
                         || event.getAction() == MotionEvent.ACTION_UP || !entryTopView.isPressed()) {
-                    entryTopView.setBackgroundResource(0);
+                    highlightView.setBackgroundResource(0);
                 }
                 return false;
             }
