@@ -33,27 +33,107 @@ import com.zapta.apps.maniana.util.LogUtil;
  */
 public class SerializationTest extends TestCase {
 
-    // Generated using constructLiteralString()
-    private static final String SERIALIZED_MODEL = "{\n" + " \"model\": {\n" + "  \"tomorow\": [\n"
-            + "   {\n" + "    \"color\": \"red\",\n" + "    \"text\": \"Item5\",\n"
-            + "    \"done\": true\n" + "   },\n" + "   {\n" + "    \"color\": \"blue\",\n"
-            + "    \"text\": \"Item6\",\n" + "    \"locked\": true\n" + "   },\n" + "   {\n"
-            + "    \"color\": \"green\",\n" + "    \"text\": \"Item7\",\n"
-            + "    \"locked\": true,\n" + "    \"done\": true\n" + "   },\n" + "   {\n"
-            + "    \"text\": \"Item8\"\n" + "   },\n" + "   {\n" + "    \"color\": \"red\",\n"
-            + "    \"text\": \"Item9\",\n" + "    \"done\": true\n" + "   },\n" + "   {\n"
-            + "    \"color\": \"blue\",\n" + "    \"text\": \"Item10\",\n"
-            + "    \"locked\": true\n" + "   },\n" + "   {\n" + "    \"color\": \"green\",\n"
-            + "    \"text\": \"Item11\",\n" + "    \"locked\": true,\n" + "    \"done\": true\n"
-            + "   }\n" + "  ],\n" + "  \"today\": [\n" + "   {\n" + "    \"text\": \"Item0\"\n"
-            + "   },\n" + "   {\n" + "    \"color\": \"red\",\n" + "    \"text\": \"Item1\",\n"
-            + "    \"done\": true\n" + "   },\n" + "   {\n" + "    \"color\": \"blue\",\n"
-            + "    \"text\": \"Item2\"\n" + "   },\n" + "   {\n" + "    \"color\": \"green\",\n"
-            + "    \"text\": \"Item3\",\n" + "    \"done\": true\n" + "   },\n" + "   {\n"
-            + "    \"text\": \"Item4\"\n" + "   }\n" + "  ],\n"
-            + "  \"last_push_date\": \"20120315\"\n" + " },\n" + " \"metadata\": {\n"
-            + "  \"writer_ver_name\": \"version-x.y.z\",\n" + "  \"writer_ver_code\": 123\n"
-            + " },\n" + " \"format\": 2\n" + "}";
+    // NOTE: to help updating the expected string, the test dumps the actual string in
+    // a java literal format. Run the test, grab the log using:
+    // adb logcat -d > _my_log
+    // And copy the relevant snippet here.
+    //
+    // @formatter:off
+    private static final String SERIALIZED_MODEL =
+        "{\n" + 
+        " \"model\": {\n" + 
+        "  \"tomorow\": [\n" + 
+        "   {\n" + 
+        "    \"id\": \"id1\",\n" + 
+        "    \"utime\": 1234567,\n" + 
+        "    \"text\": \"Item5\",\n" + 
+        "    \"color\": \"red\",\n" + 
+        "    \"done\": true\n" + 
+        "   },\n" + 
+        "   {\n" + 
+        "    \"id\": \"id1\",\n" + 
+        "    \"utime\": 1234567,\n" + 
+        "    \"text\": \"Item6\",\n" + 
+        "    \"locked\": true,\n" + 
+        "    \"color\": \"blue\"\n" + 
+        "   },\n" + 
+        "   {\n" + 
+        "    \"id\": \"id1\",\n" + 
+        "    \"utime\": 1234567,\n" + 
+        "    \"text\": \"Item7\",\n" + 
+        "    \"locked\": true,\n" + 
+        "    \"color\": \"green\",\n" + 
+        "    \"done\": true\n" + 
+        "   },\n" + 
+        "   {\n" + 
+        "    \"id\": \"id1\",\n" + 
+        "    \"utime\": 1234567,\n" + 
+        "    \"text\": \"Item8\"\n" + 
+        "   },\n" + 
+        "   {\n" + 
+        "    \"id\": \"id1\",\n" + 
+        "    \"utime\": 1234567,\n" + 
+        "    \"text\": \"Item9\",\n" + 
+        "    \"color\": \"red\",\n" + 
+        "    \"done\": true\n" + 
+        "   },\n" + 
+        "   {\n" + 
+        "    \"id\": \"id1\",\n" + 
+        "    \"utime\": 1234567,\n" + 
+        "    \"text\": \"Item10\",\n" + 
+        "    \"locked\": true,\n" + 
+        "    \"color\": \"blue\"\n" + 
+        "   },\n" + 
+        "   {\n" + 
+        "    \"id\": \"id1\",\n" + 
+        "    \"utime\": 1234567,\n" + 
+        "    \"text\": \"Item11\",\n" + 
+        "    \"locked\": true,\n" + 
+        "    \"color\": \"green\",\n" + 
+        "    \"done\": true\n" + 
+        "   }\n" + 
+        "  ],\n" + 
+        "  \"today\": [\n" + 
+        "   {\n" + 
+        "    \"id\": \"id1\",\n" + 
+        "    \"utime\": 1234567,\n" + 
+        "    \"text\": \"Item0\"\n" + 
+        "   },\n" + 
+        "   {\n" + 
+        "    \"id\": \"id1\",\n" + 
+        "    \"utime\": 1234567,\n" + 
+        "    \"text\": \"Item1\",\n" + 
+        "    \"color\": \"red\",\n" + 
+        "    \"done\": true\n" + 
+        "   },\n" + 
+        "   {\n" + 
+        "    \"id\": \"id1\",\n" + 
+        "    \"color\": \"blue\",\n" + 
+        "    \"utime\": 1234567,\n" + 
+        "    \"text\": \"Item2\"\n" + 
+        "   },\n" + 
+        "   {\n" + 
+        "    \"id\": \"id1\",\n" + 
+        "    \"utime\": 1234567,\n" + 
+        "    \"text\": \"Item3\",\n" + 
+        "    \"color\": \"green\",\n" + 
+        "    \"done\": true\n" + 
+        "   },\n" + 
+        "   {\n" + 
+        "    \"id\": \"id1\",\n" + 
+        "    \"utime\": 1234567,\n" + 
+        "    \"text\": \"Item4\"\n" + 
+        "   }\n" + 
+        "  ],\n" + 
+        "  \"last_push_date\": \"20120315\"\n" + 
+        " },\n" + 
+        " \"metadata\": {\n" + 
+        "  \"writer_ver_name\": \"version-x.y.z\",\n" + 
+        "  \"writer_ver_code\": 123\n" + 
+        " },\n" + 
+        " \"format\": 2\n" + 
+        "}";
+    // @formatter:on
 
     private AppModel createFakeModel() {
         final AppModel model = new AppModel();
@@ -76,7 +156,10 @@ public class SerializationTest extends TestCase {
         final AppModel model = createFakeModel();
         final PersistenceMetadata metadata = new PersistenceMetadata(123, "version-x.y.z");
         final String actual = ModelSerialization.serializeModel(model, metadata);
-        LogUtil.info(TestUtil.constructLiteralString(actual));
+
+        // Dump this in case we need to update the expected string.
+        LogUtil.info(TestUtil.constructLiteralString("SERIALIZED_MODEL", actual));
+
         assertEquals(SERIALIZED_MODEL, actual);
     }
 

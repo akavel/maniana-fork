@@ -23,13 +23,15 @@ package com.zapta.apps.maniana.testing;
 public class TestUtil {
 
     /** Encode a string as a java source code string declaration. */
-    public static String constructLiteralString(String str) {
+    public static String constructLiteralString(String name, String value) {
         final StringBuilder sb = new StringBuilder();
-        sb.append("private static final String XYZ =\n");
+        sb.append("private static final String ");
+        sb.append(name);
+        sb.append(" =\n");
         sb.append("\"");
-        final int n = str.length();
+        final int n = value.length();
         for (int i = 0; i < n; i++) {
-            final char c = str.charAt(i);
+            final char c = value.charAt(i);
             if (c == '\n') {
                 final boolean isLast = (i == (n - 1));
                 sb.append("\\n");
