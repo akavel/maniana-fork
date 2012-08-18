@@ -275,6 +275,13 @@
                 maniana:summaryFormat="@string/settings_text_size_summary"
                 maniana:valueFormat="@string/settings_text_size_format_d_points" />
 
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="prefWidgetAutoFitKey"
+                android:summaryOff="@string/settings_widget_sauto_fit_summary_off"
+                android:summaryOn="@string/settings_widget_auto_fit_summary_on"
+                android:title="@string/settings_widget_auto_fit_title" />
+
             <net.margaritov.preference.colorpicker.ColorPickerPreference
                 android:defaultValue="#ff330000"
                 android:key="prefWidgetTextColorKey"
@@ -299,13 +306,6 @@
                 android:key="prefWidgetCompletedTextColorKey"
                 android:summary="@string/settings_completed_task_color_summary"
                 android:title="@string/settings_completed_task_color_title" />
-
-            <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="prefWidgetAutoFitKey"
-                android:summaryOff="@string/settings_widget_sauto_fit_summary_off"
-                android:summaryOn="@string/settings_widget_auto_fit_summary_on"
-                android:title="@string/settings_widget_auto_fit_title" />
         </PreferenceScreen>
     </PreferenceScreen>
     <PreferenceScreen android:title="@string/settings_section_name_Backup" >
