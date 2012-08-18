@@ -106,7 +106,7 @@ public enum Font implements KeyedEnum {
         switch (this) {
             case CURSIVE:
                 return new TypefaceSpec(context, "fonts/Vavont/Vavont-modified.ttf", 1.5f, 0.75f,
-                        -0.25f, 0.55f);
+                        -0.10f, 0.45f);
                 
             case ELEGANT:
                 // Pompiere-Regular-modified does not contains Cyrillic fonts.
@@ -115,7 +115,7 @@ public enum Font implements KeyedEnum {
                     return new TypefaceSpec(typeface, 1.2f, 1.1f, 0.05f, 0.25f);
                 }
                 return new TypefaceSpec(context, "fonts/Pompiere/Pompiere-Regular-modified.ttf",
-                        1.6f, 1.0f, 0.1f, 0.1f);
+                        1.6f, 1.0f, 0.0f, 0.1f);
                 
             case SAN_SERIF:
                 return new TypefaceSpec(Typeface.SANS_SERIF, 1.2f, 1.1f, 0.05f, 0.25f);
