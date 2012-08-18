@@ -15,7 +15,6 @@
 package com.zapta.apps.maniana.view;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.widget.EditText;
 
@@ -27,8 +26,12 @@ import android.widget.EditText;
  * @author Tal Dayan
  */
 public class ExtendedEditText extends EditText {
+    
+    // NOTE: overriding onDraw and translating the canvas as done in ExtendedTextView results with an artifact
+    // in the editor view. The top portion of the blinking text cursor does not blink properly. For this reason,
+    // the ExtendedEditText always assumes extra top spacing of zero. 
+    // Observed on Android 2.3.x, works well on 4.1
 
-    private float mTopExtraSpacingFraction = 0.0f;
     private float mBottomExtraSpacingFraction = 0.0f;
 
     public ExtendedEditText(Context context, AttributeSet attrs, int defStyle) {
@@ -46,43 +49,22 @@ public class ExtendedEditText extends EditText {
     /**
      * Similar to ExtendedTextView.
      */
-    public void setExtraSpacingFractions(float topExtraSpacingFraction,
-            float bottomExtraSpacingFraction) {
+    public void setExtraSpacingFractions(float bottomExtraSpacingFraction) {
         // TODO: exact comparisons of floats. Is is safe?
-        if (mTopExtraSpacingFraction != topExtraSpacingFraction
-                || mBottomExtraSpacingFraction != bottomExtraSpacingFraction) {
-            mTopExtraSpacingFraction = topExtraSpacingFraction;
+        if (mBottomExtraSpacingFraction != bottomExtraSpacingFraction) {
             mBottomExtraSpacingFraction = bottomExtraSpacingFraction;
             invalidate();
         }
     }
     
     @Override
-    protected void onDraw(Canvas canvas) {
-        final boolean translate = (mTopExtraSpacingFraction != 0);
-
-        if (translate) {
-            final int topExtraSpacingPixels = (int) (getTextSize() * mTopExtraSpacingFraction);
-            canvas.save();
-            canvas.translate(0, topExtraSpacingPixels);
-        }
-
-        super.onDraw(canvas);
-
-        if (translate) {
-            canvas.restore();
-        }
-    }
-
-    @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         // TODO: exact comparisons of floats. Is is safe?
-        final float extraSpacingFraction = mTopExtraSpacingFraction + mBottomExtraSpacingFraction;
+        final float extraSpacingFraction = mBottomExtraSpacingFraction;
         if (extraSpacingFraction != 0) {
             final int extraHeightPixels = (int) (getTextSize() * extraSpacingFraction);
             setMeasuredDimension(getMeasuredWidth(), getMeasuredHeight() + extraHeightPixels);
         }
     }
-
 }

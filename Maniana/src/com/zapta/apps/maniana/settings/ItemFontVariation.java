@@ -60,8 +60,7 @@ public class ItemFontVariation {
 
     public void apply(ExtendedEditText extendedEditText, boolean isCompleted, boolean applyAlsoColor) {
         applyCommon(extendedEditText, isCompleted, applyAlsoColor);
-        extendedEditText.setExtraSpacingFractions(mTypefaceSpec.topExtraSpacingFraction,
-                mTypefaceSpec.bottomExtraSpacingFraction);
+        extendedEditText.setExtraSpacingFractions(mTypefaceSpec.bottomExtraSpacingFraction);
     }
 
     /**
