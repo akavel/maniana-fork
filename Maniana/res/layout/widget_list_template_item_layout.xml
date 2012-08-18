@@ -12,7 +12,7 @@
         android:layout_height="fill_parent"
         android:layout_marginBottom="12dip"
         android:layout_marginLeft="1dip"
-        android:layout_marginTop="2dip" >
+        android:layout_marginTop="0dip" >
     </FrameLayout>
 
     <com.zapta.apps.maniana.view.ExtendedTextView

@@ -79,7 +79,7 @@
             android:background="#00000000"
             android:orientation="vertical"
             android:paddingRight="2dip"
-            android:paddingTop="2dip" >
+            android:paddingTop="8dip" >
         </LinearLayout>
     </LinearLayout>
 
