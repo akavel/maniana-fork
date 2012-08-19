@@ -329,6 +329,7 @@ public class ListWidgetProviderTemplate {
         final List<ItemModelReadOnly> items = WidgetUtil.selectTodaysItems(mModel,
                 mIncludeCompletedItemsPreference);
 
+        // If no items, add a message and leave.
         if (items.isEmpty()) {
             final String emptyMessage = "("
                     + mContext
@@ -338,19 +339,26 @@ public class ListWidgetProviderTemplate {
             return;
         }
 
+        // Add items.
         for (ItemModelReadOnly item : items) {
             final LinearLayout itemView = (LinearLayout) mLayoutInflater.inflate(
                     R.layout.widget_list_template_item_layout, null);
             final ExtendedTextView extendedTextView = (ExtendedTextView) itemView.findViewById(R.id.widget_item_text_view);
-            final View colorView = itemView.findViewById(R.id.widget_item_color);
+            final View itemColorView = itemView.findViewById(R.id.widget_item_color);
 
             extendedTextView.setText(item.getText());
             ICS_HACK_TEXT_VIEW(extendedTextView);
             mFontVariationPreference.apply(extendedTextView, item.isCompleted(), true);
+            
+            // For debugging. Highlight each            
+            // {             
+            //  final int bgColor = 0x33000000 | RandomUtil.random.nextInt(0x1000000);
+            //  extendedTextView.setBackgroundColor(bgColor);   
+            // }
 
             // If color is NONE show a gray solid color to help visually
             // grouping item text lines.
-            colorView.setBackgroundColor(item.getColor().getColor(0xff808080));
+            itemColorView.setBackgroundColor(item.getColor().getColor(0xff808080));
             mItemListView.addView(itemView);
 
             mItemTextViews.add(extendedTextView);

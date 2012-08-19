@@ -15,7 +15,6 @@
 package com.zapta.apps.maniana.services;
 
 import java.util.List;
-import java.util.Random;
 
 import javax.annotation.Nullable;
 
@@ -41,6 +40,7 @@ import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.util.DisplayUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.PackageUtil;
+import com.zapta.apps.maniana.util.RandomUtil;
 
 /**
  * Provides common app services.
@@ -83,8 +83,6 @@ public class MainActivityServices {
     /** In the range [0, 1] */
     private final float mNormalizedSoundEffectVolume;
 
-    private final Random mRandom;
-
     private final BackupManager mBackupManager;
 
     private final float mDensity;
@@ -106,8 +104,6 @@ public class MainActivityServices {
 
         mNormalizedSoundEffectVolume = mMainActivityState.context().getResources()
                 .getInteger(R.integer.sound_effect_volume_percent) / 100.0f;
-
-        mRandom = new Random();
 
         mBackupManager = new BackupManager(mMainActivityState.context());
 
@@ -183,7 +179,7 @@ public class MainActivityServices {
             // releaseMediaPlayer();
 
             // Determine sound track to play
-            final int rand = mRandom.nextInt(100);
+            final int rand = RandomUtil.random.nextInt(100);
             final int trackResourceId = (rand < 90) ? R.raw.applause_normal
                     : R.raw.applause_special;
 
@@ -209,7 +205,7 @@ public class MainActivityServices {
                 return true;
             default:
                 // 20% probability
-                return mRandom.nextInt(100) < 20;
+                return RandomUtil.random.nextInt(100) < 20;
         }
     }
 
