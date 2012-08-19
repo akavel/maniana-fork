@@ -102,7 +102,8 @@ public class MainMenu implements OnDismissListener, TrackablePopup {
      * @param anchorView a view to which the action menu's arrow will point it.
      */
     public final void show(View anchorView) {
-
+        mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
+        
         for (MainMenuEntry entry : MainMenuEntry.values()) {
             if (entry != MainMenuEntry.DEBUG || mMainActivityState.debugController().isDebugMode()) {
                 addEntry(entry);
