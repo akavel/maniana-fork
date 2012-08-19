@@ -24,6 +24,7 @@ import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.services.MainActivityServices;
+import com.zapta.apps.maniana.util.CalendarUtil;
 import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
 
 /**
@@ -77,6 +78,8 @@ public class DebugInfoDialog extends Dialog implements TrackablePopup {
         sb.append("Display Width: " + display.getWidth() + "\n");
         sb.append("Display Height: " + display.getHeight() + "\n");
         sb.append("Voice recognition: " + hasVoiceRecogintionService + "\n");
+        sb.append("Calendar Intents: "
+                + CalendarUtil.debugGoogleCalendarVariants(mainActivityState.context()) + "\n");
         sb.append("</pre>\n</body>\n</html>\n");
 
         final String html = sb.toString();

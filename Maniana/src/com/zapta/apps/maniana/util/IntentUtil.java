@@ -14,9 +14,14 @@
 
 package com.zapta.apps.maniana.util;
 
+import java.util.List;
+
 import com.zapta.apps.maniana.annotations.ApplicationScope;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 
 /**
  * @author Tal Dayan
@@ -46,5 +51,14 @@ public final class IntentUtil {
             LogUtil.debug("*   scheme: %s", intent.getData().getScheme());
             LogUtil.debug("*   uri authority: %s", intent.getData());
         }
+    }
+    
+    /** Test if an intent has a default receiver. */
+    public static boolean isIntentAvailable(Context context, Intent intent) {
+        final PackageManager packageManager = context.getPackageManager();
+        final List<ResolveInfo> list =
+                packageManager.queryIntentActivities(intent,
+                        PackageManager.MATCH_DEFAULT_ONLY);
+        return !list.isEmpty();
     }
 }

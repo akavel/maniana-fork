@@ -155,10 +155,11 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
                 prefReader);
 
         final boolean toolbarEanbled = prefReader.getWidgetShowToolbarPreference();
-        
+
         final boolean showDate = toolbarEanbled && prefReader.getWidgetShowDatePreference();
-        
-        final boolean titleClickLaunchesCalendar = showDate && prefReader.getCalendarLaunchPreference();
+
+        final boolean titleClickLaunchesCalendar = showDate
+                && prefReader.getCalendarLaunchPreference();
 
         final boolean includeCompletedItems = prefReader.getWidgetShowCompletedItemsPreference();
 
@@ -171,7 +172,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         // remote view. This also increase the complexity and makes the widget more sensitive
         // to resizing.
         final ListWidgetProviderTemplate template = new ListWidgetProviderTemplate(context, model,
-                sometimeToday, paper, templateBackgroundColor, toolbarEanbled, showDate, 
+                sometimeToday, paper, templateBackgroundColor, toolbarEanbled, showDate,
                 includeCompletedItems, singleLine, fontVariation, autoFit);
 
         // Create the widget remote view
@@ -255,19 +256,25 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
     /** Set/disable the toolbar click overlay in the remote views layout. */
     private static final void setRemoteViewsToolbar(Context context, RemoteViews remoteViews,
             boolean toolbarEnabled, boolean titleClickLaunchesCalendar) {
-        
+
         if (toolbarEnabled && titleClickLaunchesCalendar) {
-            final Intent intent = CalendarUtil.constructGoogleCalendarIntent();
-            final PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-            remoteViews.setOnClickPendingIntent(R.id.widget_list_toolbar_title_overlay, pendingIntent);
-        } 
-        
+            // If calender does not seem to exist, do nothing.
+            @Nullable
+            final Intent calendarIntent = CalendarUtil.maybeConstructGoogleCalendarIntent(context);
+            if (calendarIntent != null) {
+                final PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, calendarIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+                remoteViews.setOnClickPendingIntent(R.id.widget_list_toolbar_title_overlay,
+                        pendingIntent);
+            }
+        }
+
         // Set or disable the click overlay of the add-item-by-text button.
         if (toolbarEnabled) {
             remoteViews.setInt(R.id.widget_list_toolbar_add_by_text_overlay, "setVisibility",
                     View.VISIBLE);
-            setOnClickLaunchMainActivity(context, remoteViews, R.id.widget_list_toolbar_add_by_text_overlay,
+            setOnClickLaunchMainActivity(context, remoteViews,
+                    R.id.widget_list_toolbar_add_by_text_overlay,
                     MainActivityResumeAction.ADD_NEW_ITEM_BY_TEXT);
         } else { // templateAddTextByVoiceButton.setVisibility(View.GONE);
             remoteViews.setInt(R.id.widget_list_toolbar_add_by_text_overlay, "setVisibility",
@@ -278,7 +285,8 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
         if (toolbarEnabled && MainActivityServices.isVoiceRecognitionSupported(context)) {
             remoteViews.setInt(R.id.widget_list_toolbar_add_by_voice_overlay, "setVisibility",
                     View.VISIBLE);
-            setOnClickLaunchMainActivity(context, remoteViews, R.id.widget_list_toolbar_add_by_voice_overlay,
+            setOnClickLaunchMainActivity(context, remoteViews,
+                    R.id.widget_list_toolbar_add_by_voice_overlay,
                     MainActivityResumeAction.ADD_NEW_ITEM_BY_VOICE);
         } else {
             remoteViews.setInt(R.id.widget_list_toolbar_add_by_voice_overlay, "setVisibility",
@@ -287,8 +295,8 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
     }
 
     /** Set onClick() action of given remote view element to launch the app. */
-    private static final void setOnClickLaunchMainActivity(Context context, RemoteViews remoteViews,
-            int viewId, MainActivityResumeAction resumeAction) {
+    private static final void setOnClickLaunchMainActivity(Context context,
+            RemoteViews remoteViews, int viewId, MainActivityResumeAction resumeAction) {
         final Intent intent = new Intent(context, MainActivity.class);
         MainActivityResumeAction.setInIntent(intent, resumeAction);
         // Setting unique intent action and using FLAG_UPDATE_CURRENT to avoid cross

@@ -877,20 +877,29 @@ public class Controller implements ShakerListener {
         return true;
     }
 
-    /** Called to launch the calendar */
+    /** Called to launch  calendar */
     public final void onCalendarLaunchClick() {
-        if (mMainActivityState.prefReader().getCalendarLaunchPreference()) {
-            mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
-            // TODO: should we use startSubActivity() here?
-            if (!mMainActivityState.services().startActivity(
-                    CalendarUtil.constructGoogleCalendarIntent())) {
-                // NOTE: the protocol to launch the google calendar depend on the OS version.
-                // We include it in the error message to help with diagnostic. If needed
-                // more information, add a debug menu command to diagnose the calendar
-                // launching.
-                mMainActivityState.services().toast("Failed launching Google calendar (%d).",
-                        android.os.Build.VERSION.SDK_INT);
-            }
+        if (!mMainActivityState.prefReader().getCalendarLaunchPreference()) {
+            return;
+        }
+        
+        mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
+        
+        // See if we can find a calendar intent that has a matching reciever.
+        @Nullable
+        final Intent calendarIntent = CalendarUtil
+                .maybeConstructGoogleCalendarIntent(mMainActivityState.context());
+        if (calendarIntent == null) {
+            mMainActivityState.services().toast("Google Calender not found.");
+            return;
+        }
+        
+        // Intent found, try launching it.
+        //
+        // TODO: should we use startSubActivity() here?
+        if (!mMainActivityState.services().startActivity(calendarIntent)) {
+            mMainActivityState.services().toast("Failed launching Google calendar.",
+                    android.os.Build.VERSION.SDK_INT);
         }
     }
 

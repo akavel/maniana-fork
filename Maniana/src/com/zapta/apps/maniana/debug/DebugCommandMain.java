@@ -23,9 +23,9 @@ import com.zapta.apps.maniana.annotations.MainActivityScope;
  */
 @MainActivityScope
 public enum DebugCommandMain implements DebugCommand {
-    NOTIFICATIONS("Notification..."),
-    HTML_PAGES("HTML Pages"),
     INFO("Device Info"),
+    HTML_PAGES("HTML Pages"),
+    NOTIFICATIONS("Notification..."),
     EXIT("Exit debug mode");
     
     private final String mText;

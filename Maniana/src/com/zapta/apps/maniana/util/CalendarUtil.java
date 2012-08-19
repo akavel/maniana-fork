@@ -14,6 +14,9 @@
 
 package com.zapta.apps.maniana.util;
 
+import javax.annotation.Nullable;
+
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
@@ -31,24 +34,77 @@ public final class CalendarUtil {
     private CalendarUtil() {
     }
 
-    
-    /** Returned true if ok. Result depends on time now. Should not be cached for too long. */
-    public static Intent constructGoogleCalendarIntent() {
-        final int OS_VERSION = android.os.Build.VERSION.SDK_INT;
-
-        // Construct the intent
-        final Intent intent = new Intent();
-        if (OS_VERSION <= 14) {
-            intent.setClassName("com.android.calendar", "com.android.calendar.AgendaActivity");
-        } else {
-            // ICS added API for launching the google calendar. See documentation at:
-            // http://developer.android.com/guide/topics/providers/calendar-provider.html#intents
-            final long startTimeMillis = System.currentTimeMillis();
-            final String url = "content://com.android.calendar/time/" + startTimeMillis;
-            intent.setAction(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse(url));
+    /** 
+     * Try constructing an intent to launch google calendar for time = now.
+     * <p>
+     * Note: we could cache the intent or the intent type for better performance.
+     */
+    @Nullable
+    public static Intent maybeConstructGoogleCalendarIntent(Context context) {
+        // Try variant 1. Older.
+        {
+            final Intent intent = constructGoogleCalendarIntentVariant1();
+            if (IntentUtil.isIntentAvailable(context, intent)) {
+                LogUtil.info("Using google calendar intent variant 1");
+                return intent;
+            }
         }
+
+        // Try variant 2. Newer.
+        // See // http://developer.android.com/guide/topics/providers/calendar-provider.html#intents
+        {
+            final Intent intent = constructGoogleCalendarIntentVariant2();
+            if (IntentUtil.isIntentAvailable(context, intent)) {
+                LogUtil.info("Using google calendar intent variant 1");
+                return intent;
+            }
+        }
+
+        // Fail
+        LogUtil.info("No functional google calendar intent variant");
+        return null;
+    }
+
+    // For debugging only.
+    public static String debugGoogleCalendarVariants(Context context) {
+        final StringBuilder sb = new StringBuilder();
+        
+        if (IntentUtil.isIntentAvailable(context, constructGoogleCalendarIntentVariant1())) {
+            sb.append("V1");
+        }
+
+        if (IntentUtil.isIntentAvailable(context, constructGoogleCalendarIntentVariant2())) {
+            if (sb.length() != 0) {
+                sb.append(", ");
+            }
+            sb.append("V2");
+        }
+
+        if (sb.length() == 0) {
+            sb.append("NONE");
+        }
+
+        return sb.toString();
+    }
+
+    /** Google calendar intent variant 1 */
+    private static Intent constructGoogleCalendarIntentVariant1() {
+        final Intent intent = new Intent();
+        return intent.setClassName("com.android.calendar", "com.android.calendar.AgendaActivity");
+    }
+
+    /** Google calendar intent variant 1 */
+    private static Intent constructGoogleCalendarIntentVariant2() {
+        final Intent intent = new Intent();
+
+        // Newer calendar have API for launching the google calendar. See documentation at:
+        // http://developer.android.com/guide/topics/providers/calendar-provider.html#intents
+        final long startTimeMillis = System.currentTimeMillis();
+        final String url = "content://com.android.calendar/time/" + startTimeMillis;
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
 
         return intent;
     }
+
 }
