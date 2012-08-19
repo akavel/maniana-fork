@@ -34,54 +34,50 @@ public final class CalendarUtil {
     private CalendarUtil() {
     }
 
-    /** 
+    /**
      * Try constructing an intent to launch google calendar for time = now.
      * <p>
      * Note: we could cache the intent or the intent type for better performance.
      */
     @Nullable
     public static Intent maybeConstructGoogleCalendarIntent(Context context) {
-        // Try variant 1. Older.
+        // Try first variant 2. Newer.
         {
-            final Intent intent = constructGoogleCalendarIntentVariant1();
+            final Intent intent = constructGoogleCalendarIntentVariant2();
             if (IntentUtil.isIntentAvailable(context, intent)) {
-                LogUtil.info("Using google calendar intent variant 1");
                 return intent;
             }
         }
 
-        // Try variant 2. Newer.
-        // See // http://developer.android.com/guide/topics/providers/calendar-provider.html#intents
+        // Else, try variant 1. Older.
         {
-            final Intent intent = constructGoogleCalendarIntentVariant2();
+            final Intent intent = constructGoogleCalendarIntentVariant1();
             if (IntentUtil.isIntentAvailable(context, intent)) {
-                LogUtil.info("Using google calendar intent variant 1");
                 return intent;
             }
         }
 
         // Fail
-        LogUtil.info("No functional google calendar intent variant");
         return null;
     }
 
     // For debugging only.
     public static String debugGoogleCalendarVariants(Context context) {
         final StringBuilder sb = new StringBuilder();
-        
-        if (IntentUtil.isIntentAvailable(context, constructGoogleCalendarIntentVariant1())) {
-            sb.append("V1");
-        }
 
         if (IntentUtil.isIntentAvailable(context, constructGoogleCalendarIntentVariant2())) {
-            if (sb.length() != 0) {
-                sb.append(", ");
-            }
             sb.append("V2");
         }
 
+        if (IntentUtil.isIntentAvailable(context, constructGoogleCalendarIntentVariant1())) {
+            if (sb.length() != 0) {
+                sb.append(", ");
+            }
+            sb.append("V1");
+        }
+
         if (sb.length() == 0) {
-            sb.append("NONE");
+            sb.append("(none found)");
         }
 
         return sb.toString();
@@ -106,5 +102,4 @@ public final class CalendarUtil {
 
         return intent;
     }
-
 }
