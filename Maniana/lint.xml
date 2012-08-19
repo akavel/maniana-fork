@@ -15,6 +15,9 @@
         <ignore path="res/layout/main_menu_entry.xml" />
         <ignore path="res/layout/thumbnail_selector_item_layout.xml" />
     </issue>
+    <issue id="UselessParent">
+        <ignore path="res/layout/main_menu_entry.xml" />
+    </issue>
     <issue id="ViewConstructor">
         <ignore path="src/com/zapta/apps/maniana/view/ItemView.java" />
     </issue>

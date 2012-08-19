@@ -31,7 +31,8 @@
             android:id="@+id/page_date_time_section"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:soundEffectsEnabled="false" >
 
             <TextView
                 android:id="@+id/page_day_text"
@@ -58,6 +59,7 @@
             android:longClickable="false"
             android:paddingLeft="@dimen/page_main_menu_left_padding"
             android:paddingRight="12dip"
+            android:soundEffectsEnabled="false"
             android:src="@drawable/main_menu_button_version_1" >
         </ImageButton>
     </LinearLayout>
@@ -96,6 +98,7 @@
             android:longClickable="false"
             android:paddingLeft="8dip"
             android:paddingRight="30dip"
+            android:soundEffectsEnabled="false"
             android:src="@drawable/place_holder" >
         </ImageButton>
 
@@ -115,6 +118,7 @@
             android:longClickable="false"
             android:paddingLeft="15dip"
             android:paddingRight="10dip"
+            android:soundEffectsEnabled="false"
             android:src="@drawable/place_holder" >
         </ImageButton>
 
@@ -127,6 +131,7 @@
             android:longClickable="false"
             android:paddingLeft="15dip"
             android:paddingRight="10dip"
+            android:soundEffectsEnabled="false"
             android:src="@drawable/place_holder" >
         </ImageButton>
 
@@ -138,6 +143,7 @@
             android:longClickable="true"
             android:paddingLeft="15dip"
             android:paddingRight="8dip"
+            android:soundEffectsEnabled="false"
             android:src="@drawable/place_holder" >
         </ImageButton>
     </LinearLayout>

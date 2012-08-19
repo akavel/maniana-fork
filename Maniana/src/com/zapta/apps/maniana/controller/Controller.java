@@ -256,7 +256,7 @@ public class Controller implements ShakerListener {
         }
 
         // Typically we reset the view to default position (both pages are scrolled
-        // to the top, Today page is shown) when the app is resumed. We preserve the page and 
+        // to the top, Today page is shown) when the app is resumed. We preserve the page and
         // scroll only when it is resumed from a sub activity (e.g. settings or startup message)
         // with no resume action.
         final boolean preserveView = mInSubActivity && resumeAction.isNone();
@@ -511,8 +511,7 @@ public class Controller implements ShakerListener {
 
             case ItemMenuCache.LOCK_ACTION_ID:
             case ItemMenuCache.UNLOCK_ACTION_ID: {
-                mMainActivityState.services().maybePlayStockSound(
-                        AudioManager.FX_KEYPRESS_STANDARD, false);
+                mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
 
                 final ItemModel item = mMainActivityState.model().getItemForMutation(pageKind,
                         itemIndex);

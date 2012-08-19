@@ -3,7 +3,8 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:soundEffectsEnabled="false" >
 
     <LinearLayout
         android:id="@+id/main_menu_entry_highlight"
