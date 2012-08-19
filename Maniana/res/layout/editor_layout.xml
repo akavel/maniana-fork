@@ -8,7 +8,7 @@
 
     <FrameLayout
         android:id="@+id/editor_color"
-        android:layout_width="30dip"
+        android:layout_width="@dimen/editor_color_marker_width"
         android:layout_height="fill_parent"
         android:background="#ffff0000" >
     </FrameLayout>
@@ -17,7 +17,7 @@
         android:id="@+id/editor_text"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dip"
+        android:layout_marginLeft="@dimen/editor_text_edit_left_margin"
         android:gravity="top"
         android:inputType="textCapSentences|textImeMultiLine"
         android:paddingRight="10dip" />
