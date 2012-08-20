@@ -23,8 +23,10 @@ import com.zapta.apps.maniana.annotations.MainActivityScope;
  */
 @MainActivityScope
 public enum DebugCommandMain implements DebugCommand {
+    // NOTE: if the command opens a sub menu rather than executing directly, suffix it
+    / name text with '...'.
     INFO("Device Info"),
-    HTML_PAGES("HTML Pages"),
+    HTML_PAGES("HTML Pages..."),
     NOTIFICATIONS("Notification..."),
     EXIT("Exit debug mode");
     
