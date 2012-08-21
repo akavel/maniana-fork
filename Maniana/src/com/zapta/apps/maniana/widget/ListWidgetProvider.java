@@ -257,16 +257,24 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
     private static final void setRemoteViewsToolbar(Context context, RemoteViews remoteViews,
             boolean toolbarEnabled, boolean titleClickLaunchesCalendar) {
 
-        if (toolbarEnabled && titleClickLaunchesCalendar) {
-            // If calender does not seem to exist, do nothing.
+        if (toolbarEnabled) {
+            // NOTE: can be null even if titleClickLaunchesCalendar is true.
             @Nullable
-            final Intent calendarIntent = CalendarUtil.maybeConstructGoogleCalendarIntent(context);
+            final Intent calendarIntent = titleClickLaunchesCalendar ? CalendarUtil
+                    .maybeConstructGoogleCalendarIntent(context) : null;
             if (calendarIntent != null) {
-                final PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, calendarIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
+                final PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+                        calendarIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                 remoteViews.setOnClickPendingIntent(R.id.widget_list_toolbar_title_overlay,
                         pendingIntent);
+            } else {
+                // NOTE: could not find a way to disable the on click of the title area so instead
+                // setting up an on click identical to the widget body.
+                setOnClickLaunchMainActivity(context, remoteViews, R.id.widget_list_toolbar_title_overlay,
+                        MainActivityResumeAction.SHOW_TODAY_PAGE);
             }
+        } else {
+            remoteViews.setInt(R.id.widget_list_toolbar_title_overlay, "setVisibility", View.GONE);
         }
 
         // Set or disable the click overlay of the add-item-by-text button.
@@ -276,7 +284,7 @@ public abstract class ListWidgetProvider extends BaseWidgetProvider {
             setOnClickLaunchMainActivity(context, remoteViews,
                     R.id.widget_list_toolbar_add_by_text_overlay,
                     MainActivityResumeAction.ADD_NEW_ITEM_BY_TEXT);
-        } else { // templateAddTextByVoiceButton.setVisibility(View.GONE);
+        } else {
             remoteViews.setInt(R.id.widget_list_toolbar_add_by_text_overlay, "setVisibility",
                     View.GONE);
         }
