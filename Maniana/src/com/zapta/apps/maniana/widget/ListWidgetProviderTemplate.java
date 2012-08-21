@@ -29,6 +29,7 @@ import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.MeasureSpec;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -75,6 +76,7 @@ public class ListWidgetProviderTemplate {
     private final View mToolbarView;
     private final TextView mToolbarTitleTextView;
     private final LinearLayout mItemListView;
+    private final FrameLayout mListTopSpaceView;
     private final List<TextView> mItemTextViews;
     private final LayoutInflater mLayoutInflater;
 
@@ -115,6 +117,8 @@ public class ListWidgetProviderTemplate {
         mToolbarView = mTopView.findViewById(R.id.widget_list_template_toolbar);
         mToolbarTitleTextView = (TextView) mToolbarView
                 .findViewById(R.id.widget_list_template_toolbar_title);
+        mListTopSpaceView = (FrameLayout) mTopView
+                .findViewById(R.id.widget_list_template_list_top_space);
         mItemListView = (LinearLayout) mTopView.findViewById(R.id.widget_list_template_item_list);
 
         mItemTextViews = new ArrayList<TextView>();
@@ -136,8 +140,8 @@ public class ListWidgetProviderTemplate {
         // Does not set title size. This is done later.
         // TODO: refactor out to a method
         final String titleText = mToolbarEanbledPreference ? (mToolbarShowDatePreference ? (mSometimeToday
-                .format(orientationInfo.dateFormat.format)) : mContext.getString(
-                R.string.page_title_Today)).toUpperCase()
+                .format(orientationInfo.dateFormat.format)) : mContext
+                .getString(R.string.page_title_Today)).toUpperCase()
                 : null;
         setToolbar(titleText);
 
@@ -267,16 +271,24 @@ public class ListWidgetProviderTemplate {
      * a canvas.
      */
     private final boolean resizeText(int widgetWidthPixels, int widgetHeightPixels,
-            float itemTextSize, float maxTitleTextSize) {
+            float itemTextSizeSp, float maxTitleTextSize) {
         if (mToolbarEanbledPreference) {
-            final float proposedTitleSize = itemTextSize * 0.8f;
-            final float titleSize = Math.max(ListWidgetSize.MAX_TITLE_TEXT_SIZE_SP,
-                    Math.min(proposedTitleSize, maxTitleTextSize));
-            mToolbarTitleTextView.setTextSize(titleSize);
+            final float proposedTitleTextSizeSp = itemTextSizeSp * 0.8f;
+            final float titleTextSizeSp = Math.max(ListWidgetSize.MAX_TITLE_TEXT_SIZE_SP,
+                    Math.min(proposedTitleTextSizeSp, maxTitleTextSize));
+            mToolbarTitleTextView.setTextSize(titleTextSizeSp);
         }
 
         for (TextView itemTextView : mItemTextViews) {
-            itemTextView.setTextSize(itemTextSize);
+            itemTextView.setTextSize(itemTextSizeSp);
+        }
+
+        // Set the space above first item. It looks better this way. The space is proportional
+        // to text size and screen density.
+        {
+            final float K = 0.45f;
+            final int topSpacePixels = (int) (itemTextSizeSp * mDensity * K + 0.5f);
+            mListTopSpaceView.getLayoutParams().height = topSpacePixels;
         }
 
         mTopView.measure(MeasureSpec.makeMeasureSpec(widgetWidthPixels, MeasureSpec.EXACTLY),
@@ -287,7 +299,7 @@ public class ListWidgetProviderTemplate {
         // We use margin height proportional to the text size. This way it is intuitive
         // to the user that this is the last line and there are no more lines beyond the
         // wieget bottom.
-        final int minMarginPixels = (int) (itemTextSize * mDensity);
+        final int minMarginPixels = (int) (itemTextSizeSp * mDensity);
         return mItemListView.getBottom() < (mBackgroundColorView.getHeight() - minMarginPixels);
     }
 
@@ -343,17 +355,18 @@ public class ListWidgetProviderTemplate {
         for (ItemModelReadOnly item : items) {
             final LinearLayout itemView = (LinearLayout) mLayoutInflater.inflate(
                     R.layout.widget_list_template_item_layout, null);
-            final ExtendedTextView extendedTextView = (ExtendedTextView) itemView.findViewById(R.id.widget_item_text_view);
+            final ExtendedTextView extendedTextView = (ExtendedTextView) itemView
+                    .findViewById(R.id.widget_item_text_view);
             final View itemColorView = itemView.findViewById(R.id.widget_item_color);
 
             extendedTextView.setText(item.getText());
             ICS_HACK_TEXT_VIEW(extendedTextView);
             mFontVariationPreference.apply(extendedTextView, item.isCompleted(), true);
-            
-            // For debugging. Highlight each            
-            // {             
-            //  final int bgColor = 0x33000000 | RandomUtil.random.nextInt(0x1000000);
-            //  extendedTextView.setBackgroundColor(bgColor);   
+
+            // For debugging. Highlight each
+            // {
+            // final int bgColor = 0x33000000 | RandomUtil.random.nextInt(0x1000000);
+            // extendedTextView.setBackgroundColor(bgColor);
             // }
 
             // If color is NONE show a gray solid color to help visually
@@ -373,7 +386,8 @@ public class ListWidgetProviderTemplate {
 
         final LinearLayout itemView = (LinearLayout) mLayoutInflater.inflate(
                 R.layout.widget_list_template_item_layout, null);
-        final ExtendedTextView extendedTextView = (ExtendedTextView) itemView.findViewById(R.id.widget_item_text_view);
+        final ExtendedTextView extendedTextView = (ExtendedTextView) itemView
+                .findViewById(R.id.widget_item_text_view);
         final View colorView = itemView.findViewById(R.id.widget_item_color);
 
         // TODO: setup message text using widget font size preference?

@@ -68,9 +68,14 @@
                     android:src="@drawable/widget_add_by_voice" >
                 </ImageButton>
             </LinearLayout>
-
-
         </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/widget_list_template_list_top_space"
+            android:layout_width="1dip"
+            android:layout_height="@dimen/place_holder_dip"
+            android:background="#00000000" >
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/widget_list_template_item_list"
@@ -79,7 +84,7 @@
             android:background="#00000000"
             android:orientation="vertical"
             android:paddingRight="2dip"
-            android:paddingTop="8dip" >
+            android:paddingTop="0dip" >
         </LinearLayout>
     </LinearLayout>
 
