@@ -16,6 +16,7 @@ package com.zapta.apps.maniana.widget;
 
 import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.ApplicationScope;
+import com.zapta.apps.maniana.settings.DateOrder;
 
 /**
  * Descriptor of supported list widget sizes.
@@ -25,20 +26,23 @@ import com.zapta.apps.maniana.annotations.ApplicationScope;
 @ApplicationScope
 public class ListWidgetSize {
 
-   public static final int MAX_TITLE_TEXT_SIZE_SP = 11;
-    
+    public static final int MAX_TITLE_TEXT_SIZE_SP = 11;
+
     public static enum WidgetDateFormat {
         // NOTE: no ',' to save space.
-        SHORT("%a %b %d"),
-        MEDIUM("%A, %b %d"),
+        SHORT("%a %b %d", "%a %d %b"),
+        MEDIUM("%A, %b %d", "%A, %d %b");
 
-        // NOTE: currently not used.
-        LONG("%A, %B %d");
+        private final String monthBeforeDayFormat;
+        private final String dayBeforeMonthFormat;
 
-        public final String format;
+        private WidgetDateFormat(String monthBeforeDayFormat, String dayBeforeMonthFormat) {
+            this.monthBeforeDayFormat = monthBeforeDayFormat;
+            this.dayBeforeMonthFormat = dayBeforeMonthFormat;
+        }
 
-        private WidgetDateFormat(String format) {
-            this.format = format;
+        public final String formatString(DateOrder dateOrder) {
+            return dateOrder.monthBeforeDay() ? monthBeforeDayFormat : dayBeforeMonthFormat;
         }
     }
 
@@ -108,7 +112,7 @@ public class ListWidgetSize {
         WidgetDateFormat.MEDIUM,
         WidgetDateFormat.MEDIUM, // was LONG
     };
-    
+
     private static final WidgetDateFormat LANDSCAPE_DATE_FORMAT[] = new WidgetDateFormat[] {
         WidgetDateFormat.SHORT,
         WidgetDateFormat.SHORT,
@@ -164,17 +168,17 @@ public class ListWidgetSize {
         this.widgetProviderClass = widgetProviderClass;
         this.widthCells = widthCells;
         this.heightCells = heightCells;
-        
+
         final int maxTitleTextSizeSp = MAX_TITLE_TEXT_SIZES_SP[widthCells - 1];
 
         this.portraitInfo = new OrientationInfo(PORTRAIT_WIDTHS[widthCells - 1],
                 PORTRAIT_HEIGHTS[heightCells - 1], portraitImageViewId, String.format(
                         "list_widget_image_%dx%d_portrait.png", widthCells, heightCells),
-                        PORTRAIT_DATE_FORMAT[widthCells - 1], maxTitleTextSizeSp);
+                PORTRAIT_DATE_FORMAT[widthCells - 1], maxTitleTextSizeSp);
 
         this.landscapeInfo = new OrientationInfo(LANDSCAPE_WIDTHS[widthCells - 1],
                 LANDSCAPE_HEIGHTS[heightCells - 1], landscapeImageViewId, String.format(
                         "list_widget_image_%dx%d_landscape.png", widthCells, heightCells),
-                        LANDSCAPE_DATE_FORMAT[widthCells - 1], maxTitleTextSizeSp);
+                LANDSCAPE_DATE_FORMAT[widthCells - 1], maxTitleTextSizeSp);
     }
 }

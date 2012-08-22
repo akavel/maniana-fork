@@ -38,6 +38,7 @@ import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.model.ItemModelReadOnly;
 import com.zapta.apps.maniana.services.MainActivityServices;
+import com.zapta.apps.maniana.settings.DateOrder;
 import com.zapta.apps.maniana.settings.ItemFontVariation;
 import com.zapta.apps.maniana.util.BitmapUtil;
 import com.zapta.apps.maniana.util.DisplayUtil;
@@ -70,6 +71,7 @@ public class ListWidgetProviderTemplate {
     private final AppModel mModel;
     private final Time mSometimeToday;
     private final Context mContext;
+    private final DateOrder mDateOrder;
     private final float mDensity;
     private final LinearLayout mTopView;
     private final View mBackgroundColorView;
@@ -96,6 +98,7 @@ public class ListWidgetProviderTemplate {
             boolean includeCompletedItemsPreference, boolean singleLinePreference,
             ItemFontVariation fontVariationPreference, boolean autoFitPreference) {
         mContext = context;
+        mDateOrder = DateOrder.localDateOrder(context);
         mDensity = DisplayUtil.getDensity(context);
         mModel = model;
         mSometimeToday = sometimeToday;
@@ -140,7 +143,7 @@ public class ListWidgetProviderTemplate {
         // Does not set title size. This is done later.
         // TODO: refactor out to a method
         final String titleText = mToolbarEanbledPreference ? (mToolbarShowDatePreference ? (mSometimeToday
-                .format(orientationInfo.dateFormat.format)) : mContext
+                .format(orientationInfo.dateFormat.formatString(mDateOrder))) : mContext
                 .getString(R.string.page_title_Today)).toUpperCase()
                 : null;
         setToolbar(titleText);

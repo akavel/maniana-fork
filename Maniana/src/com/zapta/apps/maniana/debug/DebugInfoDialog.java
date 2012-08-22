@@ -15,6 +15,8 @@
 package com.zapta.apps.maniana.debug;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.text.format.DateFormat;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Window;
@@ -24,6 +26,7 @@ import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.services.MainActivityServices;
+import com.zapta.apps.maniana.settings.DateOrder;
 import com.zapta.apps.maniana.util.CalendarUtil;
 import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
 
@@ -62,6 +65,7 @@ public class DebugInfoDialog extends Dialog implements TrackablePopup {
 
     /** Launch a debug dialog with device info. */
     public static void startDialog(final MainActivityState mainActivityState) {
+        final Context context = mainActivityState.context();
         final Display display = mainActivityState.services().windowManager().getDefaultDisplay();
         final boolean hasVoiceRecogintionService = MainActivityServices
                 .isVoiceRecognitionSupported(mainActivityState.context());
@@ -78,8 +82,10 @@ public class DebugInfoDialog extends Dialog implements TrackablePopup {
         sb.append("Display Width: " + display.getWidth() + "\n");
         sb.append("Display Height: " + display.getHeight() + "\n");
         sb.append("Voice recognition: " + hasVoiceRecogintionService + "\n");
-        sb.append("Calendar Intents: "
-                + CalendarUtil.debugGoogleCalendarVariants(mainActivityState.context()) + "\n");
+        sb.append("Calendar Intents: " + CalendarUtil.debugGoogleCalendarVariants(context) + "\n");
+        sb.append("Date order: \"" + String.valueOf(DateFormat.getDateFormatOrder(context)) + "\" -> "
+                + DateOrder.localDateOrder(context) + "\n");
+
         sb.append("</pre>\n</body>\n</html>\n");
 
         final String html = sb.toString();

@@ -23,6 +23,7 @@ import com.zapta.apps.maniana.debug.DebugController;
 import com.zapta.apps.maniana.model.AppModel;
 import com.zapta.apps.maniana.services.MainActivityServices;
 import com.zapta.apps.maniana.services.DateTracker;
+import com.zapta.apps.maniana.settings.DateOrder;
 import com.zapta.apps.maniana.settings.PreferenceKind;
 import com.zapta.apps.maniana.settings.PreferencesReader;
 import com.zapta.apps.maniana.settings.PreferencesTracker;
@@ -45,7 +46,8 @@ public class MainActivityState {
     
     private final PreferencesTracker mPreferencesTracker;
 
-    private final DateTracker mDateTracker = new DateTracker();
+    private final DateTracker mDateTracker;
+    //= new DateTracker();
 
     private MainActivityServices mServices;
 
@@ -65,6 +67,7 @@ public class MainActivityState {
     private final PopupsTracker mPopupsTracker = new PopupsTracker();
 
     MainActivityState(MainActivity mainActivity) {
+        mDateTracker = new DateTracker(DateOrder.localDateOrder(mainActivity));
         mMainActivity = checkNotNull(mainActivity);
         mModel = new AppModel();
         mApp = (MyApp) mainActivity.getApplication();

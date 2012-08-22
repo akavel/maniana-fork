@@ -19,6 +19,7 @@ import android.text.format.Time;
 import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.model.ModelUtil;
 import com.zapta.apps.maniana.model.PushScope;
+import com.zapta.apps.maniana.settings.DateOrder;
 import com.zapta.apps.maniana.settings.LockExpirationPeriod;
 import com.zapta.apps.maniana.util.DateUtil;
 
@@ -30,6 +31,8 @@ import com.zapta.apps.maniana.util.DateUtil;
  */
 @MainActivityScope
 public class DateTracker {
+
+    private final DateOrder dateOrder;
 
     /** Caching of current user visible day of week. E.g. "Sunday" */
     private String mUserDayOfWeekString;
@@ -46,7 +49,8 @@ public class DateTracker {
     /** Caching of date stamp of mCachedDate. Not user visible. Persisted. */
     private String mCachedDateString;
 
-    public DateTracker() {
+    public DateTracker(DateOrder dateOrder) {
+        this.dateOrder = dateOrder;
         updateDate();
     }
 
@@ -57,13 +61,14 @@ public class DateTracker {
             mCachedDate.set(mTempTime);
             mCachedDateString = DateUtil.dateToString(mCachedDate);
             mUserDayOfWeekString = mCachedDate.format("%A");
-            mUserMonthDayString = mCachedDate.format("%b %d");
+            mUserMonthDayString = mCachedDate
+                    .format(dateOrder.monthBeforeDay() ? "%b %d" : "%d %b");
         }
     }
-    
-    /** 
-     * Return an unspecified time that is guaranteed to be today. 
-     * Can change. Caller should not change. 
+
+    /**
+     * Return an unspecified time that is guaranteed to be today. Can change. Caller should not
+     * change.
      */
     public final Time sometimeToday() {
         return mCachedDate;
@@ -74,7 +79,7 @@ public class DateTracker {
         return mUserDayOfWeekString;
     }
 
-    /** Get month/day week. User visible. */
+    /** Get month/day week. User visible. Format depends on locale. */
     public final String getUserMonthDayString() {
         return mUserMonthDayString;
     }
