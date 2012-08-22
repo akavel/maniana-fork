@@ -61,6 +61,8 @@ public class DateTracker {
             mCachedDate.set(mTempTime);
             mCachedDateString = DateUtil.dateToString(mCachedDate);
             mUserDayOfWeekString = mCachedDate.format("%A");
+            // NOTE: this value is cached for performance. If underlying system date order is changed, 
+            // it will be reflected in next app restart.
             mUserMonthDayString = mCachedDate
                     .format(dateOrder.monthBeforeDay() ? "%b %d" : "%d %b");
         }

@@ -83,8 +83,8 @@ public class DebugInfoDialog extends Dialog implements TrackablePopup {
         sb.append("Display Height: " + display.getHeight() + "\n");
         sb.append("Voice recognition: " + hasVoiceRecogintionService + "\n");
         sb.append("Calendar Intents: " + CalendarUtil.debugGoogleCalendarVariants(context) + "\n");
-        sb.append("Date order: \"" + String.valueOf(DateFormat.getDateFormatOrder(context)) + "\" -> "
-                + DateOrder.localDateOrder(context) + "\n");
+        sb.append("Date order: " + DateOrder.localDateOrder(context) + " ("
+                + String.valueOf(DateFormat.getDateFormatOrder(context)) + ")\n");
 
         sb.append("</pre>\n</body>\n</html>\n");
 
