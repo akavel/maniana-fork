@@ -1,0 +1,49 @@
+{
+  "model": {
+    "today": [
+      {
+        "text": "Feed the cat",
+        "color": "red"
+      },
+      {
+        "text": "Backup Suzan's computer"
+      },
+      {
+        "text": "Get milk",
+        "color": "green"
+      },
+      {
+        "text": "Apply to college",
+        "color": "blue"
+      },
+      {
+        "text": "Wash the car",
+        "done": true
+      }
+    ],
+    "tomorow": [
+      {
+        "text": "Take a vacation"
+      },
+      {
+        "text": "Watch Casablanca"
+      },
+      {
+        "text": "Do homework"
+      },
+      {
+        "text": "Buy Fido a toy",
+        "color": "green"
+      },
+      {
+        "text": "Solve world hunger"
+      }
+    ],
+    "last_push_date": "20111207"
+  },
+  "metadata": {
+    "writer_ver_name": "1.2.25",
+    "writer_ver_code": 25
+  },
+  "format": 2
+}
