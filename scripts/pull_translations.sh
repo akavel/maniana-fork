@@ -9,7 +9,7 @@
 source ./bash_lib.sh
 
 # List of two letter codes of languages to update
-languages="es it ja ru sq"
+languages="es it ja ru"
 
 # Definitions
 tmproot="/tmp"
