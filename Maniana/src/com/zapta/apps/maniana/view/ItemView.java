@@ -32,6 +32,7 @@ import com.zapta.apps.maniana.model.ItemModelReadOnly;
 import com.zapta.apps.maniana.model.PageKind;
 import com.zapta.apps.maniana.settings.ItemFontVariation;
 import com.zapta.apps.maniana.settings.PageIconSet;
+import com.zapta.apps.maniana.util.TextUtil;
 
 /**
  * View of a single item.
@@ -136,6 +137,7 @@ public class ItemView extends FrameLayout {
     public final void updateFromItemModel(ItemModelReadOnly item) {
         updateItemButton(item.isLocked());
         mExtendedTextView.setText(item.getText());
+        TextUtil.ICS_HACK_TEXT_VIEW(mExtendedTextView);
         mColorView.setBackgroundColor(item.getColor().getColor(0x00000000));
         updateFont(item.isCompleted());
     }

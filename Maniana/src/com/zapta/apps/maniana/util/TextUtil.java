@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 import com.zapta.apps.maniana.annotations.ApplicationScope;
 
 import android.text.TextUtils;
+import android.widget.TextView;
 
 /**
  * @author Tal Dayan
@@ -32,6 +33,18 @@ public final class TextUtil {
 
     /** Do not instantiate */
     private TextUtil() {
+    }
+    
+    // Per http://code.google.com/p/android/issues/detail?id=22493
+    // Should be called after setting a TextView text. solves the ICS problem
+    // where text view height does not shrink when a smaller text size is set.
+    //
+    // TODO: move this to ExtendedTextView and make sure all existing text views
+    // use ExtendedTextView.
+    //
+    public static final void ICS_HACK_TEXT_VIEW(TextView textView) {
+        // TODO: make this conditional. Append only of the last character is not FEFF
+        textView.append("\uFEFF");
     }
 
     /**

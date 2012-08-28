@@ -44,6 +44,7 @@ import com.zapta.apps.maniana.util.BitmapUtil;
 import com.zapta.apps.maniana.util.DisplayUtil;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.Orientation;
+import com.zapta.apps.maniana.util.TextUtil;
 import com.zapta.apps.maniana.view.ExtendedTextView;
 import com.zapta.apps.maniana.widget.ListWidgetSize.OrientationInfo;
 
@@ -59,13 +60,6 @@ public class ListWidgetProviderTemplate {
 
     /** Will scale item text size down to this size in SP units. */
     private static final int MIN_NORMALIZED_TEXT_SIZE = 10;
-
-    // Per http://code.google.com/p/android/issues/detail?id=22493
-    // Should be called after setting a TextView text. solves the ICS problem
-    // where text view height does not shrink when a smaller text size is set.
-    private static final void ICS_HACK_TEXT_VIEW(TextView textView) {
-        textView.append("\uFEFF");
-    }
 
     @Nullable
     private final AppModel mModel;
@@ -363,7 +357,7 @@ public class ListWidgetProviderTemplate {
             final View itemColorView = itemView.findViewById(R.id.widget_item_color);
 
             extendedTextView.setText(item.getText());
-            ICS_HACK_TEXT_VIEW(extendedTextView);
+            TextUtil.ICS_HACK_TEXT_VIEW(extendedTextView);
             mFontVariationPreference.apply(extendedTextView, item.isCompleted(), true);
 
             // For debugging. Highlight each
@@ -396,7 +390,7 @@ public class ListWidgetProviderTemplate {
         // TODO: setup message text using widget font size preference?
         extendedTextView.setSingleLine(false);
         extendedTextView.setText(message);
-        ICS_HACK_TEXT_VIEW(extendedTextView);
+        TextUtil.ICS_HACK_TEXT_VIEW(extendedTextView);
         mFontVariationPreference.apply(extendedTextView, false, true);
         colorView.setVisibility(View.GONE);
 
@@ -427,7 +421,7 @@ public class ListWidgetProviderTemplate {
 
         // Show title
         mToolbarTitleTextView.setText(titleText);
-        ICS_HACK_TEXT_VIEW(mToolbarTitleTextView);
+        TextUtil.ICS_HACK_TEXT_VIEW(mToolbarTitleTextView);
 
         // The voice recognition button is shown only if this device supports voice recognition.
         final View templateAddTextByVoiceButton = mToolbarView
