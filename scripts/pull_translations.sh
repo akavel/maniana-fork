@@ -9,7 +9,7 @@
 source ./bash_lib.sh
 
 # List of two letter codes of languages to update
-languages="es it ja ru sq"
+languages="es it ja pt ru sq"
 
 # Definitions
 tmproot="/tmp"
@@ -39,8 +39,9 @@ function fetch() {
   mv -v ${tmp}/es-ES ${tmp}/es
   check_last_cmd "Normalizing es-ES dir"
 
-  mv -v ${tmp}/pt-PT ${tmp}/pt
-  check_last_cmd "Normalizing pt-PT dir"
+  # NOTE: 'BR' is the Brazilian locale. For now we use it also for Portugal ('PT' locale).
+  mv -v ${tmp}/pt-BR ${tmp}/pt
+  check_last_cmd "Normalizing pt-BR dir"
 
   ls -al ${tmp}
   check_last_cmd "Data ls"
