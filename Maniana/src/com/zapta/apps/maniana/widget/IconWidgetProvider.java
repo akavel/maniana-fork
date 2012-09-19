@@ -24,6 +24,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.text.format.Time;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.zapta.apps.maniana.R;
@@ -58,13 +59,15 @@ public class IconWidgetProvider extends BaseWidgetProvider {
             return;
         }
 
-        final String label;
+        @Nullable
+        final String maybeLabel;
         if (model == null) {
-            label = "??";
+            maybeLabel = "??";
         } else {
             // NOTE: we always exclude completed items from the count.
-            List<ItemModelReadOnly> items = WidgetUtil.selectTodaysItems(model, false);
-            label = Integer.toString(items.size());
+            final List<ItemModelReadOnly> items = WidgetUtil.selectTodaysItems(model, false);
+            final int n = items.size();
+            maybeLabel = (n > 0) ? Integer.toString(n) : null;
         }
 
         // Provides access to the remote view hosted by the home launcher.
@@ -76,7 +79,12 @@ public class IconWidgetProvider extends BaseWidgetProvider {
         final PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
         remoteViews.setOnClickPendingIntent(R.id.widget_icon_top_view, pendingIntent);
 
-        remoteViews.setTextViewText(R.id.widget_icon_label_text_view, label);
+        if (maybeLabel == null) {
+            remoteViews.setInt(R.id.widget_icon_label_view, "setVisibility", View.GONE);
+        } else {
+            remoteViews.setInt(R.id.widget_icon_label_view, "setVisibility", View.VISIBLE);
+            remoteViews.setTextViewText(R.id.widget_icon_label_text_view, maybeLabel);
+        }
 
         // Tell the app widget manager to replace the views with the new views. This is not a
         // partial update.
