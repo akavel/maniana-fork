@@ -21,30 +21,31 @@
 
 package com.mobeta.android.dslv;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
-import android.graphics.Bitmap;
-import android.graphics.PixelFormat;
-import android.graphics.Rect;
-import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.*;
-import android.view.GestureDetector.SimpleOnGestureListener;
-import android.widget.*;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.BaseAdapter;
+import android.widget.HeaderViewListAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.zapta.apps.maniana.R;
 
@@ -142,13 +143,13 @@ public class DragSortListView extends ListView {
      * The difference (in x) between screen coordinates and coordinates
      * in this view.
      */
-    private int mOffsetX;
+//    private int mOffsetX;
 
     /**
      * The difference (in y) between screen coordinates and coordinates
      * in this view.
      */
-    private int mOffsetY;
+//    private int mOffsetY;
 
     /**
      * A listener that receives callbacks whenever the floating View
@@ -282,7 +283,7 @@ public class DragSortListView extends ListView {
     /**
      * Last touch x.
      */
-    private int mLastX;
+//    private int mLastX;
 
     /**
      * Last touch y.
@@ -292,7 +293,7 @@ public class DragSortListView extends ListView {
     /**
      * The touch y-coord at which drag started
      */
-    private int mDragStartY;
+//    private int mDragStartY;
 
     /**
      * Drag flag bit. Floating View can move in the positive
@@ -807,9 +808,9 @@ public class DragSortListView extends ListView {
 
     }
 
-    private void printPosData() {
-        Log.d("mobeta", "mSrcPos="+mSrcPos+" mFirstExpPos="+mFirstExpPos+" mSecondExpPos="+mSecondExpPos);
-    }
+//    private void printPosData() {
+//        Log.d("mobeta", "mSrcPos="+mSrcPos+" mFirstExpPos="+mFirstExpPos+" mSecondExpPos="+mSecondExpPos);
+//    }
 
     private int getShuffleEdge(int position, int top) {
         return getShuffleEdge(position, top, null);
@@ -1133,17 +1134,17 @@ public class DragSortListView extends ListView {
     private void saveTouchCoords(MotionEvent ev) {
         int action = ev.getAction() & MotionEvent.ACTION_MASK;
         if (action != MotionEvent.ACTION_DOWN) {
-            mLastX = mX;
+//            mLastX = mX;
             mLastY = mY;
         }
         mX = (int) ev.getX();
         mY = (int) ev.getY();
         if (action == MotionEvent.ACTION_DOWN) {
-            mLastX = mX;
+//            mLastX = mX;
             mLastY = mY;
         }
-        mOffsetX = (int) ev.getRawX() - mX;
-        mOffsetY = (int) ev.getRawY() - mY;
+//        mOffsetX = (int) ev.getRawX() - mX;
+//        mOffsetY = (int) ev.getRawY() - mY;
     }
     
     @Override
@@ -1360,13 +1361,13 @@ public class DragSortListView extends ListView {
         }
     }
 
-    private void adjustItem(int position) {
-        View v = getChildAt(position - getFirstVisiblePosition());
-
-        if (v != null) {
-            adjustItem(position, v, false);
-        }
-    }
+//    private void adjustItem(int position) {
+//        View v = getChildAt(position - getFirstVisiblePosition());
+//
+//        if (v != null) {
+//            adjustItem(position, v, false);
+//        }
+//    }
 
     private void adjustItem(int position, View v, boolean needsMeasure) {
 
@@ -1376,7 +1377,7 @@ public class DragSortListView extends ListView {
         int oldHeight = lp.height;
         int height = oldHeight;
 
-        int divHeight = getDividerHeight();
+//        int divHeight = getDividerHeight();
 
         boolean isSliding = mAnimate && mFirstExpPos != mSecondExpPos;
         int maxNonSrcBlankHeight = mFloatViewHeight - mItemHeightCollapsed;
@@ -1545,7 +1546,7 @@ public class DragSortListView extends ListView {
 
     protected boolean onDragTouchEvent(MotionEvent ev) {
         // we are in a drag
-        int action = ev.getAction() & MotionEvent.ACTION_MASK;
+//        int action = ev.getAction() & MotionEvent.ACTION_MASK;
 
         switch (ev.getAction() & MotionEvent.ACTION_MASK) {
         case MotionEvent.ACTION_CANCEL:
@@ -1561,11 +1562,11 @@ public class DragSortListView extends ListView {
         return true;
     }
     
-    private boolean mFloatViewInvalidated = false;
+//    private boolean mFloatViewInvalidated = false;
 
-    private void invalidateFloatView() {
-        mFloatViewInvalidated = true;
-    }
+//    private void invalidateFloatView() {
+//        mFloatViewInvalidated = true;
+//    }
 
     /**
      * Start a drag of item at <code>position</code> using the
@@ -1652,7 +1653,7 @@ public class DragSortListView extends ListView {
 
         mDragDeltaX = deltaX;
         mDragDeltaY = deltaY;
-        mDragStartY = mY;
+//        mDragStartY = mY;
 
         //updateFloatView(mX - mDragDeltaX, mY - mDragDeltaY);
         mFloatLoc.x = mX - mDragDeltaX;
@@ -1995,8 +1996,8 @@ public class DragSortListView extends ListView {
         
         private boolean mScrolling = false;
         
-        private int mLastHeader;
-        private int mFirstFooter;
+//        private int mLastHeader;
+//        private int mFirstFooter;
         
         public boolean isScrolling() {
             return mScrolling;
