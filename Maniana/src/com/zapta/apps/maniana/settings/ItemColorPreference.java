@@ -89,6 +89,7 @@ public class ItemColorPreference extends DialogPreference {
             return position;
         }
 
+        /** Return layout of a single row. */
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = convertView;
@@ -97,6 +98,7 @@ public class ItemColorPreference extends DialogPreference {
             if (view == null) {
                 final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(
                         Context.LAYOUT_INFLATER_SERVICE);
+                // The row layout.
                 view = inflater.inflate(R.layout.item_default_color_preference_row_layout, parent,
                         false);
             }

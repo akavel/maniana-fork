@@ -2,6 +2,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:maniana="http://schemas.android.com/apk/res/com.zapta.apps.maniana" >
 
+    <com.zapta.apps.maniana.settings.TaskColorsPreference
+        android:key="prefTaskColorsKey"
+        android:summary="Task Colors summary"
+        android:title="Task Colors title" />
+
     <PreferenceScreen android:title="@string/settings_section_name_Sound" >
         <CheckBoxPreference
             android:defaultValue="true"

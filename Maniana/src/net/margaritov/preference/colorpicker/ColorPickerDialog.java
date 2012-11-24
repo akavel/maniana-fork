@@ -27,110 +27,102 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
-public class ColorPickerDialog 
-	extends 
-		Dialog 
-	implements
-		ColorPickerView.OnColorChangedListener,
-		View.OnClickListener {
+public class ColorPickerDialog extends Dialog implements ColorPickerView.OnColorChangedListener,
+        View.OnClickListener {
 
-	private ColorPickerView mColorPicker;
+    private ColorPickerView mColorPicker;
 
-	private ColorPickerPanelView mOldColor;
-	
-	private ColorPickerPanelView mNewColor;
+    private ColorPickerPanelView mOldColor;
 
-	private OnColorChangedListener mListener;
+    private ColorPickerPanelView mNewColor;
 
-	public interface OnColorChangedListener {
-		public void onColorChanged(int color);
-	}
-	
-	public ColorPickerDialog(Context context, int initialColor) {
-		super(context);
+    private OnColorChangedListener mListener;
 
-		init(initialColor);
-	}
+    public interface OnColorChangedListener {
+        public void onColorChanged(int color);
+    }
 
-	private void init(int color) {
-		// To fight color branding.
-		getWindow().setFormat(PixelFormat.RGBA_8888);
+    public ColorPickerDialog(Context context, int initialColor) {
+        super(context);
 
-		setUp(color);
+        init(initialColor);
+    }
 
-	}
+    private void init(int color) {
+        // To fight color branding.
+        getWindow().setFormat(PixelFormat.RGBA_8888);
 
-	private void setUp(int color) {
-		
-		LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		
-		View layout = inflater.inflate(R.layout.dialog_color_picker, null);
+        setUp(color);
 
-		setContentView(layout);
+    }
 
-		setTitle(getContext().getString(R.string.color_picker_Select_Color));
-		
-		mColorPicker = (ColorPickerView) layout.findViewById(R.id.color_picker_view);
-		mOldColor = (ColorPickerPanelView) layout.findViewById(R.id.old_color_panel);
-		mNewColor = (ColorPickerPanelView) layout.findViewById(R.id.new_color_panel);
-		
-		((LinearLayout) mOldColor.getParent()).setPadding(
-			Math.round(mColorPicker.getDrawingOffset()), 
-			0, 
-			Math.round(mColorPicker.getDrawingOffset()), 
-			0
-		);	
-		
-		mOldColor.setOnClickListener(this);
-		mNewColor.setOnClickListener(this);
-		mColorPicker.setOnColorChangedListener(this);
-		mOldColor.setColor(color);
-		mColorPicker.setColor(color, true);
+    private void setUp(int color) {
 
-	}
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(
+                Context.LAYOUT_INFLATER_SERVICE);
 
-	@Override
-	public void onColorChanged(int color) {
+        View layout = inflater.inflate(R.layout.dialog_color_picker, null);
 
-		mNewColor.setColor(color);
+        setContentView(layout);
 
-		/*
-		if (mListener != null) {
-			mListener.onColorChanged(color);
-		}
-		*/
+        setTitle(getContext().getString(R.string.color_picker_Select_Color));
 
-	}
+        mColorPicker = (ColorPickerView) layout.findViewById(R.id.color_picker_view);
+        mOldColor = (ColorPickerPanelView) layout.findViewById(R.id.old_color_panel);
+        mNewColor = (ColorPickerPanelView) layout.findViewById(R.id.new_color_panel);
 
-	public void setAlphaSliderVisible(boolean visible) {
-		mColorPicker.setAlphaSliderVisible(visible);
-	}
-	
-	/**
-	 * Set a OnColorChangedListener to get notified when the color
-	 * selected by the user has changed.
-	 * @param listener
-	 */
-	public void setOnColorChangedListener(OnColorChangedListener listener){
-		mListener = listener;
-	}
+        ((LinearLayout) mOldColor.getParent()).setPadding(
+                Math.round(mColorPicker.getDrawingOffset()), 0,
+                Math.round(mColorPicker.getDrawingOffset()), 0);
 
-	public int getColor() {
-		return mColorPicker.getColor();
-	}
-	
-	public void setJustHsNoV(float maxSaturation) {
-	    mColorPicker.setJustHsNoV(maxSaturation);
-	}
+        mOldColor.setOnClickListener(this);
+        mNewColor.setOnClickListener(this);
+        mColorPicker.setOnColorChangedListener(this);
+        mOldColor.setColor(color);
+        mColorPicker.setColor(color, true);
 
-	@Override
-	public void onClick(View v) {
-		if (v.getId() == R.id.new_color_panel) {
-			if (mListener != null) {
-				mListener.onColorChanged(mNewColor.getColor());
-			}
-		}
-		dismiss();
-	}
-	
+    }
+
+    @Override
+    public void onColorChanged(int color) {
+
+        mNewColor.setColor(color);
+
+        /*
+         * if (mListener != null) { mListener.onColorChanged(color); }
+         */
+
+    }
+
+    public void setAlphaSliderVisible(boolean visible) {
+        mColorPicker.setAlphaSliderVisible(visible);
+    }
+
+    /**
+     * Set a OnColorChangedListener to get notified when the color selected by the user has changed.
+     * 
+     * @param listener
+     */
+    public void setOnColorChangedListener(OnColorChangedListener listener) {
+        mListener = listener;
+    }
+
+    public int getColor() {
+        return mColorPicker.getColor();
+    }
+
+    public void setJustHsNoV(float maxSaturation) {
+        mColorPicker.setJustHsNoV(maxSaturation);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.new_color_panel) {
+            if (mListener != null) {
+                mListener.onColorChanged(mNewColor.getColor());
+            }
+        }
+        dismiss();
+    }
+
 }
