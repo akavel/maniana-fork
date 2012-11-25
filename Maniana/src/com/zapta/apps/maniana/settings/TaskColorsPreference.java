@@ -49,7 +49,7 @@ public class TaskColorsPreference extends Preference implements
 
         // TODO(tal): create and show a TaskColorsDialog()
 
-        final TaskColorsDialog dialog = new TaskColorsDialog(getContext());
+        final TaskColorsPreferenceDialog dialog = new TaskColorsPreferenceDialog(getContext());
 
         // ColorPickerDialog picker = new ColorPickerDialog(getContext(), getValue());
         // // TAL: added propagation of title to dialog

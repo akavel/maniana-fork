@@ -5,21 +5,12 @@
     android:background="@drawable/task_colors_drag_background"
     android:orientation="horizontal" >
 
-    <ImageButton
-        android:id="@+id/task_colors_item_drag_handle"
+    <CheckBox
+        android:id="@+id/task_colors_item_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginBottom="15dip"
-        android:layout_marginLeft="5dip"
-        android:layout_marginRight="15dip"
-        android:layout_marginTop="15dip"
-        android:background="@android:color/transparent"
-        android:clickable="false"
-        android:longClickable="false"
-        android:soundEffectsEnabled="false"
-        android:src="@drawable/drag_handle" >
-    </ImageButton>
+        android:layout_marginRight="20dip" />
 
     <FrameLayout
         android:id="@+id/task_colors_item_drag_color"
@@ -32,11 +23,20 @@
         android:background="@color/color_place_holder" >
     </FrameLayout>
 
-    <CheckBox
-        android:id="@+id/task_colors_item_checkbox"
+    <ImageButton
+        android:id="@+id/task_colors_item_drag_handle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="20dip" />
+        android:layout_marginBottom="15dip"
+        android:layout_marginLeft="15dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginTop="15dip"
+        android:background="@android:color/transparent"
+        android:clickable="false"
+        android:longClickable="false"
+        android:soundEffectsEnabled="false"
+        android:src="@drawable/drag_handle" >
+    </ImageButton>
 
 </LinearLayout>
