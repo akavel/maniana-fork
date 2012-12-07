@@ -2,11 +2,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:maniana="http://schemas.android.com/apk/res/com.zapta.apps.maniana" >
 
-    <com.zapta.apps.maniana.settings.TaskColorsPreference
-        android:key="prefTaskColorsKey"
-        android:summary="Task Colors summary"
-        android:title="Task Colors title" />
-
     <PreferenceScreen android:title="@string/settings_section_name_Sound" >
         <CheckBoxPreference
             android:defaultValue="true"
@@ -101,11 +96,11 @@
             android:summaryOn="@string/settings_add_to_top_summary_on"
             android:title="@string/settings_add_to_top_title" />
 
-        <com.zapta.apps.maniana.settings.ItemColorPreference
-            android:defaultValue="none"
-            android:key="prefDefaultItemColorKey"
-            android:summary="@string/settings_default_item_color_summary"
-            android:title="@string/settings_default_item_color_title" />
+        <com.zapta.apps.maniana.settings.ItemColorsPreference
+            android:defaultValue="none,red,green,gold"
+            android:key="prefItemColorsKey"
+            android:summary="@string/settings_select_task_colors_summary"
+            android:title="@string/settings_select_task_colors_title" />
 
         <CheckBoxPreference
             android:defaultValue="true"

@@ -109,8 +109,6 @@
   <string name="settings_add_to_top_title">Shto ne Fillim</string>
   <string name="settings_add_to_top_summary_on">Detyrat e reja shtohen ne fillim te listes</string>
   <string name="settings_add_to_top_summary_off">Detyrat e reja shtohen ne fund te listes</string>
-  <string name="settings_default_item_color_title">Ngjyra Origjinale e Detyrave</string>
-  <string name="settings_default_item_color_summary">Ngjyra fillestare e detyrave te reja</string>
   <string name="settings_daily_cleanup_title">Pastrim ditor i detyrave</string>
   <string name="settings_daily_cleanup_summary_on">Fshirja e detyrave te kryera cdo mesnate</string>
   <string name="settings_daily_cleanup_summary_off">Fshirja ditore e detyrave te kryera eshte c\'aktivizuar</string>

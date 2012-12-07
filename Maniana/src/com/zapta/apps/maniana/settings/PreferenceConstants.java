@@ -15,7 +15,6 @@
 package com.zapta.apps.maniana.settings;
 
 import com.zapta.apps.maniana.annotations.ApplicationScope;
-import com.zapta.apps.maniana.model.ItemColor;
 
 /**
  * Default preference values. All values should match the default values in Preferences.xml
@@ -31,20 +30,22 @@ public interface PreferenceConstants {
     // Behavior
     public static final boolean DEFAULT_STARTUP_ANIMATION = true;
     public static final boolean DEFAULT_VERBOSE_MESSAGES = true;
-    public static final boolean DEFAULT_AUTO_SORT = true;
-    public static final boolean DEFAULT_ADD_TO_TOP = true;
-    public static final ItemColor DEFAULT_DEFAULT_ITEM_COLOR = ItemColor.NONE;
-    public static final boolean DEFAULT_AUTO_DAILY_CLEANUP = true;
     public static final boolean DEFAULT_DAILY_NOTIFICATION = false;
     public static final boolean DEFAULT_NOTIFICATION_LED = true;
-    public static final boolean DEFAULT_CALENDAR_LAUNCH = true;
-    public static final LockExpirationPeriod DEFAULT_LOCK_PERIOD = LockExpirationPeriod.NEVER;
     
     // Shaker
     public static final boolean DEFAULT_SHAKER_ENABLED = false;
     public static final ShakerAction DEFAULT_SHAKER_ACTION = ShakerAction.NEW_ITEM_BY_TEXT;
     public static final int DEFAULT_SHAKER_SENSITIVITY = 5;
-
+   
+    // Tasks
+    public static final boolean DEFAULT_AUTO_SORT = true;
+    public static final boolean DEFAULT_ADD_TO_TOP = true;
+    public static final String DEFAULT_ITEM_COLORS = "none,red,blue,green";
+    public static final boolean DEFAULT_AUTO_DAILY_CLEANUP = true;
+    public static final boolean DEFAULT_CALENDAR_LAUNCH = true;
+    public static final LockExpirationPeriod DEFAULT_LOCK_PERIOD = LockExpirationPeriod.NEVER;    
+  
     // Page
     public static final boolean DEFAULT_PAGE_BACKGROUND_PAPER = true;
     public static final int DEFAULT_PAGE_PAPER_COLOR = 0xffffffff;

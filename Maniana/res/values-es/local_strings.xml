@@ -109,8 +109,6 @@
   <string name="settings_add_to_top_title">Añadir al principio</string>
   <string name="settings_add_to_top_summary_on">Nuevas tareas se agregan en la parte superior la lista</string>
   <string name="settings_add_to_top_summary_off">Se agregan nuevas tareas en la parte inferior de la lista</string>
-  <string name="settings_default_item_color_title">Color predeterminado de tareas</string>
-  <string name="settings_default_item_color_summary">Color inicial de nuevas tareas</string>
   <string name="settings_daily_cleanup_title">Limpieza de tareas diarias</string>
   <string name="settings_daily_cleanup_summary_on">Eliminar las tareas completadas cada medianoche</string>
   <string name="settings_daily_cleanup_summary_off">La eliminación diaria de las tareas completadas está desactivada</string>

@@ -27,6 +27,7 @@ import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.model.ItemColor;
+import com.zapta.apps.maniana.settings.ItemColorsSet;
 import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
 import com.zapta.apps.maniana.view.ExtendedEditText;
 
@@ -167,7 +168,8 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
     }
 
     private final void handleColorClicked() {
-        mItemColor = mItemColor.nextCyclicColor();
+        final ItemColorsSet itemColorsSet = mMainState.prefTracker().getItemColorsPreference();
+        mItemColor = itemColorsSet.colorAfter(mItemColor);
         updateColorView();
         mMainState.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_SPACEBAR, false);
     }

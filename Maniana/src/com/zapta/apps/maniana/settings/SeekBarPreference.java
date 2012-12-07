@@ -195,9 +195,8 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
             if (shouldPersist()) {
                 persistInt(mValue);
             }
-            // TODO: the javadoc of this method says it should be called before persisting
-            // and its return value should control the persistence.
-            callChangeListener(new Integer(mValue));
+            // NOTE: we ignore the returned value and always use the value.
+            callChangeListener(Integer.valueOf(mValue));
         }
     }
 

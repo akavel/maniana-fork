@@ -53,7 +53,7 @@ public enum PreferenceKind implements KeyedEnum {
     // Tasks
     AUTO_SORT("prefAutoSortKey"),
     ADD_TO_TOP("prefAddToTopKey"),
-    DEFAULT_ITEM_COLOR("prefDefaultItemColorKey"),
+    ITEM_COLORS("prefItemColorsKey"),
     AUTO_DAILY_CLEANUP("prefAutoDailyCleanupKey"),
     LOCK_PERIOD("prefLockPeriodKey"),
 

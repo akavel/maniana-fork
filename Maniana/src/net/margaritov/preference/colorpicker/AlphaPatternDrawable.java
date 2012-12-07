@@ -21,6 +21,7 @@ import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 
@@ -32,24 +33,28 @@ import android.graphics.drawable.Drawable;
  */
 public class AlphaPatternDrawable extends Drawable {
 
-    private int mRectangleSize = 10;
+    private final int mSquareSizePixels;
 
-    private Paint mPaint = new Paint();
-    private Paint mPaintWhite = new Paint();
-    private Paint mPaintGray = new Paint();
+    private final Paint mPaint = new Paint();
+    
+    private final Paint mPaintLight = new Paint();
+    private final Paint mPaintDark = new Paint();
 
+    // TODO: what these are member variables and not local variables?
     private int numRectanglesHorizontal;
     private int numRectanglesVertical;
 
-    /**
-     * Bitmap in which the pattern will be cahched.
-     */
+    /** Caches the pattern. */
     private Bitmap mBitmap;
 
-    public AlphaPatternDrawable(int rectangleSize) {
-        mRectangleSize = rectangleSize;
-        mPaintWhite.setColor(0xffffffff);
-        mPaintGray.setColor(0xffcbcbcb);
+    public AlphaPatternDrawable(int squareSizePixels) {
+        this(squareSizePixels, 0xffcbcbcb, 0xffffffff);
+    }  
+   
+    public AlphaPatternDrawable(int squareSizePixels, int darkColor, int lightColor) {
+        mSquareSizePixels = squareSizePixels;
+        mPaintDark.setColor(darkColor);
+        mPaintLight.setColor(lightColor);
     }
 
     @Override
@@ -59,7 +64,8 @@ public class AlphaPatternDrawable extends Drawable {
 
     @Override
     public int getOpacity() {
-        return 0;
+        // TODO: should this be OPAQUE ?
+        return PixelFormat.UNKNOWN;
     }
 
     @Override
@@ -79,11 +85,11 @@ public class AlphaPatternDrawable extends Drawable {
         int height = bounds.height();
         int width = bounds.width();
 
-        numRectanglesHorizontal = (int) Math.ceil((width / mRectangleSize));
-        numRectanglesVertical = (int) Math.ceil(height / mRectangleSize);
+        // Determine actual number of horizontal and vertical square (no fractions).
+        numRectanglesHorizontal = (int) Math.ceil((width / mSquareSizePixels));
+        numRectanglesVertical = (int) Math.ceil(height / mSquareSizePixels);
 
         generatePatternBitmap();
-
     }
 
     /**
@@ -101,24 +107,17 @@ public class AlphaPatternDrawable extends Drawable {
         Canvas canvas = new Canvas(mBitmap);
 
         Rect r = new Rect();
-        boolean verticalStartWhite = true;
         for (int i = 0; i <= numRectanglesVertical; i++) {
-
-            boolean isWhite = verticalStartWhite;
             for (int j = 0; j <= numRectanglesHorizontal; j++) {
+                final boolean isEven = (((i + j) % 2) == 0);
 
-                r.top = i * mRectangleSize;
-                r.left = j * mRectangleSize;
-                r.bottom = r.top + mRectangleSize;
-                r.right = r.left + mRectangleSize;
+                r.top = i * mSquareSizePixels;
+                r.left = j * mSquareSizePixels;
+                r.bottom = r.top + mSquareSizePixels;
+                r.right = r.left + mSquareSizePixels;
 
-                canvas.drawRect(r, isWhite ? mPaintWhite : mPaintGray);
-
-                isWhite = !isWhite;
+                canvas.drawRect(r, isEven ? mPaintLight : mPaintDark);
             }
-
-            verticalStartWhite = !verticalStartWhite;
-
         }
 
     }

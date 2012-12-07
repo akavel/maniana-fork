@@ -17,9 +17,9 @@ package com.zapta.apps.maniana.util;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
-import android.graphics.Color;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -61,12 +61,12 @@ public final class BitmapUtil {
     }
     
     /** All dimensions are in pixels */
-    private static Bitmap createColorSwatchBitmap(int width, int height, int borderWidth, int fillColor, int borderColor) {
-       final Bitmap bitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888);
+    private static Bitmap createColorSwatchBitmap(int widthPixels, int heightPixels, int borderWidthPixels, int fillColor, int borderColor) {
+       final Bitmap bitmap = Bitmap.createBitmap(widthPixels, heightPixels, Config.ARGB_8888);
         final Canvas canvas = new Canvas(bitmap);     
-        if (borderWidth > 0) {
+        if (borderWidthPixels > 0) {
             canvas.drawColor(borderColor);
-            canvas.clipRect(borderWidth, borderWidth, width - borderWidth, height - borderWidth);
+            canvas.clipRect(borderWidthPixels, borderWidthPixels, widthPixels - borderWidthPixels, heightPixels - borderWidthPixels);
         }
         canvas.drawColor(fillColor);
         return bitmap;
@@ -76,7 +76,7 @@ public final class BitmapUtil {
     public static Bitmap getPreferenceColorPreviewBitmap(int color, boolean isEnabled, float density) {
         // Determine size in pixels
         final int sizeDips = PRE_API_14 ? 31 : 22;
-        int d = (int) (density * sizeDips + 0.5f); 
+        int sizePixels = (int) (density * sizeDips + 0.5f); 
         
         // Determine colors
         int fillColor = color;
@@ -88,6 +88,6 @@ public final class BitmapUtil {
         }
         
         // Construct the bitmap
-        return BitmapUtil.createColorSwatchBitmap(d,  d, 2, fillColor, borderColor);
+        return BitmapUtil.createColorSwatchBitmap(sizePixels, sizePixels, 2, fillColor, borderColor);
     }
 }

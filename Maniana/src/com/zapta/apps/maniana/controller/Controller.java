@@ -58,6 +58,7 @@ import com.zapta.apps.maniana.services.MidnightTicker;
 import com.zapta.apps.maniana.services.ShakeImpl;
 import com.zapta.apps.maniana.services.Shaker;
 import com.zapta.apps.maniana.services.Shaker.ShakerListener;
+import com.zapta.apps.maniana.settings.ItemColorsSet;
 import com.zapta.apps.maniana.settings.PreferenceKind;
 import com.zapta.apps.maniana.settings.SettingsActivity;
 import com.zapta.apps.maniana.settings.ShakerAction;
@@ -130,7 +131,8 @@ public class Controller implements ShakerListener {
     public final void onItemColorClick(final PageKind pageKind, final int itemIndex) {
         mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_SPACEBAR, false);
         final ItemModel item = mMainActivityState.model().getItemForMutation(pageKind, itemIndex);
-        item.setColor(item.getColor().nextCyclicColor());
+        final ItemColorsSet itemColorsSet = mMainActivityState.prefTracker().getItemColorsPreference();
+        item.setColor(itemColorsSet.colorAfter(item.getColor()));
         mMainActivityState.view().updatePage(pageKind);
     }
 
@@ -593,14 +595,16 @@ public class Controller implements ShakerListener {
     public final void onAddItemByTextButton(final PageKind pageKind) {
         clearPageUndo(pageKind);
         mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
-        ItemTextEditor.startEditor(mMainActivityState, mMainActivityState
-                .str(R.string.editor_title_New_Task), "", mMainActivityState.prefTracker()
-                .getDefaultItemColorPreference(), new ItemTextEditor.ItemEditorListener() {
-            @Override
-            public void onDismiss(String finalString, ItemColor finalColor) {
-                maybeAddNewItem(finalString, finalColor, pageKind, true);
-            }
-        });
+        final ItemColor initialColor = mMainActivityState.prefTracker().getItemColorsPreference()
+                .getDefaultColor();
+        ItemTextEditor.startEditor(mMainActivityState,
+                mMainActivityState.str(R.string.editor_title_New_Task), "", initialColor,
+                new ItemTextEditor.ItemEditorListener() {
+                    @Override
+                    public void onDismiss(String finalString, ItemColor finalColor) {
+                        maybeAddNewItem(finalString, finalColor, pageKind, true);
+                    }
+                });
     }
 
     public final void onAddItemByVoiceButton(final PageKind pageKind) {
@@ -758,9 +762,10 @@ public class Controller implements ShakerListener {
                     @Override
                     public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
                         final TextView itemTextView = (TextView) arg1;
-                        maybeAddNewItem(itemTextView.getText().toString(), mMainActivityState
-                                .prefTracker().getDefaultItemColorPreference(), mMainActivityState
-                                .view().getCurrentPageKind(), true);
+                        final ItemColor initialColor = mMainActivityState.prefTracker()
+                                .getItemColorsPreference().getDefaultColor();
+                        maybeAddNewItem(itemTextView.getText().toString(), initialColor,
+                                mMainActivityState.view().getCurrentPageKind(), true);
                     }
                 });
     }
@@ -877,14 +882,14 @@ public class Controller implements ShakerListener {
         return true;
     }
 
-    /** Called to launch  calendar */
+    /** Called to launch calendar */
     public final void onCalendarLaunchClick() {
         if (!mMainActivityState.prefReader().getCalendarLaunchPreference()) {
             return;
         }
-        
+
         mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
-        
+
         // See if we can find a calendar intent that has a matching reciever.
         @Nullable
         final Intent calendarIntent = CalendarUtil
@@ -893,7 +898,7 @@ public class Controller implements ShakerListener {
             mMainActivityState.services().toast("Google Calender not found.");
             return;
         }
-        
+
         // Intent found, try launching it.
         //
         // TODO: should we use startSubActivity() here?
@@ -982,7 +987,7 @@ public class Controller implements ShakerListener {
                 break;
 
             case ADD_TO_TOP:
-            case DEFAULT_ITEM_COLOR:
+            case ITEM_COLORS:
             case SOUND_ENABLED:
             case APPLAUSE_LEVEL:
             case DAILY_NOTIFICATION:

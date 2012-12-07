@@ -36,7 +36,13 @@ public enum ItemColor implements KeyedEnum {
     NONE("none", Color.TRANSPARENT, R.string.item_color_none),
     RED("red", 0xffff0000, R.string.item_color_red),
     BLUE("blue", 0xff0077ff, R.string.item_color_blue),
-    GREEN("green", 0xff00aa00, R.string.item_color_green);
+    GREEN("green", 0xff00aa00, R.string.item_color_green),
+    GOLD("gold", 0xffc8a82d, R.string.item_color_gold),   
+    PURPLE("purple", 0xff9966ff, R.string.item_color_purple),   
+    YELLOW("yellow", 0xffffff00, R.string.item_color_yellow),  
+    CYAN("an", 0xff00c3d9, R.string.item_color_cyan), 
+    WHITE("white", 0xffffffff, R.string.item_color_white),   
+    BLACK("black", 0xff000000, R.string.item_color_black); 
 
     /** The key used for serialization. Not user visible. Should be consistent. */
     private final String mKey;
@@ -59,12 +65,6 @@ public enum ItemColor implements KeyedEnum {
         return EnumUtil.fromKey(key, ItemColor.values(), fallBack);
     }
 
-    /** Return the cyclic next color. The next color of the last color is the first color. */
-    public final ItemColor nextCyclicColor() {
-        final int nextIndex = (this.ordinal() + 1) % ItemColor.values().length;
-        return ItemColor.values()[nextIndex];
-    }
-
     @Override
     public final String getKey() {
         return mKey;
@@ -79,7 +79,7 @@ public enum ItemColor implements KeyedEnum {
     }
     
     // TODO: add unit test
-    /** Return the color with max importance. */
+    /** Return the color with max importance. Used for merging items. */
     public final ItemColor max(ItemColor other) {
         // If one of the colors is NONE, return the other.
       if (this == NONE) {

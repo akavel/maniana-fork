@@ -110,8 +110,6 @@
   <string name="settings_add_to_top_title">上部に追加します。</string>
   <string name="settings_add_to_top_summary_on">新しいタスクがリストの一番上に追加されます。</string>
   <string name="settings_add_to_top_summary_off">新しいタスクがリストの一番下に追加されます。</string>
-  <string name="settings_default_item_color_title">タスクの既定の色</string>
-  <string name="settings_default_item_color_summary">新しいタスクの最初の色</string>
   <string name="settings_daily_cleanup_title">毎日のタスクのクリーンアップ</string>
   <string name="settings_daily_cleanup_summary_on">完了したタスクを深夜に削除する</string>
   <string name="settings_daily_cleanup_summary_off">完了したタスクの毎日の削除が無効になっています。</string>

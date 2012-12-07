@@ -109,8 +109,6 @@
   <string name="settings_add_to_top_title">Добавить в начало</string>
   <string name="settings_add_to_top_summary_on">Новые задачи добавляются в список сверху</string>
   <string name="settings_add_to_top_summary_off">Новые задачи добавляются в конец списка</string>
-  <string name="settings_default_item_color_title">Цвет задач по умолчанию</string>
-  <string name="settings_default_item_color_summary">Первоначальный цвет для новых задач</string>
   <string name="settings_daily_cleanup_title">Ежедневная очистка задач</string>
   <string name="settings_daily_cleanup_summary_on">Удаление завершенных задач каждый день в полночь</string>
   <string name="settings_daily_cleanup_summary_off">Ежедневное удаление завершённых задач отключено</string>

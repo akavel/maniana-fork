@@ -7,6 +7,7 @@
     * of this and other files are pulled by crowdin.net using the script pull_translations.sh.
     -->
 
+
     <!-- General -->
     <string name="translation_language_name">English</string>
     <string name="translated_app_name">Maniana</string>
@@ -87,6 +88,12 @@
     <string name="item_color_red">Red</string>
     <string name="item_color_blue">Blue</string>
     <string name="item_color_green">Green</string>
+    <string name="item_color_gold">Gold</string>
+    <string name="item_color_cyan">Cyan</string>
+    <string name="item_color_purple">Purple</string>
+    <string name="item_color_yellow">Yellow</string>
+    <string name="item_color_black">Black</string>
+    <string name="item_color_white">White</string>
 
     <!-- Main Menu -->
     <string name="main_menu_Settings">Settings</string>
@@ -152,8 +159,9 @@
     <string name="settings_add_to_top_title">Add To Top</string>
     <string name="settings_add_to_top_summary_on">New tasks are added at list top</string>
     <string name="settings_add_to_top_summary_off">New tasks are added at list bottom</string>
-    <string name="settings_default_item_color_title">Default Task Color</string>
-    <string name="settings_default_item_color_summary">Initial color of new tasks</string>
+     <string name="settings_select_task_colors_dialog_title">Task Color List</string>
+    <string name="settings_select_task_colors_title">Select Task Colors</string>
+    <string name="settings_select_task_colors_summary">Click to select and arrange available task colors</string>
     <string name="settings_daily_cleanup_title">Daily Task Cleanup</string>
     <string name="settings_daily_cleanup_summary_on">Deleting completed tasks every midnight</string>
     <string name="settings_daily_cleanup_summary_off">Daily deletion of completed tasks is disabled</string>

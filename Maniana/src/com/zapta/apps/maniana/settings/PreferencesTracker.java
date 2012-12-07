@@ -20,7 +20,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 
 import com.zapta.apps.maniana.annotations.MainActivityScope;
-import com.zapta.apps.maniana.model.ItemColor;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**
@@ -53,7 +52,7 @@ public class PreferencesTracker {
     private boolean mCachedVerboseMessagesPreference;
     private boolean mCachedAutoSortPreference;
     private boolean mCachedAddToTopPreference;
-    private ItemColor mCachedDefaultItemColorPreference;
+    private ItemColorsSet mCachedItemColorsPreference;
 
     private boolean mCachedShakerEnabledPreference;
     private int mCachedShakerSensitivityPreference;
@@ -90,7 +89,7 @@ public class PreferencesTracker {
         updateCachedApplauseLevelPreference();
         updateCachedAutoSortPreference();
         updateCachedAddToTopPreference();
-        updateCachedDefaultItemColorPreference();
+        updateCachedItemColorsPreference();
         updateCachedShakerEnabledPreference();
         updateCachedShakerSensitivityPreference();
         updateCachedPageIconSetPreference();
@@ -123,7 +122,7 @@ public class PreferencesTracker {
     public final PreferencesReader reader() {
         return mPreferencesReader;
     }
-    
+
     // --------------- Sound ---------------------
 
     private final void updateCachedAllowSoundsPreference() {
@@ -178,12 +177,13 @@ public class PreferencesTracker {
         return mCachedAddToTopPreference;
     }
     
-    private final void updateCachedDefaultItemColorPreference() {
-        mCachedDefaultItemColorPreference = mPreferencesReader.getDefaultItemColorPreference();
-    }
 
-    public final ItemColor getDefaultItemColorPreference() {
-        return mCachedDefaultItemColorPreference;
+    private final void updateCachedItemColorsPreference() {
+        mCachedItemColorsPreference = mPreferencesReader.getItemColorsPreference();
+    }
+    
+    public final ItemColorsSet getItemColorsPreference() {
+        return mCachedItemColorsPreference;
     }
 
     private final void updateCachedShakerEnabledPreference() {
@@ -333,6 +333,7 @@ public class PreferencesTracker {
     private final void onPreferenceChange(String key) {
         // Map key to enum value. Do nothing if not found.
         final PreferenceKind id = PreferenceKind.fromKey(key);
+        
         if (id == null) {
             LogUtil.error("Unknown setting key: " + key);
             return;
@@ -340,7 +341,7 @@ public class PreferencesTracker {
 
         // TODO: order by definition order of PreferenceKind.
         switch (id) {
-        // Sound
+            // Sound
             case SOUND_ENABLED:
                 updateCachedAllowSoundsPreference();
                 break;
@@ -355,8 +356,8 @@ public class PreferencesTracker {
             case ADD_TO_TOP:
                 updateCachedAddToTopPreference();
                 break;
-            case DEFAULT_ITEM_COLOR:
-                updateCachedDefaultItemColorPreference();
+            case ITEM_COLORS:
+                updateCachedItemColorsPreference();
                 break;
             case AUTO_DAILY_CLEANUP:
             case LOCK_PERIOD:

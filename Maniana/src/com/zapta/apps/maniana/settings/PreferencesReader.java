@@ -14,11 +14,10 @@
 
 package com.zapta.apps.maniana.settings;
 
-import com.zapta.apps.maniana.annotations.ApplicationScope;
-import com.zapta.apps.maniana.model.ItemColor;
-
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.zapta.apps.maniana.annotations.ApplicationScope;
 
 /**
  * Type safe reading of preferences with proper defaults.
@@ -239,10 +238,10 @@ public class PreferencesReader implements PreferenceConstants {
         return mSharedPreferences.getBoolean(PreferenceKind.ADD_TO_TOP.getKey(), DEFAULT_ADD_TO_TOP);
     }
     
-    public final ItemColor getDefaultItemColorPreference() {
-        final String key = mSharedPreferences.getString(PreferenceKind.DEFAULT_ITEM_COLOR.getKey(),
-                DEFAULT_DEFAULT_ITEM_COLOR.getKey());
-        return ItemColor.fromKey(key, DEFAULT_DEFAULT_ITEM_COLOR);
+    public final ItemColorsSet getItemColorsPreference() {
+        final String value = mSharedPreferences.getString(PreferenceKind.ITEM_COLORS.getKey(),
+                DEFAULT_ITEM_COLORS);
+        return new ItemColorsSet(value);
     }
 
     public final boolean getAutoDailyCleanupPreference() {

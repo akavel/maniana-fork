@@ -109,8 +109,6 @@
   <string name="settings_add_to_top_title">Aggiungi sopra</string>
   <string name="settings_add_to_top_summary_on">Nuove attività aggiunte inizio lista</string>
   <string name="settings_add_to_top_summary_off">Nuove attività aggiunte fondo lista</string>
-  <string name="settings_default_item_color_title">Colore predefinito attività</string>
-  <string name="settings_default_item_color_summary">Colore iniziale nuove attività</string>
   <string name="settings_daily_cleanup_title">Pulizia giornaliera</string>
   <string name="settings_daily_cleanup_summary_on">A mezzanotte le attività completate saranno eliminate</string>
   <string name="settings_daily_cleanup_summary_off">Eliminazione giornaliera delle attività completate è disattivato</string>

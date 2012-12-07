@@ -206,7 +206,7 @@ public class SettingsActivity extends PreferenceActivity implements
         // key strings match.
         findPreference(PreferenceKind.AUTO_SORT);
         findPreference(PreferenceKind.ADD_TO_TOP);
-        findPreference(PreferenceKind.DEFAULT_ITEM_COLOR);
+        findPreference(PreferenceKind.ITEM_COLORS);
         findPreference(PreferenceKind.AUTO_DAILY_CLEANUP);
         findPreference(PreferenceKind.DAILY_NOTIFICATION);
         findPreference(PreferenceKind.NOTIFICATION_LED);
@@ -400,7 +400,7 @@ public class SettingsActivity extends PreferenceActivity implements
         editor.putBoolean(PreferenceKind.SHAKER_ENABLED.getKey(),
                 PreferenceConstants.DEFAULT_SHAKER_ENABLED);
 
-        // Set icon set preferences to broadcast the change event.
+        // Set icon-set preferences to broadcast the change event.
         editor.putString(PreferenceKind.PAGE_ICON_SET.getKey(),
                 PreferenceConstants.DEFAULT_PAGE_ICON_SET.getKey());
 
@@ -412,11 +412,15 @@ public class SettingsActivity extends PreferenceActivity implements
         editor.putString(PreferenceKind.WIDGET_ITEM_FONT.getKey(),
                 PreferenceConstants.DEFAULT_WIDGET_FONT_TYPE.getKey());
 
-        // Set the seekbar preferences to broadcast the change event
+        // Set the seek bar preferences to broadcast the change event
         editor.putInt(PreferenceKind.PAGE_ITEM_FONT_SIZE.getKey(),
                 PreferenceConstants.DEFAULT_PAGE_ITEM_FONT_SIZE);
         editor.putInt(PreferenceKind.WIDGET_ITEM_FONT_SIZE.getKey(),
                 PreferenceConstants.DEFAULT_WIDGET_ITEM_FONT_SIZE);
+        
+       // Set color set preference to broadcast the change event.
+        editor.putString(PreferenceKind.ITEM_COLORS.getKey(),
+                PreferenceConstants.DEFAULT_ITEM_COLORS);
 
         editor.commit();
 
