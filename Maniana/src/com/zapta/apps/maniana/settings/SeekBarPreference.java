@@ -97,9 +97,6 @@ public class SeekBarPreference extends DialogPreference implements SeekBar.OnSee
                 "defaultValue", 50);
         mValue = shouldPersist() ? getPersistedInt(mDefaultValue) : mDefaultValue;
 
-        // LogUtil.debug("### summaryFormat=[%s], valueFormat=[%s], minValue=[%s], maxValue=[%s], value=[%s], defaultValue=[%s]",
-        // mSummaryFormat, mValueFormat, mMinValue, mMaxValue, mValue, mDefaultValue);
-
         updateSummaryWithCurrentValue();
     }
 

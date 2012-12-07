@@ -35,10 +35,6 @@ public class ItemColorsPreference extends Preference implements
 
     private String mValue;
 
-    public ItemColorsPreference(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-    }
-
     public ItemColorsPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -61,6 +57,17 @@ public class ItemColorsPreference extends Preference implements
         return false;
     }
 
+    /** This how the initial value is actually recieved. */
+    @Override
+    protected void onSetInitialValue(boolean restore, Object defaultValue) {
+        super.onSetInitialValue(restore, defaultValue);
+        if (restore) {
+            mValue = shouldPersist() ? getPersistedString(mDefaultValue) : mDefaultValue;
+        } else {
+            mValue = (String) defaultValue;
+        }
+    }
+    
     /** Called when the user selects a new color set in the dialog. */
     @Override
     public void onTasksColorsSetChange(List<ItemColor> enabledColors) {

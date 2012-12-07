@@ -97,7 +97,7 @@
             android:title="@string/settings_add_to_top_title" />
 
         <com.zapta.apps.maniana.settings.ItemColorsPreference
-            android:defaultValue="none,red,green,gold"
+            android:defaultValue="none,red,blue,green,green"
             android:key="prefItemColorsKey"
             android:summary="@string/settings_select_task_colors_summary"
             android:title="@string/settings_select_task_colors_title" />
