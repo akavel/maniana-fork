@@ -8,8 +8,13 @@
 
 source ./bash_lib.sh
 
+# NOTE(tal): waiting with 'sq' until recieving a confirmation that it works
+# on an actual phone that supports Albanian.
+#
+# NOTE(tal): 'pt' on hold until the translation will be completed.
+#
 # List of two letter codes of languages to update
-languages="es it ja pt ru sq"
+languages="de es fr it ja ru"
 
 # Definitions
 tmproot="/tmp"

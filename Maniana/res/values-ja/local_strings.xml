@@ -54,6 +54,12 @@
   <string name="item_color_red">赤</string>
   <string name="item_color_blue">青</string>
   <string name="item_color_green">グリーン</string>
+  <string name="item_color_gold">Gold</string>
+  <string name="item_color_cyan">Cyan</string>
+  <string name="item_color_purple">Purple</string>
+  <string name="item_color_yellow">Yellow</string>
+  <string name="item_color_black">Black</string>
+  <string name="item_color_white">White</string>
   <string name="main_menu_Settings">設定</string>
   <string name="main_menu_About">について</string>
   <string name="main_menu_Help">ヘルプ</string>
@@ -110,6 +116,9 @@
   <string name="settings_add_to_top_title">上部に追加します。</string>
   <string name="settings_add_to_top_summary_on">新しいタスクがリストの一番上に追加されます。</string>
   <string name="settings_add_to_top_summary_off">新しいタスクがリストの一番下に追加されます。</string>
+  <string name="settings_select_task_colors_dialog_title">Task Color List</string>
+  <string name="settings_select_task_colors_title">Select Task Colors</string>
+  <string name="settings_select_task_colors_summary">Click to select and arrange available task colors</string>
   <string name="settings_daily_cleanup_title">毎日のタスクのクリーンアップ</string>
   <string name="settings_daily_cleanup_summary_on">完了したタスクを深夜に削除する</string>
   <string name="settings_daily_cleanup_summary_off">完了したタスクの毎日の削除が無効になっています。</string>

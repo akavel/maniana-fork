@@ -54,6 +54,12 @@
   <string name="item_color_red">Rosso</string>
   <string name="item_color_blue">Blu</string>
   <string name="item_color_green">Verde</string>
+  <string name="item_color_gold">Gold</string>
+  <string name="item_color_cyan">Cyan</string>
+  <string name="item_color_purple">Purple</string>
+  <string name="item_color_yellow">Yellow</string>
+  <string name="item_color_black">Black</string>
+  <string name="item_color_white">White</string>
   <string name="main_menu_Settings">Impostazioni</string>
   <string name="main_menu_About">Info</string>
   <string name="main_menu_Help">Guida</string>
@@ -109,6 +115,9 @@
   <string name="settings_add_to_top_title">Aggiungi sopra</string>
   <string name="settings_add_to_top_summary_on">Nuove attività aggiunte inizio lista</string>
   <string name="settings_add_to_top_summary_off">Nuove attività aggiunte fondo lista</string>
+  <string name="settings_select_task_colors_dialog_title">Task Color List</string>
+  <string name="settings_select_task_colors_title">Select Task Colors</string>
+  <string name="settings_select_task_colors_summary">Click to select and arrange available task colors</string>
   <string name="settings_daily_cleanup_title">Pulizia giornaliera</string>
   <string name="settings_daily_cleanup_summary_on">A mezzanotte le attività completate saranno eliminate</string>
   <string name="settings_daily_cleanup_summary_off">Eliminazione giornaliera delle attività completate è disattivato</string>
