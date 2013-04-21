@@ -57,7 +57,7 @@ function patch_source() {
   check_last_cmd "Copying ViewPager.java"
 
   echo
-  echo "WANRING: must diff merge ViewPager.java manuall..."
+  echo "WANRING: must diff merge ViewPager.java manual..."
 
   sleep 3 
   echo
