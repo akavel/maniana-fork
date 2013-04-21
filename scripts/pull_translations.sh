@@ -4,7 +4,7 @@
 # Tested on Max osx.
 #
 # TODO: convert file formats from DOS to unix 
-# TODO: force a sourcein package creation before downloading.
+# TODO: force a crowdin package creation before downloading.
 
 source ./bash_lib.sh
 

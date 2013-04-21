@@ -39,6 +39,7 @@ public enum Font implements KeyedEnum {
     ELEGANT(R.string.font_name_Elegant, "elegant"),
     SAN_SERIF(R.string.font_name_Sans_Serif, "sans"),
     SERIF(R.string.font_name_Serif, "serif"),
+    ITALIC(R.string.font_name_Italic, "italic"),
     IMPACT(R.string.font_name_Impact, "impact");
 
     /** User visible name. */
@@ -107,7 +108,7 @@ public enum Font implements KeyedEnum {
             case CURSIVE:
                 return new TypefaceSpec(context, "fonts/Vavont/Vavont-modified.ttf", 1.5f, 0.75f,
                         -0.10f, 0.45f);
-                
+
             case ELEGANT:
                 // Pompiere-Regular-modified does not contains Cyrillic fonts.
                 if (usesCyrillic) {
@@ -116,13 +117,17 @@ public enum Font implements KeyedEnum {
                 }
                 return new TypefaceSpec(context, "fonts/Pompiere/Pompiere-Regular-modified.ttf",
                         1.6f, 1.0f, 0.0f, 0.1f);
-                
+
             case SAN_SERIF:
                 return new TypefaceSpec(Typeface.SANS_SERIF, 1.2f, 1.1f, 0.05f, 0.25f);
-                
+
             case SERIF:
                 return new TypefaceSpec(Typeface.SERIF, 1.2f, 1.1f, 0.05f, 0.25f);
-                
+
+            case ITALIC:
+                return new TypefaceSpec(Typeface.create(Typeface.SANS_SERIF, Typeface.ITALIC),
+                        1.2f, 1.1f, 0.05f, 0.25f);
+
             case IMPACT:
                 // Damion-Regular does not contains Cyrillic fonts.
                 if (usesCyrillic) {
@@ -131,7 +136,7 @@ public enum Font implements KeyedEnum {
                 }
                 return new TypefaceSpec(context, "fonts/Damion/Damion-Regular.ttf", 1.6f, 0.7f,
                         0.0f, 0.1f);
-                
+
             default:
                 throw new RuntimeException("Unknown font: " + this);
         }

@@ -273,6 +273,7 @@
     <string name="font_name_Elegant">Elegant</string>
     <string name="font_name_Sans_Serif">Sans Serif</string>
     <string name="font_name_Serif">Serif</string>
+    <string name="font_name_Italic">Italic</string>
     <string name="font_name_Impact">Impact</string>
 
     <!-- Icon Set names -->
