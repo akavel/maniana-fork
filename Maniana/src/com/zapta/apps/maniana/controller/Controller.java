@@ -62,7 +62,6 @@ import com.zapta.apps.maniana.settings.ItemColorsSet;
 import com.zapta.apps.maniana.settings.PreferenceKind;
 import com.zapta.apps.maniana.settings.SettingsActivity;
 import com.zapta.apps.maniana.settings.ShakerAction;
-import com.zapta.apps.maniana.util.AttachmentUtil;
 import com.zapta.apps.maniana.util.CalendarUtil;
 import com.zapta.apps.maniana.util.FileUtil;
 import com.zapta.apps.maniana.util.FileUtil.FileReadResult;
@@ -221,9 +220,6 @@ public class Controller implements ShakerListener {
                     metadata);
             check(!mMainActivityState.model().isDirty());
             onBackupDataChange();
-
-            // Use this opportunity also to garbage collect old attachment files.
-            AttachmentUtil.garbageCollectAttachmentFile(mMainActivityState.context());
         }
         if (modelWasDirty || alwaysUpdateAllWidgets) {
             updateAllWidgets();

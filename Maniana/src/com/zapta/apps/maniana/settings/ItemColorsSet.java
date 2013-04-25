@@ -18,7 +18,11 @@ import java.util.List;
 
 import com.zapta.apps.maniana.model.ItemColor;
 
-/** An immutable collection of colors that can be assigned to an item. */
+/** 
+ * An immutable collection of colors that can be assigned to an item. 
+ * 
+ * @author Tal Dayan
+ */
 public class ItemColorsSet {
 
     // The list of colors as constructed by DecodeValue. Must contain the color NONE

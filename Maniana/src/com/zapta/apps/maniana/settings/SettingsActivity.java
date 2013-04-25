@@ -14,13 +14,13 @@
 
 package com.zapta.apps.maniana.settings;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.annotation.Nullable;
 
 import net.margaritov.preference.colorpicker.ColorPickerPreference;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -46,7 +46,7 @@ import com.zapta.apps.maniana.annotations.ActivityScope;
 import com.zapta.apps.maniana.annotations.VisibleForTesting;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
 import com.zapta.apps.maniana.help.PopupMessageActivity.MessageKind;
-import com.zapta.apps.maniana.util.AttachmentUtil;
+import com.zapta.apps.maniana.services.DataFileProvider;
 import com.zapta.apps.maniana.util.DateUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.PopupsTracker;
@@ -70,7 +70,7 @@ public class SettingsActivity extends PreferenceActivity implements
 
     // Behavior
     private ListPreference mLockPeriodListPreference;
-    
+
     // Shaking
     private ListPreference mShakerActionPreference;
 
@@ -139,7 +139,7 @@ public class SettingsActivity extends PreferenceActivity implements
 
         // Behavior
         mLockPeriodListPreference = (ListPreference) findPreference(PreferenceKind.LOCK_PERIOD);
-        
+
         // Shaker
         mShakerActionPreference = (ListPreference) findPreference(PreferenceKind.SHAKER_ACTION);
 
@@ -417,8 +417,8 @@ public class SettingsActivity extends PreferenceActivity implements
                 PreferenceConstants.DEFAULT_PAGE_ITEM_FONT_SIZE);
         editor.putInt(PreferenceKind.WIDGET_ITEM_FONT_SIZE.getKey(),
                 PreferenceConstants.DEFAULT_WIDGET_ITEM_FONT_SIZE);
-        
-       // Set color set preference to broadcast the change event.
+
+        // Set color set preference to broadcast the change event.
         editor.putString(PreferenceKind.ITEM_COLORS.getKey(),
                 PreferenceConstants.DEFAULT_ITEM_COLORS);
 
@@ -445,37 +445,22 @@ public class SettingsActivity extends PreferenceActivity implements
         startActivity(intent);
     }
 
+    @SuppressLint("SimpleDateFormat")
     private final void onBackupClick() {
-        AttachmentUtil.createAttachmentFile(this);
+        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-dd-MM-HH-mm-ss");
+        final String timeStamp = dateFormat.format(new Date());
 
         final Intent intent = new Intent(Intent.ACTION_SEND);
-        // sharingIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        final String defaultToAddress = getBackupEmailAddress();
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[] {
-            defaultToAddress
-        });
-
-        final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-dd-MM HH:mm:ss");
-        final String timeString = dateFormat.format(new Date());
-        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.backup_email_message_subject)
-                + " " + timeString);
-
-        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.backup_email_message_body_text1)
-                + "\n\n" + getString(R.string.backup_email_message_body_text2) + "\n\n"
-                + getString(R.string.backup_email_message_body_text3));
-
+       
+        // This determines the saved file name.
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Maniana Backup " + timeStamp);
+        
         intent.setType("application/json");
         
-        // NOTE: gmail has string restrictions on the path prefix of an attachment file. We overcome
-        // it by starting with the expected prefix and going back to the file system root. The 
-        // prefix depends on the Android version.       
-        final String pathPrefix = (android.os.Build.VERSION.SDK_INT < 16) 
-                ? "/mnt/sdcard/../.." : "/storage/sdcard0/../..";                
-        final Uri fileUri = Uri.fromFile(new File(pathPrefix + getFilesDir() + "/"
-                + AttachmentUtil.BACKUP_ATTACHMENT_FILE_NAME));
-        intent.putExtra(Intent.EXTRA_STREAM, fileUri);
-
+        // The data provider ignores the file name and always returns a copy of the maniaia data file.
+        final String fileName = "Maniana_Backup_" + timeStamp + ".json";
+        intent.putExtra(Intent.EXTRA_STREAM,
+                Uri.parse("content://" + DataFileProvider.AUTHORITY + "/" + fileName));
         try {
             startActivity(intent);
         } catch (android.content.ActivityNotFoundException e) {
@@ -589,7 +574,7 @@ public class SettingsActivity extends PreferenceActivity implements
                     + construtLockTimeLeftMessageSuffix(this, wholeHoursLeft) + ")" : "";
             updateListPreferenceSummary(mLockPeriodListPreference, R.array.lockPeriodNames, suffix);
         }
-        
+
         updateListPreferenceSummary(mShakerActionPreference, R.array.shakerActionNames, null);
     }
 

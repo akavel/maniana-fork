@@ -149,13 +149,20 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:exported="false"
             android:name=".notifications.NotificationSimulator"
-            android:enabled="true" >
+            android:enabled="true"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="com.zapta.apps.maniana.notifications.SIMULATE" />
             </intent-filter>
         </receiver>
+
+        <provider
+            android:name=".services.DataFileProvider"
+            android:grantUriPermissions="true"
+            android:exported="true"
+            android:authorities="com.zapta.apps.maniana.DATA_PROVIDER" >
+        </provider>
     </application>
 
 </manifest>
