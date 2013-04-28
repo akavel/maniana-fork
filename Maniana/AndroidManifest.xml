@@ -2,8 +2,8 @@
 <!-- NOTE: version code nnxxx is for release nn. xxx is incremented on each signed build -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zapta.apps.maniana"
-    android:versionCode="26008"
-    android:versionName="1.26.D008" >
+    android:versionCode="26009"
+    android:versionName="1.26.D009" >
 
     <uses-sdk
         android:minSdkVersion="8"
