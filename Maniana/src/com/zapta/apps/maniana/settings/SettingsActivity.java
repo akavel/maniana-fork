@@ -32,7 +32,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -46,7 +45,7 @@ import com.zapta.apps.maniana.annotations.ActivityScope;
 import com.zapta.apps.maniana.annotations.VisibleForTesting;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
 import com.zapta.apps.maniana.help.PopupMessageActivity.MessageKind;
-import com.zapta.apps.maniana.services.DataFileProvider;
+import com.zapta.apps.maniana.services.BackupFileProvider;
 import com.zapta.apps.maniana.util.DateUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 import com.zapta.apps.maniana.util.PopupsTracker;
@@ -109,10 +108,9 @@ public class SettingsActivity extends PreferenceActivity implements
     private Preference mRestoreDefaultsPreference;
 
     // Backup
-    private EditTextPreference mBackupEmailPreference;
     private Preference mBackupPreference;
     // TODO: implement popup help message for do restore
-    private Preference mRestoreBackupPreference;
+    private Preference mBackupHelpPreference;
 
     /** For temp time calculations. Avoiding new object creation. */
     private Time tempTime = new Time();
@@ -190,9 +188,8 @@ public class SettingsActivity extends PreferenceActivity implements
         mRestoreDefaultsPreference = findPreference(PreferenceKind.RESTORE_DEFAULTS);
 
         // Backup
-        mBackupEmailPreference = (EditTextPreference) findPreference(PreferenceKind.BACKUP_EMAIL);
         mBackupPreference = findPreference(PreferenceKind.BACKUP);
-        mRestoreBackupPreference = findPreference(PreferenceKind.RESTORE);
+        mBackupHelpPreference = findPreference(PreferenceKind.BACKUP_HELP);
 
         // Enabled alpha channel in colors pickers that need it.
         mPageItemDividerColorPickPreference.setAlphaSliderEnabled(true);
@@ -240,9 +237,9 @@ public class SettingsActivity extends PreferenceActivity implements
             }
         });
 
-        mRestoreBackupPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+        mBackupHelpPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             public boolean onPreferenceClick(Preference preference) {
-                onRestoreBackupClick();
+                onBackupHelpClick();
                 return true;
             }
         });
@@ -439,9 +436,9 @@ public class SettingsActivity extends PreferenceActivity implements
         startActivity(intent);
     }
 
-    private final void onRestoreBackupClick() {
-        // Popup a message with restore instructions
-        final Intent intent = PopupMessageActivity.intentFor(this, MessageKind.BACKUP_RESTORE);
+    private final void onBackupHelpClick() {
+        // Popup a message with backup/restore instructions
+        final Intent intent = PopupMessageActivity.intentFor(this, MessageKind.BACKUP_HELP);
         startActivity(intent);
     }
 
@@ -449,22 +446,15 @@ public class SettingsActivity extends PreferenceActivity implements
     private final void onBackupClick() {
         final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-dd-MM-HH-mm-ss");
         final String timeStamp = dateFormat.format(new Date());
-
-        final Intent intent = new Intent(Intent.ACTION_SEND);
-       
-        // This determines the saved file name.
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Maniana Backup " + timeStamp);
-        
-        intent.setType("application/json");
-        
-        // The data provider ignores the file name and always returns a copy of the maniaia data file.
         final String fileName = "Maniana_Backup_" + timeStamp + ".json";
-        intent.putExtra(Intent.EXTRA_STREAM,
-                Uri.parse("content://" + DataFileProvider.AUTHORITY + "/" + fileName));
+        
+        final Intent intent = BackupFileProvider.constructBackupFileSendIntent(fileName);
+
         try {
-            startActivity(intent);
+            startActivity(Intent.createChooser(intent,
+                    getString(R.string.settings_backup_do_backup_chooser_title)));
         } catch (android.content.ActivityNotFoundException e) {
-            Toast.makeText(this, getString(R.string.backup_email_gmail_not_found_error),
+            Toast.makeText(this, getString(R.string.settings_backup_no_app_error),
                     Toast.LENGTH_SHORT).show();
         }
     }
@@ -533,20 +523,6 @@ public class SettingsActivity extends PreferenceActivity implements
                     + getString(R.string.settings_applause_summary_sound_is_off) + ")");
         }
 
-        {
-            final String baseBackupEmailSummary = getString(R.string.settings_backup_gmail_address_base_summary);
-            final String backupEmailAddress = getBackupEmailAddress();
-            mBackupEmailPreference.setSummary((backupEmailAddress.length() > 0) ? "("
-                    + backupEmailAddress + ")\n" + baseBackupEmailSummary : baseBackupEmailSummary);
-
-            final boolean hasBackupEmailAddress = backupEmailAddress.contains("@")
-                    && backupEmailAddress.contains(".");
-            mBackupPreference
-                    .setSummary(hasBackupEmailAddress ? getString(R.string.setting_backup_do_backup_summary_on)
-                            : getString(R.string.setting_backup_do_backup_summary_off));
-            mBackupPreference.setEnabled(hasBackupEmailAddress);
-        }
-
         // Update color selectors
         mPageColorPreferenceSelector.update();
         mWidgetColorPreferenceSelector.update();
@@ -576,10 +552,6 @@ public class SettingsActivity extends PreferenceActivity implements
         }
 
         updateListPreferenceSummary(mShakerActionPreference, R.array.shakerActionNames, null);
-    }
-
-    private final String getBackupEmailAddress() {
-        return mBackupEmailPreference.getText().trim();
     }
 
     @VisibleForTesting

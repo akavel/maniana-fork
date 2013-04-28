@@ -25,6 +25,8 @@ import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
  * 
  * DO NOT REUSE THESE OLD KEYS: <code>
  *   prefBackgroundKey
+ *   prefBackupEmailKey
+ *   prefRestoreKey
  *   prefItemFontKey
  *   prefItemFontSizeKey
  *   prefVoiceRecognitionKey
@@ -95,9 +97,8 @@ public enum PreferenceKind implements KeyedEnum {
     RESTORE_DEFAULTS("prefRestoreDefaultsKey"),
     
     // Backup (Experimental)
-    BACKUP_EMAIL("prefBackupEmailKey"),
+    BACKUP_HELP("prefBackupHelpKey"),
     BACKUP("prefBackupKey"),
-    RESTORE("prefRestoreKey"),
     
     // Debug
     DEBUG_MODE("prefDebugModeKey");

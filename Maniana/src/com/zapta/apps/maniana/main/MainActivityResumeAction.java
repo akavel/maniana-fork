@@ -18,7 +18,6 @@ import javax.annotation.Nullable;
 
 import android.content.Intent;
 
-import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.annotations.MainActivityScope;
 import com.zapta.apps.maniana.util.IntentUtil;
@@ -81,15 +80,7 @@ public enum MainActivityResumeAction {
             final String uriStringLC = intent.getDataString().toLowerCase();
             // OI file browser sends type = "*/*" so we try to also match the extension.
             if ("application/json".equals(intent.getType()) || uriStringLC.contains(".json")) {
-                final String scheme = intent.getData().getScheme();
-                if ("file".equals(scheme)) {
-                    return RESTORE_FROM_BABKUP_FILE;
-                }
-                // Since we don't have Gmail permissions, trying to access the attachment
-                // from the Gmail providers gives permission error.
-                if ("content".equals(scheme) && uriStringLC.contains("gmail")) {
-                    mainActivityState.services().toast(R.string.backup_restore_Hint_try_using_Gmail_Download_button);
-                }
+                return RESTORE_FROM_BABKUP_FILE;
             }
         }
 

@@ -27,7 +27,7 @@ public enum DebugCommandHtml implements DebugCommand {
     ABOUT("About"),
     WHATS_NEW("What's New"),
     NEW_USER("New User"),
-    RESTORE_BACKUP("Restore Backup");
+    BACKUP_HELP("Backup Help");
     
     private final String mText;
     

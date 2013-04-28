@@ -131,8 +131,17 @@ public class Controller implements ShakerListener {
         mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_SPACEBAR, false);
         final ItemModel item = mMainActivityState.model().getItemForMutation(pageKind, itemIndex);
         final ItemColorsSet itemColorsSet = mMainActivityState.prefTracker().getItemColorsPreference();
-        item.setColor(itemColorsSet.colorAfter(item.getColor()));
-        mMainActivityState.view().updatePage(pageKind);
+        
+        final ItemColor newItemColor = itemColorsSet.colorAfter(item.getColor());
+        if (newItemColor != item.getColor()) {
+            item.setColor(newItemColor);
+            mMainActivityState.view().updatePage(pageKind);
+        } else {
+            // No color change. Give a novice user a hing.
+            if (mMainActivityState.prefTracker().getVerboseMessagesEnabledPreference()) {
+                mMainActivityState.services().toast(R.string.item_colors_hint);
+            }
+        }
     }
 
     /** Called by the view when user clicks on item's arrow/lock area */
@@ -455,9 +464,14 @@ public class Controller implements ShakerListener {
                 final ItemModel item = mMainActivityState.model().getItemForMutation(pageKind,
                         itemIndex);
                 item.setIsCompleted(true);
+                
                 // NOTE(tal): we assume that the color flag is not needed once an item is completed.
                 // This is a usability heuristic. Not required otherwise.
+                //
+                // NOTE(tal): NONE may or may not be in the user selected task color set. It does not
+                // matter, we set to NONE regardless.
                 item.setColor(ItemColor.NONE);
+                
                 mMainActivityState.view().updatePage(pageKind);
                 maybeAutosortPageWithItemOfInterest(pageKind, itemIndex);
                 return;
@@ -1028,10 +1042,6 @@ public class Controller implements ShakerListener {
                 // onAppPause() is not triggered in this case because the main activity is already
                 // paused.
                 flushModelChanges(true);
-                break;
-
-            case BACKUP_EMAIL:
-                // Nothing to do here.
                 break;
 
             case DEBUG_MODE:

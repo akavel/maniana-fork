@@ -25,8 +25,8 @@ import com.zapta.apps.maniana.model.ItemColor;
  */
 public class ItemColorsSet {
 
-    // The list of colors as constructed by DecodeValue. Must contain the color NONE
-    // and does not contain duplicate colors.
+    // The list of colors as constructed by DecodeValue. Does not contain duplicate colors.
+    // May be empty.
     private final ItemColor colors[];
 
     public ItemColorsSet(String encodedValue) {
@@ -40,7 +40,7 @@ public class ItemColorsSet {
     }
 
     public final ItemColor getDefaultColor() {
-        return colors[0];
+        return (colors.length > 0) ? colors[0] : ItemColor.NONE;
     }
 
     public final ItemColor colorAfter(ItemColor itemColor) {
@@ -50,7 +50,9 @@ public class ItemColorsSet {
                 return (i < (n - 1)) ? colors[i + 1] : colors[0];
             }
         }
-        // Here when itemColor not found. We return the default color.
+        // Here when itemColor not found. We return the default color. This can happen
+        // if the color has been disabled by the user, including the special case where 
+        // colors is empty.
         return getDefaultColor();
     }
 }

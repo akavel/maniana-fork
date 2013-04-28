@@ -105,6 +105,8 @@ public class ModelDeserialization implements FieldNames {
         final boolean isLocked = jsonItem.optBoolean(FIELD_LOCKED);
 
         final String optColorKey = jsonItem.optString(FIELD_COLOR, null);
+        // NOTE(tal): NONE may or may not be in the current user selected task color set.
+        // Default to NONE if not found.
         final ItemColor color = (optColorKey == null) ? ItemColor.NONE : ItemColor.fromKey(
                 optColorKey, ItemColor.NONE);
 

@@ -158,10 +158,10 @@
         </receiver>
 
         <provider
-            android:name=".services.DataFileProvider"
+            android:name=".services.BackupFileProvider"
             android:grantUriPermissions="true"
             android:exported="true"
-            android:authorities="com.zapta.apps.maniana.DATA_PROVIDER" >
+            android:authorities="com.zapta.apps.maniana.BACKUP_FILE_PROVIDER" >
         </provider>
     </application>
 

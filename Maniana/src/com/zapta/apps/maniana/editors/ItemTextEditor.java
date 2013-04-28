@@ -43,14 +43,14 @@ import com.zapta.apps.maniana.view.ExtendedEditText;
  */
 @MainActivityScope
 public class ItemTextEditor extends Dialog implements TrackablePopup {
-    
+
     private static final boolean PRE_API_11 = android.os.Build.VERSION.SDK_INT < 11;
 
     public interface ItemEditorListener {
         void onDismiss(String finalText, ItemColor finalColor);
     }
 
-    private final MainActivityState mMainState;
+    private final MainActivityState mMainActivityState;
 
     private final ItemEditorListener mListener;
 
@@ -70,7 +70,7 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
             String initialText, ItemColor initialItemColor, ItemEditorListener listener) {
         // TODO: reorder and organize the statements below for better reliability.
         super(mainActivityState.context());
-        mMainState = mainActivityState;
+        mMainActivityState = mainActivityState;
         mListener = listener;
         mItemColor = initialItemColor;
         setContentView(R.layout.editor_layout);
@@ -84,17 +84,17 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
         // Set text and style. Always using non completed variation, even if the
         // item is completed.
         mExtendedEditTextView.setText(initialText);
-        
-        // For API 11+ these values come from the default theme. For holo, 
+
+        // For API 11+ these values come from the default theme. For holo,
         // this will be white text on dark gray background. This makes sure the text
         // cursor is at at color visible over the background.:w
         if (PRE_API_11) {
             final View topView = findViewById(R.id.editor_top);
-            topView.setBackgroundColor(0xffffffff);            
+            topView.setBackgroundColor(0xffffffff);
             mExtendedEditTextView.setBackgroundColor(0xffffffff);
-            mExtendedEditTextView.setTextColor(0xff000000);            
+            mExtendedEditTextView.setTextColor(0xff000000);
         }
-        
+
         mainActivityState.prefTracker().getPageItemFontVariation()
                 .apply(mExtendedEditTextView, false, false);
 
@@ -147,7 +147,7 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
 
     /** Called when the dialog get dismissed. */
     private final void handleOnDismiss() {
-        mMainState.popupsTracker().untrack(this);
+        mMainActivityState.popupsTracker().untrack(this);
         // If not already reported during the close leftover.
         if (!dismissAlreadyReported) {
             mListener.onDismiss(mExtendedEditTextView.getText().toString(), mItemColor);
@@ -168,10 +168,19 @@ public class ItemTextEditor extends Dialog implements TrackablePopup {
     }
 
     private final void handleColorClicked() {
-        final ItemColorsSet itemColorsSet = mMainState.prefTracker().getItemColorsPreference();
-        mItemColor = itemColorsSet.colorAfter(mItemColor);
-        updateColorView();
-        mMainState.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_SPACEBAR, false);
+        mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEYPRESS_SPACEBAR, false);
+        final ItemColorsSet itemColorsSet = mMainActivityState.prefTracker()
+                .getItemColorsPreference();
+        final ItemColor newItemColor = itemColorsSet.colorAfter(mItemColor);
+        if (newItemColor != mItemColor) {
+            mItemColor = newItemColor;
+            updateColorView();
+        } else {
+            // No color change. Give a novice user a hint.
+            if (mMainActivityState.prefTracker().getVerboseMessagesEnabledPreference()) {
+                mMainActivityState.services().toast(R.string.item_colors_hint);
+            }
+        }
     }
 
     private final void updateColorView() {

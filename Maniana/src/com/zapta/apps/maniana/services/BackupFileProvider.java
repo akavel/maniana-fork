@@ -19,6 +19,7 @@ import java.io.FileNotFoundException;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
@@ -35,12 +36,12 @@ import com.zapta.apps.maniana.util.LogUtil;
  * 
  * @author Tal Dayan
  */
-public class DataFileProvider extends ContentProvider {
+public class BackupFileProvider extends ContentProvider {
 
     // private static final String CLASS_NAME = "CachedFileProvider";
 
     // The authority is the symbolic name for the provider class
-    public static final String AUTHORITY = "com.zapta.apps.maniana.DATA_PROVIDER";
+    public static final String AUTHORITY = "com.zapta.apps.maniana.BACKUP_FILE_PROVIDER";
 
     // Arbitrary code to return on match. Any value other than -1 should do.
     private static final int MATCHED_OK = 1;
@@ -68,8 +69,8 @@ public class DataFileProvider extends ContentProvider {
         if (matchStatus == MATCHED_OK) {
             // We always return the data file, regardless of the file name in the uri.
             String fileLocation = getContext().getFilesDir() + File.separator
-                    + ModelPersistence.DATA_FILE_NAME;
-
+                   + ModelPersistence.DATA_FILE_NAME;
+          
             // Always returning in read only mode, regardless of the requested mode.
             ParcelFileDescriptor pfd = ParcelFileDescriptor.open(new File(fileLocation),
                     ParcelFileDescriptor.MODE_READ_ONLY);
@@ -107,4 +108,22 @@ public class DataFileProvider extends ContentProvider {
         return null;
     }
 
+    /**
+     * @param fileName the saved file name. Should have a '.json' extension.
+     */
+    public static Intent constructBackupFileSendIntent(String fileName) {
+        final Intent intent = new Intent(Intent.ACTION_SEND);
+
+        // This determines the saved file name.
+        intent.putExtra(Intent.EXTRA_SUBJECT, fileName);
+
+        intent.setType("application/json");
+
+        // The data provider ignores the file name and always returns a copy of the maniaia data
+        // file.
+        intent.putExtra(Intent.EXTRA_STREAM,
+                Uri.parse("content://" + BackupFileProvider.AUTHORITY + "/" + fileName));
+
+        return intent;
+    }
 }

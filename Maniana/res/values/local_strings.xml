@@ -35,8 +35,7 @@
     <string name="undo_Restored_d_deleted_tasks">Restored %d deleted tasks</string>
 
     <!-- Backup/Restore -->
-    <string name="backup_restore_Hint_try_using_Gmail_Download_button">Hint: try using Gmail Download button</string>
-    <string name="backup_restore_Failed_to_read_backup_file">Failed to read backup file</string>
+    <string name="backup_restore_Failed_to_read_backup_file">Error reading the backup file</string>
     <string name="backup_restore_Error_loading_the_backup_file">Error loading the backup file</string>
     <string name="backup_restore_Task_list_replaced">Task list replaced</string>
     <string name="backup_restore_Task_list_merged">Task list merged</string>
@@ -94,6 +93,7 @@
     <string name="item_color_yellow">Yellow</string>
     <string name="item_color_black">Black</string>
     <string name="item_color_white">White</string>
+    <string name="item_colors_hint">Hint: select more task colors in Settings.</string>
 
     <!-- Main Menu -->
     <string name="main_menu_Settings">Settings</string>
@@ -104,17 +104,9 @@
     <string name="settings_restore_default_confirmation_text">Revert all settings to default values (does not affect task data)?</string>
     <string name="settings_restore_default_confirmation_yes">Revert</string>
     <string name="settings_Restoring_defaults">Restoring defaults...</string>
-    <string name="backup_email_message_subject">Maniana backup</string>
-    <string name="backup_email_message_body_text1">This email message was sent by the Maniana To Do List Android app.</string>
-    <string name="backup_email_message_body_text2">It contains an attachment file with a backup copy of the task list.</string>
-    <string name="backup_email_message_body_text3">To restore the task list, open this email message in an Android device where Maniana is installed and click on the Download or Save/View buttons of the attachment.</string>
-    <string name="backup_email_gmail_not_found_error">Gmail application not found</string>
     <string name="share_email_subject">Check out \"Maniana To Do List\"</string>
     <string name="share_email_body_text">Check out Maniana, a free fun and easy to use todo list app on the Android Market:</string>
     <string name="share_email_chooser_title">Share using</string>
-    <string name="settings_backup_gmail_address_base_summary">Destination Gmail address for sending backup attachments.</string>
-    <string name="setting_backup_do_backup_summary_on">Click to email a Maniana backup attachment to your Gmail account</string>
-    <string name="setting_backup_do_backup_summary_off">Please enter your Gmail address to enable Maniana backups</string>
     <string name="time_string_tonight">tonight</string>
     <string name="time_string_in_d_hours">in %d hours</string>
     <string name="time_string_in_d_days">in %d days</string>
@@ -159,7 +151,7 @@
     <string name="settings_add_to_top_title">Add To Top</string>
     <string name="settings_add_to_top_summary_on">New tasks are added at list top</string>
     <string name="settings_add_to_top_summary_off">New tasks are added at list bottom</string>
-     <string name="settings_select_task_colors_dialog_title">Task Color List</string>
+    <string name="settings_select_task_colors_dialog_title">Select Task Colors</string>
     <string name="settings_select_task_colors_title">Select Task Colors</string>
     <string name="settings_select_task_colors_summary">Click to select and arrange available task colors</string>
     <string name="settings_daily_cleanup_title">Daily Task Cleanup</string>
@@ -230,12 +222,12 @@
 
     <!-- Settings / Backup -->
     <string name="settings_section_name_Backup">Backup</string>
-    <string name="settings_backup_gmail_address_title">Your Gmail Address</string>
-    <string name="settings_backup_gmail_address_hint">e.g. johndoe@gmail.com</string>
+    <string name="settings_backup_do_backup_chooser_title">Select Dropbox Or Google Drive</string>
+    <string name="settings_backup_no_app_error">Did not found Dropbox or Google Drive apps.</string>
     <string name="settings_backup_do_backup_title">Do Backup</string>
-    <!-- <string name="settings_backup_do_backup_summary"></string> -->
-    <string name="settings_backup_do_restore_title">Do Restore</string>
-    <string name="settings_backup_do_restore_summary">Click for instructions</string>
+    <string name="settings_backup_do_backup_summary">Click to send a backup file. Only Dropbox and Google Drive are currently supported. GMail is not!</string>
+    <string name="settings_backup_help_title">Read This First!</string>
+    <string name="settings_backup_help_summary">Click to read IMPORTANT instructions on how to successfuly backup and restore.</string>
 
     <!-- Settings/Miscellaneous -->
     <string name="settings_section_name_Miscellaneous">Miscellaneous</string>

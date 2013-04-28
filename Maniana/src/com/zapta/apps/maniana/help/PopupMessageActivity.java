@@ -58,7 +58,7 @@ public class PopupMessageActivity extends Activity {
         ABOUT("help/about", ".html", true, 0),
         NEW_USER("help/new_user_welcome", ".html", false, 0xff00bb00),
         WHATS_NEW("help/whats_new", ".html", false, 0xff00ccff),
-        BACKUP_RESTORE("help/restore_backup", ".html", false, 0xff0000ff);
+        BACKUP_HELP("help/backup_help", ".html", false, 0xff0000ff);
 
         // TODO(tal): since all messages come from assets, have the names more asset specific.
         private final String mAssetRelativeBaseName;

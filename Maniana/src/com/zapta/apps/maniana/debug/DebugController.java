@@ -132,10 +132,10 @@ public class DebugController {
                         PopupMessageActivity.intentFor(mMainActivityState.context(),
                                 MessageKind.NEW_USER));
                 break;
-            case RESTORE_BACKUP:
+            case BACKUP_HELP:
                 mMainActivityState.services().startActivity(
                         PopupMessageActivity.intentFor(mMainActivityState.context(),
-                                MessageKind.BACKUP_RESTORE));
+                                MessageKind.BACKUP_HELP));
                 break;
             case WHATS_NEW:
                 mMainActivityState.services().startActivity(

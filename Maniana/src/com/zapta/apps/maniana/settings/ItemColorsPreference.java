@@ -124,10 +124,6 @@ public class ItemColorsPreference extends Preference implements
             }
         }
 
-        if (!colorsFound[ItemColor.NONE.ordinal()]) {
-            LogUtil.warning("None color was missing, inserting");
-            result.add(0, ItemColor.NONE);
-        }
         return result;
     }
 }

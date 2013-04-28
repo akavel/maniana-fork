@@ -22,7 +22,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
-import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,6 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mobeta.android.dslv.DragSortController;
 import com.mobeta.android.dslv.DragSortListView;
@@ -72,7 +70,10 @@ public class ItemColorsPreferenceDialog {
 
         private final ArrayList<ListItem> listItems = new ArrayList<ListItem>();
 
-        /** EnabledItemColors is assumed to contains the NONE color and have no duplicates. */
+        /**
+         * EnabledItemColors is assumed to contains no duplicates. May be empty. Order represents
+         * colors order.
+         */
         public ColorAdapter(Context context, List<ItemColor> enabledItemColors) {
             super();
             this.mContext = context;
@@ -154,19 +155,7 @@ public class ItemColorsPreferenceDialog {
 
         private void handleCheckboxChange(CheckBox checkboxView, int position, boolean isChecked) {
             final ListItem listItem = listItems.get(position);
-
-            if (listItem.itemColor.isNone() && !isChecked) {
-
-                checkboxView.getRootView().performHapticFeedback(
-                        HapticFeedbackConstants.LONG_PRESS,
-                        HapticFeedbackConstants.FLAG_IGNORE_VIEW_SETTING);
-
-                Toast.makeText(mContext, "None color cannot be disabled", Toast.LENGTH_SHORT)
-                        .show();
-            } else {
-
-                listItem.isEnabled = isChecked;
-            }
+            listItem.isEnabled = isChecked;
 
             // Refresh the display to propagate color change due to check change.
             notifyDataSetChanged();

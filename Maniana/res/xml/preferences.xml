@@ -309,22 +309,14 @@
         </PreferenceScreen>
     </PreferenceScreen>
     <PreferenceScreen android:title="@string/settings_section_name_Backup" >
-        <EditTextPreference
-            android:defaultValue=""
-            android:dialogTitle="@string/settings_backup_gmail_address_title"
-            android:hint="@string/settings_backup_gmail_address_hint"
-            android:key="prefBackupEmailKey"
-            android:summary="@string/place_holder"
-            android:title="@string/settings_backup_gmail_address_title" />
-
+        <Preference
+            android:key="prefBackupHelpKey"
+            android:summary="@string/settings_backup_help_summary"
+            android:title="@string/settings_backup_help_title" />
         <Preference
             android:key="prefBackupKey"
-            android:summary="@string/place_holder"
+            android:summary="@string/settings_backup_do_backup_summary"
             android:title="@string/settings_backup_do_backup_title" />
-        <Preference
-            android:key="prefRestoreKey"
-            android:summary="@string/settings_backup_do_restore_summary"
-            android:title="@string/settings_backup_do_restore_title" />
     </PreferenceScreen>
     <PreferenceScreen android:title="@string/settings_section_name_Miscellaneous" >
         <Preference
