@@ -17,8 +17,7 @@
   <string name="organize_outcome_Page_already_organized">ページは既に構成されています</string>
   <string name="undo_Restored_one_deleted_task">1 つの削除タスクを復元</string>
   <string name="undo_Restored_d_deleted_tasks">復元された %d の削除タスク</string>
-  <string name="backup_restore_Hint_try_using_Gmail_Download_button">ヒント: Gmail のダウンロードボタンを使用してください</string>
-  <string name="backup_restore_Failed_to_read_backup_file">バックアップ ・ ファイルの読み取りに失敗しました</string>
+  <string name="backup_restore_Failed_to_read_backup_file">Error reading the backup file</string>
   <string name="backup_restore_Error_loading_the_backup_file">バックアップファイルのローディングエラー</string>
   <string name="backup_restore_Task_list_replaced">タスク リストの交換</string>
   <string name="backup_restore_Task_list_merged">マージされタスク一覧表</string>
@@ -60,24 +59,16 @@
   <string name="item_color_yellow">Yellow</string>
   <string name="item_color_black">Black</string>
   <string name="item_color_white">White</string>
+  <string name="item_colors_hint">Hint: select more task colors in Settings.</string>
   <string name="main_menu_Settings">設定</string>
   <string name="main_menu_About">について</string>
   <string name="main_menu_Help">ヘルプ</string>
   <string name="settings_restore_default_confirmation_text">すべての設定を既定値に戻す (作業データは影響しません)。</string>
   <string name="settings_restore_default_confirmation_yes">元に戻す</string>
   <string name="settings_Restoring_defaults">既定値を復元しています...</string>
-  <string name="backup_email_message_subject">マニャナバックアップ</string>
-  <string name="backup_email_message_body_text1">このEメール メッセージは、 Android アプリのマニャナの To Do リスト
-より送信されました。</string>
-  <string name="backup_email_message_body_text2">それには、タスク リストのバックアップ コピーのファイルを添付ファイルが含まれます。</string>
-  <string name="backup_email_message_body_text3">タスクリストをもとにもすにはアンドロイドのデバイスにインストールされているマニャナのメールメッセージを開いて添付ファイルのダウンロードまたはセーブ／表示のボタンをクリックしてください。</string>
-  <string name="backup_email_gmail_not_found_error">Gmail アプリケーションが見つかりません</string>
   <string name="share_email_subject">「マニャナの To Do リスト」をチェックしてください。</string>
   <string name="share_email_body_text">無料で楽しく使いやすいアンドロイドのアプリ\"マニャナ\"をどうぞお試しください。</string>
   <string name="share_email_chooser_title">共有して使用します。</string>
-  <string name="settings_backup_gmail_address_base_summary">バックアップの添付ファイルを送信するためのGmailの宛先</string>
-  <string name="setting_backup_do_backup_summary_on">マニャナのバックアップファイルをGmailの宛先に送るためにemailをクリックしてください。</string>
-  <string name="setting_backup_do_backup_summary_off">マニャナバックアップを有効にする為に、Gmail アドレスを入力してください。</string>
   <string name="time_string_tonight">今夜</string>
   <string name="time_string_in_d_hours">%d 時間</string>
   <string name="time_string_in_d_days">%d 日</string>
@@ -116,7 +107,7 @@
   <string name="settings_add_to_top_title">上部に追加します。</string>
   <string name="settings_add_to_top_summary_on">新しいタスクがリストの一番上に追加されます。</string>
   <string name="settings_add_to_top_summary_off">新しいタスクがリストの一番下に追加されます。</string>
-  <string name="settings_select_task_colors_dialog_title">Task Color List</string>
+  <string name="settings_select_task_colors_dialog_title">Select Task Colors</string>
   <string name="settings_select_task_colors_title">Select Task Colors</string>
   <string name="settings_select_task_colors_summary">Click to select and arrange available task colors</string>
   <string name="settings_daily_cleanup_title">毎日のタスクのクリーンアップ</string>
@@ -171,11 +162,12 @@
   <string name="settings_widget_auto_fit_summary_on">必要な場合は、ウィジェットのサイズ （サイズの小さいテキスト、単一行など) にコンテンツに合うように試みる</string>
   <string name="settings_widget_sauto_fit_summary_off">内容がウィジェットのサイズに合いません</string>
   <string name="settings_section_name_Backup">バックアップ</string>
-  <string name="settings_backup_gmail_address_title">あなたの Gmail アドレス</string>
-  <string name="settings_backup_gmail_address_hint">例えばjohndoe@gmail.com</string>
+  <string name="settings_backup_do_backup_chooser_title">Select Dropbox Or Google Drive</string>
+  <string name="settings_backup_no_app_error">Did not found Dropbox or Google Drive apps.</string>
   <string name="settings_backup_do_backup_title">バックアップをしてください</string>
-  <string name="settings_backup_do_restore_title">復元してください</string>
-  <string name="settings_backup_do_restore_summary">指示を見るためにクリックしてください</string>
+  <string name="settings_backup_do_backup_summary">Click to send a backup file. Only Dropbox and Google Drive are currently supported. GMail is not!</string>
+  <string name="settings_backup_help_title">Read This First!</string>
+  <string name="settings_backup_help_summary">Click to read IMPORTANT instructions on how to successfuly backup and restore.</string>
   <string name="settings_section_name_Miscellaneous">その他</string>
   <string name="settings_misc_release_info_title">リリース情報</string>
   <string name="settings_misc_release_info_summary">リリース情報をみるためにクリックしてください</string>
@@ -207,6 +199,7 @@
   <string name="font_name_Elegant">エレガントです</string>
   <string name="font_name_Sans_Serif">Sans Serif</string>
   <string name="font_name_Serif">セリフ</string>
+  <string name="font_name_Italic">Italic</string>
   <string name="font_name_Impact">影響</string>
   <string name="page_icon_set_name_Hand_Drawn">手描き</string>
   <string name="page_icon_set_name_Modern">モダン</string>
@@ -235,7 +228,7 @@
   <string name="sample_tast_text_13">明日このタスクを行うには、矢印をタップします。</string>
   <string name="sample_tast_text_14">その色を変更するには、赤いマークをタップします。</string>
   <string name="sample_tast_text_15">タスクを長く押して上に移動させる。</string>
-  <string name="sample_tast_text_16">設定、ヘルプ機能の詳細について参照してください。</string>
+  <string name="sample_tast_text_16">Open the menu and see Settings and Help for more features</string>
   <string name="sample_tast_text_21">このタスクは深夜 [Today] ページに移動します</string>
   <string name="dialog_cancel">キャンセル</string>
 </resources>

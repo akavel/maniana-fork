@@ -64,7 +64,7 @@ function update() {
     cp -v ${tmp}/${lang}/help-${lang}.html ../www/help/help-${lang}.html
     check_last_cmd "Copying local_strings.xml"
   
-    for base_name in new_user_welcome restore_backup whats_new
+    for base_name in new_user_welcome backup_help whats_new
     do
       name="${base_name}-${lang}.html"
       cp -v ${tmp}/${lang}/${name} ../Maniana/assets/help/${name}

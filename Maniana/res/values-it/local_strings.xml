@@ -17,8 +17,7 @@
   <string name="organize_outcome_Page_already_organized">Pagina già organizzata</string>
   <string name="undo_Restored_one_deleted_task">Ripristinata una attività</string>
   <string name="undo_Restored_d_deleted_tasks">Ripristinate %d attività</string>
-  <string name="backup_restore_Hint_try_using_Gmail_Download_button">Suggerimento: prova usando il bottone Gmail Download</string>
-  <string name="backup_restore_Failed_to_read_backup_file">Impossibile leggere il file di backup</string>
+  <string name="backup_restore_Failed_to_read_backup_file">Error reading the backup file</string>
   <string name="backup_restore_Error_loading_the_backup_file">Errore nel caricamento del backup</string>
   <string name="backup_restore_Task_list_replaced">Elenco attività sostituito</string>
   <string name="backup_restore_Task_list_merged">Lista delle attività integrata</string>
@@ -60,23 +59,16 @@
   <string name="item_color_yellow">Yellow</string>
   <string name="item_color_black">Black</string>
   <string name="item_color_white">White</string>
+  <string name="item_colors_hint">Hint: select more task colors in Settings.</string>
   <string name="main_menu_Settings">Impostazioni</string>
   <string name="main_menu_About">Info</string>
   <string name="main_menu_Help">Guida</string>
   <string name="settings_restore_default_confirmation_text">Ripristino tutte le impostazioni di default (non influisce sui dati delle attività)?</string>
   <string name="settings_restore_default_confirmation_yes">Ripristina</string>
   <string name="settings_Restoring_defaults">Ripristino predefiniti...</string>
-  <string name="backup_email_message_subject">Maniana backup</string>
-  <string name="backup_email_message_body_text1">Questo messaggio di posta elettronica è stato inviato da Maniana To Do List Android app.</string>
-  <string name="backup_email_message_body_text2">Contiene un file allegato con una copia di backup dell\'elenco delle attività.</string>
-  <string name="backup_email_message_body_text3">Per ripristinare l\'elenco attività, aprire questa email in un dispositivo Android dove Maniana è installato e fare clic sui pulsanti Downloa o Salva/Vedi dell\'allegato.</string>
-  <string name="backup_email_gmail_not_found_error">Non ho trovato l\'applicazione Gmail</string>
   <string name="share_email_subject">Prova \"Maniana To Do List\"</string>
   <string name="share_email_body_text">Prova Maniana, una app gratuita divertente e facile per le liste attività su Android Market:</string>
   <string name="share_email_chooser_title">Condividi con</string>
-  <string name="settings_backup_gmail_address_base_summary">Indirizzo di destinazione Gmail per l\'invio di allegati di backup.</string>
-  <string name="setting_backup_do_backup_summary_on">Invia una email con allegato il backup di Maniana al tuo account Gmail</string>
-  <string name="setting_backup_do_backup_summary_off">Inserisci il tuo indirizzo Gmail per abilitare i backup di Maniana</string>
   <string name="time_string_tonight">questa notte</string>
   <string name="time_string_in_d_hours">fra %d ore</string>
   <string name="time_string_in_d_days">fra %d giorni</string>
@@ -115,7 +107,7 @@
   <string name="settings_add_to_top_title">Aggiungi sopra</string>
   <string name="settings_add_to_top_summary_on">Nuove attività aggiunte inizio lista</string>
   <string name="settings_add_to_top_summary_off">Nuove attività aggiunte fondo lista</string>
-  <string name="settings_select_task_colors_dialog_title">Task Color List</string>
+  <string name="settings_select_task_colors_dialog_title">Select Task Colors</string>
   <string name="settings_select_task_colors_title">Select Task Colors</string>
   <string name="settings_select_task_colors_summary">Click to select and arrange available task colors</string>
   <string name="settings_daily_cleanup_title">Pulizia giornaliera</string>
@@ -170,11 +162,12 @@
   <string name="settings_widget_auto_fit_summary_on">Cerca di adattare i contenuti nel widget (testo più piccolo, linea singola, etc)</string>
   <string name="settings_widget_sauto_fit_summary_off">Non cercherà di adattare i contenuti alle dimensioni del widget</string>
   <string name="settings_section_name_Backup">Backup</string>
-  <string name="settings_backup_gmail_address_title">Il tuo indirizzo Gmail</string>
-  <string name="settings_backup_gmail_address_hint">es: johndoe@gmail.com</string>
+  <string name="settings_backup_do_backup_chooser_title">Select Dropbox Or Google Drive</string>
+  <string name="settings_backup_no_app_error">Did not found Dropbox or Google Drive apps.</string>
   <string name="settings_backup_do_backup_title">Esegui Backup</string>
-  <string name="settings_backup_do_restore_title">Esegui ripristino</string>
-  <string name="settings_backup_do_restore_summary">Clicca per istruzioni</string>
+  <string name="settings_backup_do_backup_summary">Click to send a backup file. Only Dropbox and Google Drive are currently supported. GMail is not!</string>
+  <string name="settings_backup_help_title">Read This First!</string>
+  <string name="settings_backup_help_summary">Click to read IMPORTANT instructions on how to successfuly backup and restore.</string>
   <string name="settings_section_name_Miscellaneous">Varie</string>
   <string name="settings_misc_release_info_title">Info release</string>
   <string name="settings_misc_release_info_summary">Visualizza info sulla release</string>
@@ -206,6 +199,7 @@
   <string name="font_name_Elegant">Elegant</string>
   <string name="font_name_Sans_Serif">Sans Serif</string>
   <string name="font_name_Serif">Serif</string>
+  <string name="font_name_Italic">Italic</string>
   <string name="font_name_Impact">Impact</string>
   <string name="page_icon_set_name_Hand_Drawn">Hand Drawn</string>
   <string name="page_icon_set_name_Modern">Modern</string>
@@ -234,7 +228,7 @@
   <string name="sample_tast_text_13">Tocca la freccia per spostare a domani</string>
   <string name="sample_tast_text_14">Tocca il segno rosso per cambiare colore</string>
   <string name="sample_tast_text_15">Premi a lungo e spostalo in alto</string>
-  <string name="sample_tast_text_16">Vedi Impostazioni e Aiuto per più funzioni</string>
+  <string name="sample_tast_text_16">Open the menu and see Settings and Help for more features</string>
   <string name="sample_tast_text_21">A mezzanotte questa attività verrà spostata automaticamente nella pagina Oggi</string>
   <string name="dialog_cancel">Annulla</string>
 </resources>

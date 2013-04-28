@@ -17,8 +17,7 @@
   <string name="organize_outcome_Page_already_organized">Страница уже отсортирована</string>
   <string name="undo_Restored_one_deleted_task">Восстановлена одна удалённая задача</string>
   <string name="undo_Restored_d_deleted_tasks">Восстановлено %d удалённых задач</string>
-  <string name="backup_restore_Hint_try_using_Gmail_Download_button">Подсказка: попробуйте использовать кнопку «Скачать» в Gmail</string>
-  <string name="backup_restore_Failed_to_read_backup_file">Не удалось прочитать файл резервной копии</string>
+  <string name="backup_restore_Failed_to_read_backup_file">Error reading the backup file</string>
   <string name="backup_restore_Error_loading_the_backup_file">Ошибка при загрузке файла резервной копии</string>
   <string name="backup_restore_Task_list_replaced">Список задач заменён</string>
   <string name="backup_restore_Task_list_merged">Списки задач объединены</string>
@@ -60,23 +59,16 @@
   <string name="item_color_yellow">Yellow</string>
   <string name="item_color_black">Black</string>
   <string name="item_color_white">White</string>
+  <string name="item_colors_hint">Hint: select more task colors in Settings.</string>
   <string name="main_menu_Settings">Настройки</string>
   <string name="main_menu_About">О приложении</string>
   <string name="main_menu_Help">Помощь</string>
   <string name="settings_restore_default_confirmation_text">Восстановить настройки по умолчанию (не влияет на текущие задачи)?</string>
   <string name="settings_restore_default_confirmation_yes">Вернуть</string>
   <string name="settings_Restoring_defaults">Восстановление настроек по умолчанию...</string>
-  <string name="backup_email_message_subject">Резервная копия Maniana</string>
-  <string name="backup_email_message_body_text1">Это сообщение электронной почты был послано приложением Maniana To Do List.</string>
-  <string name="backup_email_message_body_text2">Оно содержит вложенный файл с резервной копией списка задач.</string>
-  <string name="backup_email_message_body_text3">Чтобы восстановить список задач, откройте это сообщение электронной почты на устройстве Android, где установлена Maniana, и нажмите на кнопку «Загрузить», «Сохранить» или «Просмотреть» рядом со вложением.</string>
-  <string name="backup_email_gmail_not_found_error">Приложение Gmail не найдено</string>
   <string name="share_email_subject">Попробуйте «Maniana To Do List»</string>
   <string name="share_email_body_text">Попробуйте Maniana, бесплатное, прикольное и лёгкое приложение для ведения списка задач на Google Play:</string>
   <string name="share_email_chooser_title">Поделиться с помощью</string>
-  <string name="settings_backup_gmail_address_base_summary">Адрес Gmail для отправки резервных копий.</string>
-  <string name="setting_backup_do_backup_summary_on">Нажмите, чтобы послать резервную копию Maniana во вложении электронного письма на Gmail</string>
-  <string name="setting_backup_do_backup_summary_off">Пожалуйста, введите свой адрес Gmail, чтобы приложение могло отправлять на него резервные копии</string>
   <string name="time_string_tonight">сегодня</string>
   <string name="time_string_in_d_hours">через %d часов</string>
   <string name="time_string_in_d_days">через %d дней</string>
@@ -115,7 +107,7 @@
   <string name="settings_add_to_top_title">Добавлять в начало списка</string>
   <string name="settings_add_to_top_summary_on">Новые задачи добавляются в список сверху</string>
   <string name="settings_add_to_top_summary_off">Новые задачи добавляются в конец списка</string>
-  <string name="settings_select_task_colors_dialog_title">Task Color List</string>
+  <string name="settings_select_task_colors_dialog_title">Select Task Colors</string>
   <string name="settings_select_task_colors_title">Select Task Colors</string>
   <string name="settings_select_task_colors_summary">Click to select and arrange available task colors</string>
   <string name="settings_daily_cleanup_title">Ежедневная очистка списка задач</string>
@@ -170,11 +162,12 @@
   <string name="settings_widget_auto_fit_summary_on">При необходимости приложение попытается подогонать содержимое по размеру виджета (за счёт уменьшения шрифта, написания одной строкой и т. п.)</string>
   <string name="settings_widget_sauto_fit_summary_off">Не будет пытаться уместить содержимое в виджет</string>
   <string name="settings_section_name_Backup">Резервные копии</string>
-  <string name="settings_backup_gmail_address_title">Ваш адрес Gmail</string>
-  <string name="settings_backup_gmail_address_hint">напр., johndoe@gmail.com</string>
+  <string name="settings_backup_do_backup_chooser_title">Select Dropbox Or Google Drive</string>
+  <string name="settings_backup_no_app_error">Did not found Dropbox or Google Drive apps.</string>
   <string name="settings_backup_do_backup_title">Сделать резервную копию</string>
-  <string name="settings_backup_do_restore_title">Восстановить резервную копию</string>
-  <string name="settings_backup_do_restore_summary">Нажмите для получения подробных инструкций</string>
+  <string name="settings_backup_do_backup_summary">Click to send a backup file. Only Dropbox and Google Drive are currently supported. GMail is not!</string>
+  <string name="settings_backup_help_title">Read This First!</string>
+  <string name="settings_backup_help_summary">Click to read IMPORTANT instructions on how to successfuly backup and restore.</string>
   <string name="settings_section_name_Miscellaneous">Дополнительно</string>
   <string name="settings_misc_release_info_title">Сведения о релизе</string>
   <string name="settings_misc_release_info_summary">Нажмите, чтобы просмотреть список изменений</string>
@@ -206,6 +199,7 @@
   <string name="font_name_Elegant">Элегантный</string>
   <string name="font_name_Sans_Serif">Без засечек</string>
   <string name="font_name_Serif">С засечками</string>
+  <string name="font_name_Italic">Italic</string>
   <string name="font_name_Impact">Убористый</string>
   <string name="page_icon_set_name_Hand_Drawn">От руки</string>
   <string name="page_icon_set_name_Modern">Современные</string>
@@ -234,7 +228,7 @@
   <string name="sample_tast_text_13">Нажмите на стрелку вправо, чтобы отложить эту задачу на завтра</string>
   <string name="sample_tast_text_14">Нажмите на красную метку для изменения её цвета</string>
   <string name="sample_tast_text_15">Нажмите на этой задаче и держите, чтобы поднять её вверх</string>
-  <string name="sample_tast_text_16">См. пункты «Настройки» и «Справка» для более подробной информации</string>
+  <string name="sample_tast_text_16">Open the menu and see Settings and Help for more features</string>
   <string name="sample_tast_text_21">Эта задача будет перемещена на страницу «Сегодня» в полночь</string>
   <string name="dialog_cancel">Отмена</string>
 </resources>

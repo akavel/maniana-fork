@@ -23,6 +23,7 @@ import com.zapta.apps.maniana.R;
 import com.zapta.apps.maniana.annotations.ApplicationScope;
 import com.zapta.apps.maniana.util.EnumUtil;
 import com.zapta.apps.maniana.util.EnumUtil.KeyedEnum;
+import com.zapta.apps.maniana.util.LanguageUtil;
 import com.zapta.apps.maniana.util.LogUtil;
 
 /**
@@ -101,8 +102,7 @@ public enum Font implements KeyedEnum {
     }
 
     private final TypefaceSpec loadTypeface(Context context) {
-        final String translationCode = context.getString(R.string.translation_language_code);
-        final boolean usesCyrillic = "ru".equals(translationCode);
+        final boolean usesCyrillic = LanguageUtil.currentLanguageUsesCyrillic(context);
 
         switch (this) {
             case CURSIVE:

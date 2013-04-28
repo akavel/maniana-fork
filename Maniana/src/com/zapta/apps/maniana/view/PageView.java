@@ -40,6 +40,7 @@ import com.zapta.apps.maniana.settings.TypefaceSpec;
 import com.zapta.apps.maniana.settings.PageIconSet;
 import com.zapta.apps.maniana.util.ColorUtil;
 import com.zapta.apps.maniana.util.DisplayUtil;
+import com.zapta.apps.maniana.util.LanguageUtil;
 
 /**
  * A single page view. Contains title, date (today page only), items, and buttons.
@@ -322,8 +323,12 @@ public class PageView extends FrameLayout {
                 .getPageTitleTomorowColor());
         final Font titleFont = mMainActivityState.prefTracker().getPageTitleFontPreference();
         final TypefaceSpec titleFontSpec = titleFont.getTypefaceSpec(mMainActivityState.context());
+        // French 'Today' title does not fit on Galaxy Nexus with default title font and size (it's
+        // a long word) so we scale it down in both pages.
+        final float frenchFactor = LanguageUtil.currentLanguageIsFrench(mMainActivityState
+                .context()) ? 0.85f : 1.0f;
         final float titleFontSizeSP = mMainActivityState.prefTracker()
-                .getPageTitleFontSizePreference() * titleFontSpec.scale;
+                .getPageTitleFontSizePreference() * titleFontSpec.scale * frenchFactor;
         mPageTitleTextView.setTypeface(titleFontSpec.typeface);
         mPageTitleTextView.setExtraSpacingFractions(titleFontSpec.topExtraSpacingFraction,
                 titleFontSpec.bottomExtraSpacingFraction);

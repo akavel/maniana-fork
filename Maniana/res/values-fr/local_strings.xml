@@ -17,8 +17,7 @@
   <string name="organize_outcome_Page_already_organized">Page déjà triée</string>
   <string name="undo_Restored_one_deleted_task">Restauration d\'une tâche supprimée</string>
   <string name="undo_Restored_d_deleted_tasks">Restauration de %d tâches supprimées</string>
-  <string name="backup_restore_Hint_try_using_Gmail_Download_button">Astuce : essayez d\'utiliser le bouton Télécharger de Gmail</string>
-  <string name="backup_restore_Failed_to_read_backup_file">Impossible de lire le fichier de sauvegarde</string>
+  <string name="backup_restore_Failed_to_read_backup_file">Error reading the backup file</string>
   <string name="backup_restore_Error_loading_the_backup_file">Erreur lors du chargement du fichier de sauvegarde</string>
   <string name="backup_restore_Task_list_replaced">Liste de tâches remplacée</string>
   <string name="backup_restore_Task_list_merged">Listes de tâches fusionnées</string>
@@ -60,23 +59,16 @@
   <string name="item_color_yellow">Jaune</string>
   <string name="item_color_black">Noir</string>
   <string name="item_color_white">Blanc</string>
+  <string name="item_colors_hint">Hint: select more task colors in Settings.</string>
   <string name="main_menu_Settings">Paramètres</string>
   <string name="main_menu_About">À propos</string>
   <string name="main_menu_Help">Aide</string>
   <string name="settings_restore_default_confirmation_text">Rétablir tous les paramètres aux valeurs par défaut (n\'affecte pas les données des tâches) ?</string>
   <string name="settings_restore_default_confirmation_yes">Restaurer</string>
   <string name="settings_Restoring_defaults">Restaurer les paramètres par défaut...</string>
-  <string name="backup_email_message_subject">Sauvegarde de Maniana</string>
-  <string name="backup_email_message_body_text1">Cet e-mail a été envoyé par l\'application Android Maniana To Do List.</string>
-  <string name="backup_email_message_body_text2">Il contient une pièce jointe avec une copie de sauvegarde de la liste des tâches.</string>
-  <string name="backup_email_message_body_text3">Pour restaurer la liste des tâches, ouvrez cet e-mail avec un appareil Android où Maniana est installée et cliquez sur le bouton Télécharger ou Enregistrer/Voir de la pièce jointe.</string>
-  <string name="backup_email_gmail_not_found_error">Application Gmail non trouvée</string>
   <string name="share_email_subject">Découvrez « Maniana To Do List »</string>
   <string name="share_email_body_text">Découvrez Maniana, un logiciel gratuit, amusant et facile à utiliser pour gérer les listes de tâches :</string>
   <string name="share_email_chooser_title">Partager</string>
-  <string name="settings_backup_gmail_address_base_summary">Adresse de destination Gmail pour envoyer les pièces jointes de sauvegarde.</string>
-  <string name="setting_backup_do_backup_summary_on">Appuyez ici pour envoyer à votre compte Gmail une pièce jointe de sauvegarde de Maniana</string>
-  <string name="setting_backup_do_backup_summary_off">Saisissez votre adresse Gmail pour activer les sauvegardes Maniana</string>
   <string name="time_string_tonight">ce soir</string>
   <string name="time_string_in_d_hours">dans %d heures</string>
   <string name="time_string_in_d_days">dans %d jours</string>
@@ -115,7 +107,7 @@
   <string name="settings_add_to_top_title">Ajouter en haut</string>
   <string name="settings_add_to_top_summary_on">Nouvelles tâches ajoutées en tête de liste</string>
   <string name="settings_add_to_top_summary_off">Nouvelles tâches ajoutées en fin de liste</string>
-  <string name="settings_select_task_colors_dialog_title">Liste des Couleurs de Tâche</string>
+  <string name="settings_select_task_colors_dialog_title">Choix des Couleurs de Tâche</string>
   <string name="settings_select_task_colors_title">Choix des Couleurs de Tâche</string>
   <string name="settings_select_task_colors_summary">Sélection et organisation les couleurs de tâche disponibles</string>
   <string name="settings_daily_cleanup_title">Nettoyage Quotidien des Tâches</string>
@@ -170,11 +162,12 @@
   <string name="settings_widget_auto_fit_summary_on">Si nécessaire, Maniana va essayer d\'adapter le contenu du widget (texte plus petit, une seule ligne, etc)</string>
   <string name="settings_widget_sauto_fit_summary_off">Ne pas essayer d\'adapter le contenu à la taille du widget</string>
   <string name="settings_section_name_Backup">Sauvegarde</string>
-  <string name="settings_backup_gmail_address_title">Votre Adresse Gmail</string>
-  <string name="settings_backup_gmail_address_hint">ex : johndoe@gmail.com</string>
+  <string name="settings_backup_do_backup_chooser_title">Select Dropbox Or Google Drive</string>
+  <string name="settings_backup_no_app_error">Did not found Dropbox or Google Drive apps.</string>
   <string name="settings_backup_do_backup_title">Faire une Sauvegarde</string>
-  <string name="settings_backup_do_restore_title">Faire une Restauration</string>
-  <string name="settings_backup_do_restore_summary">Obtenir les instructions</string>
+  <string name="settings_backup_do_backup_summary">Click to send a backup file. Only Dropbox and Google Drive are currently supported. GMail is not!</string>
+  <string name="settings_backup_help_title">Read This First!</string>
+  <string name="settings_backup_help_summary">Click to read IMPORTANT instructions on how to successfuly backup and restore.</string>
   <string name="settings_section_name_Miscellaneous">Divers</string>
   <string name="settings_misc_release_info_title">Informations sur la version</string>
   <string name="settings_misc_release_info_summary">Voir les informations sur la version</string>
@@ -206,6 +199,7 @@
   <string name="font_name_Elegant">Elégant</string>
   <string name="font_name_Sans_Serif">Sans Serif</string>
   <string name="font_name_Serif">Serif</string>
+  <string name="font_name_Italic">Italic</string>
   <string name="font_name_Impact">Impact</string>
   <string name="page_icon_set_name_Hand_Drawn">Dessin</string>
   <string name="page_icon_set_name_Modern">Moderne</string>
@@ -234,7 +228,7 @@
   <string name="sample_tast_text_13">Appuyez sur la flèche pour faire cette tâche demain</string>
   <string name="sample_tast_text_14">Appuyez sur la marque rouge pour changer sa couleur</string>
   <string name="sample_tast_text_15">Faites un appui long sur la tâche et déplacez là vers le haut</string>
-  <string name="sample_tast_text_16">Apprenez-en plus dans les Paramètres et l\'Aide</string>
+  <string name="sample_tast_text_16">Open the menu and see Settings and Help for more features</string>
   <string name="sample_tast_text_21">A minuit, cette tâche sera déplacée sur la page Aujourd\'hui</string>
   <string name="dialog_cancel">Annuler</string>
 </resources>

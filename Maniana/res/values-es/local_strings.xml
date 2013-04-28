@@ -17,8 +17,7 @@
   <string name="organize_outcome_Page_already_organized">Página organizada</string>
   <string name="undo_Restored_one_deleted_task">Restaurar tarea eliminada</string>
   <string name="undo_Restored_d_deleted_tasks">Restauradas %d tareas eliminadas</string>
-  <string name="backup_restore_Hint_try_using_Gmail_Download_button">Sugerencia: pruebe utilizar el botón Descargar de Gmail</string>
-  <string name="backup_restore_Failed_to_read_backup_file">Error al leer el archivo de copia de seguridad</string>
+  <string name="backup_restore_Failed_to_read_backup_file">Error reading the backup file</string>
   <string name="backup_restore_Error_loading_the_backup_file">Error al cargar el archivo de copia de seguridad</string>
   <string name="backup_restore_Task_list_replaced">Lista de tareas reemplazada</string>
   <string name="backup_restore_Task_list_merged">Lista de tareas combinada</string>
@@ -60,23 +59,16 @@
   <string name="item_color_yellow">Yellow</string>
   <string name="item_color_black">Black</string>
   <string name="item_color_white">White</string>
+  <string name="item_colors_hint">Hint: select more task colors in Settings.</string>
   <string name="main_menu_Settings">Ajustes</string>
   <string name="main_menu_About">Acerca de</string>
   <string name="main_menu_Help">Ayuda</string>
   <string name="settings_restore_default_confirmation_text">Revertir todas las configuraciones a los valores por defecto? (no afecta a las tareas)</string>
   <string name="settings_restore_default_confirmation_yes">Deshacer</string>
   <string name="settings_Restoring_defaults">Restaurar valores predeterminados...</string>
-  <string name="backup_email_message_subject">Copia de seguridad de Mañana</string>
-  <string name="backup_email_message_body_text1">Este mensaje fue enviado por la aplicación Android: Mañana Lista de Tareas.</string>
-  <string name="backup_email_message_body_text2">Contiene un archivo adjunto con la copia de seguridad de la lista de tareas.</string>
-  <string name="backup_email_message_body_text3">Para restaurar la lista de tareas, abra este mensaje de correo electrónico en el dispositivo Android donde está instalado Maniana y haga clic en los botones Descargar o Guardar/Ver de los datos adjuntos.</string>
-  <string name="backup_email_gmail_not_found_error">No se encuentra la aplicación Gmail</string>
   <string name="share_email_subject">Echa un vistazo a \"Mañana Lista de Tareas\"</string>
   <string name="share_email_body_text">Echa un vistazo a Mañana, una aplicación de Lista de Tareas divertida, gratuita y fácil de utilizar. En el Android Market:</string>
   <string name="share_email_chooser_title">Uso compartido</string>
-  <string name="settings_backup_gmail_address_base_summary">Dirección de destino Gmail para el envío de archivos adjuntos de copia de seguridad.</string>
-  <string name="setting_backup_do_backup_summary_on">Haga clic aquí para enviar un archivo adjunto de copia de seguridad Mañana a tu cuenta de Gmail</string>
-  <string name="setting_backup_do_backup_summary_off">Por favor, introduzca su dirección de Gmail para permitir copias de seguridad de Mañana</string>
   <string name="time_string_tonight">esta noche</string>
   <string name="time_string_in_d_hours">en %d horas</string>
   <string name="time_string_in_d_days">en %d días</string>
@@ -115,7 +107,7 @@
   <string name="settings_add_to_top_title">Añadir al principio</string>
   <string name="settings_add_to_top_summary_on">Nuevas tareas se agregan en la parte superior la lista</string>
   <string name="settings_add_to_top_summary_off">Se agregan nuevas tareas en la parte inferior de la lista</string>
-  <string name="settings_select_task_colors_dialog_title">Task Color List</string>
+  <string name="settings_select_task_colors_dialog_title">Select Task Colors</string>
   <string name="settings_select_task_colors_title">Select Task Colors</string>
   <string name="settings_select_task_colors_summary">Click to select and arrange available task colors</string>
   <string name="settings_daily_cleanup_title">Limpieza de tareas diarias</string>
@@ -170,11 +162,12 @@
   <string name="settings_widget_auto_fit_summary_on">Si es necesario, intentará ajustar el contenido al tamaño del widget (texto más pequeño, interlineado, etc.)</string>
   <string name="settings_widget_sauto_fit_summary_off">﻿No intentará ajustar el contenido al tamaño del widget</string>
   <string name="settings_section_name_Backup">Copia de seguridad</string>
-  <string name="settings_backup_gmail_address_title">﻿Tu correo de Gmail</string>
-  <string name="settings_backup_gmail_address_hint">por ejemplo, johndoe@gmail.com</string>
+  <string name="settings_backup_do_backup_chooser_title">Select Dropbox Or Google Drive</string>
+  <string name="settings_backup_no_app_error">Did not found Dropbox or Google Drive apps.</string>
   <string name="settings_backup_do_backup_title">Copia de seguridad</string>
-  <string name="settings_backup_do_restore_title">Restaurar</string>
-  <string name="settings_backup_do_restore_summary">Ver las instrucciones</string>
+  <string name="settings_backup_do_backup_summary">Click to send a backup file. Only Dropbox and Google Drive are currently supported. GMail is not!</string>
+  <string name="settings_backup_help_title">Read This First!</string>
+  <string name="settings_backup_help_summary">Click to read IMPORTANT instructions on how to successfuly backup and restore.</string>
   <string name="settings_section_name_Miscellaneous">Varios</string>
   <string name="settings_misc_release_info_title">Información de la versión</string>
   <string name="settings_misc_release_info_summary">Ver información de esta versión</string>
@@ -206,6 +199,7 @@
   <string name="font_name_Elegant">Elegante</string>
   <string name="font_name_Sans_Serif">Sans Serif</string>
   <string name="font_name_Serif">Serif</string>
+  <string name="font_name_Italic">Italic</string>
   <string name="font_name_Impact">Impactante</string>
   <string name="page_icon_set_name_Hand_Drawn">Dibujado a mano</string>
   <string name="page_icon_set_name_Modern">Moderno</string>
@@ -234,7 +228,7 @@
   <string name="sample_tast_text_13">Toque en la flecha para postergar esta tarea (para mañana)</string>
   <string name="sample_tast_text_14">Toque sobre la marca roja para cambiar de color</string>
   <string name="sample_tast_text_15">Mantenga pulsada esta tarea y muévala hacia arriba</string>
-  <string name="sample_tast_text_16">Ver Configuración y Ayuda para más características</string>
+  <string name="sample_tast_text_16">Open the menu and see Settings and Help for more features</string>
   <string name="sample_tast_text_21">Esta tarea se movió a la página Hoy a la medianoche</string>
   <string name="dialog_cancel">Cancelar</string>
 </resources>

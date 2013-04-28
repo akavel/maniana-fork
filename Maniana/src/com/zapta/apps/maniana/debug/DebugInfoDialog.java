@@ -28,6 +28,7 @@ import com.zapta.apps.maniana.main.MainActivityState;
 import com.zapta.apps.maniana.services.MainActivityServices;
 import com.zapta.apps.maniana.settings.DateOrder;
 import com.zapta.apps.maniana.util.CalendarUtil;
+import com.zapta.apps.maniana.util.LanguageUtil;
 import com.zapta.apps.maniana.util.PopupsTracker.TrackablePopup;
 
 /**
@@ -69,15 +70,15 @@ public class DebugInfoDialog extends Dialog implements TrackablePopup {
         final Display display = mainActivityState.services().windowManager().getDefaultDisplay();
         final boolean hasVoiceRecogintionService = MainActivityServices
                 .isVoiceRecognitionSupported(mainActivityState.context());
-        final String translationCode = mainActivityState.str(R.string.translation_language_code);
-        final String translationName = mainActivityState.str(R.string.translation_language_name);
 
         final StringBuilder sb = new StringBuilder();
         sb.append("<html>\n<body>\n");
         sb.append("DEVICE INFO\n<pre>\n");
         sb.append("API level: " + android.os.Build.VERSION.SDK_INT + "\n");
-        sb.append("Translation code: " + translationCode + "\n");
-        sb.append("Translation name: " + translationName + "\n");
+        sb.append("Translation code: " + LanguageUtil.currentTranslationCode(context) + "\n");
+        sb.append("Translation name: " + LanguageUtil.currentTranslationName(context) + "\n");
+        sb.append("Uses Cyrillic chars: " + LanguageUtil.currentLanguageUsesCyrillic(context) + "\n");
+        sb.append("Uses French: " + LanguageUtil.currentLanguageIsFrench(context) + "\n");
         sb.append("Display density: " + mainActivityState.services().density() + "\n");
         sb.append("Display Width: " + display.getWidth() + "\n");
         sb.append("Display Height: " + display.getHeight() + "\n");
