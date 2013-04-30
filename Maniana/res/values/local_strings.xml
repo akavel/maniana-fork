@@ -152,7 +152,7 @@
     <string name="settings_add_to_top_summary_on">New tasks are added at list top</string>
     <string name="settings_add_to_top_summary_off">New tasks are added at list bottom</string>
     <string name="settings_select_task_colors_dialog_title">Task Colors</string>
-    <string name="settings_select_task_colors_title">Select Task Colors</string>
+    <string name="settings_select_task_colors_title">Task Colors</string>
     <string name="settings_select_task_colors_summary">Click to select and arrange available task colors</string>
     <string name="settings_daily_cleanup_title">Daily Task Cleanup</string>
     <string name="settings_daily_cleanup_summary_on">Deleting completed tasks every midnight</string>
