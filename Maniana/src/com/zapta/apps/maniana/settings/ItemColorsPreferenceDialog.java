@@ -27,9 +27,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mobeta.android.dslv.DragSortController;
@@ -142,20 +141,25 @@ public class ItemColorsPreferenceDialog {
             // Disable the old listener so we don't callback the handle when setting a reused view.
             checkboxView.setOnCheckedChangeListener(null);
             checkboxView.setChecked(listItem.isEnabled);
-            checkboxView.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            checkboxView.setClickable(false);
+
+            final LinearLayout clickArea = (LinearLayout) view
+                    .findViewById(R.id.item_colors_item_clickable_area);
+            clickArea.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onCheckedChanged(final CompoundButton buttonView,
-                        final boolean isChecked) {
-                    handleCheckboxChange(checkboxView, position, isChecked);
+                public void onClick(View v) {
+                    handleColorClick(checkboxView, position);
                 }
             });
 
             return view;
         }
 
-        private void handleCheckboxChange(CheckBox checkboxView, int position, boolean isChecked) {
+        private void handleColorClick(CheckBox checkboxView, int position) {
             final ListItem listItem = listItems.get(position);
-            listItem.isEnabled = isChecked;
+            final boolean newState = !checkboxView.isChecked();
+            checkboxView.setChecked(newState);
+            listItem.isEnabled = newState;
 
             // Refresh the display to propagate color change due to check change.
             notifyDataSetChanged();

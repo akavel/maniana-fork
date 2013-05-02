@@ -5,35 +5,42 @@
     android:background="@drawable/item_colors_drag_background"
     android:orientation="horizontal" >
 
-    <CheckBox
-        android:id="@+id/item_colors_item_checkbox"
+    <LinearLayout
+        android:id="@+id/item_colors_item_clickable_area"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-         android:layout_marginLeft="10dip"
-        android:layout_marginRight="20dip" />
-
-      <ImageView
-        android:id="@+id/item_colors_item_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="0"
-        android:clickable="false"
-        android:paddingLeft="5dip"
-        android:src="@drawable/place_holder" />
-
-    <TextView
-        android:id="@+id/item_colors_item_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_height="fill_parent"
         android:layout_weight="1"
-        android:gravity="left"
-        android:paddingLeft="20dip"
-        android:text="@string/place_holder"
-     
-        android:textSize="18sp" />
+        android:orientation="horizontal" >
+
+        <CheckBox
+            android:id="@+id/item_colors_item_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dip"
+            android:layout_marginRight="20dip" />
+
+        <ImageView
+            android:id="@+id/item_colors_item_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0"
+            android:clickable="false"
+            android:paddingLeft="5dip"
+            android:src="@drawable/place_holder" />
+
+        <TextView
+            android:id="@+id/item_colors_item_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:paddingLeft="20dip"
+            android:text="@string/place_holder"
+            android:textSize="18sp" />
+    </LinearLayout>
 
     <ImageButton
         android:id="@+id/item_colors_item_drag_handle"
