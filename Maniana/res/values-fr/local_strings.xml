@@ -17,7 +17,7 @@
   <string name="organize_outcome_Page_already_organized">Page déjà triée</string>
   <string name="undo_Restored_one_deleted_task">Restauration d\'une tâche supprimée</string>
   <string name="undo_Restored_d_deleted_tasks">Restauration de %d tâches supprimées</string>
-  <string name="backup_restore_Failed_to_read_backup_file">Error reading the backup file</string>
+  <string name="backup_restore_Failed_to_read_backup_file">Erreur lors de la lecture du fichier de sauvegarde</string>
   <string name="backup_restore_Error_loading_the_backup_file">Erreur lors du chargement du fichier de sauvegarde</string>
   <string name="backup_restore_Task_list_replaced">Liste de tâches remplacée</string>
   <string name="backup_restore_Task_list_merged">Listes de tâches fusionnées</string>
@@ -59,7 +59,7 @@
   <string name="item_color_yellow">Jaune</string>
   <string name="item_color_black">Noir</string>
   <string name="item_color_white">Blanc</string>
-  <string name="item_colors_hint">Hint: select more task colors in Settings.</string>
+  <string name="item_colors_hint">Astuce : choisissez plus de couleurs dans les Paramètres.</string>
   <string name="main_menu_Settings">Paramètres</string>
   <string name="main_menu_About">À propos</string>
   <string name="main_menu_Help">Aide</string>
@@ -107,8 +107,8 @@
   <string name="settings_add_to_top_title">Ajouter en haut</string>
   <string name="settings_add_to_top_summary_on">Nouvelles tâches ajoutées en tête de liste</string>
   <string name="settings_add_to_top_summary_off">Nouvelles tâches ajoutées en fin de liste</string>
-  <string name="settings_select_task_colors_dialog_title">Choix des Couleurs de Tâche</string>
-  <string name="settings_select_task_colors_title">Choix des Couleurs de Tâche</string>
+  <string name="settings_select_task_colors_dialog_title">Couleurs de Tâche</string>
+  <string name="settings_select_task_colors_title">Couleurs de Tâche</string>
   <string name="settings_select_task_colors_summary">Sélection et organisation les couleurs de tâche disponibles</string>
   <string name="settings_daily_cleanup_title">Nettoyage Quotidien des Tâches</string>
   <string name="settings_daily_cleanup_summary_on">Supprime chaque nuit les tâches terminées</string>
@@ -162,12 +162,12 @@
   <string name="settings_widget_auto_fit_summary_on">Si nécessaire, Maniana va essayer d\'adapter le contenu du widget (texte plus petit, une seule ligne, etc)</string>
   <string name="settings_widget_sauto_fit_summary_off">Ne pas essayer d\'adapter le contenu à la taille du widget</string>
   <string name="settings_section_name_Backup">Sauvegarde</string>
-  <string name="settings_backup_do_backup_chooser_title">Select Dropbox Or Google Drive</string>
-  <string name="settings_backup_no_app_error">Did not found Dropbox or Google Drive apps.</string>
+  <string name="settings_backup_do_backup_chooser_title">Choisissez Dropbox ou Google Drive</string>
+  <string name="settings_backup_no_app_error">Aucune application trouvée pour Dropbox ou Google Drive.</string>
   <string name="settings_backup_do_backup_title">Faire une Sauvegarde</string>
-  <string name="settings_backup_do_backup_summary">Click to send a backup file. Only Dropbox and Google Drive are currently supported. GMail is not!</string>
-  <string name="settings_backup_help_title">Read This First!</string>
-  <string name="settings_backup_help_summary">Click to read IMPORTANT instructions on how to successfuly backup and restore.</string>
+  <string name="settings_backup_do_backup_summary">Envoyer un fichier de sauvegarde. Actuellement seuls Dropbox et Google Drive sont supportés. Gmail ne l\'est pas !</string>
+  <string name="settings_backup_help_title">A Lire Attentivement !</string>
+  <string name="settings_backup_help_summary">Lire les instructions IMPORTANTES pour effectuer une sauvegarde avec succès.</string>
   <string name="settings_section_name_Miscellaneous">Divers</string>
   <string name="settings_misc_release_info_title">Informations sur la version</string>
   <string name="settings_misc_release_info_summary">Voir les informations sur la version</string>
@@ -199,7 +199,7 @@
   <string name="font_name_Elegant">Elégant</string>
   <string name="font_name_Sans_Serif">Sans Serif</string>
   <string name="font_name_Serif">Serif</string>
-  <string name="font_name_Italic">Italic</string>
+  <string name="font_name_Italic">Italique</string>
   <string name="font_name_Impact">Impact</string>
   <string name="page_icon_set_name_Hand_Drawn">Dessin</string>
   <string name="page_icon_set_name_Modern">Moderne</string>
@@ -228,7 +228,7 @@
   <string name="sample_tast_text_13">Appuyez sur la flèche pour faire cette tâche demain</string>
   <string name="sample_tast_text_14">Appuyez sur la marque rouge pour changer sa couleur</string>
   <string name="sample_tast_text_15">Faites un appui long sur la tâche et déplacez là vers le haut</string>
-  <string name="sample_tast_text_16">Open the menu and see Settings and Help for more features</string>
+  <string name="sample_tast_text_16">Ouvrez le menu et consultez les Paramètres et l\'Aide pour plus de fonctionnalités</string>
   <string name="sample_tast_text_21">A minuit, cette tâche sera déplacée sur la page Aujourd\'hui</string>
   <string name="dialog_cancel">Annuler</string>
 </resources>

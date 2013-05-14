@@ -107,8 +107,8 @@
   <string name="settings_add_to_top_title">上部に追加します。</string>
   <string name="settings_add_to_top_summary_on">新しいタスクがリストの一番上に追加されます。</string>
   <string name="settings_add_to_top_summary_off">新しいタスクがリストの一番下に追加されます。</string>
-  <string name="settings_select_task_colors_dialog_title">Select Task Colors</string>
-  <string name="settings_select_task_colors_title">Select Task Colors</string>
+  <string name="settings_select_task_colors_dialog_title">Task Colors</string>
+  <string name="settings_select_task_colors_title">Task Colors</string>
   <string name="settings_select_task_colors_summary">Click to select and arrange available task colors</string>
   <string name="settings_daily_cleanup_title">毎日のタスクのクリーンアップ</string>
   <string name="settings_daily_cleanup_summary_on">完了したタスクを深夜に削除する</string>

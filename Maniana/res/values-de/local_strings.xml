@@ -17,7 +17,7 @@
   <string name="organize_outcome_Page_already_organized">Seite bereits organisiert</string>
   <string name="undo_Restored_one_deleted_task">Wiederherstellen einer gelöschte Aufgabe</string>
   <string name="undo_Restored_d_deleted_tasks">Wiederherstellen %d gelöschter Aufgaben</string>
-  <string name="backup_restore_Failed_to_read_backup_file">Error reading the backup file</string>
+  <string name="backup_restore_Failed_to_read_backup_file">Fehler beim Lesen der Datensicherungsdatei</string>
   <string name="backup_restore_Error_loading_the_backup_file">Fehler beim Laden der Backup Datei</string>
   <string name="backup_restore_Task_list_replaced">Aufgabenliste ersetzt</string>
   <string name="backup_restore_Task_list_merged">Aufgabenliste vereint</string>
@@ -59,7 +59,7 @@
   <string name="item_color_yellow">Gelb</string>
   <string name="item_color_black">Schwarz</string>
   <string name="item_color_white">Weiß</string>
-  <string name="item_colors_hint">Hint: select more task colors in Settings.</string>
+  <string name="item_colors_hint">Hinweis: Wähle mehr Farben in den Einstellungen.</string>
   <string name="main_menu_Settings">Einstellungen</string>
   <string name="main_menu_About">Über</string>
   <string name="main_menu_Help">Hilfe</string>
@@ -107,8 +107,8 @@
   <string name="settings_add_to_top_title">Füge oben hinzu</string>
   <string name="settings_add_to_top_summary_on">Neue Aufgaben wurden oben hinzugefügt</string>
   <string name="settings_add_to_top_summary_off">Neue Aufgaben wurden unten hinzugefügt</string>
-  <string name="settings_select_task_colors_dialog_title">Wähle eine Farbe für die Aufgabe</string>
-  <string name="settings_select_task_colors_title">Wähle eine Farbe für die Aufgabe</string>
+  <string name="settings_select_task_colors_dialog_title">Aufgabenfarben</string>
+  <string name="settings_select_task_colors_title">Aufgabenfarben</string>
   <string name="settings_select_task_colors_summary">Auswahl und Einrichtung der Farben für Aufgaben</string>
   <string name="settings_daily_cleanup_title">Tägliche Bereinigung</string>
   <string name="settings_daily_cleanup_summary_on">Lösche erledigte Aufgaben Mitternacht</string>
@@ -162,12 +162,12 @@
   <string name="settings_widget_auto_fit_summary_on">Wenn nötig, wird versucht den Inhalt an die Widgetgröße anzupassen (kleinerer Text, eine Zeile, etc.)</string>
   <string name="settings_widget_sauto_fit_summary_off">Versuche nicht den Inahlt an die Widgetgröße anzupassen</string>
   <string name="settings_section_name_Backup">Datensicherung</string>
-  <string name="settings_backup_do_backup_chooser_title">Select Dropbox Or Google Drive</string>
-  <string name="settings_backup_no_app_error">Did not found Dropbox or Google Drive apps.</string>
+  <string name="settings_backup_do_backup_chooser_title">Wähhle Dropbox oder Google Drive</string>
+  <string name="settings_backup_no_app_error">Dropbox oder Goggle Drive Apps nicht gefunden.</string>
   <string name="settings_backup_do_backup_title">Sichere deine Daten</string>
-  <string name="settings_backup_do_backup_summary">Click to send a backup file. Only Dropbox and Google Drive are currently supported. GMail is not!</string>
-  <string name="settings_backup_help_title">Read This First!</string>
-  <string name="settings_backup_help_summary">Click to read IMPORTANT instructions on how to successfuly backup and restore.</string>
+  <string name="settings_backup_do_backup_summary">Klicke um die Sicherungsdatei zu senden. Momentan werden nur Dropbox und Google Drive unterstützt. GMail nicht!</string>
+  <string name="settings_backup_help_title">Bitte zuerst lesen!</string>
+  <string name="settings_backup_help_summary">Lies die Anleitung um deine Daten erfolgreich zu sichern und wiederherzustzellen.</string>
   <string name="settings_section_name_Miscellaneous">Verschiedenes</string>
   <string name="settings_misc_release_info_title">Releaseinformationen</string>
   <string name="settings_misc_release_info_summary">Klicke um die Releaseinformationen anzusehen</string>
@@ -228,7 +228,7 @@
   <string name="sample_tast_text_13">Tippe auf den Pfeil um die Aufgabe morgen zu erledigen</string>
   <string name="sample_tast_text_14">Tippe auf die rote Markierung um die Farbe zu ändern</string>
   <string name="sample_tast_text_15">Drücke lange auf diese Aufgabe und bewege sie nach oben</string>
-  <string name="sample_tast_text_16">Open the menu and see Settings and Help for more features</string>
+  <string name="sample_tast_text_16">Öffne das Menu und schau dir Einstellungen und Hilfe für mehr Funktionen an</string>
   <string name="sample_tast_text_21">Diese Aufgabe wird Mitternacht auf die Heute-Seite verschoben</string>
   <string name="dialog_cancel">Abbrechen</string>
 </resources>

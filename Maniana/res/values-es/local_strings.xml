@@ -107,8 +107,8 @@
   <string name="settings_add_to_top_title">Añadir al principio</string>
   <string name="settings_add_to_top_summary_on">Nuevas tareas se agregan en la parte superior la lista</string>
   <string name="settings_add_to_top_summary_off">Se agregan nuevas tareas en la parte inferior de la lista</string>
-  <string name="settings_select_task_colors_dialog_title">Select Task Colors</string>
-  <string name="settings_select_task_colors_title">Select Task Colors</string>
+  <string name="settings_select_task_colors_dialog_title">Task Colors</string>
+  <string name="settings_select_task_colors_title">Task Colors</string>
   <string name="settings_select_task_colors_summary">Click to select and arrange available task colors</string>
   <string name="settings_daily_cleanup_title">Limpieza de tareas diarias</string>
   <string name="settings_daily_cleanup_summary_on">Eliminar las tareas completadas cada medianoche</string>
