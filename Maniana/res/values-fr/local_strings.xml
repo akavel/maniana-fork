@@ -173,7 +173,7 @@
   <string name="settings_misc_release_info_summary">Voir les informations sur la version</string>
   <string name="settings_misc_tell_a_friend_title">Envoyer à un Ami</string>
   <string name="settings_misc_tell_a_friend_summary">Parler à un ami de Maniana</string>
-  <string name="settings_misc_feedback_title">Envoyer-nous un commentaire</string>
+  <string name="settings_misc_feedback_title">Envoyez-nous un commentaire</string>
   <string name="settings_misc_feedback_summary">Envoyer un commentaire aux développeurs</string>
   <string name="settings_misc_restore_defaults_title">Réinitialiser tous les paramètres</string>
   <string name="settings_misc_restore_defaults_summary">Restaurer les paramètres d\'origine. N\'affecte pas les données des tâches.</string>
