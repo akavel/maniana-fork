@@ -223,7 +223,7 @@
     <!-- Settings / Backup -->
     <string name="settings_section_name_Backup">Backup</string>
     <string name="settings_backup_do_backup_chooser_title">Select Dropbox Or Google Drive</string>
-    <string name="settings_backup_no_app_error">Did not found Dropbox or Google Drive apps.</string>
+    <string name="settings_backup_no_app_error">Did not find Dropbox or Google Drive apps.</string>
     <string name="settings_backup_do_backup_title">Do Backup</string>
     <string name="settings_backup_do_backup_summary">Click to send a backup file. Only Dropbox and Google Drive are currently supported. GMail is not!</string>
     <string name="settings_backup_help_title">Read This First!</string>
