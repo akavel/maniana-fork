@@ -109,7 +109,7 @@
   <string name="settings_add_to_top_summary_off">Новые задачи добавляются в конец списка</string>
   <string name="settings_select_task_colors_dialog_title">Цвета задач</string>
   <string name="settings_select_task_colors_title">Цвета задач</string>
-  <string name="settings_select_task_colors_summary">Click to select and arrange available task colors</string>
+  <string name="settings_select_task_colors_summary">Нажмите, чтобы выбрать и настроить доступные цвета задач</string>
   <string name="settings_daily_cleanup_title">Ежедневная очистка списка задач</string>
   <string name="settings_daily_cleanup_summary_on">Удаление завершенных задач каждый день в полночь</string>
   <string name="settings_daily_cleanup_summary_off">Ежедневное удаление завершённых задач отключено</string>
@@ -167,7 +167,7 @@
   <string name="settings_backup_do_backup_title">Сделать резервную копию</string>
   <string name="settings_backup_do_backup_summary">Нажмите для отправки файла резервной копии. В настоящее время поддерживаются только Dropbox и Google Диск. GMail не поддерживается!</string>
   <string name="settings_backup_help_title">Внимание!</string>
-  <string name="settings_backup_help_summary">Click to read IMPORTANT instructions on how to successfuly backup and restore.</string>
+  <string name="settings_backup_help_summary">Нажмите, чтобы прочитать ВАЖНУЮ информацию о резервном копировании и восстановлении задач в Maniana.</string>
   <string name="settings_section_name_Miscellaneous">Дополнительно</string>
   <string name="settings_misc_release_info_title">Сведения о релизе</string>
   <string name="settings_misc_release_info_summary">Нажмите, чтобы просмотреть список изменений</string>
@@ -228,7 +228,7 @@
   <string name="sample_tast_text_13">Нажмите на стрелку вправо, чтобы отложить эту задачу на завтра</string>
   <string name="sample_tast_text_14">Нажмите на красную метку для изменения её цвета</string>
   <string name="sample_tast_text_15">Нажмите на этой задаче и держите, чтобы поднять её вверх</string>
-  <string name="sample_tast_text_16">Open the menu and see Settings and Help for more features</string>
+  <string name="sample_tast_text_16">Откройте меню и выберите «Настройки» или «Помощь», чтобы увидеть дополнительные опции</string>
   <string name="sample_tast_text_21">Эта задача будет перемещена на страницу «Сегодня» в полночь</string>
   <string name="dialog_cancel">Отмена</string>
 </resources>
