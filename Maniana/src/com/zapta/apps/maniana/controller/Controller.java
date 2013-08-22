@@ -17,6 +17,8 @@ package com.zapta.apps.maniana.controller;
 import static com.zapta.apps.maniana.util.Assertions.check;
 
 import java.io.InputStream;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.annotation.Nullable;
 
@@ -35,6 +37,8 @@ import com.zapta.apps.maniana.backup.RestoreBackupDialog;
 import com.zapta.apps.maniana.backup.RestoreBackupDialog.Action;
 import com.zapta.apps.maniana.backup.RestoreBackupDialog.RestoreBackupDialogListener;
 import com.zapta.apps.maniana.editors.ItemTextEditor;
+import com.zapta.apps.maniana.editors.ItemTimePicker;
+import com.zapta.apps.maniana.editors.ItemTimePicker.ItemTimePickerListener;
 import com.zapta.apps.maniana.editors.ItemVoiceEditor;
 import com.zapta.apps.maniana.help.HelpUtil;
 import com.zapta.apps.maniana.help.PopupMessageActivity;
@@ -523,6 +527,19 @@ public class Controller implements ShakerListener {
                             }
                         });
                 return;
+            }
+            
+            case ItemMenuCache.SCHEDULE_ACTION_ID: {
+                mMainActivityState.services().maybePlayStockSound(AudioManager.FX_KEY_CLICK, false);
+                final ItemModel item = mMainActivityState.model().getItemForMutation(pageKind,
+                        itemIndex);
+                ItemTimePicker.startEditor(mMainActivityState, new Date(), new ItemTimePickerListener() {
+					@Override
+					public void onDismiss(Date finalDate) {
+						// FIXME: set date of 'item'
+					}
+				});
+            	return;
             }
 
             case ItemMenuCache.LOCK_ACTION_ID:
