@@ -35,9 +35,10 @@ public class ItemMenuCache {
     public static final int DONE_ACTION_ID = 1;
     public static final int TODO_ACTION_ID = 2;
     public static final int EDIT_ACTION_ID = 3;
-    public static final int LOCK_ACTION_ID = 4;
-    public static final int UNLOCK_ACTION_ID = 5;
-    public static final int DELETE_ACTION_ID = 6;
+    public static final int SCHEDULE_ACTION_ID = 4;
+    public static final int LOCK_ACTION_ID = 5;
+    public static final int UNLOCK_ACTION_ID = 6;
+    public static final int DELETE_ACTION_ID = 7;
 
     private final MainActivityState mMainActivityState;
     
@@ -51,6 +52,9 @@ public class ItemMenuCache {
 
     @Nullable
     private ItemMenuEntry mCachedActionEdit;
+
+    @Nullable
+    private ItemMenuEntry mCachedActionSchedule;
 
     @Nullable
     private ItemMenuEntry mCachedActionLock;
@@ -88,6 +92,14 @@ public class ItemMenuCache {
                     mMainActivityState.str(R.string.item_menu_Edit), R.drawable.item_menu_edit);
         }
         return mCachedActionEdit;
+    }
+
+    public ItemMenuEntry getScheduleAction() {
+        if (mCachedActionSchedule == null) {
+            mCachedActionSchedule = newItem(SCHEDULE_ACTION_ID,
+                    mMainActivityState.str(R.string.item_menu_Schedule), R.drawable.item_menu_schedule);
+        }
+        return mCachedActionSchedule;
     }
 
     public ItemMenuEntry getDeleteAction() {

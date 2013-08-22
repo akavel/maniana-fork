@@ -421,6 +421,9 @@ public class Controller implements ShakerListener {
 
         // Edit.
         final ItemMenuEntry editAction = mItemMenuCache.getEditAction();
+        
+        // Set or modify date and time.
+        final ItemMenuEntry scheduleAction = mItemMenuCache.getScheduleAction();
 
         // Lock vs Unlock based on item isLocked status.
         final ItemMenuEntry lockAction = item.isLocked() ? mItemMenuCache.getUnlockAction()
@@ -433,6 +436,7 @@ public class Controller implements ShakerListener {
         final ItemMenuEntry actions[] = {
             doneAction,
             editAction,
+            scheduleAction,
             lockAction,
             deleteAction
         };

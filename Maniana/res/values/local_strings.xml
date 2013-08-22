@@ -65,6 +65,7 @@
     <string name="item_menu_Done">Done</string>
     <string name="item_menu_To_Do">To Do</string>
     <string name="item_menu_Edit">Edit</string>
+    <string name="item_menu_Schedule">Time</string>
     <string name="item_menu_Lock">Lock</string>
     <string name="item_menu_Unlock">Unlock</string>
     <string name="item_menu_Delete">Delete</string>
