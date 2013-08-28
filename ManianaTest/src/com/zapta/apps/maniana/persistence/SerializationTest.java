@@ -143,7 +143,7 @@ public class SerializationTest extends TestCase {
             final boolean isCompleted = (i & 0x1) != 0;
             final boolean isLocked = pageKind.isTomorrow() && ((i & 0x2) != 0);
             final ItemColor itemColor = ItemColor.values()[i % ItemColor.values().length];
-            final ItemModel item = new ItemModel(ts, "id1", "Item" + i, isCompleted, isLocked,
+            final ItemModel item = new ItemModel(ts, "id1", "Item" + i, isCompleted, isLocked, 0,
                     itemColor);
             model.appendItem(pageKind, item);
         }

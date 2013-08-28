@@ -35,20 +35,24 @@ public class ItemModel implements ItemModelReadOnly {
 
     /** Is this item done? */
     private boolean mIsCompleted;
-
+    
     /** Is this item blocked. */
     private boolean mIsLocked;
+
+    /** The item scheduled time, in millis. */
+    private long mScheduledTime;
 
     /** The item color. */
     private ItemColor mColor;
 
     /** Constructor with initial values. */
-    public ItemModel(long updateTime, String id, String text, boolean isCompleted, boolean isLocked, ItemColor color) {
+    public ItemModel(long updateTime, String id, String text, boolean isCompleted, boolean isLocked, long scheduledTime, ItemColor color) {
         mUpdateTime = updateTime;
         mId = id;
         mText = text;
         mIsCompleted = isCompleted;
         mIsLocked = isLocked;
+        mScheduledTime = scheduledTime;
         mColor = color;
     }
 
@@ -64,6 +68,7 @@ public class ItemModel implements ItemModelReadOnly {
         mText = other.getText();
         mIsCompleted = other.isCompleted();
         mIsLocked = other.isLocked();
+        mScheduledTime = other.getScheduledTime();
         mColor = other.getColor();
     }
     
@@ -106,6 +111,15 @@ public class ItemModel implements ItemModelReadOnly {
 
     public final void setIsLocked(boolean isLocked) {
         mIsLocked = isLocked;
+    }
+    
+    @Override
+    public final long getScheduledTime() {
+    	return mScheduledTime;
+    }
+    
+    public final void setScheduledTime(long scheduledTime) {
+    	mScheduledTime = scheduledTime;
     }
 
     @Override

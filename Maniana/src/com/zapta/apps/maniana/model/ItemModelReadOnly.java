@@ -37,6 +37,8 @@ public interface ItemModelReadOnly {
     boolean isCompleted();
 
     boolean isLocked();
+    
+    long getScheduledTime();
 
     ItemColor getColor();
 

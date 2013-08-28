@@ -37,5 +37,6 @@ public interface FieldNames {
     static String FIELD_TEXT = "text";
     static String FIELD_DONE = "done";
     static String FIELD_LOCKED = "locked";
+    static String FIELD_SCHEDULED = "scheduled";
     static String FIELD_COLOR = "color";
 }

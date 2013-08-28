@@ -40,11 +40,11 @@ public class PageModelTest extends TestCase {
         pageModel = new PageModel();
         final long ts = 1234567;
         for (int i = 0; i < 5; i++) {
-            items[i] = new ItemModel(ts, "id-" + i, "Item" + i, false, false, ItemColor.NONE);
+            items[i] = new ItemModel(ts, "id-" + i, "Item" + i, false, false, 0, ItemColor.NONE);
             pageModel.appendItem(items[i]);
         }
         
-        extraItem = new ItemModel(ts, "id-extra", "Extra1", false, false, ItemColor.NONE);
+        extraItem = new ItemModel(ts, "id-extra", "Extra1", false, false, 0, ItemColor.NONE);
         pageModel.appendUndoItemForTesting(extraItem);
     }
 

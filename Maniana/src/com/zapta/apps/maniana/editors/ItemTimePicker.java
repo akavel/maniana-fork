@@ -48,7 +48,7 @@ public class ItemTimePicker extends Dialog implements TrackablePopup {
 		setOwnerActivity(mainActivityState.mainActivity());
 
 		// FIXME: allow clearing item date (?)
-		// FIXME: try to start this dialog from ItemTextEditor, not from ItemMenu
+		// FIXME: try to start this dialog from ItemTextEditor, not from ItemMenu?
 		// FIXME: add OK (Save?)/Cancel
 		// FIXME: make sure that the dialog fits in screen
 		

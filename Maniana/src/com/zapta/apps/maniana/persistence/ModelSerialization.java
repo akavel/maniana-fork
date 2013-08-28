@@ -85,6 +85,9 @@ public class ModelSerialization implements FieldNames {
         if (itemModel.isLocked()) {
             result.put(FIELD_LOCKED, itemModel.isLocked());
         }
+        if (itemModel.getScheduledTime() != 0) {
+        	result.put(FIELD_SCHEDULED, itemModel.getScheduledTime());
+        }
         if (itemModel.getColor() != ItemColor.NONE) {
             result.put(FIELD_COLOR, itemModel.getColor().getKey());
         }

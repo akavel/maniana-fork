@@ -103,6 +103,7 @@ public class ModelDeserialization implements FieldNames {
         final String text = jsonItem.getString(FIELD_TEXT);
         final boolean isCompleted = jsonItem.optBoolean(FIELD_DONE);
         final boolean isLocked = jsonItem.optBoolean(FIELD_LOCKED);
+        final long scheduled = jsonItem.optLong(FIELD_SCHEDULED);
 
         final String optColorKey = jsonItem.optString(FIELD_COLOR, null);
         // NOTE(tal): NONE may or may not be in the current user selected task color set.
@@ -110,7 +111,7 @@ public class ModelDeserialization implements FieldNames {
         final ItemColor color = (optColorKey == null) ? ItemColor.NONE : ItemColor.fromKey(
                 optColorKey, ItemColor.NONE);
 
-        return new ItemModel(updateTime, id, text, isCompleted, isLocked, color);
+        return new ItemModel(updateTime, id, text, isCompleted, isLocked, scheduled, color);
     }
 
 }

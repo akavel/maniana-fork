@@ -18,7 +18,6 @@ import static com.zapta.apps.maniana.util.Assertions.check;
 
 import java.io.InputStream;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import javax.annotation.Nullable;
 
@@ -356,21 +355,21 @@ public class Controller implements ShakerListener {
         // Today's page
         final long ts = System.currentTimeMillis();
         model.appendItem(PageKind.TODAY, new ItemModel(ts, IdGenerator.getFreshId(),
-                mMainActivityState.str(R.string.sample_tast_text_11), false, false, ItemColor.NONE));
+                mMainActivityState.str(R.string.sample_tast_text_11), false, false, 0, ItemColor.NONE));
         model.appendItem(PageKind.TODAY, new ItemModel(ts, IdGenerator.getFreshId(),
-                mMainActivityState.str(R.string.sample_tast_text_12), false, false, ItemColor.NONE));
+                mMainActivityState.str(R.string.sample_tast_text_12), false, false, 0, ItemColor.NONE));
         model.appendItem(PageKind.TODAY, new ItemModel(ts, IdGenerator.getFreshId(),
-                mMainActivityState.str(R.string.sample_tast_text_13), false, false, ItemColor.NONE));
+                mMainActivityState.str(R.string.sample_tast_text_13), false, false, 0, ItemColor.NONE));
         model.appendItem(PageKind.TODAY, new ItemModel(ts, IdGenerator.getFreshId(),
-                mMainActivityState.str(R.string.sample_tast_text_14), false, false, ItemColor.RED));
+                mMainActivityState.str(R.string.sample_tast_text_14), false, false, 0, ItemColor.RED));
         model.appendItem(PageKind.TODAY, new ItemModel(ts, IdGenerator.getFreshId(),
-                mMainActivityState.str(R.string.sample_tast_text_15), false, false, ItemColor.BLUE));
+                mMainActivityState.str(R.string.sample_tast_text_15), false, false, 0, ItemColor.BLUE));
         model.appendItem(PageKind.TODAY, new ItemModel(ts, IdGenerator.getFreshId(),
-                mMainActivityState.str(R.string.sample_tast_text_16), false, false, ItemColor.NONE));
+                mMainActivityState.str(R.string.sample_tast_text_16), false, false, 0, ItemColor.NONE));
 
         // Tommorow's page
         model.appendItem(PageKind.TOMOROW, new ItemModel(ts, IdGenerator.getFreshId(),
-                mMainActivityState.str(R.string.sample_tast_text_21), false, false, ItemColor.NONE));
+                mMainActivityState.str(R.string.sample_tast_text_21), false, false, 0, ItemColor.NONE));
     }
 
     /** Update date and if needed push model items from Tomorow to Today. */
@@ -536,7 +535,15 @@ public class Controller implements ShakerListener {
                 ItemTimePicker.startEditor(mMainActivityState, new Date(), new ItemTimePickerListener() {
 					@Override
 					public void onDismiss(Date finalDate) {
-						// FIXME: set date of 'item'
+						item.setScheduledTime(finalDate.getTime());
+						// FIXME: reschedule the alarm to earliest Tomorrow item's scheduled time
+						MidnightTicker.scheduleMidnightTicker(mMainActivityState.context());
+						
+						mMainActivityState.model().setDirty();
+						mMainActivityState.view().updatePage(pageKind);
+						// Highlight the modified item for a short time, to provide
+						// the user with an indication of the modified item.
+						briefItemHighlight(pageKind, itemIndex, 700);
 					}
 				});
             	return;
@@ -665,7 +672,7 @@ public class Controller implements ShakerListener {
         }
 
         ItemModel item = new ItemModel(System.currentTimeMillis(), IdGenerator.getFreshId(),
-                cleanedValue, false, false, color);
+                cleanedValue, false, false, 0, color);
 
         final int insertionIndex = newItemInsertionIndex(pageKind);
         mMainActivityState.model().insertItem(pageKind, insertionIndex, item);

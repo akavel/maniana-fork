@@ -25,6 +25,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.SystemClock;
+import android.text.format.DateUtils;
 import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -356,7 +357,19 @@ public class ListWidgetProviderTemplate {
                     .findViewById(R.id.widget_item_text_view);
             final View itemColorView = itemView.findViewById(R.id.widget_item_color);
 
-            extendedTextView.setText(item.getText());
+            String text = item.getText();
+            /* FIXME: do we need this? what's the above function for?
+            if (item.getScheduledTime() != 0) {
+            	text = DateUtils.formatDateTime(mContext,
+        				item.getScheduledTime(), DateUtils.FORMAT_SHOW_WEEKDAY
+    					| DateUtils.FORMAT_ABBREV_WEEKDAY
+    					| DateUtils.FORMAT_SHOW_DATE
+    					| DateUtils.FORMAT_ABBREV_MONTH
+    					| DateUtils.FORMAT_NO_YEAR
+    					| DateUtils.FORMAT_SHOW_TIME) + " " + text;
+            }
+            */
+            extendedTextView.setText(text);
             TextUtil.ICS_HACK_TEXT_VIEW(extendedTextView);
             mFontVariationPreference.apply(extendedTextView, item.isCompleted(), true);
 

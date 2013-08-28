@@ -17,6 +17,7 @@ package com.zapta.apps.maniana.view;
 import javax.annotation.Nullable;
 
 import android.graphics.Color;
+import android.text.format.DateUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -136,7 +137,17 @@ public class ItemView extends FrameLayout {
 
     public final void updateFromItemModel(ItemModelReadOnly item) {
         updateItemButton(item.isLocked());
-        mExtendedTextView.setText(item.getText());
+        String text = item.getText();
+        if (item.getScheduledTime() != 0) {
+        	text = DateUtils.formatDateTime(getContext(),
+    				item.getScheduledTime(), DateUtils.FORMAT_SHOW_WEEKDAY
+					| DateUtils.FORMAT_ABBREV_WEEKDAY
+					| DateUtils.FORMAT_SHOW_DATE
+					| DateUtils.FORMAT_ABBREV_MONTH
+					| DateUtils.FORMAT_NO_YEAR
+					| DateUtils.FORMAT_SHOW_TIME) + " " + text;
+        }
+        mExtendedTextView.setText(text);
         TextUtil.ICS_HACK_TEXT_VIEW(mExtendedTextView);
         mColorView.setBackgroundColor(item.getColor().getColor(0x00000000));
         updateFont(item.isCompleted());
